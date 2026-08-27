@@ -587,11 +587,21 @@ function renderLegalPage(container, type) {
           <li><strong>🧶 Throwable Yarn Ball Toy</strong>: Interactive yarn ball featuring drag-and-throw physics, friction damping, and screen boundary bounce physics.</li>
           <li><strong>🥣 Cat Food Bowl & Fish Feeding</strong>: Click or drag the food bowl to spawn fresh fish 🐟 to feed Nibbles.</li>
         </ul>
+      <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🏆 Anonymous Global Leaderboards</h3>
+        <p>CatKeyLab features a 100% private, anonymous leaderboard and percentile ranking engine. Players automatically receive a fun anonymous cat alias (e.g., <em>Speedy Tabby #4820</em>) with zero account creation or personal data collection.</p>
       </div>
 
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules</h3>
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules (15 Suite Modules)</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:0.75rem;">
+          <div><strong>⏱️ Reaction Time Test</strong>: Visual reaction latency tester in milliseconds.</div>
+          <div><strong>🧠 Sequence Memory Test</strong>: Simon-says 3x3 interactive pattern recall with tones.</div>
+          <div><strong>🎯 Aim Trainer</strong>: 30 targets precision challenge measuring acquisition speed & accuracy.</div>
+          <div><strong>🔢 Number Memory Test</strong>: Digit span recall test with animated progress timer.</div>
+          <div><strong>💬 Verbal Memory Test</strong>: SEEN vs NEW sequential word memory test with 3 lives.</div>
+          <div><strong>🐒 Chimp Test</strong>: Ascending working memory grid test inspired by Kyoto University.</div>
+          <div><strong>🔳 Visual Memory Test</strong>: Spatial matrix pattern recall expanding up to 7x7 grid.</div>
           <div><strong>⌨️ Typing Speed (WPM)</strong>: Distraction-free Monkeytype-inspired test with mechanical key sounds.</div>
           <div><strong>🖱️ Mouse Hardware Tester</strong>: MB1–MB5 buttons, scroll wheel direction, and velocity inspector.</div>
           <div><strong>🖥️ Keyboard Key Tester</strong>: NKRO key rollover verification and DOM KeyCode inspector.</div>
@@ -599,7 +609,6 @@ function renderLegalPage(container, type) {
           <div><strong>⚡ CPS Speed Test</strong>: Timed clicks-per-second benchmarking with high score badges.</div>
           <div><strong>🚀 Click Speed Test</strong>: Real-time velocity analytics and click consistency gauges.</div>
           <div><strong>🔢 Digital Click Counter</strong>: Tactile tally counter with spacebar triggers and target alerts.</div>
-          <div><strong>⏱️ Reaction Time Test</strong>: Millisecond visual reaction latency benchmarking.</div>
           <div><strong>👆 Double Click Tester</strong>: Hardware chatter detector for faulty mouse micro-switches.</div>
         </div>
       </div>

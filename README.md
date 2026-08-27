@@ -1,15 +1,14 @@
 # 🐾🔑 CatKeyLab
 
-<h3 align="center">Free, Private & Powerful Online Hardware Testing Suite & Typing Speed Challenge</h3>
+<h3 align="center">Free, Private & Powerful Online Hardware Testing Suite, Human Benchmarks & Typing Challenge</h3>
 <h4 align="center">🌐 <a href="https://catkeylab.com/">https://catkeylab.com</a></h4>
 
 <p align="center">
   <a href="https://catkeylab.com/"><img src="https://img.shields.io/badge/Website-catkeylab.com-orange.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"></a>
-  <a href="#key-features--included-tools"><img src="https://img.shields.io/badge/Tools-9_Interactive_Modules-emerald.svg?style=for-the-badge" alt="9 Tools"></a>
+  <a href="#key-features--included-tools"><img src="https://img.shields.io/badge/Tools-15_Interactive_Modules-emerald.svg?style=for-the-badge" alt="15 Tools"></a>
   <a href="#nibbles-the-cat--interactive-toys"><img src="https://img.shields.io/badge/Companion-Nibbles_the_Cat_🐱-orange.svg?style=for-the-badge" alt="Nibbles the Cat"></a>
   <a href="#internationalization-i18n"><img src="https://img.shields.io/badge/Languages-13_Supported-purple.svg?style=for-the-badge" alt="13 Languages"></a>
   <a href="#technology-stack--architecture"><img src="https://img.shields.io/badge/Dependencies-Zero_External-brightgreen.svg?style=for-the-badge" alt="Zero Dependencies"></a>
-  <a href="#web-audio-api-synthesizer--sound"><img src="https://img.shields.io/badge/Audio-Web_Audio_API_Synthesizer-orange.svg?style=for-the-badge" alt="Web Audio API"></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License"></a>
 </p>
 
@@ -18,30 +17,31 @@
 ## 📋 Table of Contents
 
 - [Overview](#-overview)
+- [🏆 Anonymous Global Leaderboards](#-anonymous-global-leaderboards)
 - [🐱 Nibbles the Cat & Interactive Toys](#-nibbles-the-cat--interactive-toys)
 - [✨ Key Features & Included Tools](#-key-features--included-tools)
 - [🛠️ Technology Stack & Architecture](#️-technology-stack--architecture)
 - [📁 Project Directory Structure](#-project-directory-structure)
 - [🚀 Getting Started](#-getting-started)
 - [🌐 Internationalization (i18n)](#-internationalization-i18n)
-- [🎨 Design System & Ambient Cat Theme](#-design-system--ambient-cat-theme)
-- [🔊 Web Audio API Synthesizer & Sound](#-web-audio-api-synthesizer--sound)
-- [🔍 SEO & Metadata Coordinator](#-seo--metadata-coordinator)
-- [🤝 Contributing](#-contributing)
 - [📄 License](#-license)
 
 ---
 
 ## 📖 Overview
 
-**CatKeyLab** ([catkeylab.com](https://catkeylab.com/)) is a lightweight, high-performance web application created by **Dylan** ([snowyorca.itch.io](https://snowyorca.itch.io/)) built for testing mouse hardware, keyboard switches, WPM typing speed, click velocity, and reaction latency directly inside your web browser.
+**CatKeyLab** ([catkeylab.com](https://catkeylab.com/)) is a lightweight, high-performance web application created by **Dylan** ([snowyorca.itch.io](https://snowyorca.itch.io/)) built for testing mouse hardware, keyboard switches, WPM typing speed, cognitive Human Benchmarks, and reaction latency directly inside your web browser.
 
-<p align="center">
-  <img src="./assets/orange-cat.jpg" width="340" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="border-radius:12px; border:3px solid #f97316;" /><br>
-  <em>Meet the adorable real-life orange cat sitting in a box who inspired Nibbles! 🐱</em>
-</p>
+---
 
-Unlike bloated desktop software, CatKeyLab operates **100% client-side**, requiring **zero downloads, zero plugins, zero accounts, and zero tracking**. All hardware test measurements, typing accuracy calculations, and high score benchmarks process locally in your browser sandbox to guarantee absolute privacy and instant performance.
+## 🏆 Anonymous Global Leaderboards
+
+CatKeyLab features a 100% private, anonymous leaderboard and percentile ranking engine across all cognitive benchmark games and speed utilities:
+
+- **Zero Account & No Login**: Automatically assigns a fun anonymous cat alias (e.g. `Speedy Tabby #4820`, `Laser Whiskers #8912`) and cat emoji avatar.
+- **Percentile Ratings**: Calculates real-time rank percentiles (*e.g., "Top 3% (Pro Level)"*) upon test completion.
+- **Embedded & Full Page View**: View leaderboards directly on the Home Page or via `#leaderboards`.
+- **Interactive Controls**: Click **`🎲 Randomize Name & Emoji`** or click **`🎭 Cycle Emoji`** to re-roll your cat avatar anytime.
 
 ---
 
@@ -49,87 +49,40 @@ Unlike bloated desktop software, CatKeyLab operates **100% client-side**, requir
 
 CatKeyLab features **Nibbles**, a playful Ginger Tabby Cat wearing a ruby red collar with a shiny gold bell 🔔 who accompanies you while you test hardware!
 
-### 🐾 1. Pupil Tracking & Paw Reactions (`catMascot.js`)
-- **Smooth Cursor Tracking**: Nibbles' pupils follow your cursor in real time across the viewport.
-- **Paw Swatting**: Paws reach out toward your mouse cursor as you move nearby.
-- **WPM Judging**: Nibbles evaluates your typing speed, purring happily for fast typists or squinting judgmentally at typos!
-- **Fast Scroll Detection**: Squints in surprise when you scroll rapidly down a page.
-- **Click Petting**: Click Nibbles directly to pet him, triggering purrs and floating heart/paw particles (`❤️`, `🐾`).
-
-### 🧶 2. Throwable Yarn Ball Toy (`yarnBall.js`)
-- **Physics Drag & Throw**: Drag and flick the Yarn Ball 🧶 across your screen. Features momentum friction damping (`0.94`) and screen boundary bounce physics!
-- **Cat Interactivity**: Drag or toss the yarn ball near Nibbles to see both paws and pupils track the yarn in real-time, swatting at the ball silently with playful speech popups (*"my toy!"*, *"swat! 🧶"*, *"purrrrr... yarn!"*).
-
-### 🥣 3. Cat Food Bowl & Fish Feeding (`foodBowl.js`)
-- **Interactive Food Bowl**: Click or drag the Cat Food Bowl 🥣 in the bottom-right corner to spawn fresh, draggable **Fish 🐟**.
-- **Munching Eating Reactions**: Drag the fish to Nibbles to watch his paws excitedly track the fish. Feeding Nibbles (< 130px) eats the fish with a shrink animation, floating sparkles (`❤️`, `✨`, `🐟`), and cute eating popups (*"nom nom nom! 🐟"*, *"yummy fish!"*, *"thanks human! 🐾"*).
-
 ---
 
 ## ✨ Key Features & Included Tools
 
-CatKeyLab includes nine specialized, feature-rich interactive modules accessible via client-side hash routing:
+CatKeyLab includes fifteen specialized interactive modules accessible via client-side hash routing:
 
-### ⌨️ 1. Typing Speed Challenge (WPM) (`#typing-test`)
-- **Minimal WPM Testing**: Distraction-free typing test inspired by Monkeytype.
-- **Custom Time Limits**: Choose between 15s, 30s, 60s, or 120s testing durations.
-- **Mechanical Sound Synthesis**: Synthesizes authentic mechanical key clicks as you type.
-- **Live Accuracy & Analytics**: Real-time WPM, Net WPM, accuracy %, raw CPS, and character error tracking.
-- **Nibbles Judging**: Nibbles evaluates your performance level after every test!
+### 🧠 Human Benchmark & Cognitive Suite
+1. **⏱️ Reaction Time Test (`#reaction-time-test`)**: Tests visual reaction latency in milliseconds.
+2. **🧠 Sequence Memory Test (`#sequence-memory-test`)**: Simon-says 3x3 interactive pattern recall with Web Audio API sound frequencies.
+3. **🎯 Aim Trainer (`#aim-trainer-test`)**: 30 targets precision challenge measuring target acquisition speed and aim accuracy.
+4. **🔢 Number Memory Test (`#number-memory-test`)**: Digit span recall test with animated countdown timer bars.
+5. **💬 Verbal Memory Test (`#verbal-memory-test`)**: Sequential word memory test identifying words as **SEEN** or **NEW** with 3 lives.
+6. **🐒 Chimp Test (`#chimp-test`)**: Working memory grid test clicking numbers 1..N in order before tiles hide.
+7. **🔳 Visual Memory Test (`#visual-memory-test`)**: Spatial matrix pattern recall expanding from 3x3 to 7x7 grid.
+8. **⌨️ Typing Speed Challenge (`#typing-test`)**: Distraction-free Monkeytype-inspired WPM speed test with Nibbles judging.
 
-### 🖱️ 2. Mouse Hardware Tester (`#mouse-test`)
-- **Multi-Button Verification**: Interactively tests Left Click (MB1), Right Click (MB2), Middle Click/Wheel (MB3), Side Button 4 (Back), and Side Button 5 (Forward).
-- **Scroll Wheel Diagnostics**: Detects scroll direction (Up/Down) and measures scroll velocity.
-- **Dynamic Visual Mouse Diagram**: Highlighted SVG diagram updating instantly as buttons are pressed.
-
-### 🖥️ 3. Visual Keyboard Tester (`#keyboard-test`)
-- **Interactive Visual Keyboard Canvas**: Highlights pressed keys on a virtual layout in real-time.
-- **DOM KeyCode Inspector**: Displays detailed DOM event properties (`key`, `code`, `keyCode`, `location`).
-- **Modifier Key Tracking**: Monitors active state for Shift, Control, Alt, and Meta/Command keys.
-- **NKRO & Ghosting Test**: Verifies key rollover capabilities across mechanical or membrane switches.
-
-### 🎯 4. Auto Clicker (`#auto-clicker`)
-- **Browser-Native Click Simulator**: Simulates continuous automated clicking directly within the page canvas.
-- **Customizable Intervals**: Set click intervals in milliseconds or seconds.
-- **Target Limit Controls**: Specify a fixed number of target clicks or run infinitely until stopped.
-- **Click Types**: Supports Single Click, Double Click, and Right Click mode simulations.
-
-### ⚡ 5. CPS Test (Clicks Per Second) (`#cps-test`)
-- **Timed Speed Benchmarking**: Select from preset time intervals (1s, 5s, 10s, 30s, 60s).
-- **Personal Best Tracking**: Automatically saves high scores and best CPS rates to `localStorage`.
-- **Rank Progression Badges**: Gamified badge achievements (e.g., *Turtle*, *Rabbit*, *Cheetah*, *Lightning*, *Godlike*) based on CPS scores.
-
-### 🚀 6. Click Speed Test (`#click-speed-test`)
-- **Advanced Velocity Analytics**: Measures instant click frequency, peak CPS, burst velocity, and consistency metrics.
-- **Real-Time Speed Gauge**: Live visual gauge displaying current click speed against historical averages.
-
-### 🔢 7. Digital Click Counter (`#click-counter`)
-- **Tactile Digital Tally**: Increment, decrement, or reset tallies with customizable step sizes.
-- **Keyboard Navigation**: Press **Spacebar** or **Enter** to increment counts effortlessly.
-- **Goal Limit Alerts**: Set custom goal targets with audio and visual completion chimes.
-- **Haptic Feedback**: Triggers native device vibration on supported mobile browsers.
-
-### ⏱️ 8. Reaction Time Test (`#reaction-time-test`)
-- **Visual Stimulus Benchmark**: Tests visual reaction latency in milliseconds.
-- **False-Start Prevention**: Penalty detection for clicking before the indicator turns green.
-- **Historical Averages**: Calculates average response times over multiple attempts with rating tiers.
-
-### 👆 9. Double Click Chatter Test (`#double-click-test`)
-- **Hardware Chatter & Fault Detector**: Diagnoses worn mouse switches causing unintended double-clicks.
-- **Threshold Analysis**: Measures millisecond gaps between consecutive clicks against a chatter threshold (~80ms).
+### 🖱️ Hardware & Speed Diagnostics
+9. **🖱️ Mouse Hardware Tester (`#mouse-test`)**: Tests Left, Right, Middle, Side (MB4/MB5), and scroll wheel direction.
+10. **🖥️ Visual Keyboard Tester (`#keyboard-test`)**: Visual keyboard layout, NKRO rollover test, and DOM KeyCode inspector.
+11. **🎯 Online Auto Clicker (`#auto-clicker`)**: In-browser automated clicking simulator with interval controls.
+12. **⚡ CPS Test (`#cps-test`)**: Timed clicks-per-second speed benchmarking.
+13. **🚀 Click Speed Test (`#click-speed-test`)**: Real-time velocity analytics and click consistency gauges.
+14. **🔢 Digital Click Counter (`#click-counter`)**: Tactile tally counter with spacebar triggers.
+15. **👆 Double Click Chatter Test (`#double-click-test`)**: Hardware chatter detector for faulty mouse micro-switches.
 
 ---
 
 ## 🛠️ Technology Stack & Architecture
 
-CatKeyLab is built with modern, vanilla web standards for zero bundle overhead and long-term maintainability:
-
-- **Markup**: Semantic HTML5 (`<main>`, `<header>`, `<footer>`, `<nav>`) with ARIA accessibility tags.
-- **Styling**: Vanilla CSS3 with CSS Custom Properties (`:root` tokens), HSL color space, glassmorphism overlays, and cat paw watermark grids.
-- **Logic**: Modular ES2022+ JavaScript with functional route cleanup handlers.
-- **Audio Engine**: Native **Web Audio API** synthesized sound effects (sine/square wave oscillators + exponential gain ramps) eliminating external `.mp3`/`.wav` assets.
-- **Routing**: Lightweight hash-based client router (`js/router.js`) handling dynamic component loading and SEO metadata sync.
-- **Localization**: Pure JS i18n engine (`js/i18n.js`) supporting 13 languages with dynamic runtime language switching.
+- **Markup**: Semantic HTML5 with ARIA accessibility tags.
+- **Styling**: Vanilla CSS3 with CSS Custom Properties, dark-mode glassmorphism, and responsive CSS grids.
+- **Logic**: Modular ES2022+ JavaScript with functional route cleanup.
+- **Audio Engine**: Native **Web Audio API** synthesized sound effects.
+- **Leaderboards Engine**: Client-side anonymous identity generator & leaderboard engine (`leaderboard.js`).
 
 ---
 
@@ -139,35 +92,41 @@ CatKeyLab is built with modern, vanilla web standards for zero bundle overhead a
 catkeylab/
 ├── index.html                  # Main HTML document & SPA layout shell
 ├── README.md                   # Project documentation
-├── package.json                # Project metadata & deployment scripts
+├── render.yaml                 # Render Blueprint specification
 ├── css/
 │   ├── main.css                # Color tokens, cat theme background, reset & utilities
-│   ├── components.css          # UI component styles (buttons, cards, gauges, FAQ, header/footer)
-│   └── mascot.css              # Nibbles the Cat vector styling, yarn ball & food bowl rules
+│   ├── components.css          # UI component styles (buttons, cards, leaderboard, FAQ)
+│   └── mascot.css              # Nibbles vector styling, yarn ball & food bowl rules
 ├── js/
 │   ├── app.js                  # Application entry point & subsystem initialization
 │   ├── router.js               # Hash routing engine, tool metadata registry & SEO sync
-│   ├── i18n.js                 # Translation dictionary (13 languages) & language manager
-│   ├── theme.js                # Theme switcher (Dark / Light mode) with OS preference detection
-│   ├── audio.js                # Synthesized Web Audio API sound generator & haptics controller
+│   ├── leaderboard.js          # Anonymous identity engine & leaderboard rank calculator
+│   ├── i18n.js                 # Translation dictionary (13 languages)
+│   ├── theme.js                # Theme switcher (Dark / Light mode)
+│   ├── audio.js                # Synthesized Web Audio API sound generator
 │   ├── components/
-│   │   ├── catMascot.js        # Nibbles the Cat pupil tracking, paw swatting & speech engine
+│   │   ├── catMascot.js        # Nibbles the Cat pupil tracking & speech engine
 │   │   ├── yarnBall.js         # Interactive Throwable Yarn Ball 🧶 physics component
 │   │   ├── foodBowl.js         # Cat Food Bowl 🥣 & Fish Feeding 🐟 component
-│   │   ├── header.js           # Site navigation bar, language picker & theme toggle
-│   │   ├── footer.js           # Dynamic footer with tool links, copyright & language select
-│   │   ├── breadcrumbs.js      # Dynamic breadcrumb navigation bar
-│   │   └── faq.js              # Frequently Asked Questions accordion widget
+│   │   ├── leaderboardView.js  # Global Anonymous Leaderboards UI component
+│   │   ├── header.js           # Navigation header component
+│   │   └── footer.js           # Footer component
 │   └── tools/
-│       ├── typingTest.js       # Typing Speed Challenge (WPM) module
-│       ├── autoClicker.js      # Auto Clicker simulation engine
-│       ├── cpsTest.js          # CPS Benchmark & ranking system
-│       ├── clickSpeedTest.js   # Velocity analytics & click speed gauge
-│       ├── clickCounter.js     # Digital tally counter
-│       ├── mouseTest.js        # Mouse button & scroll wheel hardware tester
-│       ├── keyboardTest.js     # Visual keyboard keypress tester
-│       ├── reactionTimeTest.js # Visual reaction timer module
-│       └── doubleClickTest.js  # Hardware chatter & double-click fault detector
+│       ├── sequenceMemoryTest.js # Sequence Memory (Simon grid) module
+│       ├── aimTrainerTest.js     # Aim Trainer 30 targets module
+│       ├── numberMemoryTest.js   # Number Memory digit span module
+│       ├── verbalMemoryTest.js   # Verbal Memory SEEN/NEW word module
+│       ├── chimpTest.js          # Chimp Test memory grid module
+│       ├── visualMemoryTest.js   # Visual Memory matrix module
+│       ├── typingTest.js         # Typing Speed Challenge (WPM) module
+│       ├── reactionTimeTest.js   # Visual reaction timer module
+│       ├── cpsTest.js            # CPS Benchmark & ranking system
+│       ├── autoClicker.js        # Auto Clicker simulation engine
+│       ├── clickSpeedTest.js     # Click velocity analytics
+│       ├── clickCounter.js       # Digital tally counter
+│       ├── mouseTest.js          # Mouse button & scroll wheel tester
+│       ├── keyboardTest.js       # Visual keyboard keypress tester
+│       └── doubleClickTest.js    # Hardware chatter detector
 ```
 
 ---
