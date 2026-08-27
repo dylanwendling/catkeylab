@@ -229,6 +229,62 @@ export function reactToYarn(yarnX, yarnY) {
   showSpeechBubble(line);
 }
 
+const FISH_DIALOGUES = [
+  "nom nom nom! 🐟",
+  "yummy fish!",
+  "mrrp! delicious! 🐟",
+  "purrrrr! 🐟",
+  "thanks human! 🐾",
+  "another one please! 🐟"
+];
+
+let lastFishFeed = 0;
+export function feedFishToCat(fishX, fishY) {
+  const now = Date.now();
+  if (now - lastFishFeed < 500) return;
+  lastFishFeed = now;
+
+  playPurrSound();
+
+  if (catEl) {
+    catEl.classList.add('play-mode');
+    catEl.classList.add('purring');
+
+    updateYarnPawTracking(fishX, fishY);
+
+    spawnFloatingParticleCustom('🐟');
+    spawnFloatingParticleCustom('✨');
+    spawnFloatingParticleCustom('❤️');
+
+    setTimeout(() => {
+      if (catEl) {
+        catEl.classList.remove('play-mode');
+        catEl.classList.remove('purring');
+      }
+    }, 2000);
+  }
+
+  const line = FISH_DIALOGUES[Math.floor(Math.random() * FISH_DIALOGUES.length)];
+  showSpeechBubble(line);
+}
+
+function spawnFloatingParticleCustom(symbol) {
+  if (!catEl) return;
+  const particle = document.createElement('div');
+  particle.className = 'floating-particle';
+  particle.textContent = symbol;
+
+  const rect = catEl.getBoundingClientRect();
+  particle.style.left = `${rect.left + rect.width / 2 - 10 + (Math.random() * 30 - 15)}px`;
+  particle.style.top = `${rect.top}px`;
+
+  document.body.appendChild(particle);
+
+  setTimeout(() => {
+    particle.remove();
+  }, 1200);
+}
+
 /**
  * Synthesize Purr Chime Sound via Web Audio API
  */

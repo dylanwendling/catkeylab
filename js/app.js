@@ -9,6 +9,7 @@ import { renderHeader } from './components/header.js';
 import { renderFooter } from './components/footer.js';
 import { initCatMascot } from './components/catMascot.js';
 import { initYarnBall } from './components/yarnBall.js';
+import { initFoodBowl } from './components/foodBowl.js';
 import { handleRoute } from './router.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,9 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initAudio();
   initI18n();
 
-  // 2. Initialize Interactive Cat Mascot & Throwable Yarn Ball Toy 🧶
+  // 2. Initialize Interactive Cat Mascot, Throwable Yarn Ball & Food Bowl 🥣🐟
   initCatMascot();
   initYarnBall();
+  initFoodBowl();
 
   // 3. Setup Global Mouse Tracking Spotlight Aura & Card Parallax
   initMouseSpotlight();

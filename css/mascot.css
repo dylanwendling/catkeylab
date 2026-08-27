@@ -338,3 +338,68 @@
   cursor: grabbing;
   box-shadow: 0 14px 32px rgba(244, 63, 94, 0.7);
 }
+
+/* Interactive Cat Food Bowl & Draggable Fish 🥣🐟 */
+.food-bowl-container {
+  position: fixed;
+  bottom: 22px;
+  right: 90px;
+  z-index: 1003;
+  pointer-events: auto;
+}
+
+.food-bowl-toy {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #0284c7, #0369a1);
+  border: 3px solid #075985;
+  box-shadow: 0 8px 20px rgba(3, 105, 161, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.food-bowl-toy:hover {
+  transform: scale(1.1);
+  box-shadow: 0 10px 26px rgba(14, 165, 233, 0.6);
+}
+
+.bowl-fish-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  font-size: 1rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.draggable-fish {
+  position: fixed;
+  width: 44px;
+  height: 44px;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 1010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5));
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.draggable-fish.eaten {
+  transform: scale(0) rotate(180deg);
+  opacity: 0;
+}
+
+.draggable-fish.dropping {
+  transform: translateY(40px) scale(0.5);
+  opacity: 0;
+}
