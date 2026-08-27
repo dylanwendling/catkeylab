@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Monkeytype-Inspired Typing Speed Challenge Tool (Gamified)
+   ClickPulse - Typing Speed Challenge Tool (Gamified WPM Tester)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -50,7 +50,7 @@ export function renderTypingTest(container) {
             <span style="font-size:2rem;">⌨️⚡</span>
             <span data-i18n="typingTestTitle">${t('typingTestTitle')}</span>
           </h1>
-          <p class="tool-subtitle-text">Distraction-free, minimal typing speed test. Type words smoothly and let the Eye Mascot judge your WPM!</p>
+          <p class="tool-subtitle-text">Distraction-free, minimal typing speed test. Type words smoothly and let the Cat Mascot judge your WPM!</p>
         </div>
         <div class="header-actions">
           <div style="display:flex; gap:0.5rem; background:var(--bg-tertiary); padding:0.25rem; border-radius:var(--radius-sm); border:1px solid var(--border-color);">

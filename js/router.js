@@ -206,7 +206,10 @@ function renderHomePage(container) {
           Instant, free, and private online tools to test mouse buttons (MB1-MB5, right click, scroll wheel) and verify keyboard key switches, rollover, and click speed.
         </p>
         <div class="hero-ctas">
-          <a href="#mouse-test" class="btn btn-primary btn-lg">
+          <a href="#typing-test" class="btn btn-primary btn-lg">
+            <span>⌨️⚡ Test Typing Speed (WPM)</span>
+          </a>
+          <a href="#mouse-test" class="btn btn-secondary btn-lg">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
             <span>🖱️ Test Mouse Hardware</span>
           </a>
@@ -252,13 +255,13 @@ function renderHomePage(container) {
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">Online Hardware Testers & Speed Utilities</h2>
-          <p class="section-subtitle">Promoted browser tools for checking mouse buttons, keyboard rollover, and click performance.</p>
+          <p class="section-subtitle">Promoted browser tools for checking typing speed (WPM), mouse buttons, keyboard rollover, and click performance.</p>
         </div>
 
         <div class="grid grid-cols-4">
           ${Object.keys(TOOL_METADATA).map(key => {
             const tool = TOOL_METADATA[key];
-            const isFeatured = key === 'mouse-test' || key === 'keyboard-test';
+            const isFeatured = key === 'typing-test' || key === 'mouse-test' || key === 'keyboard-test';
             return `
               <div class="tool-card ${isFeatured ? 'featured-tool-card' : ''}" style="${isFeatured ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
                 <div>

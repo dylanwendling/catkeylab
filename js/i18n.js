@@ -121,8 +121,8 @@ export const translations = {
     lblHistory: 'Key History Log',
 
     // Typing Test
-    typingTestTitle: 'Monkeytype Typing Speed Challenge',
-    typingTestSubtitle: 'Test your typing WPM and accuracy in real-time with distraction-free text, mechanical keyboard sounds, and Eye Mascot judging.',
+    typingTestTitle: 'Typing Speed Challenge (WPM)',
+    typingTestSubtitle: 'Test your typing speed and accuracy in real time with distraction-free text, mechanical keyboard sounds, and Cat Mascot judging.',
 
     // Reaction Time Test
     reactionTestTitle: 'Reaction Time Test',

@@ -25,7 +25,10 @@ export function renderHeader(container) {
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
-          <a href="#typing-test" class="nav-link nav-link-featured" data-route="typing-test" data-i18n="navTypingTest">⌨️⚡ ${t('navTypingTest')}</a>
+          <a href="#typing-test" class="nav-link nav-link-featured" data-route="typing-test">
+            <span>⌨️⚡ Typing Challenge</span>
+            <span style="background:linear-gradient(90deg, #f85149, #d29922); color:#ffffff; font-size:0.65rem; font-weight:800; padding:0.1rem 0.4rem; border-radius:var(--radius-full); margin-left:0.3rem;">HOT</span>
+          </a>
 
           <!-- Hardware Dropdown -->
           <div class="dropdown" id="hardware-dropdown">
