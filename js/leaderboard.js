@@ -88,20 +88,34 @@ if (syncChannel) {
   };
 }
 
-const GLOBAL_BLOB_URL = 'https://jsonblob.com/api/jsonBlob/1278149811099688960';
+// Global Firebase Realtime Database Endpoint
+const FIREBASE_DB_URL = 'https://catkeylab-default-rtdb.firebaseio.com/leaderboards';
 
 // Purge old local storage keys to guarantee 100% clean data slate
 function purgeOldKeys() {
-  ['catkeylab_leaderboards', 'catkeylab_leaderboards_v2', 'catkeylab_leaderboards_v3', 'catkeylab_leaderboards_v4'].forEach(k => {
+  ['catkeylab_leaderboards', 'catkeylab_leaderboards_v2', 'catkeylab_leaderboards_v3', 'catkeylab_leaderboards_v4', 'catkeylab_leaderboards_v5'].forEach(k => {
     if (localStorage.getItem(k)) localStorage.removeItem(k);
   });
 }
 purgeOldKeys();
 
-// Fetch Global Remote Leaderboards from Cloud Store
+// Firebase Live Server-Sent Events (SSE) Stream
+let eventSource = null;
+
+function initFirebaseSSE() {
+  if (typeof EventSource === 'undefined' || eventSource) return;
+  try {
+    eventSource = new EventSource(`${FIREBASE_DB_URL}.json`);
+    eventSource.onmessage = () => {
+      fetchGlobalLeaderboards();
+    };
+  } catch (e) {}
+}
+
+// Fetch Global Remote Leaderboards from Firebase Realtime Database
 export async function fetchGlobalLeaderboards() {
   try {
-    const res = await fetch(GLOBAL_BLOB_URL, {
+    const res = await fetch(`${FIREBASE_DB_URL}.json`, {
       method: 'GET',
       headers: { 'Accept': 'application/json' }
     });
@@ -111,13 +125,14 @@ export async function fetchGlobalLeaderboards() {
 
     let localBoards = {};
     try {
-      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v5')) || {};
+      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v6')) || {};
     } catch (e) {}
 
     let hasChanges = false;
 
     Object.keys(INITIAL_LEADERBOARDS).forEach(testId => {
-      const remoteList = Array.isArray(remoteData[testId]) ? remoteData[testId] : [];
+      const rawRemote = remoteData[testId];
+      const remoteList = rawRemote ? (Array.isArray(rawRemote) ? rawRemote : Object.values(rawRemote)) : [];
       const localList = Array.isArray(localBoards[testId]) ? localBoards[testId] : [];
 
       const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
@@ -143,7 +158,7 @@ export async function fetchGlobalLeaderboards() {
     });
 
     if (hasChanges) {
-      localStorage.setItem('catkeylab_leaderboards_v5', JSON.stringify(localBoards));
+      localStorage.setItem('catkeylab_leaderboards_v6', JSON.stringify(localBoards));
       if (updateCallback) updateCallback();
     }
   } catch (e) {
@@ -151,14 +166,15 @@ export async function fetchGlobalLeaderboards() {
   }
 }
 
-// Automatic 3-Second Live Polling Loop across all clients
+// Initialize Live Streaming & 3s Polling Fallback
+initFirebaseSSE();
 setInterval(fetchGlobalLeaderboards, 3000);
 
 // Get Leaderboard Data for a Test
 export function getLeaderboard(testId) {
   purgeOldKeys();
 
-  let boards = localStorage.getItem('catkeylab_leaderboards_v5');
+  let boards = localStorage.getItem('catkeylab_leaderboards_v6');
   let data = null;
 
   if (boards) {
@@ -169,7 +185,7 @@ export function getLeaderboard(testId) {
 
   if (!data) {
     data = INITIAL_LEADERBOARDS;
-    localStorage.setItem('catkeylab_leaderboards_v5', JSON.stringify(data));
+    localStorage.setItem('catkeylab_leaderboards_v6', JSON.stringify(data));
   }
 
   const list = data[testId] || [];
@@ -222,21 +238,21 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 
   let allBoards = {};
   try {
-    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v5')) || INITIAL_LEADERBOARDS;
+    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v6')) || INITIAL_LEADERBOARDS;
   } catch (e) {
     allBoards = INITIAL_LEADERBOARDS;
   }
 
   allBoards[testId] = topList;
-  localStorage.setItem('catkeylab_leaderboards_v5', JSON.stringify(allBoards));
+  localStorage.setItem('catkeylab_leaderboards_v6', JSON.stringify(allBoards));
 
   // Notify other local tabs in real-time
   if (syncChannel) {
     syncChannel.postMessage({ type: 'SCORE_SUBMITTED', testId, entry: newEntry });
   }
 
-  // Push to Global Cloud Store asynchronously
-  syncGlobalCloud(testId, newEntry);
+  // Push to Global Firebase Realtime Database
+  syncFirebaseCloud(testId, newEntry);
 
   if (updateCallback) updateCallback(testId);
 
@@ -255,41 +271,25 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
   };
 }
 
-// Global Cloud Synchronization Engine
-async function syncGlobalCloud(testId, newEntry) {
+// Push Score Entry to Firebase Realtime Database
+async function syncFirebaseCloud(testId, entry) {
   try {
-    let remoteData = {};
-    try {
-      const res = await fetch(GLOBAL_BLOB_URL, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) remoteData = await res.json() || {};
-    } catch (e) {}
-
-    const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
-    const currentList = Array.isArray(remoteData[testId]) ? remoteData[testId] : [];
-
-    const existingIdx = currentList.findIndex(item => item.handle === newEntry.handle);
-    if (existingIdx !== -1) {
-      const prev = currentList[existingIdx];
-      const isBetter = isLowerBetter ? newEntry.score < prev.score : newEntry.score > prev.score;
-      if (isBetter) currentList[existingIdx] = newEntry;
-    } else {
-      currentList.push(newEntry);
-    }
-
-    currentList.sort((a, b) => isLowerBetter ? a.score - b.score : b.score - a.score);
-    remoteData[testId] = currentList.slice(0, 50);
-
-    // Save updated global leaderboards to cloud store
-    await fetch(GLOBAL_BLOB_URL, {
+    const safeHandle = entry.handle.replace(/[.#$/[\]]/g, '_');
+    const url = `${FIREBASE_DB_URL}/${testId}/${safeHandle}.json`;
+    
+    await fetch(url, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(remoteData)
+      body: JSON.stringify({
+        handle: entry.handle,
+        avatar: entry.avatar,
+        score: entry.score,
+        display: entry.display,
+        date: "Just now",
+        timestamp: Date.now()
+      })
     });
   } catch (e) {
     // Offline resilience
