@@ -157,11 +157,11 @@ export function handleRoute() {
   if (!hash || hash === '') {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
-    updateSEOMetadata('Mouse Test & Keyboard Test Online - Free Hardware & Click Tools | ClickPulse', 'Free online mouse button tester, keyboard key tester, CPS click speed test, and auto clicker. Test mouse right click, side buttons, scroll wheel, and key rollover instantly.');
+    updateSEOMetadata('Mouse Hardware & Keyboard Key Tester Online - CatnipLab 🐾', 'Free online mouse button tester, keyboard key tester, typing speed challenge, and click speed utilities.');
   } else if (hash === 'tools') {
     renderToolsDirectoryPage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, 'All Tools');
-    updateSEOMetadata('Mouse & Keyboard Tools Directory - ClickPulse', 'Browse all free online mouse button testers, keyboard key testers, clicking, and speed testing utilities.');
+    updateSEOMetadata('Mouse & Keyboard Tools Directory - CatnipLab 🐾', 'Browse all free online mouse button testers, keyboard key testers, typing challenge, and speed testing utilities.');
   } else if (TOOL_METADATA[hash]) {
     const meta = TOOL_METADATA[hash];
     renderToolPage(mainContainer, hash, meta);
