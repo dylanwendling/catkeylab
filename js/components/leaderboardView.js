@@ -104,12 +104,17 @@ function bindEvents() {
 
   if (syncCloudBtn) {
     syncCloudBtn.addEventListener('click', async () => {
+      syncCloudBtn.disabled = true;
       syncCloudBtn.textContent = '⏳ Syncing...';
-      await fetchGlobalLeaderboards();
+      const success = await fetchGlobalLeaderboards();
       renderTable(activeTestId);
       setTimeout(() => {
-        syncCloudBtn.textContent = '🔄 Refresh Live Scores';
-      }, 600);
+        syncCloudBtn.disabled = false;
+        syncCloudBtn.textContent = success ? '✅ Scores Synced!' : '🔄 Refresh Live Scores';
+        setTimeout(() => {
+          syncCloudBtn.textContent = '🔄 Refresh Live Scores';
+        }, 1500);
+      }, 400);
     });
   }
 

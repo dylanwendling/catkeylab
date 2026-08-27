@@ -89,11 +89,11 @@ if (syncChannel) {
 }
 
 // Global Firebase Realtime Database Endpoint
-const FIREBASE_DB_URL = 'https://catkeylab-default-rtdb.firebaseio.com/leaderboards';
+const FIREBASE_DB_URL = 'https://catkeylab-default-rtdb.firebaseio.com/leaderboards_v7';
 
 // Purge old local storage keys to guarantee 100% clean data slate
 function purgeOldKeys() {
-  ['catkeylab_leaderboards', 'catkeylab_leaderboards_v2', 'catkeylab_leaderboards_v3', 'catkeylab_leaderboards_v4', 'catkeylab_leaderboards_v5'].forEach(k => {
+  ['catkeylab_leaderboards', 'catkeylab_leaderboards_v2', 'catkeylab_leaderboards_v3', 'catkeylab_leaderboards_v4', 'catkeylab_leaderboards_v5', 'catkeylab_leaderboards_v6'].forEach(k => {
     if (localStorage.getItem(k)) localStorage.removeItem(k);
   });
 }
@@ -119,13 +119,13 @@ export async function fetchGlobalLeaderboards() {
       method: 'GET',
       headers: { 'Accept': 'application/json' }
     });
-    if (!res.ok) return;
-    const remoteData = await res.json();
-    if (!remoteData || typeof remoteData !== 'object') return;
+    if (!res.ok) return false;
+    const rawResponse = await res.json();
+    const remoteData = (rawResponse && typeof rawResponse === 'object') ? rawResponse : {};
 
     let localBoards = {};
     try {
-      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v6')) || {};
+      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v7')) || {};
     } catch (e) {}
 
     let hasChanges = false;
@@ -158,11 +158,12 @@ export async function fetchGlobalLeaderboards() {
     });
 
     if (hasChanges) {
-      localStorage.setItem('catkeylab_leaderboards_v6', JSON.stringify(localBoards));
+      localStorage.setItem('catkeylab_leaderboards_v7', JSON.stringify(localBoards));
       if (updateCallback) updateCallback();
     }
+    return true;
   } catch (e) {
-    // Offline resilience
+    return false;
   }
 }
 
@@ -174,7 +175,7 @@ setInterval(fetchGlobalLeaderboards, 3000);
 export function getLeaderboard(testId) {
   purgeOldKeys();
 
-  let boards = localStorage.getItem('catkeylab_leaderboards_v6');
+  let boards = localStorage.getItem('catkeylab_leaderboards_v7');
   let data = null;
 
   if (boards) {
@@ -185,7 +186,7 @@ export function getLeaderboard(testId) {
 
   if (!data) {
     data = INITIAL_LEADERBOARDS;
-    localStorage.setItem('catkeylab_leaderboards_v6', JSON.stringify(data));
+    localStorage.setItem('catkeylab_leaderboards_v7', JSON.stringify(data));
   }
 
   const list = data[testId] || [];
@@ -239,13 +240,13 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 
   let allBoards = {};
   try {
-    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v6')) || INITIAL_LEADERBOARDS;
+    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v7')) || INITIAL_LEADERBOARDS;
   } catch (e) {
     allBoards = INITIAL_LEADERBOARDS;
   }
 
   allBoards[testId] = topList;
-  localStorage.setItem('catkeylab_leaderboards_v6', JSON.stringify(allBoards));
+  localStorage.setItem('catkeylab_leaderboards_v7', JSON.stringify(allBoards));
 
   // Notify other local tabs in real-time
   if (syncChannel) {
@@ -278,7 +279,7 @@ async function syncFirebaseCloud(testId, entry) {
     const safeHandle = entry.handle.replace(/[.#$/[\]]/g, '_');
     const url = `${FIREBASE_DB_URL}/${testId}/${safeHandle}.json`;
     
-    await fetch(url, {
+    const res = await fetch(url, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json'
@@ -292,6 +293,10 @@ async function syncFirebaseCloud(testId, entry) {
         timestamp: Date.now()
       })
     });
+
+    if (res.ok) {
+      await fetchGlobalLeaderboards();
+    }
   } catch (e) {
     // Offline resilience
   }
