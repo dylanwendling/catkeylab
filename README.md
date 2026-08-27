@@ -83,14 +83,19 @@ CatKeyLab includes fifteen specialized interactive modules accessible via client
 7. **🔳 Visual Memory Test (`#visual-memory-test`)**: Spatial matrix pattern recall expanding from 3x3 to 7x7 grid.
 8. **⌨️ Typing Speed Challenge (`#typing-test`)**: Distraction-free Monkeytype-inspired WPM speed test with Nibbles judging.
 
+### 🎮 Nibbles Companion Arcade Games
+9. **⛳ Nibbles 2D Mini Golf (`#cat-mini-golf-game`)**: 18-hole HTML5 Canvas 2D physics mini golf game with 3/9/18 round options, dynamic weather, wind, sand traps, water hazards, portals, and dual windmills.
+10. **🐟 Help Nibbles Find the Fish Maze (`#fish-maze-game`)**: 10x10 procedural maze puzzle guide game with keyboard & touch controls.
+11. **🎴 Cat Card Memory Match (`#card-memory-game`)**: 3D card flipping memory game matching 8 cat pairs.
+
 ### 🖱️ Hardware & Speed Diagnostics
-9. **🖱️ Mouse Hardware Tester (`#mouse-test`)**: Tests Left, Right, Middle, Side (MB4/MB5), and scroll wheel direction.
-10. **🖥️ Visual Keyboard Tester (`#keyboard-test`)**: Visual keyboard layout, NKRO rollover test, and DOM KeyCode inspector.
-11. **🎯 Online Auto Clicker (`#auto-clicker`)**: In-browser automated clicking simulator with interval controls.
-12. **⚡ CPS Test (`#cps-test`)**: Timed clicks-per-second speed benchmarking.
-13. **🚀 Click Speed Test (`#click-speed-test`)**: Real-time velocity analytics and click consistency gauges.
-14. **🔢 Digital Click Counter (`#click-counter`)**: Tactile tally counter with spacebar triggers.
-15. **👆 Double Click Chatter Test (`#double-click-test`)**: Hardware chatter detector for faulty mouse micro-switches.
+12. **🖱️ Mouse Hardware Tester (`#mouse-test`)**: Tests Left, Right, Middle, Side (MB4/MB5), and scroll wheel direction.
+13. **🖥️ Visual Keyboard Tester (`#keyboard-test`)**: Visual keyboard layout, NKRO rollover test, and DOM KeyCode inspector.
+14. **🎯 Online Auto Clicker (`#auto-clicker`)**: In-browser automated clicking simulator with interval controls.
+15. **⚡ CPS Test (`#cps-test`)**: Timed clicks-per-second speed benchmarking.
+16. **🚀 Click Speed Test (`#click-speed-test`)**: Real-time velocity analytics and click consistency gauges.
+17. **🔢 Digital Click Counter (`#click-counter`)**: Tactile tally counter with spacebar triggers.
+18. **👆 Double Click Chatter Test (`#double-click-test`)**: Hardware chatter detector for faulty mouse micro-switches.
 
 ---
 

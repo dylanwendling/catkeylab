@@ -161,14 +161,15 @@ export const TOOL_METADATA = {
   },
   'cat-mini-golf-game': {
     titleKey: 'catMiniGolfTitle',
-    desc: 'HTML5 Canvas 2D Physics Mini Golf with dynamic weather, wind, sand traps, portals, ice, and power-ups!',
+    desc: 'HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, sand traps, portals, ice, and dual windmills!',
     icon: '⛳',
     category: 'games',
     renderFn: renderCatMiniGolfGame,
     cleanupFn: cleanupCatMiniGolfGame,
     faqs: [
-      { q: 'How do I aim and shoot the golf ball?', a: 'Click and drag backward on the golf ball to adjust your shot angle and power meter, then release!' },
-      { q: 'What do power-ups do?', a: 'Aim Assist shows a extended trajectory line, Ball Magnet pulls the ball into the cup, Super Shot adds 2x power boost, and Undo Shot resets your last stroke.' }
+      { q: 'How do I aim and shoot the golf ball?', a: 'Click or touch and drag backward on the golf ball to adjust your shot angle and power meter, then release! You can drag anywhere across the screen.' },
+      { q: 'How do I choose course length?', a: 'Use the course selector buttons on the control bar to choose between 3 Holes (Quick), 9 Holes (Front Nine), or full 18 Holes (Championship).' },
+      { q: 'What do the course hazards do?', a: 'Sand traps slow down your ball with heavy drag, water hazards add +1 stroke penalty and reset the tee, ice patches slide smoothly, portals warp your ball, and windmills spin obstacle blades!' }
     ]
   },
   'typing-test': {
@@ -655,14 +656,16 @@ function renderLegalPage(container, type) {
           <li><strong>🧶 Throwable Yarn Ball Toy</strong>: Interactive yarn ball featuring drag-and-throw physics, friction damping, and screen boundary bounce physics.</li>
           <li><strong>🥣 Cat Food Bowl & Fish Feeding</strong>: Click or drag the food bowl to spawn fresh fish 🐟 to feed Nibbles.</li>
         </ul>
+      </div>
+
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
         <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🏆 Anonymous Global Leaderboards</h3>
         <p>CatKeyLab features a 100% private, anonymous leaderboard and percentile ranking engine. Players automatically receive a fun anonymous cat alias (e.g., <em>Speedy Tabby #4820</em>) with zero account creation or personal data collection.</p>
       </div>
 
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules (15 Suite Modules)</h3>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:0.75rem;">
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules (18 Suite Modules)</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1rem; margin-top:0.75rem;">
           <div><strong>⏱️ Reaction Time Test</strong>: Visual reaction latency tester in milliseconds.</div>
           <div><strong>🧠 Sequence Memory Test</strong>: Simon-says 3x3 interactive pattern recall with tones.</div>
           <div><strong>🎯 Aim Trainer</strong>: 30 targets precision challenge measuring acquisition speed & accuracy.</div>
@@ -671,6 +674,9 @@ function renderLegalPage(container, type) {
           <div><strong>🐒 Chimp Test</strong>: Ascending working memory grid test inspired by Kyoto University.</div>
           <div><strong>🔳 Visual Memory Test</strong>: Spatial matrix pattern recall expanding up to 7x7 grid.</div>
           <div><strong>⌨️ Typing Speed (WPM)</strong>: Distraction-free Monkeytype-inspired test with mechanical key sounds.</div>
+          <div><strong>⛳ Nibbles 2D Mini Golf</strong>: 18-hole 2D physics golf game with 3/9/18 hole rounds, portals & windmills.</div>
+          <div><strong>🐟 Help Nibbles Find Fish</strong>: 10x10 procedural maze puzzle guide game with touch/WASD controls.</div>
+          <div><strong>🎴 Cat Card Memory Match</strong>: 3D card flipping memory game matching 8 cat pairs.</div>
           <div><strong>🖱️ Mouse Hardware Tester</strong>: MB1–MB5 buttons, scroll wheel direction, and velocity inspector.</div>
           <div><strong>🖥️ Keyboard Key Tester</strong>: NKRO key rollover verification and DOM KeyCode inspector.</div>
           <div><strong>🎯 Online Auto Clicker</strong>: In-browser automated clicking simulator with interval controls.</div>
@@ -698,7 +704,7 @@ function renderLegalPage(container, type) {
       <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🔒 Zero Personal Data Collection</h3>
-          <p>At <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), we believe hardware testing and typing utilities should be fast, private, and secure. We do not collect, transmit, or store any personal data, email addresses, names, IP logs, keypress histories, or private hardware logs.</p>
+          <p>At <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), we believe hardware testing, typing utilities, and companion arcade games should be fast, private, and secure. We do not collect, transmit, or store any personal data, email addresses, names, IP logs, keypress histories, or private hardware logs.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
@@ -713,7 +719,7 @@ function renderLegalPage(container, type) {
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🖥️ Local Browser Sandbox Execution</h3>
-          <p>All tool calculations—including mouse button detection, keyboard keycode logging, WPM speed benchmarks, and reaction time measurements—execute <strong>100% locally inside your web browser sandbox</strong>. No raw test data ever leaves your device.</p>
+          <p>All tool calculations—including mouse button detection, keyboard keycode logging, WPM speed benchmarks, mini golf physics, and reaction time measurements—execute <strong>100% locally inside your web browser sandbox</strong>. No raw test data ever leaves your device.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
@@ -722,7 +728,7 @@ function renderLegalPage(container, type) {
           <ul style="margin-top:0.5rem; margin-left:1.25rem;">
             <li>Dark / Light color theme preference (<code>catkeylab_theme</code>)</li>
             <li>Sound effects toggle state (<code>catkeylab_sound</code>)</li>
-            <li>Personal high scores and CPS personal best benchmarks</li>
+            <li>Personal high scores and benchmark progress</li>
             <li>Anonymous cat profile handle (<code>catkeylab_anon_profile</code>)</li>
           </ul>
           <p style="margin-top:0.5rem;">You can clear this data at any time by clearing your browser site data.</p>
@@ -739,17 +745,17 @@ function renderLegalPage(container, type) {
       <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">1. Acceptance of Terms</h3>
-          <p>By accessing and using <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), created by Dylan (<a href="https://snowyorca.itch.io/" target="_blank" style="color:var(--accent-cyan);">snowyorca.itch.io</a>), you agree to these Terms of Service. CatKeyLab provides free, browser-native hardware testing, cognitive Human Benchmark games, and typing utilities for personal, commercial, and educational use.</p>
+          <p>By accessing and using <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), created by Dylan (<a href="https://snowyorca.itch.io/" target="_blank" style="color:var(--accent-cyan);">snowyorca.itch.io</a>), you agree to these Terms of Service. CatKeyLab provides free, browser-native hardware testing, cognitive Human Benchmark games, companion arcade games, and typing utilities for personal, commercial, and educational use.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">2. Use of Utilities & Browser Sandbox</h3>
-          <p>All tools on CatKeyLab run strictly within your web browser sandbox using modern web standards (HTML5, CSS3, JavaScript ES2022+, and Web Audio API). Tools are intended for hardware verification, cognitive speed practice, and hardware chatter diagnostics.</p>
+          <p>All tools on CatKeyLab run strictly within your web browser sandbox using modern web standards (HTML5 Canvas, CSS3, JavaScript ES2022+, and Web Audio API). Tools are intended for hardware verification, cognitive speed practice, and hardware chatter diagnostics.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">3. Anonymous Leaderboards & Fair Play</h3>
-          <p>CatKeyLab features global anonymous high score leaderboards across all 9 benchmark games. Players agree to participate in fair play without using automated cheat scripts or artificial score injection.</p>
+          <p>CatKeyLab features global anonymous high score leaderboards across all benchmark games. Players agree to participate in fair play without using automated cheat scripts or artificial score injection.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
@@ -767,7 +773,7 @@ function renderLegalPage(container, type) {
     title = 'Sitemap & Index';
     body = `
       <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
-        Complete Index of Interactive Tools, Cognitive Benchmarks & Resources on CatKeyLab 🗺️
+        Complete Index of Interactive Tools, Companion Arcade Games & Resources on CatKeyLab 🗺️
       </p>
 
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
@@ -783,6 +789,15 @@ function renderLegalPage(container, type) {
             <li><a href="#visual-memory-test" style="color:var(--text-primary); font-weight:600;">🔳 Visual Memory Spatial Recall Test</a></li>
             <li><a href="#typing-test" style="color:var(--text-primary); font-weight:600;">⌨️ Typing Speed Challenge (WPM)</a></li>
             <li><a href="#leaderboards" style="color:var(--accent-cyan); font-weight:700;">🏆 Anonymous Global Leaderboards</a></li>
+          </ul>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--accent-amber); font-size:1.2rem; margin-bottom:1rem;">🎮 Nibbles Companion Arcade Games</h3>
+          <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
+            <li><a href="#cat-mini-golf-game" style="color:var(--text-primary); font-weight:600;">⛳ Nibbles 2D Mini Golf (18 Holes)</a></li>
+            <li><a href="#fish-maze-game" style="color:var(--text-primary); font-weight:600;">🐟 Help Nibbles Find Fish (Maze)</a></li>
+            <li><a href="#card-memory-game" style="color:var(--text-primary); font-weight:600;">🎴 Cat Card Memory Match (3D)</a></li>
           </ul>
         </div>
 
@@ -842,7 +857,7 @@ function renderMeetNibblesPage(container) {
               Meet Nibbles in Real Life! 🐱
             </h2>
             <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">
-              This adorable orange cat sitting in a cardboard box is the real-life inspiration behind <strong>Nibbles</strong>! Created by <strong>Dylan</strong>, Nibbles lives on CatKeyLab to keep you company while you test hardware, practice typing, and click.
+              This adorable orange cat sitting in a cardboard box is the real-life inspiration behind <strong>Nibbles</strong>! Created by <strong>Dylan</strong>, Nibbles lives on CatKeyLab to keep you company while you test hardware, practice typing, and play companion arcade games!
             </p>
           </div>
         </div>
@@ -860,17 +875,23 @@ function renderMeetNibblesPage(container) {
           </div>
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <h3 style="font-size:1.2rem; color:var(--accent-amber); margin-bottom:0.5rem;">⌨️ WPM Typing Judging</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Take the Typing Speed Challenge! Nibbles calculates your WPM and accuracy, purring happily for fast typists or squinting judgmentally at typos.</p>
+            <h3 style="font-size:1.2rem; color:var(--accent-amber); margin-bottom:0.5rem;">⛳ Nibbles 2D Mini Golf</h3>
+            <p style="color:var(--text-secondary); line-height:1.6;">Play an 18-hole HTML5 Canvas 2D physics mini golf game with Nibbles! Master wind, portals, sand traps, and dual windmills.</p>
           </div>
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <h3 style="font-size:1.2rem; color:var(--accent-rose); margin-bottom:0.5rem;">🧶 Throwable Yarn Ball Toy</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Drag and toss the red yarn ball 🧶 across your screen. Throw it near Nibbles to watch his paws and pupils eagerly swat at the toy!</p>
+            <h3 style="font-size:1.2rem; color:var(--accent-rose); margin-bottom:0.5rem;">🐟 Help Nibbles Find Fish</h3>
+            <p style="color:var(--text-secondary); line-height:1.6;">Guide Nibbles through a 10x10 procedural maze puzzle to catch delicious fish using keyboard WASD or touch D-Pad controls!</p>
           </div>
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <h3 style="color:var(--accent-primary); font-size:1.2rem; margin-bottom:0.5rem;">🥣 Cat Food Bowl & Fish</h3>
+            <h3 style="color:var(--accent-primary); font-size:1.2rem; margin-bottom:0.5rem;">🎴 Cat Card Memory Match</h3>
+            <p style="color:var(--text-secondary); line-height:1.6;">Flip 3D cat cards to test your memory and find all 8 matching pairs in the fewest turns possible.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;le="color:var(--accent-primary); font-size:1.2rem; margin-bottom:0.5rem;">🥣 Cat Food Bowl & Fish</h3>
             <p style="color:var(--text-secondary); line-height:1.6;">Click the blue cat bowl 🥣 in the bottom-right corner to spawn fresh fish 🐟. Drag fish to Nibbles to feed him yummy treats!</p>
           </div>
         </div>
