@@ -1,9 +1,5 @@
 # ⚡ ClickPulse
 
-<p align="center">
-  <img src="assets/logo.png" alt="ClickPulse Logo" width="120" onerror="this.style.display='none'" />
-</p>
-
 <h3 align="center">Free, Private & Powerful Online Browser Clicking & Hardware Testing Suite</h3>
 
 <p align="center">
