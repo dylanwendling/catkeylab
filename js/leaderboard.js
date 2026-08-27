@@ -72,7 +72,12 @@ export function randomizeAnonHandle() {
 
 // Get Leaderboard Data for a Test
 export function getLeaderboard(testId) {
-  let boards = localStorage.getItem('catkeylab_leaderboards');
+  // Purge old mock storage key if present
+  if (localStorage.getItem('catkeylab_leaderboards')) {
+    localStorage.removeItem('catkeylab_leaderboards');
+  }
+
+  let boards = localStorage.getItem('catkeylab_leaderboards_v2');
   let data = null;
 
   if (boards) {
@@ -83,10 +88,10 @@ export function getLeaderboard(testId) {
 
   if (!data) {
     data = INITIAL_LEADERBOARDS;
-    localStorage.setItem('catkeylab_leaderboards', JSON.stringify(data));
+    localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(data));
   }
 
-  const list = data[testId] || INITIAL_LEADERBOARDS[testId] || [];
+  const list = data[testId] || [];
 
   // Sort logic (Lower is better for reaction-time and aim-trainer; Higher is better for others)
   const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
@@ -131,13 +136,13 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 
   let allBoards = {};
   try {
-    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards')) || INITIAL_LEADERBOARDS;
+    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v2')) || INITIAL_LEADERBOARDS;
   } catch (e) {
     allBoards = INITIAL_LEADERBOARDS;
   }
 
   allBoards[testId] = topList;
-  localStorage.setItem('catkeylab_leaderboards', JSON.stringify(allBoards));
+  localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(allBoards));
 
   // Find user rank position
   const rankIdx = topList.findIndex(item => item.handle === profile.handle);
