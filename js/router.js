@@ -166,12 +166,12 @@ export function handleRoute() {
     const meta = TOOL_METADATA[hash];
     renderToolPage(mainContainer, hash, meta);
     renderBreadcrumbs(breadcrumbsContainer, t(meta.titleKey));
-    updateSEOMetadata(`${t(meta.titleKey)} - CatnipLab 🐾 Hardware Tools`, meta.desc);
+    updateSEOMetadata(`${t(meta.titleKey)} - CatKeyLab 🐾 Hardware Tools`, meta.desc);
     currentCleanup = meta.cleanupFn;
   } else if (hash === 'about' || hash === 'privacy' || hash === 'terms') {
     renderLegalPage(mainContainer, hash);
     renderBreadcrumbs(breadcrumbsContainer, hash.toUpperCase());
-    updateSEOMetadata(`${hash.toUpperCase()} - CatnipLab 🐾`, 'CatnipLab platform policies and information.');
+    updateSEOMetadata(`${hash.toUpperCase()} - CatKeyLab 🐾`, 'CatKeyLab platform policies and information.');
   } else {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
@@ -197,7 +197,7 @@ function renderHomePage(container) {
     <section class="hero">
       <div class="container">
         <div class="hero-badge" style="background:linear-gradient(90deg, rgba(16,185,129,0.18), rgba(249,115,22,0.18)); border-color:rgba(16,185,129,0.35); color:var(--accent-emerald);">
-          🐾 CatnipLab • Handcrafted Hardware Testers & Typing Speed Challenge
+          🐾 CatKeyLab • Handcrafted Hardware Testers & Typing Speed Challenge
         </div>
         <h1 class="hero-title">
           <span>Test Mouse Hardware, Keyboard Keys & Typing Speed</span> 🐾

@@ -1,7 +1,7 @@
 {
-  "name": "catniplab",
+  "name": "catkeylab",
   "version": "1.0.0",
-  "description": "CatnipLab - Online Hardware Testers & Typing Speed Challenge",
+  "description": "CatKeyLab - Online Hardware Testers & Typing Speed Challenge",
   "private": true,
   "main": "index.html",
   "scripts": {

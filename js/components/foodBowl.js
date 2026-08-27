@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatnipLab - Interactive Cat Food Bowl & Fish Feeding Component 🥣🐟
+   CatKeyLab - Interactive Cat Food Bowl & Fish Feeding Component 🥣🐟
    ========================================================================== */
 
 import { getMascotPosition, feedFishToCat, updateYarnPawTracking } from './catMascot.js';

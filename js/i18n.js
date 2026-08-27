@@ -142,8 +142,8 @@ export const translations = {
 
     // Footer & Meta
     privacyNotice: '100% Client-Side & Private. No data leaves your device.',
-    copyright: '© 2026 CatnipLab 🐾. All rights reserved.',
-    footerAbout: 'CatnipLab provides free, browser-native hardware testing tools, WPM typing speed challenges, and click speed diagnostics with Nibbles the Cat.'
+    copyright: '© 2026 CatKeyLab 🐾. All rights reserved.',
+    footerAbout: 'CatKeyLab provides free, browser-native hardware testing tools, WPM typing speed challenges, and click speed diagnostics with Nibbles the Cat.'
   },
   es: {
     siteName: 'ClickPulse',

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatnipLab - Header Navigation Component (Cat Theme)
+   CatKeyLab - Header Navigation Component (Cat Theme)
    ========================================================================== */
 
 import { t, LANGUAGES, getCurrentLang, setLanguage } from '../i18n.js';
@@ -17,7 +17,7 @@ export function renderHeader(container) {
           <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
             🐱
           </div>
-          <div class="logo-text">Catnip<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
+          <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
         </a>
 
         <!-- Desktop Navigation Links -->

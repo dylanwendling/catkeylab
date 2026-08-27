@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatnipLab - Interactive Throwable Yarn Ball Toy Component 🧶
+   CatKeyLab - Interactive Throwable Yarn Ball Toy Component 🧶
    ========================================================================== */
 
 import { getMascotPosition, reactToYarn, updateYarnPawTracking } from './catMascot.js';
