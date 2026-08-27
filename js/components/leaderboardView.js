@@ -184,21 +184,9 @@ function renderTable(testId) {
       <div style="text-align:center; padding:3.5rem 1.5rem; color:var(--text-secondary);">
         <div style="font-size:3rem; margin-bottom:0.5rem;">🐾🏆</div>
         <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:0.4rem;">No Scores Logged Yet</h3>
-        <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.25rem;">Be the very first player to set a high score record on this test!</p>
-        <button class="btn btn-primary btn-sm lb-direct-play-btn" style="cursor:pointer; font-weight:700;">🎮 Play ${currentTab.label} Now</button>
+        <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:0;">Be the very first player to set a high score record on this test using the button above!</p>
       </div>
     `;
-
-    const emptyPlayBtn = content.querySelector('.lb-direct-play-btn');
-    if (emptyPlayBtn) {
-      emptyPlayBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.hash = '#' + testId;
-        handleRoute();
-        window.scrollTo({ top: 0, behavior: 'instant' });
-      });
-    }
     return;
   }
 
