@@ -28,6 +28,7 @@ export function renderFooter(container) {
           <div>
             <h4 class="footer-title" data-i18n="navTools">${t('navTools')}</h4>
             <div class="footer-links">
+              <a href="#typing-test" class="footer-link" data-i18n="navTypingTest">${t('navTypingTest')}</a>
               <a href="#auto-clicker" class="footer-link" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
               <a href="#cps-test" class="footer-link" data-i18n="navCPSTest">${t('navCPSTest')}</a>
               <a href="#click-speed-test" class="footer-link" data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</a>
@@ -55,10 +56,10 @@ export function renderFooter(container) {
           <div>
             <h4 class="footer-title">Platform & Privacy</h4>
             <div class="footer-links">
-              <a href="#about" class="footer-link">About CatKeyLab</a>
-              <a href="#privacy" class="footer-link">Privacy Policy</a>
-              <a href="#terms" class="footer-link">Terms of Service</a>
-              <a href="#sitemap" class="footer-link">Sitemap & Index</a>
+              <a href="https://catkeylab.onrender.com/#about" class="footer-link">About CatKeyLab</a>
+              <a href="https://catkeylab.onrender.com/#privacy" class="footer-link">Privacy Policy</a>
+              <a href="https://catkeylab.onrender.com/#terms" class="footer-link">Terms of Service</a>
+              <a href="https://catkeylab.onrender.com/#sitemap" class="footer-link">Sitemap & Index</a>
             </div>
           </div>
         </div>

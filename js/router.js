@@ -79,7 +79,7 @@ export const TOOL_METADATA = {
     faqs: [
       { q: 'How does an online auto clicker work?', a: 'An online auto clicker uses browser JavaScript timers to simulate rapid mouse click events automatically inside the active web page canvas.' },
       { q: 'Can an online auto clicker click outside the browser?', a: 'No. Due to browser security sandbox rules, web applications cannot control the mouse cursor on your Windows or Mac desktop outside the browser window.' },
-      { q: 'Is this auto clicker 100% free to use?', a: 'Yes! ClickPulse is 100% free, private, and requires zero installation or account creation.' }
+      { q: 'Is this auto clicker 100% free to use?', a: 'Yes! CatKeyLab is 100% free, private, and requires zero installation or account creation.' }
     ]
   },
   'cps-test': {
@@ -157,21 +157,21 @@ export function handleRoute() {
   if (!hash || hash === '') {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
-    updateSEOMetadata('Mouse Test & Keyboard Test Online - Free Hardware & Click Tools | ClickPulse', 'Free online mouse button tester, keyboard key tester, CPS click speed test, and auto clicker. Test mouse right click, side buttons, scroll wheel, and key rollover instantly.');
+    updateSEOMetadata('CatKeyLab 🐾 - Mouse Hardware Tester, Keyboard Tester & Typing Speed Challenge', 'Free online mouse button tester, keyboard key tester, WPM typing test, CPS click speed test, and auto clicker with Nibbles the Cat.');
   } else if (hash === 'tools') {
     renderToolsDirectoryPage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, 'All Tools');
-    updateSEOMetadata('Mouse & Keyboard Tools Directory - ClickPulse', 'Browse all free online mouse button testers, keyboard key testers, clicking, and speed testing utilities.');
+    updateSEOMetadata('Mouse & Keyboard Tools Directory - CatKeyLab 🐾', 'Browse all free online mouse button testers, keyboard key testers, typing tests, clicking, and speed testing utilities.');
   } else if (TOOL_METADATA[hash]) {
     const meta = TOOL_METADATA[hash];
     renderToolPage(mainContainer, hash, meta);
     renderBreadcrumbs(breadcrumbsContainer, t(meta.titleKey));
     updateSEOMetadata(`${t(meta.titleKey)} - CatKeyLab 🐾 Hardware Tools`, meta.desc);
     currentCleanup = meta.cleanupFn;
-  } else if (hash === 'about' || hash === 'privacy' || hash === 'terms') {
+  } else if (hash === 'about' || hash === 'privacy' || hash === 'terms' || hash === 'sitemap') {
     renderLegalPage(mainContainer, hash);
-    renderBreadcrumbs(breadcrumbsContainer, hash.toUpperCase());
-    updateSEOMetadata(`${hash.toUpperCase()} - CatKeyLab 🐾`, 'CatKeyLab platform policies and information.');
+    renderBreadcrumbs(breadcrumbsContainer, hash === 'sitemap' ? 'Sitemap & Index' : hash.toUpperCase());
+    updateSEOMetadata(`${hash === 'sitemap' ? 'Sitemap & Index' : hash.toUpperCase()} - CatKeyLab 🐾`, 'CatKeyLab platform policies and index.');
   } else {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
@@ -292,10 +292,10 @@ function renderHomePage(container) {
         <div style="max-width:800px; margin:0 auto; line-height:1.7;">
           <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:1rem;">Everything You Need For Clicking & Hardware Diagnostics — Directly In Your Browser</h2>
           <p style="margin-bottom:1rem; color:var(--text-secondary);">
-            ClickPulse is designed from the ground up to provide fast, lightweight, and completely browser-native tools for clicking, CPS speed testing, mouse button diagnostics, and keyboard event logging.
+            CatKeyLab is designed from the ground up to provide fast, lightweight, and completely browser-native tools for clicking, WPM typing speed tests, CPS performance, mouse button diagnostics, and keyboard event logging.
           </p>
           <p style="margin-bottom:1rem; color:var(--text-secondary);">
-            Unlike traditional desktop software that requires downloads, executable installers, or system administrator permissions, all tools on ClickPulse execute 100% locally inside your web browser. This guarantees ultimate privacy, instant access, and cross-platform compatibility across Windows, macOS, Linux, ChromeOS, iOS, and Android.
+            Unlike traditional desktop software that requires downloads, executable installers, or system administrator permissions, all tools on CatKeyLab execute 100% locally inside your web browser. This guarantees ultimate privacy, instant access, and cross-platform compatibility across Windows, macOS, Linux, ChromeOS, iOS, and Android.
           </p>
         </div>
       </div>
@@ -307,8 +307,8 @@ function renderHomePage(container) {
   initHeroQuickTestListeners();
 
   renderFAQ(document.getElementById('home-faq-container'), [
-    { q: 'Do I need to download or install software to use ClickPulse?', a: 'No! All tools on ClickPulse run 100% inside your web browser using HTML5, Web Audio, and Vanilla JavaScript.' },
-    { q: 'Is ClickPulse safe and private?', a: 'Yes. None of your clicks, keypresses, or test scores are ever sent to an external server. Everything stays on your local device.' }
+    { q: 'Do I need to download or install software to use CatKeyLab?', a: 'No! All tools on CatKeyLab run 100% inside your web browser using HTML5, Web Audio API, and Vanilla JavaScript.' },
+    { q: 'Is CatKeyLab safe and private?', a: 'Yes. None of your clicks, keypresses, WPM typing tests, or test scores are ever sent to an external server. Everything stays on your local device.' }
   ]);
 }
 
@@ -456,22 +456,161 @@ function renderToolPage(container, toolKey, toolMeta) {
 }
 
 function renderLegalPage(container, type) {
-  let title = 'About ClickPulse';
-  let body = 'ClickPulse is a free online browser-based tool suite.';
+  let title = 'About CatKeyLab';
+  let body = `
+    <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
+      Free, Private & Powerful Online Hardware Testing Suite & Typing Speed Challenge 🐾
+    </p>
+
+    <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
+      <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">📖 Overview</h3>
+        <p>
+          <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>) is a lightweight, high-performance web application built for testing mouse hardware, keyboard switches, WPM typing speed, click velocity, and reaction latency directly inside your web browser.
+        </p>
+        <p style="margin-top:0.75rem;">
+          Unlike bloated desktop software, CatKeyLab operates <strong>100% client-side</strong>, requiring <strong>zero downloads, zero plugins, zero accounts, and zero tracking</strong>. All hardware test measurements, typing accuracy calculations, and high score benchmarks process locally in your browser sandbox to guarantee absolute privacy and instant performance.
+        </p>
+      </div>
+
+      <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🐱 Nibbles the Cat & Interactive Companions</h3>
+        <p>CatKeyLab features <strong>Nibbles</strong>, a playful Ginger Tabby Cat wearing a ruby red collar with a shiny gold bell 🔔 who accompanies you while you test hardware!</p>
+        <ul style="margin-top:0.75rem; margin-left:1.25rem; display:flex; flex-direction:column; gap:0.5rem;">
+          <li><strong>🐾 Pupil & Paw Tracking</strong>: Nibbles' pupils follow your cursor across the viewport, while his paws reach out toward nearby mouse movements.</li>
+          <li><strong>⌨️ WPM Typing Judging</strong>: Nibbles evaluates your typing speed, purring happily for fast typists or squinting judgmentally at typos!</li>
+          <li><strong>🧶 Throwable Yarn Ball Toy</strong>: Interactive yarn ball featuring drag-and-throw physics, friction damping, and screen boundary bounce physics.</li>
+          <li><strong>🥣 Cat Food Bowl & Fish Feeding</strong>: Click or drag the food bowl to spawn fresh fish 🐟 to feed Nibbles.</li>
+        </ul>
+      </div>
+
+      <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules</h3>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:0.75rem;">
+          <div><strong>⌨️⚡ Typing Speed (WPM)</strong>: Distraction-free Monkeytype-inspired test with mechanical key sounds.</div>
+          <div><strong>🖱️ Mouse Hardware Tester</strong>: MB1–MB5 buttons, scroll wheel direction, and velocity inspector.</div>
+          <div><strong>⌨️ Keyboard Key Tester</strong>: NKRO key rollover verification and DOM KeyCode inspector.</div>
+          <div><strong>🎯 Online Auto Clicker</strong>: In-browser automated clicking simulator with interval controls.</div>
+          <div><strong>⚡ CPS Speed Test</strong>: Timed clicks-per-second benchmarking with high score badges.</div>
+          <div><strong>🚀 Click Speed Test</strong>: Real-time velocity analytics and click consistency gauges.</div>
+          <div><strong>🔢 Digital Click Counter</strong>: Tactile tally counter with spacebar triggers and target alerts.</div>
+          <div><strong>⏱️ Reaction Time Test</strong>: Millisecond visual reaction latency benchmarking.</div>
+          <div><strong>👆 Double Click Tester</strong>: Hardware chatter detector for faulty mouse micro-switches.</div>
+        </div>
+      </div>
+
+      <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🔊 Web Audio API Synthesizer</h3>
+        <p>To maintain 100% offline capability and zero network overhead, CatKeyLab programmatically synthesizes audio in real-time using native Web Audio API oscillators for mechanical typing clicks, UI chimes, and cat purr sounds.</p>
+      </div>
+    </div>
+  `;
 
   if (type === 'privacy') {
     title = 'Privacy Policy';
-    body = 'ClickPulse respects your privacy. All interactive tools process data 100% client-side in your web browser. We do not track mouse clicks, keyboard input, or test scores.';
+    body = `
+      <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
+        100% Client-Side Processing • Zero Tracking • Zero Data Collection 🛡️
+      </p>
+
+      <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🔒 Zero Data Collection Guarantee</h3>
+          <p>At <strong>CatKeyLab</strong>, we believe hardware testing and typing utilities should be fast, private, and secure. We do not collect, transmit, store, or sell any personal data, IP addresses, click logs, keypress histories, or test results.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🖥️ Local Browser Sandbox Execution</h3>
+          <p>All tool calculations—including mouse button detection, keyboard keycode logging, WPM speed benchmarks, and reaction time measurements—execute <strong>100% locally inside your web browser sandbox</strong>. No data ever leaves your device.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">💾 Local Storage Usage</h3>
+          <p>CatKeyLab uses standard browser <code>localStorage</code> solely for persisting your non-sensitive preferences locally on your device:</p>
+          <ul style="margin-top:0.5rem; margin-left:1.25rem;">
+            <li>Dark / Light color theme preference (<code>catkeylab_theme</code>)</li>
+            <li>Sound effects toggle state (<code>catkeylab_sound</code>)</li>
+            <li>Personal high scores and CPS personal best benchmarks</li>
+          </ul>
+          <p style="margin-top:0.5rem;">You can clear this data at any time by clearing your browser site data.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🌐 No Desktop Downloads or Installers</h3>
+          <p>CatKeyLab requires zero executable downloads, zero browser extensions, and zero user account sign-ups. Enjoy complete security and privacy out of the box.</p>
+        </div>
+      </div>
+    `;
   } else if (type === 'terms') {
     title = 'Terms of Service';
-    body = 'All tools are provided "as-is" for personal, educational, and testing purposes.';
+    body = `
+      <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
+        MIT Licensed Open Utilities • Personal & Educational Use 📄
+      </p>
+
+      <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">1. Acceptance of Terms</h3>
+          <p>By accessing and using <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), you agree to these Terms of Service. CatKeyLab provides free, browser-native hardware testing and typing utilities for personal, commercial, and educational use.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">2. Use of Utilities & Browser Sandbox</h3>
+          <p>All tools on CatKeyLab run strictly within your web browser sandbox using web standards (HTML5, CSS3, JavaScript ES2022+, and Web Audio API). Tools are intended for hardware verification, typing speed practice, and hardware chatter diagnostics.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">3. Open Source & MIT License</h3>
+          <p>CatKeyLab is licensed under the <strong>MIT License</strong>. You are free to use, modify, and distribute the project for personal or commercial applications under the terms of the MIT open-source license.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">4. Disclaimer of Warranty</h3>
+          <p>All utilities are provided "AS IS", without warranty of any kind, express or implied. Hardware measurements depend on device hardware, operating system drivers, and browser performance.</p>
+        </div>
+      </div>
+    `;
+  } else if (type === 'sitemap') {
+    title = 'Sitemap & Index';
+    body = `
+      <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
+        Complete Index of Interactive Tools & Platform Resources on CatKeyLab 🗺️
+      </p>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--accent-emerald); font-size:1.2rem; margin-bottom:1rem;">⌨️ Hardware & Typing Tools</h3>
+          <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
+            <li><a href="#typing-test" style="color:var(--text-primary); font-weight:600;">⌨️⚡ Typing Speed Challenge (WPM)</a></li>
+            <li><a href="#mouse-test" style="color:var(--text-primary); font-weight:600;">🖱️ Mouse Button & Movement Tester</a></li>
+            <li><a href="#keyboard-test" style="color:var(--text-primary); font-weight:600;">⌨️ Visual Keyboard Switch Tester</a></li>
+            <li><a href="#auto-clicker" style="color:var(--text-primary); font-weight:600;">🎯 In-Browser Online Auto Clicker</a></li>
+            <li><a href="#cps-test" style="color:var(--text-primary); font-weight:600;">⚡ CPS Test (Clicks Per Second)</a></li>
+            <li><a href="#click-speed-test" style="color:var(--text-primary); font-weight:600;">🚀 Click Velocity & Burst Speed Test</a></li>
+            <li><a href="#click-counter" style="color:var(--text-primary); font-weight:600;">🔢 Digital Tally Click Counter</a></li>
+            <li><a href="#reaction-time-test" style="color:var(--text-primary); font-weight:600;">⏱️ Visual Reaction Time Latency Test</a></li>
+            <li><a href="#double-click-test" style="color:var(--text-primary); font-weight:600;">👆 Mouse Double Click Chatter Tester</a></li>
+          </ul>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--accent-cyan); font-size:1.2rem; margin-bottom:1rem;">Platform & Information</h3>
+          <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
+            <li><a href="https://catkeylab.onrender.com/#about" style="color:var(--text-primary); font-weight:600;">About CatKeyLab</a></li>
+            <li><a href="https://catkeylab.onrender.com/#privacy" style="color:var(--text-primary); font-weight:600;">Privacy Policy</a></li>
+            <li><a href="https://catkeylab.onrender.com/#terms" style="color:var(--text-primary); font-weight:600;">Terms of Service</a></li>
+            <li><a href="https://catkeylab.onrender.com/#sitemap" style="color:var(--text-primary); font-weight:600;">Sitemap & Index</a></li>
+          </ul>
+        </div>
+      </div>
+    `;
   }
 
   container.innerHTML = `
     <div class="container section">
-      <div class="tool-wrapper">
-        <h1 style="font-size:2rem; font-weight:800; margin-bottom:1rem;">${title}</h1>
-        <p style="color:var(--text-secondary); line-height:1.7;">${body}</p>
+      <div class="tool-wrapper" style="max-width:900px; margin:0 auto;">
+        <h1 style="font-size:2.2rem; font-weight:800; margin-bottom:1rem;">${title}</h1>
+        <div>${body}</div>
       </div>
     </div>
   `;

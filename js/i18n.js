@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - i18n Multilingual Translation Dictionary (13 Languages)
+   CatKeyLab - i18n Multilingual Translation Dictionary (13 Languages)
    ========================================================================== */
 
 export const LANGUAGES = [
@@ -146,7 +146,7 @@ export const translations = {
     footerAbout: 'CatKeyLab provides free, browser-native hardware testing tools, WPM typing speed challenges, and click speed diagnostics with Nibbles the Cat.'
   },
   es: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Herramientas Gratuitas de Clics y Ratón en el Navegador',
     navHome: 'Inicio',
     navAutoClicker: 'Auto Clicker',
@@ -239,11 +239,11 @@ export const translations = {
     lblDoubleInterval: 'Intervalo Doble Clic',
     lblStatusRating: 'Evaluación Clic',
     privacyNotice: '100% Privado en Navegador. Sin envío de datos.',
-    copyright: '© 2026 ClickPulse. Todos los derechos reservados.',
-    footerAbout: 'ClickPulse ofrece herramientas de clics y pruebas de hardware gratuitas directamente en tu navegador.'
+    copyright: '© 2026 CatKeyLab. Todos los derechos reservados.',
+    footerAbout: 'CatKeyLab ofrece herramientas de clics y pruebas de hardware gratuitas directamente en tu navegador.'
   },
   fr: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Outils de Clic et Souris Gratuits en Ligne',
     navHome: 'Accueil',
     navAutoClicker: 'Auto Clicker',
@@ -336,11 +336,11 @@ export const translations = {
     lblDoubleInterval: 'Intervalle Double Clic',
     lblStatusRating: 'Évaluation Clic',
     privacyNotice: '100% Privé dans le Navigateur. Aucune donnée stockée.',
-    copyright: '© 2026 ClickPulse. Tous droits réservés.',
-    footerAbout: 'ClickPulse fournit des outils de clic et de test de périphérique gratuits dans votre navigateur.'
+    copyright: '© 2026 CatKeyLab. Tous droits réservés.',
+    footerAbout: 'CatKeyLab fournit des outils de clic et de test de périphérique gratuits dans votre navigateur.'
   },
   de: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Kostenlose Online-Klick- & Maus-Tools',
     navHome: 'Startseite',
     navAutoClicker: 'Auto Clicker',
@@ -433,11 +433,11 @@ export const translations = {
     lblDoubleInterval: 'Doppelklick-Intervall',
     lblStatusRating: 'Klick-Bewertung',
     privacyNotice: '100% Lokal im Browser. Keine Datenübertragung.',
-    copyright: '© 2026 ClickPulse. Alle Rechte vorbehalten.',
-    footerAbout: 'ClickPulse bietet kostenlose Online-Tools für Klicks, Mäuse und Tastaturen direkt im Browser.'
+    copyright: '© 2026 CatKeyLab. Alle Rechte vorbehalten.',
+    footerAbout: 'CatKeyLab bietet kostenlose Online-Tools für Klicks, Mäuse und Tastaturen direkt im Browser.'
   },
   pt: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Ferramentas de Clicar e Rato Online Grátis',
     navHome: 'Início',
     navAutoClicker: 'Auto Clicker',
@@ -530,11 +530,11 @@ export const translations = {
     lblDoubleInterval: 'Intervalo Duplo Clique',
     lblStatusRating: 'Avaliação Clique',
     privacyNotice: '100% Privado no Navegador.',
-    copyright: '© 2026 ClickPulse. Todos os direitos reservados.',
-    footerAbout: 'ClickPulse oferece ferramentas gratuitas de cliques e testes de rato online.'
+    copyright: '© 2026 CatKeyLab. Todos os direitos reservados.',
+    footerAbout: 'CatKeyLab oferece ferramentas gratuitas de cliques e testes de rato online.'
   },
   it: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Strumenti Online Gratuiti per Clic e Mouse',
     navHome: 'Home',
     navAutoClicker: 'Auto Clicker',
@@ -627,11 +627,11 @@ export const translations = {
     lblDoubleInterval: 'Intervallo Doppio Clic',
     lblStatusRating: 'Valutazione Clic',
     privacyNotice: '100% Privato nel Browser.',
-    copyright: '© 2026 ClickPulse. Tutti i diritti riservati.',
-    footerAbout: 'ClickPulse offre strumenti gratuiti per testare clic, mouse e tastiera online.'
+    copyright: '© 2026 CatKeyLab. Tutti i diritti riservati.',
+    footerAbout: 'CatKeyLab offre strumenti gratuiti per testare clic, mouse e tastiera online.'
   },
   nl: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Gratis Online Klik- & Muis-Tools',
     navHome: 'Home',
     navAutoClicker: 'Auto Clicker',
@@ -724,11 +724,11 @@ export const translations = {
     lblDoubleInterval: 'Dubbelklik Interval',
     lblStatusRating: 'Klik Score',
     privacyNotice: '100% Privé in Browser.',
-    copyright: '© 2026 ClickPulse. Alle rechten voorbehouden.',
-    footerAbout: 'ClickPulse biedt gratis online muis- en kliktools aan.'
+    copyright: '© 2026 CatKeyLab. Alle rechten voorbehouden.',
+    footerAbout: 'CatKeyLab biedt gratis online muis- en kliktools aan.'
   },
   pl: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Darmowe Narzędzia Klikania i Myszy Online',
     navHome: 'Strona Główna',
     navAutoClicker: 'Auto Clicker',
@@ -821,11 +821,11 @@ export const translations = {
     lblDoubleInterval: 'Interwał Kliknięcia',
     lblStatusRating: 'Ocena Kliknięcia',
     privacyNotice: '100% Prywatności w Przeglądarce.',
-    copyright: '© 2026 ClickPulse. Wszelkie prawa zastrzeżone.',
-    footerAbout: 'ClickPulse oferuje darmowe narzędzia online do testowania myszy i klikania.'
+    copyright: '© 2026 CatKeyLab. Wszelkie prawa zastrzeżone.',
+    footerAbout: 'CatKeyLab oferuje darmowe narzędzia online do testowania myszy i klikania.'
   },
   tr: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Ücretsiz Çevrimiçi Tıklama ve Fare Araçları',
     navHome: 'Ana Sayfa',
     navAutoClicker: 'Auto Clicker',
@@ -918,11 +918,11 @@ export const translations = {
     lblDoubleInterval: 'Çift Tık Aralığı',
     lblStatusRating: 'Tıklama Derecesi',
     privacyNotice: '%100 Tarayıcıda Gizli. Veri toplanmaz.',
-    copyright: '© 2026 ClickPulse. Tüm hakları saklıdır.',
-    footerAbout: 'ClickPulse, tarayıcınızda çalışan ücretsiz tıklama ve donanım test araçları sunar.'
+    copyright: '© 2026 CatKeyLab. Tüm hakları saklıdır.',
+    footerAbout: 'CatKeyLab, tarayıcınızda çalışan ücretsiz tıklama ve donanım test araçları sunar.'
   },
   ru: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: 'Бесплатные Онлайн Онлайн-Инструменты для Кликов и Мыши',
     navHome: 'Главная',
     navAutoClicker: 'Автокликер',
@@ -1015,11 +1015,11 @@ export const translations = {
     lblDoubleInterval: 'Интервал Клика',
     lblStatusRating: 'Оценка Клика',
     privacyNotice: '100% Конфиденциально в Браузере.',
-    copyright: '© 2026 ClickPulse. Все права защищены.',
-    footerAbout: 'ClickPulse предоставляет бесплатные инструменты для кликов и проверки устройств онлайн.'
+    copyright: '© 2026 CatKeyLab. Все права защищены.',
+    footerAbout: 'CatKeyLab предоставляет бесплатные инструменты для кликов и проверки устройств онлайн.'
   },
   ja: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: '無料オンラインブラウザクリック＆マウスツール',
     navHome: 'ホーム',
     navAutoClicker: '連打ツール',
@@ -1112,11 +1112,11 @@ export const translations = {
     lblDoubleInterval: 'クリック間隔',
     lblStatusRating: '判定結果',
     privacyNotice: '100%ブラウザ内で完結。個人情報は一切送信されません。',
-    copyright: '© 2026 ClickPulse. All rights reserved.',
-    footerAbout: 'ClickPulseはブラウザで動作する無料の連打・マウス・キーボードテストツールを提供します。'
+    copyright: '© 2026 CatKeyLab. All rights reserved.',
+    footerAbout: 'CatKeyLabはブラウザで動作する無料の連打・マウス・キーボードテストツールを提供します。'
   },
   ko: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: '무료 온라인 브라우저 클릭 및 마우스 툴',
     navHome: '홈',
     navAutoClicker: '오토클릭',
@@ -1209,11 +1209,11 @@ export const translations = {
     lblDoubleInterval: '클릭 간격',
     lblStatusRating: '판정 결과',
     privacyNotice: '100% 브라우저 내 동작. 개인정보를 수집하지 않습니다.',
-    copyright: '© 2026 ClickPulse. All rights reserved.',
-    footerAbout: 'ClickPulse는 브라우저에서 바로 사용 가능한 무료 클릭 및 하드웨어 테스트 도구를 제공합니다.'
+    copyright: '© 2026 CatKeyLab. All rights reserved.',
+    footerAbout: 'CatKeyLab는 브라우저에서 바로 사용 가능한 무료 클릭 및 하드웨어 테스트 도구를 제공합니다.'
   },
   zh: {
-    siteName: 'ClickPulse',
+    siteName: 'CatKeyLab',
     tagline: '免费在线浏览器点击与鼠标工具',
     navHome: '首页',
     navAutoClicker: '自动点击器',
@@ -1306,8 +1306,8 @@ export const translations = {
     lblDoubleInterval: '双击间隔',
     lblStatusRating: '双击评级',
     privacyNotice: '100% 浏览器本地运行，绝不上传任何隐私数据。',
-    copyright: '© 2026 ClickPulse. 保留所有权利。',
-    footerAbout: 'ClickPulse 致力于提供免费、安全、高效的网页端点击与硬件测试工具。'
+    copyright: '© 2026 CatKeyLab. 保留所有权利。',
+    footerAbout: 'CatKeyLab 致力于提供免费、安全、高效的网页端点击与硬件测试工具。'
   }
 };
 
