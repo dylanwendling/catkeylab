@@ -292,9 +292,13 @@ function updatePhysics() {
 
   // Ball Movement Dynamics
   if (ballMoving) {
-    // Apply Wind Force
-    ball.vx += wind.x * 0.15;
-    ball.vy += wind.y * 0.15;
+    const currentSpeed = Math.hypot(ball.vx, ball.vy);
+
+    // Apply Wind Force (only when ball is actively rolling to allow static friction stop)
+    if (currentSpeed > 0.35) {
+      ball.vx += wind.x * 0.04;
+      ball.vy += wind.y * 0.04;
+    }
 
     // Check Surface Friction
     let currentFriction = 0.982;
@@ -309,7 +313,7 @@ function updatePhysics() {
     // Ice Patches Check
     hole.icePatches.forEach(ice => {
       if (ball.x > ice.x && ball.x < ice.x + ice.w && ball.y > ice.y && ball.y < ice.y + ice.h) {
-        currentFriction = 0.996; // Super slick
+        currentFriction = 0.994; // Super slick
       }
     });
 
@@ -373,11 +377,12 @@ function updatePhysics() {
       }
     }
 
-    // Stop Threshold
-    if (Math.hypot(ball.vx, ball.vy) < 0.12) {
+    // Stop Threshold (Static Ground Friction)
+    if (Math.hypot(ball.vx, ball.vy) < 0.25) {
       ball.vx = 0;
       ball.vy = 0;
       ballMoving = false;
+    }
     }
 
     // Check Hole Drop (Victory on current hole)
