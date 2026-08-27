@@ -82,19 +82,6 @@
   overflow: hidden;
 }
 
-/* Tabby Forehead Stripes */
-.cat-head::before {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 16px;
-  height: 12px;
-  background: radial-gradient(circle, #9a3412 40%, transparent 70%);
-  opacity: 0.6;
-}
-
 /* Cat Ears with Pink Inner Pads */
 .cat-ear {
   position: absolute;
@@ -214,18 +201,18 @@
 
 .cat-whiskers {
   position: absolute;
-  top: 20px;
+  top: 40px;
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 1px;
+  padding: 0 4px;
   pointer-events: none;
 }
 
 .whisker-line {
-  width: 18px;
+  width: 16px;
   height: 1.5px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
