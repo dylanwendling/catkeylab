@@ -254,49 +254,6 @@ function renderHomePage(container) {
         </div>
       </div>
     </section>
-  `;
-
-  initHeroQuickTestListeners();
-}
-
-function initHeroQuickTestListeners() {
-  const quickTestZone = document.getElementById('hero-quick-test-zone');
-  const mouseValEl = document.getElementById('hero-mouse-btn');
-  const keyValEl = document.getElementById('hero-key-btn');
-  const countValEl = document.getElementById('hero-count-val');
-
-  if (!quickTestZone) return;
-
-  let inputCount = 0;
-
-  const mouseNames = ['Left Click (MB1)', 'Middle Click (MB3)', 'Right Click (MB2)', 'Side Back (MB4)', 'Side Forward (MB5)'];
-
-  quickTestZone.addEventListener('contextmenu', (e) => e.preventDefault());
-
-  quickTestZone.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    inputCount++;
-    if (countValEl) countValEl.textContent = inputCount;
-    if (mouseValEl) {
-      const btnName = mouseNames[e.button] || `Button ${e.button}`;
-      mouseValEl.textContent = btnName;
-      mouseValEl.style.color = 'var(--accent-cyan)';
-    }
-  });
-
-  const keyHandler = (e) => {
-    // Only process if user is on home page
-    if (window.location.hash && window.location.hash !== '#' && window.location.hash !== '') return;
-    inputCount++;
-    if (countValEl) countValEl.textContent = inputCount;
-    if (keyValEl) {
-      keyValEl.textContent = `${e.key === ' ' ? 'Space' : e.key} (${e.code})`;
-      keyValEl.style.color = 'var(--accent-emerald)';
-    }
-  };
-
-  window.addEventListener('keydown', keyHandler);
-}
 
     ${renderAdSpace('banner')}
 
@@ -317,6 +274,8 @@ function initHeroQuickTestListeners() {
 
     <div class="container" id="home-faq-container"></div>
   `;
+
+  initHeroQuickTestListeners();
 
   renderFAQ(document.getElementById('home-faq-container'), [
     { q: 'Do I need to download or install software to use ClickPulse?', a: 'No! All tools on ClickPulse run 100% inside your web browser using HTML5, Web Audio, and Vanilla JavaScript.' },
