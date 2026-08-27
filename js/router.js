@@ -624,34 +624,40 @@ function renderLegalPage(container, type) {
     title = 'Privacy Policy';
     body = `
       <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
-        100% Client-Side Processing • Zero Tracking • Zero Data Collection 🛡️
+        100% Client-Side Processing • Anonymous Leaderboards • Zero Personal Data Collection 🛡️
       </p>
 
       <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🔒 Zero Data Collection Guarantee</h3>
-          <p>At <strong>CatKeyLab</strong>, we believe hardware testing and typing utilities should be fast, private, and secure. We do not collect, transmit, store, or sell any personal data, IP addresses, click logs, keypress histories, or test results.</p>
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🔒 Zero Personal Data Collection</h3>
+          <p>At <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), we believe hardware testing and typing utilities should be fast, private, and secure. We do not collect, transmit, or store any personal data, email addresses, names, IP logs, keypress histories, or private hardware logs.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🏆 Anonymous Leaderboards & Firebase Cloud Storage</h3>
+          <p>CatKeyLab features a 100% private, anonymous global leaderboard system. High scores process anonymously without account registration:</p>
+          <ul style="margin-top:0.5rem; margin-left:1.25rem; display:flex; flex-direction:column; gap:0.3rem;">
+            <li>Players receive auto-generated anonymous cat aliases (e.g. <em>Speedy Tabby #4820</em>) and cat emoji avatars.</li>
+            <li>No personal identification or custom text handles are stored.</li>
+            <li>Leaderboard score entries are synchronized via Firebase Realtime Database REST API.</li>
+          </ul>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🖥️ Local Browser Sandbox Execution</h3>
-          <p>All tool calculations—including mouse button detection, keyboard keycode logging, WPM speed benchmarks, and reaction time measurements—execute <strong>100% locally inside your web browser sandbox</strong>. No data ever leaves your device.</p>
+          <p>All tool calculations—including mouse button detection, keyboard keycode logging, WPM speed benchmarks, and reaction time measurements—execute <strong>100% locally inside your web browser sandbox</strong>. No raw test data ever leaves your device.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">💾 Local Storage Usage</h3>
-          <p>CatKeyLab uses standard browser <code>localStorage</code> solely for persisting your non-sensitive preferences locally on your device:</p>
+          <p>CatKeyLab uses standard browser <code>localStorage</code> solely for persisting non-sensitive preferences locally on your device:</p>
           <ul style="margin-top:0.5rem; margin-left:1.25rem;">
             <li>Dark / Light color theme preference (<code>catkeylab_theme</code>)</li>
             <li>Sound effects toggle state (<code>catkeylab_sound</code>)</li>
             <li>Personal high scores and CPS personal best benchmarks</li>
+            <li>Anonymous cat profile handle (<code>catkeylab_anon_profile</code>)</li>
           </ul>
           <p style="margin-top:0.5rem;">You can clear this data at any time by clearing your browser site data.</p>
-        </div>
-
-        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">🌐 No Desktop Downloads or Installers</h3>
-          <p>CatKeyLab requires zero executable downloads, zero browser extensions, and zero user account sign-ups. Enjoy complete security and privacy out of the box.</p>
         </div>
       </div>
     `;
@@ -659,27 +665,32 @@ function renderLegalPage(container, type) {
     title = 'Terms of Service';
     body = `
       <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
-        MIT Licensed Open Utilities • Personal & Educational Use 📄
+        MIT Licensed Open Utilities • Anonymous Global Leaderboards • Terms of Use 📄
       </p>
 
       <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">1. Acceptance of Terms</h3>
-          <p>By accessing and using <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), you agree to these Terms of Service. CatKeyLab provides free, browser-native hardware testing and typing utilities for personal, commercial, and educational use.</p>
+          <p>By accessing and using <strong>CatKeyLab</strong> (<a href="https://catkeylab.com/" style="color:var(--accent-cyan);">catkeylab.com</a>), created by Dylan (<a href="https://snowyorca.itch.io/" target="_blank" style="color:var(--accent-cyan);">snowyorca.itch.io</a>), you agree to these Terms of Service. CatKeyLab provides free, browser-native hardware testing, cognitive Human Benchmark games, and typing utilities for personal, commercial, and educational use.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">2. Use of Utilities & Browser Sandbox</h3>
-          <p>All tools on CatKeyLab run strictly within your web browser sandbox using web standards (HTML5, CSS3, JavaScript ES2022+, and Web Audio API). Tools are intended for hardware verification, typing speed practice, and hardware chatter diagnostics.</p>
+          <p>All tools on CatKeyLab run strictly within your web browser sandbox using modern web standards (HTML5, CSS3, JavaScript ES2022+, and Web Audio API). Tools are intended for hardware verification, cognitive speed practice, and hardware chatter diagnostics.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">3. Open Source & MIT License</h3>
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">3. Anonymous Leaderboards & Fair Play</h3>
+          <p>CatKeyLab features global anonymous high score leaderboards across all 9 benchmark games. Players agree to participate in fair play without using automated cheat scripts or artificial score injection.</p>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">4. Open Source & MIT License</h3>
           <p>CatKeyLab is licensed under the <strong>MIT License</strong>. You are free to use, modify, and distribute the project for personal or commercial applications under the terms of the MIT open-source license.</p>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">4. Disclaimer of Warranty</h3>
+          <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">5. Disclaimer of Warranty</h3>
           <p>All utilities are provided "AS IS", without warranty of any kind, express or implied. Hardware measurements depend on device hardware, operating system drivers, and browser performance.</p>
         </div>
       </div>
@@ -688,27 +699,40 @@ function renderLegalPage(container, type) {
     title = 'Sitemap & Index';
     body = `
       <p class="hero-subtitle" style="margin-bottom:1.5rem; color:var(--accent-emerald); font-weight:600; font-size:1.1rem;">
-        Complete Index of Interactive Tools & Platform Resources on CatKeyLab 🗺️
+        Complete Index of Interactive Tools, Cognitive Benchmarks & Resources on CatKeyLab 🗺️
       </p>
 
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-          <h3 style="color:var(--accent-emerald); font-size:1.2rem; margin-bottom:1rem;">⌨️ Hardware & Typing Tools</h3>
+          <h3 style="color:var(--accent-emerald); font-size:1.2rem; margin-bottom:1rem;">🧠 Human Benchmark Suite</h3>
           <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
+            <li><a href="#reaction-time-test" style="color:var(--text-primary); font-weight:600;">⏱️ Reaction Time Latency Test</a></li>
+            <li><a href="#sequence-memory-test" style="color:var(--text-primary); font-weight:600;">🧠 Sequence Memory Test (Simon Grid)</a></li>
+            <li><a href="#aim-trainer-test" style="color:var(--text-primary); font-weight:600;">🎯 Aim Trainer Precision Challenge</a></li>
+            <li><a href="#number-memory-test" style="color:var(--text-primary); font-weight:600;">🔢 Number Memory Digit Span Test</a></li>
+            <li><a href="#verbal-memory-test" style="color:var(--text-primary); font-weight:600;">💬 Verbal Memory Word Recall Test</a></li>
+            <li><a href="#chimp-test" style="color:var(--text-primary); font-weight:600;">🐒 Chimp Test Working Memory Grid</a></li>
+            <li><a href="#visual-memory-test" style="color:var(--text-primary); font-weight:600;">🔳 Visual Memory Spatial Recall Test</a></li>
             <li><a href="#typing-test" style="color:var(--text-primary); font-weight:600;">⌨️ Typing Speed Challenge (WPM)</a></li>
+            <li><a href="#leaderboards" style="color:var(--accent-cyan); font-weight:700;">🏆 Anonymous Global Leaderboards</a></li>
+          </ul>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+          <h3 style="color:var(--accent-cyan); font-size:1.2rem; margin-bottom:1rem;">🖱️ Hardware & Speed Diagnostics</h3>
+          <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
             <li><a href="#mouse-test" style="color:var(--text-primary); font-weight:600;">🖱️ Mouse Button & Movement Tester</a></li>
             <li><a href="#keyboard-test" style="color:var(--text-primary); font-weight:600;">🖥️ Visual Keyboard Switch Tester</a></li>
             <li><a href="#auto-clicker" style="color:var(--text-primary); font-weight:600;">🎯 In-Browser Online Auto Clicker</a></li>
             <li><a href="#cps-test" style="color:var(--text-primary); font-weight:600;">⚡ CPS Test (Clicks Per Second)</a></li>
             <li><a href="#click-speed-test" style="color:var(--text-primary); font-weight:600;">🚀 Click Velocity & Burst Speed Test</a></li>
             <li><a href="#click-counter" style="color:var(--text-primary); font-weight:600;">🔢 Digital Tally Click Counter</a></li>
-            <li><a href="#reaction-time-test" style="color:var(--text-primary); font-weight:600;">⏱️ Visual Reaction Time Latency Test</a></li>
             <li><a href="#double-click-test" style="color:var(--text-primary); font-weight:600;">👆 Mouse Double Click Chatter Tester</a></li>
           </ul>
         </div>
 
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-          <h3 style="color:var(--accent-cyan); font-size:1.2rem; margin-bottom:1rem;">Platform & Information</h3>
+          <h3 style="color:var(--accent-rose); font-size:1.2rem; margin-bottom:1rem;">Platform & Information</h3>
           <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
             <li><a href="#nibbles" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles the Cat</a></li>
             <li><a href="https://catkeylab.com/#about" style="color:var(--text-primary); font-weight:600;">About CatKeyLab</a></li>

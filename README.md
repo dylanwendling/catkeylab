@@ -32,22 +32,40 @@
 
 **CatKeyLab** ([catkeylab.com](https://catkeylab.com/)) is a lightweight, high-performance web application created by **Dylan** ([snowyorca.itch.io](https://snowyorca.itch.io/)) built for testing mouse hardware, keyboard switches, WPM typing speed, cognitive Human Benchmarks, and reaction latency directly inside your web browser.
 
+<p align="center">
+  <img src="./assets/orange-cat.jpg" width="340" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="border-radius:12px; border:3px solid #f97316;" /><br>
+  <em>Meet the adorable real-life orange cat sitting in a box who inspired Nibbles! 🐱</em>
+</p>
+
 ---
 
-## 🏆 Anonymous Global Leaderboards
+## 🏆 Anonymous Global Leaderboards (Firebase Realtime Database & SSE)
 
-CatKeyLab features a 100% private, anonymous leaderboard and percentile ranking engine across all cognitive benchmark games and speed utilities:
+CatKeyLab features a 100% private, anonymous global leaderboard system powered by **Firebase Realtime Database & EventSource SSE Live Streaming**:
 
+- **Real-Time Live Streaming (< 50ms)**: Built with native browser `EventSource` (Server-Sent Events) and Google Cloud REST endpoints (`catkeylab-default-rtdb.firebaseio.com`). High scores stream live to all connected devices worldwide in under 50 milliseconds!
 - **Zero Account & No Login**: Automatically assigns a fun anonymous cat alias (e.g. `Speedy Tabby #4820`, `Laser Whiskers #8912`) and cat emoji avatar.
-- **Percentile Ratings**: Calculates real-time rank percentiles (*e.g., "Top 3% (Pro Level)"*) upon test completion.
-- **Embedded & Full Page View**: View leaderboards directly on the Home Page or via `#leaderboards`.
-- **Interactive Controls**: Click **`🎲 Randomize Name & Emoji`** or click **`🎭 Cycle Emoji`** to re-roll your cat avatar anytime.
+- **Percentile Ratings**: Calculates real-time rank percentiles (*e.g., "Top 1% (Leaderboard #1 Leader! 🥇)"*) upon test completion.
+- **Direct Result Nav**: Completing any benchmark game displays a direct **`🏆 View Global Leaderboard`** button opening the exact game tab played with your **`YOU`** highlight pill.
+- **Interactive Controls**: Click **`🎲 Randomize Name & Emoji`**, **`🎭 Cycle Emoji`**, or **`🔄 Refresh Live Scores`** anytime.
 
 ---
 
 ## 🐱 Nibbles the Cat & Interactive Toys
 
 CatKeyLab features **Nibbles**, a playful Ginger Tabby Cat wearing a ruby red collar with a shiny gold bell 🔔 who accompanies you while you test hardware!
+
+### 🐾 1. Pupil Tracking & Paw Reactions (`catMascot.js`)
+- **Smooth Cursor Tracking**: Nibbles' pupils follow your cursor in real time across the viewport.
+- **Paw Swatting**: Paws reach out toward your mouse cursor as you move nearby.
+- **WPM Judging**: Nibbles evaluates your typing speed, purring happily for fast typists or squinting judgmentally at typos!
+- **Click Petting**: Click Nibbles directly to pet him, triggering purrs and floating heart/paw particles (`❤️`, `🐾`).
+
+### 🧶 2. Throwable Yarn Ball Toy (`yarnBall.js`)
+- **Physics Drag & Throw**: Drag and flick the Yarn Ball 🧶 across your screen with momentum friction damping (`0.94`) and screen boundary bounce physics!
+
+### 🥣 3. Cat Food Bowl & Fish Feeding (`foodBowl.js`)
+- **Interactive Food Bowl**: Click or drag the Cat Food Bowl 🥣 in the bottom-right corner to spawn fresh, draggable **Fish 🐟** to feed Nibbles.
 
 ---
 
