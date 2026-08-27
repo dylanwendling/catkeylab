@@ -996,6 +996,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.lb-avatar-clickable {
+  cursor: pointer;
+}
+
+.lb-avatar-clickable:hover {
+  transform: scale(1.1) rotate(5deg);
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 15px var(--accent-cyan-glow);
+}
+
+.lb-avatar-clickable:active {
+  transform: scale(0.95);
 }
 
 .lb-handle-title {

@@ -9,7 +9,7 @@ const CAT_NAMES = [
   "Velvet Tiger", "Pixel Whiskers", "Blaze Feline", "Quantum Purr"
 ];
 
-const CAT_EMOJIS = ["🐱", "😸", "😹", "😻", "😼", "😽", "🙀", "🐯", "🐆", "🐈"];
+const CAT_EMOJIS = ["🐱", "😸", "😹", "😻", "😼", "😽", "🙀", "🐯", "🐆", "🐈", "🦁", "🐾", "🐈‍⬛", "⚡", "🧠", "🎯"];
 
 // Initial Empty Leaderboards for all Benchmark Tools
 const INITIAL_LEADERBOARDS = {
@@ -54,6 +54,15 @@ export function updateAnonHandle(customName) {
     profile.handle = customName.trim().substring(0, 24);
     localStorage.setItem('catkeylab_anon_profile', JSON.stringify(profile));
   }
+  return profile;
+}
+
+export function cycleAnonAvatar() {
+  const profile = getAnonProfile();
+  const currentIdx = CAT_EMOJIS.indexOf(profile.avatar);
+  const nextIdx = (currentIdx + 1) % CAT_EMOJIS.length;
+  profile.avatar = CAT_EMOJIS[nextIdx];
+  localStorage.setItem('catkeylab_anon_profile', JSON.stringify(profile));
   return profile;
 }
 

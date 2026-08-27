@@ -3,7 +3,7 @@
    ========================================================================== */
 
 import { t } from '../i18n.js';
-import { getAnonProfile, updateAnonHandle, randomizeAnonHandle, getLeaderboard } from '../leaderboard.js';
+import { getAnonProfile, updateAnonHandle, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard } from '../leaderboard.js';
 
 let activeTestId = 'reaction-time-test';
 
@@ -37,15 +37,18 @@ export function renderLeaderboardView(container) {
       <!-- Anonymous User Handle Profile Bar -->
       <div class="lb-profile-card">
         <div class="lb-profile-info">
-          <div class="lb-avatar">${profile.avatar}</div>
+          <button id="lb-avatar-btn" class="lb-avatar lb-avatar-clickable" title="Click to cycle avatar emoji!">
+            <span id="lb-avatar-icon">${profile.avatar}</span>
+          </button>
           <div>
-            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.05em;">YOUR ANONYMOUS ALIAS</div>
+            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700; letter-spacing:0.05em;">YOUR ANONYMOUS ALIAS (CLICK EMOJI TO CHANGE)</div>
             <div id="lb-handle-text" class="lb-handle-title">${profile.handle}</div>
           </div>
         </div>
         <div class="lb-profile-actions">
-          <button id="lb-randomize-btn" class="btn btn-secondary btn-sm">🎲 Randomize Name</button>
-          <button id="lb-edit-btn" class="btn btn-primary btn-sm">✏️ Edit Alias</button>
+          <button id="lb-cycle-emoji-btn" class="btn btn-secondary btn-sm">🎭 Cycle Emoji</button>
+          <button id="lb-randomize-btn" class="btn btn-secondary btn-sm">🎲 Randomize All</button>
+          <button id="lb-edit-btn" class="btn btn-primary btn-sm">✏️ Edit Name</button>
         </div>
       </div>
 
@@ -71,6 +74,8 @@ export function renderLeaderboardView(container) {
 
 function bindEvents() {
   const tabs = document.querySelectorAll('.lb-tab-btn');
+  const avatarBtn = document.getElementById('lb-avatar-btn');
+  const cycleEmojiBtn = document.getElementById('lb-cycle-emoji-btn');
   const randomizeBtn = document.getElementById('lb-randomize-btn');
   const editBtn = document.getElementById('lb-edit-btn');
 
@@ -83,11 +88,23 @@ function bindEvents() {
     });
   });
 
+  const handleAvatarCycle = () => {
+    const updated = cycleAnonAvatar();
+    const iconEl = document.getElementById('lb-avatar-icon');
+    if (iconEl) iconEl.textContent = updated.avatar;
+    renderTable(activeTestId);
+  };
+
+  if (avatarBtn) avatarBtn.addEventListener('click', handleAvatarCycle);
+  if (cycleEmojiBtn) cycleEmojiBtn.addEventListener('click', handleAvatarCycle);
+
   if (randomizeBtn) {
     randomizeBtn.addEventListener('click', () => {
       const updated = randomizeAnonHandle();
       const handleEl = document.getElementById('lb-handle-text');
+      const iconEl = document.getElementById('lb-avatar-icon');
       if (handleEl) handleEl.textContent = updated.handle;
+      if (iconEl) iconEl.textContent = updated.avatar;
       renderTable(activeTestId);
     });
   }
