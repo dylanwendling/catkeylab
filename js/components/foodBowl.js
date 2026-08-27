@@ -122,3 +122,9 @@ function checkCatFeedingProximity(isRelease = false) {
     }
   }
 }
+
+export function spawnFishAutoFeed() {
+  playClickSound(850, 0.05);
+  const mascotPos = getMascotPosition();
+  feedFishToCat(mascotPos.x - 20, mascotPos.y - 20);
+}
