@@ -160,7 +160,7 @@ const YARN_DIALOGUES = [
   "mrrp! yarn!",
   "swat! 🧶",
   "catch!",
-  "purrrrr... yarn!"
+  "purrrrr...\nyarn!"
 ];
 
 export function getMascotPosition() {
@@ -480,7 +480,7 @@ function schedulePeriodicSpeech() {
 function showSpeechBubble(text) {
   if (!speechEl) return;
 
-  speechEl.textContent = text;
+  speechEl.innerHTML = text.replace(/\n/g, '<br>');
   speechEl.classList.add('active');
   lastSpeechTime = Date.now();
 
