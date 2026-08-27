@@ -366,6 +366,11 @@ function renderHomePage(container) {
       </div>
     </section>
 
+    <!-- Embedded Anonymous Leaderboards Section -->
+    <section class="section" style="padding-top:0;">
+      <div id="home-leaderboard-container"></div>
+    </section>
+
     ${renderAdSpace('banner')}
 
     <!-- Educational & Value Section -->
@@ -387,6 +392,11 @@ function renderHomePage(container) {
   `;
 
   initHeroQuickTestListeners();
+
+  const lbContainer = document.getElementById('home-leaderboard-container');
+  if (lbContainer) {
+    renderLeaderboardView(lbContainer);
+  }
 
   renderFAQ(document.getElementById('home-faq-container'), [
     { q: 'Do I need to download or install software to use CatKeyLab?', a: 'No! All tools on CatKeyLab run 100% inside your web browser using HTML5, Web Audio API, and Vanilla JavaScript.' },
