@@ -1,10 +1,11 @@
 /* ==========================================================================
-   ClickPulse - Monkeytype-Inspired Typing Speed Challenge Tool
+   ClickPulse - Monkeytype-Inspired Typing Speed Challenge Tool (Gamified)
    ========================================================================== */
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
 import { judgeTypingSpeed } from '../components/eyeMascot.js';
+import { triggerRandomTool } from '../router.js';
 
 const WORD_BANK = [
   "the", "be", "of", "and", "a", "to", "in", "he", "have", "it", "that", "for", "they", "with",
@@ -33,6 +34,8 @@ let correctChars = 0;
 let errorCount = 0;
 let isTestActive = false;
 let isTestFinished = false;
+
+let confettiAnimationId = null;
 
 export function renderTypingTest(container) {
   cleanupTypingTest();
@@ -87,6 +90,10 @@ export function renderTypingTest(container) {
         </div>
       </div>
     </div>
+
+    <!-- Gamified Results Modal Container -->
+    <div id="typing-results-modal" class="modal-overlay"></div>
+    <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
   `;
 
   initTypingTestLogic();
@@ -110,14 +117,17 @@ function initTypingTestLogic() {
   if (box) {
     box.addEventListener('focus', () => hideFocusNotice());
     box.addEventListener('blur', () => showFocusNotice());
-    window.addEventListener('keydown', handleKeyDown);
   }
 
+  window.addEventListener('keydown', handleKeyDown);
   resetTest();
 }
 
 function resetTest() {
   cleanupTimer();
+  cleanupConfetti();
+  closeResultsModal();
+
   isTestActive = false;
   isTestFinished = false;
   timeRemaining = testDuration;
@@ -137,11 +147,14 @@ function resetTest() {
 
   generateWordList();
   renderWords();
+
+  const box = document.getElementById('typing-test-box');
+  if (box) box.focus();
 }
 
 function generateWordList() {
   generatedWords = [];
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 70; i++) {
     const word = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)];
     generatedWords.push(word);
   }
@@ -161,8 +174,17 @@ function renderWords() {
 }
 
 function handleKeyDown(e) {
-  // Ignore modifier keys and shortcuts
-  if (e.ctrlKey || e.altKey || e.metaKey || isTestFinished) return;
+  // Restart shortcut on Enter when finished
+  if (isTestFinished) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      resetTest();
+    }
+    return;
+  }
+
+  // Ignore modifier keys
+  if (e.ctrlKey || e.altKey || e.metaKey) return;
 
   const isLetter = e.key.length === 1;
   const isBackspace = e.key === 'Backspace';
@@ -265,22 +287,179 @@ function finishTest() {
   isTestActive = false;
   isTestFinished = true;
 
-  playClickSound(1000, 0.08);
+  // Play Fanfare Chime Sequence
+  playClickSound(523.25, 0.08); // C5
+  setTimeout(() => playClickSound(659.25, 0.08), 90); // E5
+  setTimeout(() => playClickSound(783.99, 0.12), 180); // G5
 
   const timeElapsedSec = testDuration;
   const finalWpm = Math.round((correctChars / 5) / (timeElapsedSec / 60));
+  const rawWpm = Math.round((totalTypedChars / 5) / (timeElapsedSec / 60));
   const finalAccuracy = Math.round((correctChars / Math.max(1, totalTypedChars)) * 100);
 
   // Update Personal Best
   const currentBest = parseInt(localStorage.getItem('clickpulse_best_wpm') || '0', 10);
-  if (finalWpm > currentBest) {
+  const isNewHigh = finalWpm > currentBest;
+  if (isNewHigh) {
     localStorage.setItem('clickpulse_best_wpm', finalWpm.toString());
     const bestEl = document.getElementById('tt-best-val');
     if (bestEl) bestEl.textContent = finalWpm;
   }
 
-  // Trigger Eye Mascot Judging!
+  // Trigger Eye Mascot Judging
   judgeTypingSpeed(finalWpm, finalAccuracy);
+
+  // Trigger Canvas Confetti Explosion
+  triggerConfetti();
+
+  // Show High-Energy Results Modal
+  showResultsModal(finalWpm, rawWpm, finalAccuracy, errorCount, isNewHigh);
+}
+
+/**
+ * Render Gamified Results Modal Popup
+ */
+function showResultsModal(wpm, rawWpm, accuracy, errors, isNewHigh) {
+  const modalEl = document.getElementById('typing-results-modal');
+  if (!modalEl) return;
+
+  // Determine Rank Tier
+  let rankClass = 'rank-casual';
+  let rankTitle = '⌨️ CASUAL TYPIST';
+
+  if (wpm >= 100) {
+    rankClass = 'rank-godlike';
+    rankTitle = '🏆 GODLIKE TYPIST';
+  } else if (wpm >= 65) {
+    rankClass = 'rank-speed';
+    rankTitle = '⚡ SPEED DEMON';
+  } else if (wpm >= 45) {
+    rankClass = 'rank-pro';
+    rankTitle = '🎯 PRO TYPIST';
+  } else if (wpm >= 25) {
+    rankClass = 'rank-casual';
+    rankTitle = '⌨️ CASUAL TYPIST';
+  } else {
+    rankClass = 'rank-novice';
+    rankTitle = '🐣 NOVICE TYPIST';
+  }
+
+  modalEl.innerHTML = `
+    <div class="modal-card typing-modal-card">
+      ${isNewHigh ? '<div class="new-record-banner">🔥 NEW PERSONAL BEST SCORE! 🔥</div>' : ''}
+      <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:0.25rem;">Test Complete!</h2>
+      <div class="rank-badge-pill ${rankClass}">${rankTitle}</div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
+        <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <div style="font-size:2.2rem; font-weight:800; color:var(--accent-cyan);">${wpm}</div>
+          <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Final WPM</div>
+        </div>
+        <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <div style="font-size:2.2rem; font-weight:800; color:var(--accent-emerald);">${accuracy}%</div>
+          <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Accuracy</div>
+        </div>
+        <div style="background:var(--bg-primary); padding:0.75rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <div style="font-size:1.2rem; font-weight:700; color:var(--text-primary);">${rawWpm}</div>
+          <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Raw WPM</div>
+        </div>
+        <div style="background:var(--bg-primary); padding:0.75rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+          <div style="font-size:1.2rem; font-weight:700; color:var(--accent-rose);">${errors}</div>
+          <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase;">Typos / Errors</div>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+        <button id="modal-retry-btn" class="btn btn-primary btn-lg" style="flex:1; min-width:180px;">
+          🎮 Try Again (Enter)
+        </button>
+        <button id="modal-surprise-btn" class="btn btn-surprise btn-lg" style="flex:1; min-width:180px;">
+          🎲 Try Random Tool
+        </button>
+      </div>
+    </div>
+  `;
+
+  modalEl.classList.add('open');
+
+  const retryBtn = document.getElementById('modal-retry-btn');
+  const surpriseBtn = document.getElementById('modal-surprise-btn');
+
+  if (retryBtn) retryBtn.addEventListener('click', resetTest);
+  if (surpriseBtn) surpriseBtn.addEventListener('click', triggerRandomTool);
+}
+
+function closeResultsModal() {
+  const modalEl = document.getElementById('typing-results-modal');
+  if (modalEl) modalEl.classList.remove('open');
+}
+
+/**
+ * Canvas Confetti Particle Generator
+ */
+function triggerConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = [];
+  const colors = ['#39c5bb', '#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff'];
+
+  for (let i = 0; i < 90; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height * 0.3,
+      size: Math.random() * 8 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 4,
+      vy: Math.random() * 4 + 2,
+      rotation: Math.random() * 360,
+      vRot: (Math.random() - 0.5) * 6
+    });
+  }
+
+  function renderConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rotation += p.vRot;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      ctx.restore();
+
+      if (p.y > canvas.height) {
+        particles.splice(i, 1);
+      }
+    }
+
+    if (particles.length > 0) {
+      confettiAnimationId = requestAnimationFrame(renderConfetti);
+    }
+  }
+
+  renderConfetti();
+}
+
+function cleanupConfetti() {
+  if (confettiAnimationId) {
+    cancelAnimationFrame(confettiAnimationId);
+    confettiAnimationId = null;
+  }
+  const canvas = document.getElementById('confetti-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
 }
 
 function hideFocusNotice() {
@@ -302,5 +481,7 @@ function cleanupTimer() {
 
 export function cleanupTypingTest() {
   cleanupTimer();
+  cleanupConfetti();
+  closeResultsModal();
   window.removeEventListener('keydown', handleKeyDown);
 }

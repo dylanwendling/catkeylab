@@ -599,3 +599,55 @@
   font-size: 1.2rem;
   margin: 1rem 0;
 }
+
+/* Confetti Overlay Canvas */
+.confetti-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Gamified Results Modal Overlay */
+.typing-modal-card {
+  max-width: 540px !important;
+  border: 1px solid var(--accent-cyan-glow) !important;
+  box-shadow: 0 0 40px rgba(57, 197, 187, 0.25), var(--shadow-lg) !important;
+  background: var(--bg-secondary) !important;
+}
+
+.rank-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-weight: 800;
+  font-size: 1.1rem;
+  margin: 0.5rem 0 1.25rem;
+  border: 1px solid var(--border-color);
+}
+
+.rank-godlike { background: rgba(210, 153, 34, 0.2); color: #d29922; border-color: #d29922; }
+.rank-speed { background: rgba(57, 197, 187, 0.2); color: #39c5bb; border-color: #39c5bb; }
+.rank-pro { background: rgba(88, 166, 255, 0.2); color: #58a6ff; border-color: #58a6ff; }
+.rank-casual { background: rgba(63, 185, 80, 0.2); color: #3fb950; border-color: #3fb950; }
+.rank-novice { background: rgba(139, 148, 158, 0.2); color: #8b949e; border-color: #8b949e; }
+
+.new-record-banner {
+  background: linear-gradient(90deg, #d29922, #f85149);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 0 15px rgba(210, 153, 34, 0.5);
+  animation: pulse-dot 1.5s infinite;
+}
