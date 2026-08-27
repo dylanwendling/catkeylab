@@ -226,23 +226,22 @@
   border-radius: 1px;
 }
 
-/* Fanned Open Left Whiskers at Idle */
-.cat-whiskers-left .whisker-top { width: 24px; transform: rotate(-22deg); transform-origin: right center; }
-.cat-whiskers-left .whisker-mid { width: 26px; transform: rotate(-4deg); transform-origin: right center; }
-.cat-whiskers-left .whisker-bot { width: 24px; transform: rotate(18deg); transform-origin: right center; }
+/* Sleek Flattened Cat Whiskers */
+.cat-whiskers-left .whisker-top { width: 22px; transform: none; }
+.cat-whiskers-left .whisker-mid { width: 25px; transform: none; }
+.cat-whiskers-left .whisker-bot { width: 22px; transform: none; }
 
-/* Fanned Open Right Whiskers at Idle */
-.cat-whiskers-right .whisker-top { width: 24px; transform: rotate(22deg); transform-origin: left center; }
-.cat-whiskers-right .whisker-mid { width: 26px; transform: rotate(4deg); transform-origin: left center; }
-.cat-whiskers-right .whisker-bot { width: 24px; transform: rotate(-18deg); transform-origin: left center; }
+.cat-whiskers-right .whisker-top { width: 22px; transform: none; }
+.cat-whiskers-right .whisker-mid { width: 25px; transform: none; }
+.cat-whiskers-right .whisker-bot { width: 22px; transform: none; }
 
 .cat-character.purring .whisker-line {
   animation: vibrate-whisker 0.15s infinite;
 }
 
 @keyframes vibrate-whisker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(1.5px); }
 }
 
 /* Cat Paws Reaching & Tracking Cursor */
