@@ -161,7 +161,7 @@ export const TOOL_METADATA = {
   },
   'cat-mini-golf-game': {
     titleKey: 'catMiniGolfTitle',
-    desc: 'HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, sand traps, rideable water slides, kinetic windmills, and portals!',
+    desc: 'HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!',
     icon: '⛳',
     category: 'games',
     renderFn: renderCatMiniGolfGame,
@@ -169,7 +169,7 @@ export const TOOL_METADATA = {
     faqs: [
       { q: 'How do I aim and shoot the golf ball?', a: 'Click or touch and drag backward on the golf ball to adjust your shot angle and power meter, then release! You can drag anywhere across the screen.' },
       { q: 'How do I choose course length?', a: 'Use the course selector buttons on the control bar to choose between 3 Holes (Quick), 9 Holes (Front Nine), or full 18 Holes (Championship).' },
-      { q: 'What do the course hazards & features do?', a: 'Sand traps slow down your ball with heavy drag, water hazards add +1 stroke penalty, water slides let your ball ride safely over water with directional speed boosts, ice patches slide smoothly, portals warp your ball, and rotating windmill blades deflect shots!' }
+      { q: 'What do the course hazards & features do?', a: 'Sand traps slow down your ball with heavy drag, water hazards add +1 stroke penalty and reset the tee, ice patches slide smoothly, portals warp your ball, and rotating windmill blades deflect shots!' }
     ]
   },
   'typing-test': {
