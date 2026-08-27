@@ -203,7 +203,7 @@ function renderHomePage(container) {
           <span>Test Mouse Hardware, Keyboard Keys & Typing Speed</span> 🐾
         </h1>
         <p class="hero-subtitle">
-          Tested & approved by Nibbles the Cat mascot. Free, private, browser-based tools to verify mouse buttons (MB1-MB5, right click, scroll), keyboard switches, and WPM typing speed.
+          Tested & approved by Nibbles the Cat. Free, private, browser-based tools to verify mouse buttons (MB1-MB5, right click, scroll), keyboard switches, and WPM typing speed.
         </p>
         <div class="hero-ctas">
           <a href="#typing-test" class="btn btn-primary btn-lg">

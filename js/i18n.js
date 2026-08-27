@@ -122,7 +122,7 @@ export const translations = {
 
     // Typing Test
     typingTestTitle: 'Typing Speed Challenge (WPM)',
-    typingTestSubtitle: 'Test your typing speed and accuracy in real time with distraction-free text, mechanical keyboard sounds, and Cat Mascot judging.',
+    typingTestSubtitle: 'Test your typing speed and accuracy in real time with distraction-free text, mechanical keyboard sounds, and Nibbles the Cat judging.',
 
     // Reaction Time Test
     reactionTestTitle: 'Reaction Time Test',
@@ -143,7 +143,7 @@ export const translations = {
     // Footer & Meta
     privacyNotice: '100% Client-Side & Private. No data leaves your device.',
     copyright: '© 2026 CatnipLab 🐾. All rights reserved.',
-    footerAbout: 'CatnipLab provides free, browser-native hardware testing tools, WPM typing speed challenges, and click speed diagnostics with an interactive Cat Mascot.'
+    footerAbout: 'CatnipLab provides free, browser-native hardware testing tools, WPM typing speed challenges, and click speed diagnostics with Nibbles the Cat.'
   },
   es: {
     siteName: 'ClickPulse',
