@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound, getAudioContext } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 let sequence = [];
 let userStep = 0;
@@ -180,6 +181,8 @@ function handleGameOver() {
   state = 'game_over';
   saveBestScore(level);
 
+  const rankInfo = submitScore('sequence-memory-test', level, `Level ${level}`);
+
   const bestScore = localStorage.getItem('catkeylab_sequence_best') || level;
   document.getElementById('sq-val-best').textContent = bestScore;
 
@@ -189,7 +192,7 @@ function handleGameOver() {
   const startBtn = document.getElementById('sq-start-btn');
 
   if (title) title.textContent = `Game Over - Level ${level}`;
-  if (desc) desc.textContent = `You reached Level ${level}. Personal Best: ${bestScore}`;
+  if (desc) desc.innerHTML = `Personal Best: <strong>Level ${bestScore}</strong><br><span style="color:var(--accent-cyan); font-weight:700;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
   if (startBtn) startBtn.textContent = 'Try Again';
 
   if (overlay) overlay.style.display = 'flex';

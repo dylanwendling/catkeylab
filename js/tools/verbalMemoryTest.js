@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 const WORD_BANK = [
   "river", "mountain", "keyboard", "sunset", "whisper", "emerald", "velocity", "galaxy",
@@ -197,10 +198,12 @@ function handleGameOver() {
   state = 'game_over';
   hideAllViews();
 
+  const rankInfo = score > 0 ? submitScore('verbal-memory-test', score, `${score} Words`) : null;
+
   const resultView = document.getElementById('vb-result-view');
   if (resultView) resultView.style.display = 'flex';
 
-  document.getElementById('vb-final-score-text').textContent = `Score: ${score} words`;
+  document.getElementById('vb-final-score-text').innerHTML = `Score: ${score} words<br><span style="font-size:1.1rem; color:var(--accent-emerald);">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
 }
 
 function hideAllViews() {

@@ -23,6 +23,7 @@ import { renderNumberMemoryTest, cleanupNumberMemoryTest } from './tools/numberM
 import { renderVerbalMemoryTest, cleanupVerbalMemoryTest } from './tools/verbalMemoryTest.js';
 import { renderChimpTest, cleanupChimpTest } from './tools/chimpTest.js';
 import { renderVisualMemoryTest, cleanupVisualMemoryTest } from './tools/visualMemoryTest.js';
+import { renderLeaderboardView } from './components/leaderboardView.js';
 
 let currentCleanup = null;
 
@@ -235,6 +236,10 @@ export function handleRoute() {
     renderToolsDirectoryPage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, 'All Tools');
     updateSEOMetadata('Mouse & Keyboard Tools Directory - CatKeyLab 🐾', 'Browse all free online mouse button testers, keyboard key testers, typing tests, clicking, and speed testing utilities.');
+  } else if (hash === 'leaderboards') {
+    renderLeaderboardView(mainContainer);
+    renderBreadcrumbs(breadcrumbsContainer, 'Anonymous Leaderboards 🏆');
+    updateSEOMetadata('Anonymous Leaderboards & High Scores - CatKeyLab 🐾', '100% private, anonymous high scores and rank percentiles across all human benchmark tests.');
   } else if (TOOL_METADATA[hash]) {
     const meta = TOOL_METADATA[hash];
     renderToolPage(mainContainer, hash, meta);

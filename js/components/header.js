@@ -23,6 +23,7 @@ export function renderHeader(container) {
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
+          <a href="#leaderboards" class="nav-link" data-route="leaderboards">🏆 Leaderboards</a>
           
           <!-- Benchmarks Dropdown -->
           <div class="dropdown" id="benchmarks-dropdown">

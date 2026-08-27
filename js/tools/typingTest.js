@@ -6,6 +6,7 @@ import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
 import { judgeTypingSpeed } from '../components/catMascot.js';
 import { triggerRandomTool } from '../router.js';
+import { submitScore } from '../leaderboard.js';
 
 const WORD_BANK = [
   "the", "be", "of", "and", "a", "to", "in", "he", "have", "it", "that", "for", "they", "with",
@@ -322,6 +323,8 @@ function finishTest() {
 function showResultsModal(wpm, rawWpm, accuracy, errors, isNewHigh) {
   const modalEl = document.getElementById('typing-results-modal');
   if (!modalEl) return;
+
+  const rankInfo = wpm > 0 ? submitScore('typing-test', wpm, `${wpm} WPM`) : null;
 
   // Determine Rank Tier
   let rankClass = 'rank-casual';

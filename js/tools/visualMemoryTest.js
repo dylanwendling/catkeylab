@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 let level = 1;
 let gridSize = 3; // 3x3 up to 7x7
@@ -202,6 +203,8 @@ function updateDashboard() {
 function handleGameOver() {
   state = 'game_over';
 
+  const rankInfo = targetCount > 0 ? submitScore('visual-memory-test', targetCount, `Level ${level} (${targetCount} Tiles)`) : null;
+
   const overlay = document.getElementById('vm-overlay');
   const title = document.getElementById('vm-overlay-title');
   const desc = document.getElementById('vm-overlay-desc');
@@ -210,7 +213,7 @@ function handleGameOver() {
   const bestScore = localStorage.getItem('catkeylab_visual_best') || targetCount;
 
   if (title) title.textContent = `Game Over - Level ${level}`;
-  if (desc) desc.textContent = `You reached ${targetCount} tiles remembered. Personal Best: ${bestScore}`;
+  if (desc) desc.innerHTML = `Personal Best: <strong>${bestScore} Tiles</strong><br><span style="color:var(--accent-cyan); font-weight:700;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
   if (startBtn) startBtn.textContent = 'Try Again';
 
   if (overlay) overlay.style.display = 'flex';

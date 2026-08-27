@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 let state = 'start'; // 'start', 'wait', 'ready', 'early', 'result'
 let startTime = null;
@@ -105,10 +106,12 @@ function handleBoxClick() {
     attempts.push(reactionTime);
     saveBestReaction(reactionTime);
 
+    const rankInfo = submitScore('reaction-time-test', reactionTime, `${reactionTime} ms`);
+
     targetBox.className = 'reaction-box reaction-state-result';
     icon.textContent = '🏆';
     title.textContent = `${reactionTime} ms`;
-    sub.textContent = getRatingString(reactionTime) + ' (Click to try again)';
+    sub.innerHTML = `${getRatingString(reactionTime)} • <strong>${rankInfo ? rankInfo.percentile : ''}</strong> (Click to try again)`;
 
     updateDashboard(reactionTime);
   }

@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 let numberCount = 4;
 let nextExpected = 1;
@@ -196,15 +197,18 @@ function updateDashboard() {
 function handleGameOver() {
   state = 'game_over';
 
+  const scoreNum = numberCount - 1;
+  const rankInfo = scoreNum > 0 ? submitScore('chimp-test', scoreNum, `${scoreNum} Numbers`) : null;
+
   const overlay = document.getElementById('cp-overlay');
   const title = document.getElementById('cp-overlay-title');
   const desc = document.getElementById('cp-overlay-desc');
   const startBtn = document.getElementById('cp-start-btn');
 
-  const bestScore = localStorage.getItem('catkeylab_chimp_best') || (numberCount - 1);
+  const bestScore = localStorage.getItem('catkeylab_chimp_best') || scoreNum;
 
-  if (title) title.textContent = `Game Over - ${numberCount - 1} Numbers`;
-  if (desc) desc.textContent = `You reached ${numberCount - 1} numbers. Personal Best: ${bestScore}`;
+  if (title) title.textContent = `Game Over - ${scoreNum} Numbers`;
+  if (desc) desc.innerHTML = `Personal Best: <strong>${bestScore} Numbers</strong><br><span style="color:var(--accent-cyan); font-weight:700;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
   if (startBtn) startBtn.textContent = 'Try Again';
 
   if (overlay) overlay.style.display = 'flex';

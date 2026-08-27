@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound, triggerVibration } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 let testState = 'idle'; // 'idle', 'running', 'finished'
 let selectedDuration = 5;
@@ -192,6 +193,10 @@ function finishTest() {
 
   const finalCPS = (clickCount / selectedDuration).toFixed(1);
   saveBestCPS(selectedDuration, finalCPS);
+
+  if (parseFloat(finalCPS) > 0) {
+    submitScore('cps-test', parseFloat(finalCPS), `${finalCPS} CPS`);
+  }
 
   // Determine Rank
   let rank = '🐢 Turtle';

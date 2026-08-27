@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 let level = 1;
 let currentNumber = '';
@@ -194,12 +195,15 @@ function showGameOver(userInput) {
   const resultView = document.getElementById('nm-result-view');
   if (resultView) resultView.style.display = 'flex';
 
-  const bestScore = localStorage.getItem('catkeylab_number_best') || (level - 1);
+  const achievedDigits = level - 1;
+  const rankInfo = achievedDigits > 0 ? submitScore('number-memory-test', achievedDigits, `${achievedDigits} Digits`) : null;
+
+  const bestScore = localStorage.getItem('catkeylab_number_best') || achievedDigits;
   document.getElementById('nm-val-best').textContent = bestScore;
 
   document.getElementById('nm-shown-val').textContent = currentNumber;
   document.getElementById('nm-user-val').textContent = userInput || '(empty)';
-  document.getElementById('nm-level-score').textContent = `Level ${level - 1} (${level - 1} digits)`;
+  document.getElementById('nm-level-score').innerHTML = `Level ${achievedDigits} (${achievedDigits} digits)<br><span style="color:var(--accent-cyan); font-size:1rem; font-weight:700;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
 }
 
 function hideAllViews() {

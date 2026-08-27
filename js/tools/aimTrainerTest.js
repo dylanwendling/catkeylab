@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
+import { submitScore } from '../leaderboard.js';
 
 let targetsRemaining = 30;
 let totalTargets = 30;
@@ -175,6 +176,7 @@ function finishTest() {
   const accuracy = Math.round((targetTimes.length / totalClicks) * 100);
 
   saveBestScore(avgSpeed);
+  const rankInfo = submitScore('aim-trainer-test', avgSpeed, `${avgSpeed} ms`);
 
   const bestScore = localStorage.getItem('catkeylab_aim_best') || avgSpeed;
   document.getElementById('aim-val-best').textContent = `${bestScore} ms`;
@@ -185,7 +187,7 @@ function finishTest() {
   const startBtn = document.getElementById('aim-start-btn');
 
   if (title) title.textContent = `${avgSpeed} ms / target`;
-  if (desc) desc.innerHTML = `Accuracy: <strong>${accuracy}%</strong> (${misses} misses)<br>Personal Best: <strong>${bestScore} ms</strong>`;
+  if (desc) desc.innerHTML = `Accuracy: <strong>${accuracy}%</strong> (${misses} misses)<br>Personal Best: <strong>${bestScore} ms</strong><br><span style="color:var(--accent-cyan); font-weight:700;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
   if (startBtn) startBtn.textContent = 'Try Again';
 
   if (overlay) overlay.style.display = 'flex';
