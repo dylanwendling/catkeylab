@@ -1,7 +1,7 @@
-# Render Blueprint Specification for ClickPulse
+# Render Blueprint Specification for CatnipLab 🐾
 services:
   - type: web
-    name: clickpulse
+    name: catniplab
     runtime: static
     buildCommand: ""
     staticPublishPath: ./
