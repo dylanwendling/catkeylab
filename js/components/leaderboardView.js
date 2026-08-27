@@ -16,7 +16,10 @@ const TEST_TABS = [
   { id: 'chimp-test', label: '🐒 Chimp Test' },
   { id: 'visual-memory-test', label: '🔳 Visual Memory' },
   { id: 'typing-test', label: '⌨️ Typing Speed' },
-  { id: 'cps-test', label: '⚡ CPS Test' }
+  { id: 'cps-test', label: '⚡ CPS Test' },
+  { id: 'fish-maze-game', label: '🐟 Fish Maze' },
+  { id: 'card-memory-game', label: '🎴 Card Memory' },
+  { id: 'cat-battleship-game', label: '🚢 Cat Battleship' }
 ];
 
 export function renderLeaderboardView(container) {

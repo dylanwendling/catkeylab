@@ -11,7 +11,7 @@ const CAT_NAMES = [
 
 const CAT_EMOJIS = ["🐱", "😸", "😹", "😻", "😼", "😽", "🙀", "🐯", "🐆", "🐈", "🦁", "🐾", "🐈‍⬛", "⚡", "🧠", "🎯"];
 
-// Initial Empty Leaderboards for all Benchmark Tools
+// Initial Empty Leaderboards for all Benchmark Tools & Games
 const INITIAL_LEADERBOARDS = {
   'reaction-time-test': [],
   'sequence-memory-test': [],
@@ -21,7 +21,10 @@ const INITIAL_LEADERBOARDS = {
   'chimp-test': [],
   'visual-memory-test': [],
   'typing-test': [],
-  'cps-test': []
+  'cps-test': [],
+  'fish-maze-game': [],
+  'card-memory-game': [],
+  'cat-battleship-game': []
 };
 
 // Get or Create Anonymous Identity
@@ -135,7 +138,7 @@ export async function fetchGlobalLeaderboards() {
       const remoteList = rawRemote ? (Array.isArray(rawRemote) ? rawRemote : Object.values(rawRemote)) : [];
       const localList = Array.isArray(localBoards[testId]) ? localBoards[testId] : [];
 
-      const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
+      const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test' || testId === 'fish-maze-game' || testId === 'card-memory-game' || testId === 'cat-battleship-game';
       const mergedMap = new Map();
 
       [...localList, ...remoteList].forEach(item => {
@@ -195,7 +198,7 @@ export function getLeaderboard(testId) {
   fetchGlobalLeaderboards();
 
   // Sort logic (Lower is better for reaction-time and aim-trainer; Higher is better for others)
-  const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
+  const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test' || testId === 'fish-maze-game' || testId === 'card-memory-game' || testId === 'cat-battleship-game';
 
   return list.sort((a, b) => isLowerBetter ? a.score - b.score : b.score - a.score);
 }
@@ -212,7 +215,7 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
   // Check if profile already has an entry
   const existingIdx = list.findIndex(item => item.handle === profile.handle);
 
-  const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
+  const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test' || testId === 'fish-maze-game' || testId === 'card-memory-game' || testId === 'cat-battleship-game';
 
   const newEntry = {
     handle: profile.handle,
