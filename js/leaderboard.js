@@ -89,7 +89,7 @@ if (syncChannel) {
 }
 
 // Global Firebase Realtime Database Endpoint
-const FIREBASE_DB_URL = 'https://catkeylab-default-rtdb.firebaseio.com/leaderboards_v7';
+const FIREBASE_DB_URL = 'https://catkeylab-default-rtdb.firebaseio.com/leaderboards';
 
 // Purge old local storage keys to guarantee 100% clean data slate
 function purgeOldKeys() {
