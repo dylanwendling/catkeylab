@@ -1,7 +1,7 @@
 {
-  "name": "clickpulse",
+  "name": "catniplab",
   "version": "1.0.0",
-  "description": "Free Online Browser Clicking & Testing Tools",
+  "description": "CatnipLab - Online Hardware Testers & Typing Speed Challenge",
   "private": true,
   "main": "index.html",
   "scripts": {

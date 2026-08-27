@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Footer Component
+   CatnipLab - Footer Component (Cat Theme)
    ========================================================================== */
 
 import { t, LANGUAGES, setLanguage } from '../i18n.js';
@@ -12,12 +12,10 @@ export function renderFooter(container) {
           <!-- Brand Summary Column -->
           <div class="footer-brand">
             <a href="#" class="logo">
-              <div class="logo-icon">
-                <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
+              <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
+                🐱
               </div>
-              <div class="logo-text">Click<span>Pulse</span></div>
+              <div class="logo-text">Catnip<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
             </a>
             <p data-i18n="footerAbout">${t('footerAbout')}</p>
             <div class="privacy-badge">
@@ -57,7 +55,7 @@ export function renderFooter(container) {
           <div>
             <h4 class="footer-title">Platform & Privacy</h4>
             <div class="footer-links">
-              <a href="#about" class="footer-link">About ClickPulse</a>
+              <a href="#about" class="footer-link">About CatnipLab</a>
               <a href="#privacy" class="footer-link">Privacy Policy</a>
               <a href="#terms" class="footer-link">Terms of Service</a>
               <a href="#sitemap" class="footer-link">Sitemap & Index</a>

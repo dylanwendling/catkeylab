@@ -166,12 +166,12 @@ export function handleRoute() {
     const meta = TOOL_METADATA[hash];
     renderToolPage(mainContainer, hash, meta);
     renderBreadcrumbs(breadcrumbsContainer, t(meta.titleKey));
-    updateSEOMetadata(`${t(meta.titleKey)} - ClickPulse Hardware Tools`, meta.desc);
+    updateSEOMetadata(`${t(meta.titleKey)} - CatnipLab 🐾 Hardware Tools`, meta.desc);
     currentCleanup = meta.cleanupFn;
   } else if (hash === 'about' || hash === 'privacy' || hash === 'terms') {
     renderLegalPage(mainContainer, hash);
     renderBreadcrumbs(breadcrumbsContainer, hash.toUpperCase());
-    updateSEOMetadata(`${hash.toUpperCase()} - ClickPulse`, 'ClickPulse platform policies and information.');
+    updateSEOMetadata(`${hash.toUpperCase()} - CatnipLab 🐾`, 'CatnipLab platform policies and information.');
   } else {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
@@ -196,14 +196,14 @@ function renderHomePage(container) {
     <!-- Hero Section -->
     <section class="hero">
       <div class="container">
-        <div class="hero-badge" style="background:linear-gradient(90deg, rgba(6,182,212,0.2), rgba(99,102,241,0.2)); border-color:var(--accent-cyan-glow); color:var(--accent-cyan);">
-          🖱️ Online Mouse Tester & ⌨️ Keyboard Key Tester
+        <div class="hero-badge" style="background:linear-gradient(90deg, rgba(16,185,129,0.18), rgba(249,115,22,0.18)); border-color:rgba(16,185,129,0.35); color:var(--accent-emerald);">
+          🐾 CatnipLab • Handcrafted Hardware Testers & Typing Speed Challenge
         </div>
         <h1 class="hero-title">
-          <span>Test Your Mouse & Keyboard Hardware Online</span>
+          <span>Test Mouse Hardware, Keyboard Keys & Typing Speed</span> 🐾
         </h1>
         <p class="hero-subtitle">
-          Instant, free, and private online tools to test mouse buttons (MB1-MB5, right click, scroll wheel) and verify keyboard key switches, rollover, and click speed.
+          Tested & approved by the CatnipLab mascot. Free, private, browser-based tools to verify mouse buttons (MB1-MB5, right click, scroll), keyboard switches, and WPM typing speed.
         </p>
         <div class="hero-ctas">
           <a href="#typing-test" class="btn btn-primary btn-lg">
@@ -225,9 +225,9 @@ function renderHomePage(container) {
         <!-- Hero Quick Test Interactive Card -->
         <div class="hero-quick-test-card" id="hero-quick-test-zone">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
-            <div style="font-weight:700; font-size:1.1rem; color:var(--accent-cyan); display:flex; align-items:center; gap:0.5rem;">
+            <div style="font-weight:700; font-size:1.1rem; color:var(--accent-emerald); display:flex; align-items:center; gap:0.5rem;">
               <span class="status-dot" style="background:var(--accent-emerald);"></span>
-              <span>Instant Quick Hardware Inspector</span>
+              <span>🐱 Mascot Hardware Inspector</span>
             </div>
             <span style="font-size:0.8rem; color:var(--text-muted);">Click mouse or press any key to test live</span>
           </div>

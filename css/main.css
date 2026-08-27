@@ -20,19 +20,22 @@
   --text-secondary: #8b949e;
   --text-muted: #6e7681;
 
-  --accent-primary: #58a6ff;
-  --accent-primary-hover: #388bfd;
-  --accent-primary-glow: rgba(88, 166, 255, 0.25);
+  --accent-primary: #10b981; /* Catnip Emerald */
+  --accent-primary-hover: #059669;
+  --accent-primary-glow: rgba(16, 185, 129, 0.25);
   
-  --accent-cyan: #39c5bb;
-  --accent-cyan-glow: rgba(57, 197, 187, 0.25);
-  --accent-emerald: #3fb950;
-  --accent-amber: #d29922;
-  --accent-rose: #f85149;
-  --accent-purple: #bc8cff;
+  --accent-cyan: #10b981; /* Catnip Emerald Accent */
+  --accent-cyan-glow: rgba(16, 185, 129, 0.25);
+  --accent-catnip: #10b981; /* Catnip Emerald */
+  --accent-ginger: #f97316; /* Ginger Tabby Orange */
+  --accent-pink: #fda4af; /* Soft Salmon Pink */
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+  --accent-rose: #f43f5e;
+  --accent-purple: #a855f7;
 
   --border-color: #30363d;
-  --border-focus: #58a6ff;
+  --border-focus: #10b981;
 
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);

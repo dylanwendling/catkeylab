@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Header Navigation Component
+   CatnipLab - Header Navigation Component (Cat Theme)
    ========================================================================== */
 
 import { t, LANGUAGES, getCurrentLang, setLanguage } from '../i18n.js';
@@ -14,12 +14,10 @@ export function renderHeader(container) {
     <header class="site-header">
       <div class="container header-inner">
         <a href="#" class="logo" id="header-logo">
-          <div class="logo-icon">
-            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
+          <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
+            🐱
           </div>
-          <div class="logo-text">Click<span>Pulse</span></div>
+          <div class="logo-text">Catnip<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
         </a>
 
         <!-- Desktop Navigation Links -->

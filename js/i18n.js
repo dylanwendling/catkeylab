@@ -20,8 +20,8 @@ export const LANGUAGES = [
 
 export const translations = {
   en: {
-    siteName: 'ClickPulse',
-    tagline: 'Free Online Browser Clicking & Mouse Tools',
+    siteName: 'CatnipLab 🐾',
+    tagline: 'Handcrafted Online Hardware Testers & Typing Speed Challenge',
     navHome: 'Home',
     navAutoClicker: 'Auto Clicker',
     navCPSTest: 'CPS Test',
@@ -142,8 +142,8 @@ export const translations = {
 
     // Footer & Meta
     privacyNotice: '100% Client-Side & Private. No data leaves your device.',
-    copyright: '© 2026 ClickPulse. All rights reserved.',
-    footerAbout: 'ClickPulse provides free, browser-native clicking utilities, mouse testing tools, and speed diagnostics designed for gamers, office professionals, and web developers.'
+    copyright: '© 2026 CatnipLab 🐾. All rights reserved.',
+    footerAbout: 'CatnipLab provides free, browser-native hardware testing tools, WPM typing speed challenges, and click speed diagnostics with an interactive Cat Mascot.'
   },
   es: {
     siteName: 'ClickPulse',
