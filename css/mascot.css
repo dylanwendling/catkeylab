@@ -1,0 +1,182 @@
+/* ==========================================================================
+   ClickPulse - Interactive Eye Mascot Component Styles
+   ========================================================================== */
+
+.mascot-container {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  pointer-events: none; /* Container passes pointer events except mascot itself */
+  user-select: none;
+}
+
+/* Mascot Speech Bubble */
+.mascot-speech-bubble {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: var(--font-family);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 2px #0f172a;
+  margin-bottom: 8px;
+  margin-left: 10px;
+  position: relative;
+  opacity: 0;
+  transform: translateY(6px) scale(0.95);
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.mascot-speech-bubble.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.mascot-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 16px;
+  width: 10px;
+  height: 10px;
+  background: #ffffff;
+  border-right: 2px solid #0f172a;
+  border-bottom: 2px solid #0f172a;
+  transform: rotate(45deg);
+}
+
+/* Eye Character Shell */
+.mascot-character {
+  width: 58px;
+  height: 58px;
+  background: #ffffff;
+  border: 3px solid #0f172a;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 3px 0 #0f172a;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  overflow: hidden;
+}
+
+.mascot-character:hover {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 4px 0 #0f172a;
+}
+
+.mascot-character:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 0 #0f172a;
+}
+
+/* Sclera & Iris */
+.mascot-sclera {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 35% 35%, #ffffff 60%, #e2e8f0 100%);
+}
+
+.mascot-pupil {
+  width: 22px;
+  height: 22px;
+  background: #0f172a;
+  border-radius: 50%;
+  position: absolute;
+  transition: width 0.15s ease, height 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Iris Highlight Catchlight */
+.mascot-pupil::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+}
+
+/* Eyelids for Blinking */
+.mascot-eyelid-top, .mascot-eyelid-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: #0f172a;
+  z-index: 10;
+  transition: height 0.08s ease-in-out;
+}
+
+.mascot-eyelid-top {
+  top: 0;
+  height: 0%;
+  border-bottom: 2px solid #0f172a;
+}
+
+.mascot-eyelid-bottom {
+  bottom: 0;
+  height: 0%;
+  border-top: 2px solid #0f172a;
+}
+
+/* Eyelid Blink State */
+.mascot-character.blinking .mascot-eyelid-top,
+.mascot-character.blinking .mascot-eyelid-bottom {
+  height: 50%;
+}
+
+/* Expression Modifiers */
+.mascot-character.surprised .mascot-pupil {
+  width: 28px;
+  height: 28px;
+}
+
+.mascot-character.squint .mascot-eyelid-top,
+.mascot-character.squint .mascot-eyelid-bottom {
+  height: 25%;
+}
+
+.mascot-character.happy .mascot-eyelid-bottom {
+  height: 40%;
+  border-radius: 50% 50% 0 0;
+}
+
+.mascot-character.wink .mascot-eyelid-top,
+.mascot-character.wink .mascot-eyelid-bottom {
+  height: 50%;
+}
+
+/* Responsive adjustment for mobile */
+@media (max-width: 640px) {
+  .mascot-container {
+    bottom: 16px;
+    left: 16px;
+  }
+  .mascot-character {
+    width: 48px;
+    height: 48px;
+  }
+  .mascot-pupil {
+    width: 18px;
+    height: 18px;
+  }
+}

@@ -18,6 +18,12 @@ import { renderDoubleClickTest, cleanupDoubleClickTest } from './tools/doubleCli
 
 let currentCleanup = null;
 
+export function triggerRandomTool() {
+  const keys = Object.keys(TOOL_METADATA);
+  const randomKey = keys[Math.floor(Math.random() * keys.length)];
+  window.location.hash = `#${randomKey}`;
+}
+
 export const TOOL_METADATA = {
   'mouse-test': {
     titleKey: 'mouseTestTitle',
@@ -180,17 +186,17 @@ function renderHomePage(container) {
           Instant, free, and private online tools to test mouse buttons (MB1-MB5, right click, scroll wheel) and verify keyboard key switches, rollover, and click speed.
         </p>
         <div class="hero-ctas">
-          <a href="#mouse-test" class="btn btn-primary btn-lg" style="box-shadow:var(--shadow-cyan-glow);">
+          <a href="#mouse-test" class="btn btn-primary btn-lg">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
             <span>🖱️ Test Mouse Hardware</span>
           </a>
-          <a href="#keyboard-test" class="btn btn-secondary btn-lg" style="border-color:var(--accent-cyan); color:var(--accent-cyan);">
+          <a href="#keyboard-test" class="btn btn-secondary btn-lg">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
             <span>⌨️ Test Keyboard Keys</span>
           </a>
-          <a href="#cps-test" class="btn btn-secondary btn-lg">
-            <span>⚡ CPS Speed Test</span>
-          </a>
+          <button id="hero-surprise-btn" class="btn btn-surprise btn-lg">
+            <span>🎲 Surprise Me!</span>
+          </button>
         </div>
 
         <!-- Hero Quick Test Interactive Card -->
@@ -281,6 +287,48 @@ function renderHomePage(container) {
     { q: 'Do I need to download or install software to use ClickPulse?', a: 'No! All tools on ClickPulse run 100% inside your web browser using HTML5, Web Audio, and Vanilla JavaScript.' },
     { q: 'Is ClickPulse safe and private?', a: 'Yes. None of your clicks, keypresses, or test scores are ever sent to an external server. Everything stays on your local device.' }
   ]);
+}
+
+function initHeroQuickTestListeners() {
+  const quickTestZone = document.getElementById('hero-quick-test-zone');
+  const mouseValEl = document.getElementById('hero-mouse-btn');
+  const keyValEl = document.getElementById('hero-key-btn');
+  const countValEl = document.getElementById('hero-count-val');
+  const surpriseBtn = document.getElementById('hero-surprise-btn');
+
+  if (surpriseBtn) {
+    surpriseBtn.addEventListener('click', triggerRandomTool);
+  }
+
+  if (!quickTestZone) return;
+
+  let inputCount = 0;
+  const mouseNames = ['Left Click (MB1)', 'Middle Click (MB3)', 'Right Click (MB2)', 'Side Back (MB4)', 'Side Forward (MB5)'];
+
+  quickTestZone.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  quickTestZone.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    inputCount++;
+    if (countValEl) countValEl.textContent = inputCount;
+    if (mouseValEl) {
+      const btnName = mouseNames[e.button] || `Button ${e.button}`;
+      mouseValEl.textContent = btnName;
+      mouseValEl.style.color = 'var(--accent-cyan)';
+    }
+  });
+
+  const keyHandler = (e) => {
+    if (window.location.hash && window.location.hash !== '#' && window.location.hash !== '') return;
+    inputCount++;
+    if (countValEl) countValEl.textContent = inputCount;
+    if (keyValEl) {
+      keyValEl.textContent = `${e.key === ' ' ? 'Space' : e.key} (${e.code})`;
+      keyValEl.style.color = 'var(--accent-emerald)';
+    }
+  };
+
+  window.addEventListener('keydown', keyHandler);
 }
 
 function renderToolsDirectoryPage(container) {

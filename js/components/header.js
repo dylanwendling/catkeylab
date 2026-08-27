@@ -4,6 +4,7 @@
 
 import { t, LANGUAGES, getCurrentLang, setLanguage } from '../i18n.js';
 import { toggleTheme } from '../theme.js';
+import { triggerRandomTool } from '../router.js';
 
 export function renderHeader(container) {
   const currentLangCode = getCurrentLang();
@@ -28,8 +29,6 @@ export function renderHeader(container) {
           <a href="#keyboard-test" class="nav-link" data-route="keyboard-test" data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</a>
           <a href="#auto-clicker" class="nav-link" data-route="auto-clicker" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
           <a href="#cps-test" class="nav-link" data-route="cps-test" data-i18n="navCPSTest">${t('navCPSTest')}</a>
-          <a href="#click-speed-test" class="nav-link" data-route="click-speed-test" data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</a>
-          <a href="#click-counter" class="nav-link" data-route="click-counter" data-i18n="navClickCounter">${t('navClickCounter')}</a>
 
           <!-- Tools Dropdown -->
           <div class="dropdown" id="tools-dropdown">
@@ -53,6 +52,11 @@ export function renderHeader(container) {
         </nav>
 
         <div class="header-actions">
+          <!-- Surprise Me Discovery Button -->
+          <button id="nav-surprise-btn" class="btn btn-sm btn-surprise" style="padding:0.45rem 0.9rem;">
+            <span>🎲 Surprise Me!</span>
+          </button>
+
           <!-- Language Selector Dropdown -->
           <div class="dropdown" id="lang-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
@@ -159,6 +163,12 @@ function bindHeaderEvents() {
   const themeBtn = document.getElementById('theme-toggle-btn');
   if (themeBtn) {
     themeBtn.addEventListener('click', toggleTheme);
+  }
+
+  // Surprise Me Discovery Button
+  const navSurpriseBtn = document.getElementById('nav-surprise-btn');
+  if (navSurpriseBtn) {
+    navSurpriseBtn.addEventListener('click', triggerRandomTool);
   }
 
   // Mobile Drawer Toggle
