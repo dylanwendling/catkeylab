@@ -11,10 +11,11 @@ let ctx = null;
 let animFrameId = null;
 
 // Game State
+let selectedMaxHoles = 18; // 3, 9, or 18
 let currentHoleIndex = 0;
 let strokeCount = 0;
 let totalStrokes = 0;
-let totalPar = 12; // Hole 1 (Par 3) + Hole 2 (Par 4) + Hole 3 (Par 5) = 12
+let totalPar = 71;
 let isAiming = false;
 let aimStartPos = { x: 0, y: 0 };
 let aimCurrentPos = { x: 0, y: 0 };
@@ -41,70 +42,26 @@ let wind = { x: 0, y: 0, strength: 0 };
 let weatherMode = 'sun'; // 'sun', 'rain', 'snow', 'night'
 let weatherParticles = [];
 
-// Holes & Courses Setup
-const HOLES = [
-  {
-    name: 'Hole 1: Sunny Meadow ☀️',
-    par: 3,
-    weather: 'sun',
-    ballStart: { x: 100, y: 250 },
-    holePos: { x: 700, y: 250 },
-    walls: [
-      { x: 380, y: 100, w: 35, h: 300, label: '🧱 BUMPER WALL' }
-    ],
-    sandTraps: [
-      { x: 480, y: 150, w: 130, h: 200, label: '🏖️ SAND TRAP' }
-    ],
-    waterHazards: [],
-    icePatches: [],
-    portals: [],
-    windmill: null
-  },
-  {
-    name: 'Hole 2: Catnip Forest 🌴',
-    par: 4,
-    weather: 'rain',
-    ballStart: { x: 100, y: 150 },
-    holePos: { x: 720, y: 400 },
-    walls: [
-      { x: 240, y: 0, w: 25, h: 310, label: '🧱 BUMPER WALL' },
-      { x: 500, y: 180, w: 25, h: 320, label: '🧱 BUMPER WALL' }
-    ],
-    sandTraps: [
-      { x: 310, y: 360, w: 160, h: 110, label: '🏖️ SAND TRAP' }
-    ],
-    waterHazards: [
-      { x: 290, y: 100, w: 190, h: 180, label: '🌊 WATER HAZARD (+1)' }
-    ],
-    icePatches: [],
-    portals: [
-      { inX: 180, inY: 420, outX: 630, outY: 100, radius: 25, label: '🌀 PORTAL' }
-    ],
-    windmill: { x: 610, y: 250, radius: 60, angle: 0, speed: 0.03, label: '🌀 WINDMILL' }
-  },
-  {
-    name: 'Hole 3: Ice & Snow Peaks ❄️',
-    par: 5,
-    weather: 'snow',
-    ballStart: { x: 90, y: 420 },
-    holePos: { x: 710, y: 100 },
-    walls: [
-      { x: 200, y: 200, w: 400, h: 25, label: '🧱 BUMPER WALL' },
-      { x: 380, y: 0, w: 25, h: 200, label: '🧱 BUMPER WALL' }
-    ],
-    sandTraps: [],
-    waterHazards: [
-      { x: 450, y: 280, w: 180, h: 140, label: '🌊 WATER HAZARD (+1)' }
-    ],
-    icePatches: [
-      { x: 250, y: 50, w: 120, h: 140, label: '🧊 SLICK ICE' },
-      { x: 50, y: 240, w: 130, h: 130, label: '🧊 SLICK ICE' }
-    ],
-    portals: [
-      { inX: 120, inY: 100, outX: 680, outY: 380, radius: 25, label: '🌀 PORTAL' }
-    ],
-    windmill: { x: 390, y: 330, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' }
-  }
+// 18 Full Playable Mini Golf Holes
+const ALL_18_HOLES = [
+  { name: 'Hole 1: Sunny Tee ☀️', par: 3, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [], sandTraps: [{ x: 400, y: 180, w: 100, h: 140, label: '🏖️ SAND TRAP' }], waterHazards: [], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 2: Bumper Alley 🧱', par: 3, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [{ x: 380, y: 100, w: 35, h: 300, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 3: Sand Trap Bend 🏖️', par: 3, weather: 'sun', ballStart: { x: 100, y: 150 }, holePos: { x: 700, y: 380 }, walls: [{ x: 300, y: 0, w: 30, h: 300, label: '🧱 BUMPER WALL' }], sandTraps: [{ x: 450, y: 200, w: 140, h: 160, label: '🏖️ SAND TRAP' }], waterHazards: [], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 4: Windmill Pass 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: { x: 400, y: 250, radius: 70, angle: 0, speed: 0.03, label: '🌀 WINDMILL' } },
+  { name: 'Hole 5: Water Crossing 🌊', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 330, y: 100, w: 140, h: 300, label: '🌊 WATER HAZARD (+1)' }], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 6: Portal Jump 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 120 }, holePos: { x: 700, y: 400 }, walls: [{ x: 260, y: 0, w: 30, h: 350, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [{ inX: 180, inY: 400, outX: 620, outY: 120, radius: 25, label: '🌀 PORTAL' }], windmill: null },
+  { name: 'Hole 7: Ice Slide 🧊', par: 4, weather: 'snow', ballStart: { x: 90, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [{ x: 250, y: 120, w: 300, h: 260, label: '🧊 SLICK ICE' }], portals: [], windmill: null },
+  { name: 'Hole 8: Double Bumper 🧱', par: 4, weather: 'sun', ballStart: { x: 100, y: 100 }, holePos: { x: 700, y: 400 }, walls: [{ x: 250, y: 0, w: 30, h: 320, label: '🧱 BUMPER WALL' }, { x: 500, y: 180, w: 30, h: 320, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 9: Forest Loop 🌴', par: 5, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 400 }, walls: [{ x: 240, y: 0, w: 25, h: 310, label: '🧱 WALL' }], sandTraps: [{ x: 310, y: 360, w: 160, h: 110, label: '🏖️ SAND' }], waterHazards: [{ x: 290, y: 100, w: 190, h: 180, label: '🌊 WATER' }], icePatches: [], portals: [{ inX: 180, inY: 420, outX: 630, outY: 100, radius: 25, label: '🌀 PORTAL' }], windmill: { x: 610, y: 250, radius: 60, angle: 0, speed: 0.03, label: '🌀 WINDMILL' } },
+  { name: 'Hole 10: Rainy Slalom 🌧️', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [{ x: 300, y: 100, w: 30, h: 180, label: '🧱 WALL' }, { x: 500, y: 220, w: 30, h: 180, label: '🧱 WALL' }], sandTraps: [{ x: 380, y: 180, w: 90, h: 140, label: '🏖️ SAND' }], waterHazards: [], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 11: Narrow Water Bridge 🌉', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 250, y: 50, w: 300, h: 160, label: '🌊 WATER' }, { x: 250, y: 290, w: 300, h: 160, label: '🌊 WATER' }], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 12: Portal Maze 🌀', par: 4, weather: 'night', ballStart: { x: 90, y: 400 }, holePos: { x: 710, y: 100 }, walls: [{ x: 200, y: 150, w: 400, h: 30, label: '🧱 WALL' }, { x: 400, y: 300, w: 30, h: 180, label: '🧱 WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [{ inX: 140, inY: 100, outX: 680, outY: 400, radius: 25, label: '🌀 PORTAL' }], windmill: null },
+  { name: 'Hole 13: Double Windmill 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: { x: 300, y: 250, radius: 60, angle: 0, speed: 0.035, label: '🌀 WINDMILL' } },
+  { name: 'Hole 14: Snowy Ice Run 🧊', par: 4, weather: 'snow', ballStart: { x: 90, y: 100 }, holePos: { x: 710, y: 400 }, walls: [{ x: 350, y: 0, w: 30, h: 320, label: '🧱 WALL' }], sandTraps: [], waterHazards: [], icePatches: [{ x: 120, y: 220, w: 200, h: 180, label: '🧊 SLICK ICE' }, { x: 420, y: 100, w: 200, h: 180, label: '🧊 SLICK ICE' }], portals: [], windmill: null },
+  { name: 'Hole 15: Sand & Water Combo 🏖️', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [], sandTraps: [{ x: 250, y: 100, w: 120, h: 300, label: '🏖️ SAND' }], waterHazards: [{ x: 450, y: 100, w: 120, h: 300, label: '🌊 WATER' }], icePatches: [], portals: [], windmill: null },
+  { name: 'Hole 16: Windmill Water Gauntlet 🌀', par: 5, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 420, y: 100, w: 150, h: 300, label: '🌊 WATER' }], icePatches: [], portals: [], windmill: { x: 280, y: 250, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' } },
+  { name: 'Hole 17: Island Green ⛳', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 250, y: 50, w: 350, h: 400, label: '🌊 WATER HAZARD (+1)' }], icePatches: [], portals: [{ inX: 180, inY: 250, outX: 710, outY: 150, radius: 25, label: '🌀 PORTAL' }], windmill: null },
+  { name: 'Hole 18: Grand Finale 🏆', par: 5, weather: 'night', ballStart: { x: 90, y: 420 }, holePos: { x: 710, y: 100 }, walls: [{ x: 200, y: 200, w: 400, h: 25, label: '🧱 WALL' }], sandTraps: [{ x: 120, y: 100, w: 100, h: 100, label: '🏖️ SAND' }], waterHazards: [{ x: 450, y: 280, w: 180, h: 140, label: '🌊 WATER' }], icePatches: [{ x: 250, y: 50, w: 120, h: 140, label: '🧊 ICE' }], portals: [{ inX: 120, inY: 280, outX: 680, outY: 380, radius: 25, label: '🌀 PORTAL' }], windmill: { x: 390, y: 330, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' } }
 ];
 
 export function renderCatMiniGolfGame(container) {
@@ -116,28 +73,27 @@ export function renderCatMiniGolfGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles Ultimate 2D Mini Golf</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Click & drag backward on the golf ball to aim & shoot! Avoid sand traps, water hazards, and bumper walls.
+          Click & drag backward on the golf ball to aim & shoot! Master wind, portals, sand traps, and water hazards.
         </p>
 
-        <!-- Weather & Control Bar -->
+        <!-- Course Selector & Control Bar -->
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.75rem; background:var(--bg-secondary); border:1px solid var(--border-color); padding:0.85rem 1.25rem; border-radius:var(--radius-lg); margin-bottom:1rem;">
           <div style="display:flex; align-items:center; gap:0.75rem; font-weight:700;">
-            <span id="golf-hole-title" style="color:var(--accent-cyan); font-size:1.05rem;">Hole 1: Sunny Meadow ☀️</span>
+            <span id="golf-hole-title" style="color:var(--accent-cyan); font-size:1.05rem;">Hole 1: Sunny Tee ☀️</span>
             <span style="background:var(--bg-tertiary); padding:0.25rem 0.65rem; border-radius:var(--radius-sm); font-size:0.85rem; color:var(--text-secondary);" id="golf-par-text">Par 3</span>
           </div>
 
-          <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+          <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+            <!-- Round Length Selector -->
+            <div style="display:flex; gap:0.3rem;">
+              <button class="btn btn-secondary btn-sm golf-round-btn" data-holes="3">⛳ 3 Holes</button>
+              <button class="btn btn-secondary btn-sm golf-round-btn" data-holes="9">⛳ 9 Holes</button>
+              <button class="btn btn-secondary btn-sm golf-round-btn active" data-holes="18">⛳ 18 Holes</button>
+            </div>
+
             <!-- Wind Indicator -->
             <div id="golf-wind-badge" style="background:var(--bg-tertiary); border:1px solid var(--border-color); padding:0.35rem 0.75rem; border-radius:var(--radius-md); font-weight:700; font-size:0.85rem; color:var(--accent-emerald);">
               💨 Wind: CalmMph
-            </div>
-
-            <!-- Weather Selector Buttons -->
-            <div style="display:flex; gap:0.3rem;">
-              <button class="btn btn-secondary btn-sm golf-weather-btn active" data-weather="sun" title="Sunny Weather">☀️</button>
-              <button class="btn btn-secondary btn-sm golf-weather-btn" data-weather="rain" title="Rain Weather">🌧️</button>
-              <button class="btn btn-secondary btn-sm golf-weather-btn" data-weather="snow" title="Snow Weather">❄️</button>
-              <button class="btn btn-secondary btn-sm golf-weather-btn" data-weather="night" title="Night Mode">🌙</button>
             </div>
 
             <button id="pu-undo-btn" class="btn btn-secondary btn-sm" style="border-color:var(--accent-emerald); font-weight:700;">↩️ Undo Shot</button>
@@ -150,23 +106,27 @@ export function renderCatMiniGolfGame(container) {
         </div>
 
         <!-- Live Golf Dashboard -->
-        <div class="stats-dashboard" style="max-width:600px; margin:1.25rem auto 1.5rem auto;">
+        <div class="stats-dashboard" style="max-width:650px; margin:1.25rem auto 1.5rem auto;">
           <div class="stat-box">
             <div id="golf-stroke-val" class="stat-value">0</div>
-            <div class="stat-label">Current Hole Strokes</div>
+            <div class="stat-label">Hole Strokes</div>
           </div>
           <div class="stat-box">
             <div id="golf-total-stroke-val" class="stat-value">0</div>
-            <div class="stat-label">Total Strokes</div>
+            <div class="stat-label">Total Score</div>
           </div>
           <div class="stat-box">
-            <div id="golf-total-par-val" class="stat-value">12</div>
-            <div class="stat-label">Course Par</div>
+            <div id="golf-total-par-val" class="stat-value">71</div>
+            <div class="stat-label">Round Par</div>
+          </div>
+          <div class="stat-box">
+            <div id="golf-hole-progress" class="stat-value">1 / 18</div>
+            <div class="stat-label">Hole Progress</div>
           </div>
         </div>
 
         <div>
-          <button id="golf-reset-btn" class="btn btn-primary btn-lg">🎲 Restart Golf Game</button>
+          <button id="golf-reset-btn" class="btn btn-primary btn-lg">🎲 Restart Selected Course</button>
         </div>
       </div>
     </div>
@@ -174,7 +134,7 @@ export function renderCatMiniGolfGame(container) {
     <!-- Golf Victory Result Modal -->
     <div id="golf-modal" class="modal-overlay">
       <div class="modal-card" style="text-align:center;">
-        <h2 style="font-size:1.8rem; margin-bottom:0.5rem;">⛳ Hole-in-One Champion!</h2>
+        <h2 style="font-size:1.8rem; margin-bottom:0.5rem;">⛳ Golf Championship Complete!</h2>
         <p style="color:var(--text-secondary); margin-bottom:1rem;">Nibbles purrs and celebrates your mini golf masterclass!</p>
 
         <div class="stats-dashboard" style="margin-bottom:1.5rem;">
@@ -207,15 +167,20 @@ function initCanvas() {
 
   currentHoleIndex = 0;
   totalStrokes = 0;
+  calculateTotalPar();
   loadHole(0);
 
   if (animFrameId) cancelAnimationFrame(animFrameId);
   gameLoop();
 }
 
+function calculateTotalPar() {
+  totalPar = ALL_18_HOLES.slice(0, selectedMaxHoles).reduce((acc, h) => acc + h.par, 0);
+}
+
 function loadHole(index) {
   currentHoleIndex = index;
-  const hole = HOLES[currentHoleIndex];
+  const hole = ALL_18_HOLES[currentHoleIndex];
   strokeCount = 0;
   holeCompleted = false;
   ballMoving = false;
@@ -270,7 +235,7 @@ function gameLoop() {
 }
 
 function updatePhysics() {
-  const hole = HOLES[currentHoleIndex];
+  const hole = ALL_18_HOLES[currentHoleIndex];
 
   // Update Windmill Blade Angle
   if (hole.windmill) {
@@ -372,7 +337,7 @@ function updatePhysics() {
       playSuccessSound();
 
       setTimeout(() => {
-        if (currentHoleIndex + 1 < HOLES.length) {
+        if (currentHoleIndex + 1 < selectedMaxHoles) {
           loadHole(currentHoleIndex + 1);
         } else {
           finishCourse();
@@ -384,7 +349,7 @@ function updatePhysics() {
 
 function renderCanvas() {
   if (!ctx) return;
-  const hole = HOLES[currentHoleIndex];
+  const hole = ALL_18_HOLES[currentHoleIndex];
 
   // 1. Clear & Background Course Colors
   ctx.fillStyle = weatherMode === 'night' ? '#0f172a' : (weatherMode === 'snow' ? '#e2e8f0' : '#2d6a4f');
@@ -397,7 +362,7 @@ function renderCanvas() {
 
   ctx.font = 'bold 12px sans-serif';
 
-  // 2. Render Sand Traps 🏖️ with Bold Borders & Labels
+  // 2. Render Sand Traps 🏖️ with Outlines & Labels
   hole.sandTraps.forEach(sand => {
     ctx.fillStyle = '#fde047';
     ctx.fillRect(sand.x, sand.y, sand.w, sand.h);
@@ -409,7 +374,7 @@ function renderCanvas() {
     ctx.fillText(sand.label || '🏖️ SAND TRAP', sand.x + 10, sand.y + 22);
   });
 
-  // 3. Render Water Hazards 🌊 with Bold Borders & Labels
+  // 3. Render Water Hazards 🌊 with Outlines & Labels
   hole.waterHazards.forEach(water => {
     ctx.fillStyle = '#3b82f6';
     ctx.fillRect(water.x, water.y, water.w, water.h);
@@ -421,7 +386,7 @@ function renderCanvas() {
     ctx.fillText(water.label || '🌊 WATER HAZARD (+1)', water.x + 10, water.y + 22);
   });
 
-  // 4. Render Ice Patches 🧊 with Bold Borders & Labels
+  // 4. Render Ice Patches 🧊 with Outlines & Labels
   hole.icePatches.forEach(ice => {
     ctx.fillStyle = '#93c5fd';
     ctx.fillRect(ice.x, ice.y, ice.w, ice.h);
@@ -433,7 +398,7 @@ function renderCanvas() {
     ctx.fillText(ice.label || '🧊 SLICK ICE', ice.x + 10, ice.y + 22);
   });
 
-  // 5. Render Obstacle Walls 🧱 with High-Contrast Outlines & Labels
+  // 5. Render Obstacle Walls 🧱 with Outlines & Labels
   hole.walls.forEach(w => {
     ctx.fillStyle = '#475569';
     ctx.fillRect(w.x, w.y, w.w, w.h);
@@ -447,7 +412,6 @@ function renderCanvas() {
 
   // 6. Render Portals 🌀 with Outlines & Labels
   hole.portals.forEach(p => {
-    // Portal Entrance
     ctx.beginPath();
     ctx.arc(p.inX, p.inY, p.radius, 0, Math.PI * 2);
     ctx.fillStyle = '#a855f7';
@@ -459,7 +423,6 @@ function renderCanvas() {
     ctx.fillStyle = '#ffffff';
     ctx.fillText('🌀 IN', p.inX - 14, p.inY - p.radius - 6);
 
-    // Portal Exit
     ctx.beginPath();
     ctx.arc(p.outX, p.outY, p.radius, 0, Math.PI * 2);
     ctx.fillStyle = '#ec4899';
@@ -502,7 +465,6 @@ function renderCanvas() {
   ctx.lineWidth = 3;
   ctx.stroke();
 
-  // Flag pole & red flag
   ctx.strokeStyle = '#ffffff';
   ctx.lineWidth = 3;
   ctx.beginPath();
@@ -569,7 +531,6 @@ function renderCanvas() {
 function shootBall(powerX, powerY) {
   if (ballMoving || holeCompleted) return;
 
-  // Save State for Undo Shot
   lastBallState = { x: ball.x, y: ball.y, strokes: strokeCount, total: totalStrokes };
 
   const speedMult = 0.12;
@@ -585,18 +546,20 @@ function shootBall(powerX, powerY) {
 }
 
 function updateHUD() {
-  const hole = HOLES[currentHoleIndex];
+  const hole = ALL_18_HOLES[currentHoleIndex];
   const holeTitleEl = document.getElementById('golf-hole-title');
   const parTextEl = document.getElementById('golf-par-text');
   const strokeValEl = document.getElementById('golf-stroke-val');
   const totalStrokeValEl = document.getElementById('golf-total-stroke-val');
   const totalParValEl = document.getElementById('golf-total-par-val');
+  const progressEl = document.getElementById('golf-hole-progress');
 
   if (holeTitleEl) holeTitleEl.textContent = hole.name;
   if (parTextEl) parTextEl.textContent = `Par ${hole.par}`;
   if (strokeValEl) strokeValEl.textContent = strokeCount;
   if (totalStrokeValEl) totalStrokeValEl.textContent = totalStrokes;
   if (totalParValEl) totalParValEl.textContent = totalPar;
+  if (progressEl) progressEl.textContent = `${currentHoleIndex + 1} / ${selectedMaxHoles}`;
 }
 
 function finishCourse() {
@@ -608,7 +571,7 @@ function finishCourse() {
   else if (scoreDiff > 0) parDiffDisplay = `+${scoreDiff}`;
 
   playSuccessSound();
-  submitScore('cat-mini-golf-game', totalStrokes, `${totalStrokes} Strokes (${parDiffDisplay})`);
+  submitScore('cat-mini-golf-game', totalStrokes, `${totalStrokes} Strokes (${parDiffDisplay} on ${selectedMaxHoles} Holes)`);
 
   document.getElementById('golf-modal-score').textContent = totalStrokes;
   document.getElementById('golf-modal-par-diff').textContent = parDiffDisplay;
@@ -618,7 +581,7 @@ function finishCourse() {
 function bindEvents() {
   const resetBtn = document.getElementById('golf-reset-btn');
   const modalRetry = document.getElementById('golf-modal-retry');
-  const weatherBtns = document.querySelectorAll('.golf-weather-btn');
+  const roundBtns = document.querySelectorAll('.golf-round-btn');
   const undoBtn = document.getElementById('pu-undo-btn');
 
   if (resetBtn) resetBtn.addEventListener('click', () => loadHole(0));
@@ -629,13 +592,14 @@ function bindEvents() {
     });
   }
 
-  // Weather Buttons
-  weatherBtns.forEach(btn => {
+  // Round Length Selector Buttons (3, 9, 18 Holes)
+  roundBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      weatherBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      weatherMode = btn.dataset.weather;
-      initWeatherParticles();
+      roundBtns.forEach(b => b.classList.remove('active', 'btn-primary'));
+      btn.classList.add('active', 'btn-primary');
+      selectedMaxHoles = parseInt(btn.dataset.holes, 10);
+      calculateTotalPar();
+      loadHole(0);
     });
   });
 
