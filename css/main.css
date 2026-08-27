@@ -3,14 +3,18 @@
    ========================================================================== */
 
 :root {
+  /* Dynamic Mouse Coordinates */
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
+
   /* Color Palette - Dark Theme (Default) */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --bg-card: rgba(30, 41, 59, 0.7);
-  --bg-card-hover: rgba(51, 65, 85, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-bg: rgba(15, 23, 42, 0.8);
+  --bg-primary: #0b0f19;
+  --bg-secondary: #131b2e;
+  --bg-tertiary: #1e293b;
+  --bg-card: rgba(19, 27, 46, 0.75);
+  --bg-card-hover: rgba(30, 41, 59, 0.85);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(11, 15, 25, 0.82);
 
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
@@ -18,9 +22,10 @@
 
   --accent-primary: #6366f1;
   --accent-primary-hover: #4f46e5;
-  --accent-primary-glow: rgba(99, 102, 241, 0.35);
+  --accent-primary-glow: rgba(99, 102, 241, 0.4);
   
   --accent-cyan: #06b6d4;
+  --accent-cyan-glow: rgba(6, 182, 212, 0.4);
   --accent-emerald: #10b981;
   --accent-amber: #f59e0b;
   --accent-rose: #ef4444;
@@ -29,10 +34,11 @@
   --border-color: rgba(255, 255, 255, 0.08);
   --border-focus: #6366f1;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.5);
-  --shadow-glow: 0 0 25px rgba(99, 102, 241, 0.25);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 35px rgba(99, 102, 241, 0.3);
+  --shadow-cyan-glow: 0 0 35px rgba(6, 182, 212, 0.3);
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -41,7 +47,7 @@
 
   --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --transition-fast: 0.15s ease;
-  --transition-normal: 0.25s ease;
+  --transition-normal: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   --transition-slow: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -50,10 +56,10 @@
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
-  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card: rgba(255, 255, 255, 0.88);
   --bg-card-hover: #ffffff;
   --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-bg: rgba(248, 250, 252, 0.85);
+  --glass-bg: rgba(248, 250, 252, 0.88);
 
   --text-primary: #0f172a;
   --text-secondary: #475569;
@@ -89,6 +95,11 @@ body {
   flex-direction: column;
   line-height: 1.6;
   overflow-x: hidden;
+  position: relative;
+  background: 
+    radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(99, 102, 241, 0.12), transparent 80%),
+    radial-gradient(400px circle at calc(var(--mouse-x) + 100px) calc(var(--mouse-y) - 100px), rgba(6, 182, 212, 0.08), transparent 70%),
+    var(--bg-primary);
 }
 
 a {

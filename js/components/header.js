@@ -24,12 +24,12 @@ export function renderHeader(container) {
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
+          <a href="#mouse-test" class="nav-link" data-route="mouse-test" data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</a>
+          <a href="#keyboard-test" class="nav-link" data-route="keyboard-test" data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</a>
           <a href="#auto-clicker" class="nav-link" data-route="auto-clicker" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
           <a href="#cps-test" class="nav-link" data-route="cps-test" data-i18n="navCPSTest">${t('navCPSTest')}</a>
           <a href="#click-speed-test" class="nav-link" data-route="click-speed-test" data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</a>
           <a href="#click-counter" class="nav-link" data-route="click-counter" data-i18n="navClickCounter">${t('navClickCounter')}</a>
-          <a href="#mouse-test" class="nav-link" data-route="mouse-test" data-i18n="navMouseTest">${t('navMouseTest')}</a>
-          <a href="#keyboard-test" class="nav-link" data-route="keyboard-test" data-i18n="navKeyboardTest">${t('navKeyboardTest')}</a>
 
           <!-- Tools Dropdown -->
           <div class="dropdown" id="tools-dropdown">
@@ -40,12 +40,12 @@ export function renderHeader(container) {
             <div class="dropdown-menu">
               <a href="#tools" class="dropdown-item"><strong>All Tools Directory</strong></a>
               <div style="height:1px; background:var(--border-color); margin:0.3rem 0;"></div>
+              <a href="#mouse-test" class="dropdown-item" data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</a>
+              <a href="#keyboard-test" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</a>
               <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
               <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">${t('navCPSTest')}</a>
               <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</a>
               <a href="#click-counter" class="dropdown-item" data-i18n="navClickCounter">${t('navClickCounter')}</a>
-              <a href="#mouse-test" class="dropdown-item" data-i18n="navMouseTest">${t('navMouseTest')}</a>
-              <a href="#keyboard-test" class="dropdown-item" data-i18n="navKeyboardTest">${t('navKeyboardTest')}</a>
               <a href="#reaction-time-test" class="dropdown-item" data-i18n="navReactionTimeTest">${t('navReactionTimeTest')}</a>
               <a href="#double-click-test" class="dropdown-item" data-i18n="navDoubleClickTest">${t('navDoubleClickTest')}</a>
             </div>
@@ -89,6 +89,12 @@ export function renderHeader(container) {
       <div id="mobile-drawer" class="mobile-drawer">
         <a href="#" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
+        </a>
+        <a href="#mouse-test" class="mobile-nav-link" data-route="mouse-test">
+          <span data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</span>
+        </a>
+        <a href="#keyboard-test" class="mobile-nav-link" data-route="keyboard-test">
+          <span data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</span>
         </a>
         <a href="#auto-clicker" class="mobile-nav-link" data-route="auto-clicker">
           <span data-i18n="navAutoClicker">${t('navAutoClicker')}</span>

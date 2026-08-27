@@ -275,15 +275,17 @@
   width: 240px;
   height: 340px;
   position: relative;
+  filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
 }
 
 .mouse-part {
-  transition: fill var(--transition-fast), stroke var(--transition-fast);
+  transition: fill var(--transition-fast), stroke var(--transition-fast), filter var(--transition-fast);
 }
 
 .mouse-part.active {
-  fill: var(--accent-primary) !important;
-  filter: drop-shadow(0 0 10px var(--accent-primary-glow));
+  fill: var(--accent-cyan) !important;
+  stroke: #ffffff !important;
+  filter: drop-shadow(0 0 15px var(--accent-cyan-glow)) !important;
 }
 
 .mouse-trail-canvas {
@@ -293,6 +295,7 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   cursor: crosshair;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* Keyboard Tester Virtual Keyboard */
@@ -301,7 +304,11 @@
   flex-direction: column;
   gap: 0.5rem;
   overflow-x: auto;
-  padding: 1rem 0;
+  padding: 1.25rem 0.5rem;
+  background: rgba(11, 15, 25, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.4);
 }
 
 .kb-row {
@@ -312,34 +319,60 @@
 
 .kb-key {
   min-width: 44px;
-  height: 46px;
+  height: 48px;
   padding: 0 0.5rem;
   background: var(--bg-tertiary);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
   user-select: none;
-  box-shadow: 0 2px 0 var(--border-color);
-  transition: all var(--transition-fast);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .kb-key.pressed {
-  background: var(--accent-primary);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--accent-cyan), var(--accent-primary)) !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  transform: translateY(3px) !important;
+  box-shadow: 0 0 18px var(--accent-cyan-glow) !important;
+}
+
+.kb-key.tested-before {
   border-color: var(--accent-primary);
-  transform: translateY(2px);
-  box-shadow: none;
+  color: var(--accent-cyan);
+  background: rgba(99, 102, 241, 0.15);
 }
 
 .kb-key.w-1-5 { min-width: 66px; }
 .kb-key.w-2 { min-width: 88px; }
 .kb-key.w-2-5 { min-width: 110px; }
 .kb-key.w-space { min-width: 280px; }
+
+/* Hero Quick Test Box Component */
+.hero-quick-test-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+  border: 1px solid var(--accent-cyan-glow);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  margin-top: 2rem;
+  box-shadow: var(--shadow-cyan-glow), var(--shadow-lg);
+  backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-quick-test-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent-cyan), var(--accent-primary), var(--accent-purple));
+}
 
 /* Reaction Time Test Container */
 .reaction-box {

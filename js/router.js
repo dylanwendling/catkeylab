@@ -19,6 +19,30 @@ import { renderDoubleClickTest, cleanupDoubleClickTest } from './tools/doubleCli
 let currentCleanup = null;
 
 export const TOOL_METADATA = {
+  'mouse-test': {
+    titleKey: 'mouseTestTitle',
+    desc: 'Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.',
+    icon: '🖱️',
+    category: 'hardware',
+    renderFn: renderMouseTest,
+    cleanupFn: cleanupMouseTest,
+    faqs: [
+      { q: 'Which mouse buttons can I test?', a: 'You can test Left Click (MB1), Right Click (MB2), Middle Click (MB3/Wheel), Side Button 4 (Back), Side Button 5 (Forward), and Scroll Wheel direction.' },
+      { q: 'How to check if my mouse right click or side buttons work?', a: 'Click anywhere inside our interactive mouse visualizer. The corresponding mouse button will glow cyan in real time if functioning properly.' }
+    ]
+  },
+  'keyboard-test': {
+    titleKey: 'keyboardTestTitle',
+    desc: 'Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.',
+    icon: '⌨️',
+    category: 'hardware',
+    renderFn: renderKeyboardTest,
+    cleanupFn: cleanupKeyboardTest,
+    faqs: [
+      { q: 'Does this keyboard tester support all keyboard layouts?', a: 'Yes! The tester listens to standard DOM KeyboardEvents so any QWERTY, AZERTY, or custom layout keys will register.' },
+      { q: 'Why is key testing important for gaming and typing?', a: 'Key testing helps verify key rollover (NKRO), ghosting, and faulty key switches on mechanical or membrane keyboards.' }
+    ]
+  },
   'auto-clicker': {
     titleKey: 'autoClickerTitle',
     desc: 'Free online auto clicker running directly in your browser. Set click intervals, target counts, and hotkeys with zero software downloads.',
@@ -66,28 +90,6 @@ export const TOOL_METADATA = {
       { q: 'Can I use keyboard keys to increment the counter?', a: 'Yes! You can press the Spacebar or Enter key to count clicks effortlessly.' }
     ]
   },
-  'mouse-test': {
-    titleKey: 'mouseTestTitle',
-    desc: 'Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.',
-    icon: '🖱️',
-    category: 'hardware',
-    renderFn: renderMouseTest,
-    cleanupFn: cleanupMouseTest,
-    faqs: [
-      { q: 'Which mouse buttons can I test?', a: 'You can test Left Click (MB1), Right Click (MB2), Middle Click (MB3/Wheel), Side Button 4 (Back), Side Button 5 (Forward), and Scroll Wheel direction.' }
-    ]
-  },
-  'keyboard-test': {
-    titleKey: 'keyboardTestTitle',
-    desc: 'Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.',
-    icon: '⌨️',
-    category: 'hardware',
-    renderFn: renderKeyboardTest,
-    cleanupFn: cleanupKeyboardTest,
-    faqs: [
-      { q: 'Does this keyboard tester support all keyboard layouts?', a: 'Yes! The tester listens to standard DOM KeyboardEvents so any QWERTY, AZERTY, or custom layout keys will register.' }
-    ]
-  },
   'reaction-time-test': {
     titleKey: 'reactionTestTitle',
     desc: 'Test your visual reaction time in milliseconds. Wait for the signal to turn green and click as fast as you can.',
@@ -129,16 +131,16 @@ export function handleRoute() {
   if (!hash || hash === '') {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
-    updateSEOMetadata('ClickPulse - Free Online Browser Clicking & Testing Tools', 'Use powerful browser-based clicking, mouse, keyboard, and speed testing utilities directly in your browser. 100% free and private.');
+    updateSEOMetadata('Mouse Test & Keyboard Test Online - Free Hardware & Click Tools | ClickPulse', 'Free online mouse button tester, keyboard key tester, CPS click speed test, and auto clicker. Test mouse right click, side buttons, scroll wheel, and key rollover instantly.');
   } else if (hash === 'tools') {
     renderToolsDirectoryPage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, 'All Tools');
-    updateSEOMetadata('Tools Directory - ClickPulse', 'Browse all free online clicking, speed testing, and hardware diagnostic tools.');
+    updateSEOMetadata('Mouse & Keyboard Tools Directory - ClickPulse', 'Browse all free online mouse button testers, keyboard key testers, clicking, and speed testing utilities.');
   } else if (TOOL_METADATA[hash]) {
     const meta = TOOL_METADATA[hash];
     renderToolPage(mainContainer, hash, meta);
     renderBreadcrumbs(breadcrumbsContainer, t(meta.titleKey));
-    updateSEOMetadata(`${t(meta.titleKey)} - ClickPulse`, meta.desc);
+    updateSEOMetadata(`${t(meta.titleKey)} - ClickPulse Hardware Tools`, meta.desc);
     currentCleanup = meta.cleanupFn;
   } else if (hash === 'about' || hash === 'privacy' || hash === 'terms') {
     renderLegalPage(mainContainer, hash);
@@ -168,17 +170,53 @@ function renderHomePage(container) {
     <!-- Hero Section -->
     <section class="hero">
       <div class="container">
-        <div class="hero-badge" data-i18n="heroBadge">${t('heroBadge')}</div>
+        <div class="hero-badge" style="background:linear-gradient(90deg, rgba(6,182,212,0.2), rgba(99,102,241,0.2)); border-color:var(--accent-cyan-glow); color:var(--accent-cyan);">
+          🖱️ Online Mouse Tester & ⌨️ Keyboard Key Tester
+        </div>
         <h1 class="hero-title">
-          <span data-i18n="heroTitle">${t('heroTitle')}</span>
+          <span>Test Your Mouse & Keyboard Hardware Online</span>
         </h1>
-        <p class="hero-subtitle" data-i18n="heroSubtitle">${t('heroSubtitle')}</p>
+        <p class="hero-subtitle">
+          Instant, free, and private online tools to test mouse buttons (MB1-MB5, right click, scroll wheel) and verify keyboard key switches, rollover, and click speed.
+        </p>
         <div class="hero-ctas">
-          <a href="#auto-clicker" class="btn btn-primary btn-lg">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-            <span data-i18n="btnTryAutoClicker">${t('btnTryAutoClicker')}</span>
+          <a href="#mouse-test" class="btn btn-primary btn-lg" style="box-shadow:var(--shadow-cyan-glow);">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+            <span>🖱️ Test Mouse Hardware</span>
           </a>
-          <a href="#tools" class="btn btn-secondary btn-lg" data-i18n="btnExploreTools">${t('btnExploreTools')}</a>
+          <a href="#keyboard-test" class="btn btn-secondary btn-lg" style="border-color:var(--accent-cyan); color:var(--accent-cyan);">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            <span>⌨️ Test Keyboard Keys</span>
+          </a>
+          <a href="#cps-test" class="btn btn-secondary btn-lg">
+            <span>⚡ CPS Speed Test</span>
+          </a>
+        </div>
+
+        <!-- Hero Quick Test Interactive Card -->
+        <div class="hero-quick-test-card" id="hero-quick-test-zone">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+            <div style="font-weight:700; font-size:1.1rem; color:var(--accent-cyan); display:flex; align-items:center; gap:0.5rem;">
+              <span class="status-dot" style="background:var(--accent-emerald);"></span>
+              <span>Instant Quick Hardware Inspector</span>
+            </div>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Click mouse or press any key to test live</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:1rem; text-align:center;">
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+              <div id="hero-mouse-btn" style="font-size:1.3rem; font-weight:800; color:var(--accent-cyan);">Click Here</div>
+              <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; margin-top:0.2rem;">Last Mouse Event</div>
+            </div>
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+              <div id="hero-key-btn" style="font-size:1.3rem; font-weight:800; color:var(--accent-emerald);">Press Any Key</div>
+              <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; margin-top:0.2rem;">Last Keyboard Key</div>
+            </div>
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+              <div id="hero-count-val" style="font-size:1.3rem; font-weight:800; color:var(--accent-primary);">0</div>
+              <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; margin-top:0.2rem;">Total Inputs Registered</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -187,26 +225,27 @@ function renderHomePage(container) {
     <section class="section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Featured Browser Utilities</h2>
-          <p class="section-subtitle">Instant online tools for gamers, office workers, and hardware testing.</p>
+          <h2 class="section-title">Online Hardware Testers & Speed Utilities</h2>
+          <p class="section-subtitle">Promoted browser tools for checking mouse buttons, keyboard rollover, and click performance.</p>
         </div>
 
         <div class="grid grid-cols-4">
           ${Object.keys(TOOL_METADATA).map(key => {
             const tool = TOOL_METADATA[key];
+            const isFeatured = key === 'mouse-test' || key === 'keyboard-test';
             return `
-              <div class="tool-card">
+              <div class="tool-card ${isFeatured ? 'featured-tool-card' : ''}" style="${isFeatured ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
                 <div>
                   <div class="tool-card-header">
-                    <div class="tool-card-icon">${tool.icon}</div>
-                    <span class="tool-card-badge">${tool.category}</span>
+                    <div class="tool-card-icon" style="font-size:2rem;">${tool.icon}</div>
+                    <span class="tool-card-badge" style="${isFeatured ? 'background:rgba(6,182,212,0.2); color:var(--accent-cyan);' : ''}">${isFeatured ? '🔥 TOP SEARCHED' : tool.category}</span>
                   </div>
                   <h3 class="tool-card-title">${t(tool.titleKey)}</h3>
                   <p class="tool-card-desc">${tool.desc}</p>
                 </div>
                 <div class="tool-card-footer">
-                  <a href="#${key}" class="btn btn-primary btn-sm" style="width:100%;">
-                    <span data-i18n="btnUseTool">${t('btnUseTool')}</span> →
+                  <a href="#${key}" class="btn ${isFeatured ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%;">
+                    <span>${t('btnUseTool')} ${tool.icon}</span> →
                   </a>
                 </div>
               </div>
@@ -215,6 +254,49 @@ function renderHomePage(container) {
         </div>
       </div>
     </section>
+  `;
+
+  initHeroQuickTestListeners();
+}
+
+function initHeroQuickTestListeners() {
+  const quickTestZone = document.getElementById('hero-quick-test-zone');
+  const mouseValEl = document.getElementById('hero-mouse-btn');
+  const keyValEl = document.getElementById('hero-key-btn');
+  const countValEl = document.getElementById('hero-count-val');
+
+  if (!quickTestZone) return;
+
+  let inputCount = 0;
+
+  const mouseNames = ['Left Click (MB1)', 'Middle Click (MB3)', 'Right Click (MB2)', 'Side Back (MB4)', 'Side Forward (MB5)'];
+
+  quickTestZone.addEventListener('contextmenu', (e) => e.preventDefault());
+
+  quickTestZone.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    inputCount++;
+    if (countValEl) countValEl.textContent = inputCount;
+    if (mouseValEl) {
+      const btnName = mouseNames[e.button] || `Button ${e.button}`;
+      mouseValEl.textContent = btnName;
+      mouseValEl.style.color = 'var(--accent-cyan)';
+    }
+  });
+
+  const keyHandler = (e) => {
+    // Only process if user is on home page
+    if (window.location.hash && window.location.hash !== '#' && window.location.hash !== '') return;
+    inputCount++;
+    if (countValEl) countValEl.textContent = inputCount;
+    if (keyValEl) {
+      keyValEl.textContent = `${e.key === ' ' ? 'Space' : e.key} (${e.code})`;
+      keyValEl.style.color = 'var(--accent-emerald)';
+    }
+  };
+
+  window.addEventListener('keydown', keyHandler);
+}
 
     ${renderAdSpace('banner')}
 

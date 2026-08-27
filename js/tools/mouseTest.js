@@ -1,32 +1,39 @@
 /* ==========================================================================
-   ClickPulse - Interactive Mouse & Button Tester Component
+   ClickPulse - Interactive Mouse & Hardware Button Tester Component
    ========================================================================== */
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
 
 let mouseCanvasCtx = null;
-let lastMousePos = { x: 0, y: 0 };
+let trailParticles = [];
 let scrollDelta = 0;
+let totalMouseClicks = 0;
+let animationFrameId = null;
 
 export function renderMouseTest(container) {
+  totalMouseClicks = 0;
+  scrollDelta = 0;
+
   container.innerHTML = `
-    <div class="tool-wrapper">
+    <div class="tool-wrapper" style="border:1px solid var(--accent-cyan-glow);">
       <div class="tool-header-bar">
         <div class="tool-title-group">
           <h1>
-            <svg width="28" height="28" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"></path>
-            </svg>
+            <span style="font-size:2rem;">🖱️</span>
             <span data-i18n="mouseTestTitle">${t('mouseTestTitle')}</span>
           </h1>
-          <p class="tool-subtitle-text" data-i18n="mouseTestSubtitle">${t('mouseTestSubtitle')}</p>
+          <p class="tool-subtitle-text">Test Left, Right, Middle (MB3), Side Back (MB4), Side Forward (MB5) buttons, and Scroll Wheel velocity online.</p>
+        </div>
+        <div class="status-badge status-running">
+          <span class="status-dot"></span>
+          <span>Hardware Listener Active</span>
         </div>
       </div>
 
-      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem;">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:2rem;">
         <!-- Left: Interactive Mouse SVG Visualizer -->
-        <div style="background:var(--bg-tertiary); padding:2rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid var(--border-color);" id="mouse-test-area">
+        <div style="background:var(--bg-card); padding:2rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; align-items:center; justify-content:center; border:1px solid var(--glass-border); backdrop-filter:blur(12px);" id="mouse-test-area">
           <div class="mouse-svg-wrapper">
             <svg viewBox="0 0 200 300" width="100%" height="100%">
               <!-- Mouse Body Base -->
@@ -48,24 +55,33 @@ export function renderMouseTest(container) {
               <rect class="mouse-part" id="mp-side2" x="42" y="165" width="8" height="28" rx="3" fill="var(--bg-primary)" stroke="var(--border-color)"/>
             </svg>
           </div>
-          <p style="margin-top:1rem; color:var(--text-secondary); font-size:0.9rem;">Click any button inside this box to test registration</p>
+          <p style="margin-top:1.25rem; color:var(--accent-cyan); font-size:0.9rem; font-weight:600; text-align:center;">
+            ⚡ Click anywhere inside this card to test MB1, MB2, MB3, MB4 & MB5
+          </p>
         </div>
 
         <!-- Right: Movement Trail & Scroll Tester -->
         <div style="display:flex; flex-direction:column; gap:1.25rem;">
-          <div style="background:var(--bg-tertiary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
-            <div style="font-size:0.8rem; color:var(--text-secondary); text-transform:uppercase; margin-bottom:0.5rem;" data-i18n="lblCursorPosition">${t('lblCursorPosition')}</div>
+          <div style="background:var(--bg-card); padding:1.25rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+              <span style="font-size:0.8rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700;">Interactive Cursor Trail Canvas</span>
+              <span style="font-size:0.75rem; color:var(--accent-cyan);">Move mouse to draw glow trails</span>
+            </div>
             <canvas id="mouse-trail-canvas" class="mouse-trail-canvas"></canvas>
           </div>
 
           <div class="stats-dashboard" style="margin-top:0;">
             <div class="stat-box">
-              <div id="mt-detected-btn" class="stat-value" style="font-size:1.2rem;">None</div>
-              <div class="stat-label" data-i18n="lblDetectedButton">${t('lblDetectedButton')}</div>
+              <div id="mt-detected-btn" class="stat-value" style="font-size:1.2rem; color:var(--accent-cyan);">None</div>
+              <div class="stat-label">Last Detected Button</div>
             </div>
             <div class="stat-box">
-              <div id="mt-scroll-val" class="stat-value">0</div>
-              <div class="stat-label" data-i18n="lblScrollDelta">${t('lblScrollDelta')}</div>
+              <div id="mt-total-clicks" class="stat-value" style="color:var(--accent-emerald);">0</div>
+              <div class="stat-label">Total Clicks Registered</div>
+            </div>
+            <div class="stat-box">
+              <div id="mt-scroll-val" class="stat-value" style="font-size:1.1rem; color:var(--accent-amber);">0</div>
+              <div class="stat-label">Scroll Wheel Delta</div>
             </div>
           </div>
         </div>
@@ -102,12 +118,18 @@ function initCanvasAndEvents() {
   });
 
   canvas.addEventListener('mousemove', (e) => {
-    drawTrail(e);
+    addTrailParticle(e);
   });
+
+  startTrailAnimation();
 }
 
 function handleMouseDown(e) {
   playClickSound(700, 0.03);
+  totalMouseClicks++;
+  const totalClicksEl = document.getElementById('mt-total-clicks');
+  if (totalClicksEl) totalClicksEl.textContent = totalMouseClicks;
+
   let btnName = 'Unknown';
   let partId = null;
 
@@ -117,7 +139,7 @@ function handleMouseDown(e) {
       partId = 'mp-left';
       break;
     case 1:
-      btnName = 'Middle Click (Wheel / MB3)';
+      btnName = 'Middle Click (MB3)';
       partId = 'mp-wheel';
       break;
     case 2:
@@ -134,7 +156,9 @@ function handleMouseDown(e) {
       break;
   }
 
-  document.getElementById('mt-detected-btn').textContent = btnName;
+  const detectedBtnEl = document.getElementById('mt-detected-btn');
+  if (detectedBtnEl) detectedBtnEl.textContent = btnName;
+
   if (partId) {
     const el = document.getElementById(partId);
     if (el) el.classList.add('active');
@@ -159,20 +183,56 @@ function handleWheel(e) {
   }
 }
 
-function drawTrail(e) {
+function addTrailParticle(e) {
   const canvas = document.getElementById('mouse-trail-canvas');
-  if (!canvas || !mouseCanvasCtx) return;
+  if (!canvas) return;
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
 
-  mouseCanvasCtx.fillStyle = 'rgba(99, 102, 241, 0.15)';
-  mouseCanvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-  mouseCanvasCtx.beginPath();
-  mouseCanvasCtx.arc(x, y, 6, 0, Math.PI * 2);
-  mouseCanvasCtx.fillStyle = '#06b6d4';
-  mouseCanvasCtx.fill();
+  trailParticles.push({
+    x, y,
+    size: Math.random() * 5 + 3,
+    alpha: 1.0,
+    color: Math.random() > 0.5 ? '#06b6d4' : '#6366f1'
+  });
 }
 
-export function cleanupMouseTest() {}
+function startTrailAnimation() {
+  const canvas = document.getElementById('mouse-trail-canvas');
+  if (!canvas || !mouseCanvasCtx) return;
+
+  function render() {
+    mouseCanvasCtx.fillStyle = 'rgba(11, 15, 25, 0.2)';
+    mouseCanvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = trailParticles.length - 1; i >= 0; i--) {
+      const p = trailParticles[i];
+      mouseCanvasCtx.beginPath();
+      mouseCanvasCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      mouseCanvasCtx.fillStyle = p.color;
+      mouseCanvasCtx.globalAlpha = p.alpha;
+      mouseCanvasCtx.fill();
+      mouseCanvasCtx.globalAlpha = 1.0;
+
+      p.alpha -= 0.04;
+      p.size = Math.max(0, p.size - 0.1);
+
+      if (p.alpha <= 0) {
+        trailParticles.splice(i, 1);
+      }
+    }
+
+    animationFrameId = requestAnimationFrame(render);
+  }
+
+  render();
+}
+
+export function cleanupMouseTest() {
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId);
+    animationFrameId = null;
+  }
+  trailParticles = [];
+}
