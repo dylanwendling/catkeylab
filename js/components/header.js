@@ -112,6 +112,9 @@ export function renderHeader(container) {
 
       <!-- Mobile Navigation Drawer -->
       <div id="mobile-drawer" class="mobile-drawer">
+        <a href="#nibbles" class="mobile-nav-link" data-route="nibbles" style="background:rgba(249,115,22,0.15); border:1px solid rgba(249,115,22,0.4); color:#f97316; font-weight:700;">
+          <span>🐱 Meet Nibbles the Cat & Mascot Toys</span>
+        </a>
         <a href="#" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
         </a>

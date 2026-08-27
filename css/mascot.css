@@ -448,61 +448,73 @@
 
 @media (max-width: 768px) {
   .mascot-container {
-    bottom: 75px;
-    left: 12px;
-    transform: scale(0.78);
+    bottom: 80px;
+    left: 10px;
+    transform: scale(0.75);
     transform-origin: bottom left;
   }
 
   .yarn-ball-container {
-    bottom: 75px;
+    bottom: 80px;
     right: 65px;
-    transform: scale(0.85);
+    transform: scale(0.8);
   }
 
   .food-bowl-container {
-    bottom: 75px;
-    right: 15px;
-    transform: scale(0.85);
+    bottom: 80px;
+    right: 10px;
+    transform: scale(0.8);
   }
 
-  /* Floating Mobile Quick Action Dock */
+  /* Floating Mobile Quick Action Dock - Firefox & Universal Mobile Support */
   .mobile-mascot-bar {
     display: flex;
     position: fixed;
-    bottom: 15px;
-    right: 15px;
-    z-index: 1005;
-    background: rgba(15, 23, 42, 0.88);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(249, 115, 22, 0.45);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.55), 0 0 16px rgba(249, 115, 22, 0.3);
+    bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    background: #0f172a; /* Solid Firefox fallback */
+    background: rgba(15, 23, 42, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 2px solid #f97316;
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(249, 115, 22, 0.4);
     border-radius: 9999px;
-    padding: 0.35rem 0.55rem;
-    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    gap: 0.5rem;
     align-items: center;
     pointer-events: auto;
+    width: max-content;
+    max-width: 92vw;
+  }
+
+  /* Firefox Mobile Specific Viewport Adjustment */
+  @supports (-moz-appearance: none) {
+    .mobile-mascot-bar {
+      bottom: max(20px, env(safe-area-inset-bottom, 20px));
+    }
   }
 
   .mobile-mascot-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 9999px;
     color: #ffffff;
-    font-size: 0.82rem;
-    font-weight: 700;
-    padding: 0.4rem 0.75rem;
+    font-size: 0.88rem;
+    font-weight: 800;
+    padding: 0.45rem 0.85rem;
     display: flex;
     align-items: center;
     gap: 0.35rem;
     cursor: pointer;
     touch-action: manipulation;
     transition: transform 0.15s ease, background 0.15s ease;
+    white-space: nowrap;
   }
 
   .mobile-mascot-btn:active {
     transform: scale(0.92);
-    background: rgba(249, 115, 22, 0.35);
+    background: rgba(249, 115, 22, 0.4);
   }
 }
