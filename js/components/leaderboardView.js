@@ -4,6 +4,7 @@
 
 import { t } from '../i18n.js';
 import { getAnonProfile, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard, setLeaderboardUpdateCallback, fetchGlobalLeaderboards } from '../leaderboard.js';
+import { handleRoute } from '../router.js';
 
 let activeTestId = 'reaction-time-test';
 
@@ -29,6 +30,8 @@ export function renderLeaderboardView(container) {
   if (lastTest && TEST_TABS.some(t => t.id === lastTest)) {
     activeTestId = lastTest;
   }
+
+  const currentTab = TEST_TABS.find(t => t.id === activeTestId) || TEST_TABS[0];
 
   container.innerHTML = `
     <div class="container section" style="padding-top:1.5rem;">
@@ -69,8 +72,17 @@ export function renderLeaderboardView(container) {
         `).join('')}
       </div>
 
-      <!-- Leaderboard Ranking Table -->
+      <!-- Header Bar with Direct Play Button -->
       <div class="lb-table-container">
+        <div class="lb-header-bar" style="display:flex; justify-space-between; align-items:center; padding:1rem 1.25rem; background:var(--bg-tertiary); border-bottom:1px solid var(--border-color); flex-wrap:wrap; gap:0.75rem;">
+          <div style="font-weight:700; color:var(--text-primary); font-size:1rem; display:flex; align-items:center; gap:0.5rem;">
+            <span>Current Benchmark:</span>
+            <span id="lb-current-test-label" style="color:var(--accent-cyan); font-weight:800;">${currentTab.label}</span>
+          </div>
+          <button id="lb-header-play-btn" class="btn btn-primary btn-sm" style="font-weight:700; cursor:pointer;">
+            🎮 Play ${currentTab.label} Now →
+          </button>
+        </div>
         <div id="lb-table-content"></div>
       </div>
     </div>
@@ -93,6 +105,17 @@ function bindEvents() {
   const syncCloudBtn = document.getElementById('lb-sync-cloud-btn');
   const cycleEmojiBtn = document.getElementById('lb-cycle-emoji-btn');
   const randomizeBtn = document.getElementById('lb-randomize-btn');
+  const headerPlayBtn = document.getElementById('lb-header-play-btn');
+
+  if (headerPlayBtn) {
+    headerPlayBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      window.location.hash = '#' + activeTestId;
+      handleRoute();
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  }
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -100,6 +123,12 @@ function bindEvents() {
       tab.classList.add('active');
       activeTestId = tab.dataset.tab;
       localStorage.setItem('catkeylab_last_active_test', activeTestId);
+
+      const currentTab = TEST_TABS.find(t => t.id === activeTestId) || TEST_TABS[0];
+      const labelEl = document.getElementById('lb-current-test-label');
+      if (labelEl) labelEl.textContent = currentTab.label;
+      if (headerPlayBtn) headerPlayBtn.textContent = `🎮 Play ${currentTab.label} Now →`;
+
       renderTable(activeTestId);
     });
   });
@@ -148,6 +177,7 @@ function renderTable(testId) {
 
   const list = getLeaderboard(testId);
   const profile = getAnonProfile();
+  const currentTab = TEST_TABS.find(t => t.id === testId) || TEST_TABS[0];
 
   if (list.length === 0) {
     content.innerHTML = `
@@ -155,9 +185,20 @@ function renderTable(testId) {
         <div style="font-size:3rem; margin-bottom:0.5rem;">🐾🏆</div>
         <h3 style="font-size:1.3rem; font-weight:800; color:var(--text-primary); margin-bottom:0.4rem;">No Scores Logged Yet</h3>
         <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.25rem;">Be the very first player to set a high score record on this test!</p>
-        <a href="#${testId}" class="btn btn-primary btn-sm">🎮 Play Test Now</a>
+        <button class="btn btn-primary btn-sm lb-direct-play-btn" style="cursor:pointer; font-weight:700;">🎮 Play ${currentTab.label} Now</button>
       </div>
     `;
+
+    const emptyPlayBtn = content.querySelector('.lb-direct-play-btn');
+    if (emptyPlayBtn) {
+      emptyPlayBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.hash = '#' + testId;
+        handleRoute();
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      });
+    }
     return;
   }
 
