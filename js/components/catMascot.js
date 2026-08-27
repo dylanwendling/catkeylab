@@ -2,7 +2,7 @@
    ClickPulse - Interactive Cat Mascot Component (Ginger Tabby Upgrade)
    ========================================================================== */
 
-import { playClickSound } from '../audio.js';
+import { playClickSound, getAudioContext } from '../audio.js';
 
 const CAT_DIALOGUES = [
   "meow.",
@@ -162,7 +162,13 @@ function handlePetting(e) {
  */
 function playPurrSound() {
   try {
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const audioCtx = getAudioContext();
+    if (!audioCtx) return;
+
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume().catch(() => {});
+    }
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
