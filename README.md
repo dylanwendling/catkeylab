@@ -1,8 +1,10 @@
 # 🐾🔑 CatKeyLab
 
 <h3 align="center">Free, Private & Powerful Online Hardware Testing Suite & Typing Speed Challenge</h3>
+<h4 align="center">🌐 <a href="https://catkeylab.com/">https://catkeylab.com</a></h4>
 
 <p align="center">
+  <a href="https://catkeylab.com/"><img src="https://img.shields.io/badge/Website-catkeylab.com-orange.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"></a>
   <a href="#key-features--included-tools"><img src="https://img.shields.io/badge/Tools-9_Interactive_Modules-emerald.svg?style=for-the-badge" alt="9 Tools"></a>
   <a href="#nibbles-the-cat--interactive-toys"><img src="https://img.shields.io/badge/Companion-Nibbles_the_Cat_🐱-orange.svg?style=for-the-badge" alt="Nibbles the Cat"></a>
   <a href="#internationalization-i18n"><img src="https://img.shields.io/badge/Languages-13_Supported-purple.svg?style=for-the-badge" alt="13 Languages"></a>
