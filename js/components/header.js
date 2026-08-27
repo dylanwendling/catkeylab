@@ -25,10 +25,6 @@ export function renderHeader(container) {
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
-          <a href="#typing-test" class="nav-link nav-link-featured" data-route="typing-test">
-            <span>⌨️⚡ Typing Challenge</span>
-            <span style="background:linear-gradient(90deg, #f85149, #d29922); color:#ffffff; font-size:0.65rem; font-weight:800; padding:0.1rem 0.4rem; border-radius:var(--radius-full); margin-left:0.3rem;">HOT</span>
-          </a>
 
           <!-- Hardware Dropdown -->
           <div class="dropdown" id="hardware-dropdown">
@@ -42,13 +38,18 @@ export function renderHeader(container) {
             </div>
           </div>
 
-          <!-- Speed & Tools Dropdown -->
+          <!-- Speed & Typing Dropdown -->
           <div class="dropdown" id="tools-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>⚡ Speed & Utilities</span>
+              <span>⚡ Speed & Typing</span>
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
+              <a href="#typing-test" class="dropdown-item" style="background:rgba(6,182,212,0.1); color:var(--accent-cyan); font-weight:700;">
+                <span>⌨️⚡ Typing Speed Challenge</span>
+                <span style="background:linear-gradient(90deg, #f85149, #d29922); color:#ffffff; font-size:0.65rem; font-weight:800; padding:0.1rem 0.4rem; border-radius:var(--radius-full); margin-left:0.4rem;">HOT</span>
+              </a>
+              <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
               <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
               <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
               <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">⏱️ Click Speed Test</a>
