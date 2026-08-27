@@ -23,7 +23,8 @@ const INITIAL_LEADERBOARDS = {
   'typing-test': [],
   'cps-test': [],
   'fish-maze-game': [],
-  'card-memory-game': []
+  'card-memory-game': [],
+  'cat-mini-golf-game': []
 };
 
 // Get or Create Anonymous Identity
@@ -137,7 +138,7 @@ export async function fetchGlobalLeaderboards() {
       const remoteList = rawRemote ? (Array.isArray(rawRemote) ? rawRemote : Object.values(rawRemote)) : [];
       const localList = Array.isArray(localBoards[testId]) ? localBoards[testId] : [];
 
-      const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test' || testId === 'fish-maze-game' || testId === 'card-memory-game';
+      const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test' || testId === 'fish-maze-game' || testId === 'card-memory-game' || testId === 'cat-mini-golf-game';
       const mergedMap = new Map();
 
       [...localList, ...remoteList].forEach(item => {

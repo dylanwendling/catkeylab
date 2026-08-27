@@ -25,6 +25,7 @@ import { renderChimpTest, cleanupChimpTest } from './tools/chimpTest.js';
 import { renderVisualMemoryTest, cleanupVisualMemoryTest } from './tools/visualMemoryTest.js';
 import { renderFishMazeGame, cleanupFishMazeGame } from './tools/fishMazeGame.js';
 import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryGame.js';
+import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGolfGame.js';
 import { renderLeaderboardView } from './components/leaderboardView.js';
 
 let currentCleanup = null;
@@ -156,6 +157,18 @@ export const TOOL_METADATA = {
     cleanupFn: cleanupCardMemoryGame,
     faqs: [
       { q: 'How many cards are in the Memory Match grid?', a: '16 cards total, containing 8 matching cat pairs.' }
+    ]
+  },
+  'cat-mini-golf-game': {
+    titleKey: 'catMiniGolfTitle',
+    desc: 'HTML5 Canvas 2D Physics Mini Golf with dynamic weather, wind, sand traps, portals, ice, and power-ups!',
+    icon: '⛳',
+    category: 'games',
+    renderFn: renderCatMiniGolfGame,
+    cleanupFn: cleanupCatMiniGolfGame,
+    faqs: [
+      { q: 'How do I aim and shoot the golf ball?', a: 'Click and drag backward on the golf ball to adjust your shot angle and power meter, then release!' },
+      { q: 'What do power-ups do?', a: 'Aim Assist shows a extended trajectory line, Ball Magnet pulls the ball into the cup, Super Shot adds 2x power boost, and Undo Shot resets your last stroke.' }
     ]
   },
   'typing-test': {

@@ -19,7 +19,8 @@ const TEST_TABS = [
   { id: 'typing-test', label: '⌨️ Typing Speed' },
   { id: 'cps-test', label: '⚡ CPS Test' },
   { id: 'fish-maze-game', label: '🐟 Fish Maze' },
-  { id: 'card-memory-game', label: '🎴 Card Memory' }
+  { id: 'card-memory-game', label: '🎴 Card Memory' },
+  { id: 'cat-mini-golf-game', label: '⛳ Cat Mini Golf' }
 ];
 
 export function renderLeaderboardView(container) {
