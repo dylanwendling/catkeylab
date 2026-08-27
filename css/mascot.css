@@ -66,6 +66,9 @@
   will-change: transform;
   transform: translateZ(0);
   transition: transform 0.15s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 
 .cat-character:hover {
@@ -86,39 +89,33 @@
   transform: translateZ(0);
 }
 
-/* Cat Ears with Pink Inner Pads (Symmetrically Centered) */
+/* Cat Ears with Pink Inner Pads (100% Symmetrically Centered) */
 .cat-ear {
   position: absolute;
-  top: -14px;
-  width: 24px;
-  height: 26px;
-  background: #ea580c;
-  border: 2.5px solid #7c2d12;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  top: -16px;
+  width: 26px;
+  height: 28px;
   transition: transform 0.15s ease;
   z-index: -1;
+  pointer-events: none;
 }
 
-.cat-ear::after {
-  content: '';
-  position: absolute;
-  bottom: 1px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 14px;
-  background: #fda4af; /* Cute Pink Inner Ear */
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+.cat-ear-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .cat-ear-left {
-  left: 8px;
+  left: 6px;
   transform: rotate(-14deg);
+  transform-origin: bottom center;
 }
 
 .cat-ear-right {
-  right: 8px;
+  right: 6px;
   transform: rotate(14deg);
+  transform-origin: bottom center;
 }
 
 .cat-character.play-mode .cat-ear-left {

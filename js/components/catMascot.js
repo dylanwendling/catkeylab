@@ -77,9 +77,19 @@ export function initCatMascot() {
     <div class="mascot-container">
       <div id="mascot-speech" class="mascot-speech-bubble">hi, i'm Nibbles! 🐾</div>
       <div id="cat-character" class="cat-character" aria-label="Nibbles the Cat">
-        <div class="cat-ear cat-ear-left"></div>
-        <div class="cat-ear cat-ear-right"></div>
         <div class="cat-head">
+          <div class="cat-ear cat-ear-left">
+            <svg viewBox="0 0 26 28" class="cat-ear-svg">
+              <path d="M13 2 L2 26 C2 26 13 28 24 26 Z" fill="#ea580c" stroke="#7c2d12" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M13 8 L7 22 C7 22 13 23.5 19 22 Z" fill="#fda4af"/>
+            </svg>
+          </div>
+          <div class="cat-ear cat-ear-right">
+            <svg viewBox="0 0 26 28" class="cat-ear-svg">
+              <path d="M13 2 L2 26 C2 26 13 28 24 26 Z" fill="#ea580c" stroke="#7c2d12" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M13 8 L7 22 C7 22 13 23.5 19 22 Z" fill="#fda4af"/>
+            </svg>
+          </div>
           <div class="cat-eyes-row">
             <div class="cat-sclera">
               <div class="cat-eyelid"></div>
