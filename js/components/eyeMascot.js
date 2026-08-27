@@ -38,6 +38,66 @@ let pupilEl = null;
 let eyeEl = null;
 let speechEl = null;
 
+/**
+ * Mascot Typing Speed & Accuracy Judge
+ */
+export function judgeTypingSpeed(wpm, accuracy) {
+  if (!eyeEl) return;
+
+  EXPRESSIONS.forEach(exp => eyeEl.classList.remove(exp));
+
+  let expression = 'happy';
+  let dialogue = '';
+
+  if (accuracy < 85) {
+    expression = 'squint';
+    dialogue = `${wpm} WPM is fast, but ${accuracy}% accuracy? Watch those typos!`;
+  } else if (wpm < 30) {
+    expression = 'squint';
+    const lines = [
+      `${wpm} WPM... are you typing with one finger?`,
+      `${wpm} WPM? Take your time, i'm not going anywhere...`,
+      `${wpm} WPM. My grandma types faster!`,
+      `Warm up those fingers! Only ${wpm} WPM.`
+    ];
+    dialogue = lines[Math.floor(Math.random() * lines.length)];
+  } else if (wpm <= 65) {
+    expression = 'wink';
+    const lines = [
+      `${wpm} WPM! Solid casual typist!`,
+      `${wpm} WPM with ${accuracy}% accuracy. Respectable pace.`,
+      `Nice and steady: ${wpm} WPM!`,
+      `Smooth typing! ${wpm} WPM.`
+    ];
+    dialogue = lines[Math.floor(Math.random() * lines.length)];
+  } else if (wpm <= 100) {
+    expression = 'surprised';
+    const lines = [
+      `WHOA! ${wpm} WPM!! Fast fingers!`,
+      `${wpm} WPM! Mechanical keyboard power!`,
+      `${wpm} WPM! You're flying across those keys!`,
+      `Speed demon alert! ${wpm} WPM!`
+    ];
+    dialogue = lines[Math.floor(Math.random() * lines.length)];
+  } else {
+    expression = 'happy';
+    const lines = [
+      `HOLY ${wpm} WPM!! Are you a robot?!`,
+      `${wpm} WPM! My eyes are spinning!`,
+      `GODLIKE TYPIST! ${wpm} WPM with ${accuracy}% accuracy!`,
+      `Pro gamer typist unlocked: ${wpm} WPM!`
+    ];
+    dialogue = lines[Math.floor(Math.random() * lines.length)];
+  }
+
+  eyeEl.classList.add(expression);
+  setTimeout(() => {
+    if (eyeEl) eyeEl.classList.remove(expression);
+  }, 3500);
+
+  showSpeechBubble(dialogue);
+}
+
 let targetPupilX = 0;
 let targetPupilY = 0;
 let currentPupilX = 0;

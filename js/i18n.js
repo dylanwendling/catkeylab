@@ -31,6 +31,7 @@ export const translations = {
     navKeyboardTest: 'Keyboard Test',
     navReactionTimeTest: 'Reaction Time Test',
     navDoubleClickTest: 'Double Click Test',
+    navTypingTest: 'Typing Test',
     navTools: 'Tools',
     navLanguages: 'Language',
     
@@ -118,6 +119,10 @@ export const translations = {
     lblLocation: 'Key Location',
     lblModifiers: 'Modifier Keys',
     lblHistory: 'Key History Log',
+
+    // Typing Test
+    typingTestTitle: 'Monkeytype Typing Speed Challenge',
+    typingTestSubtitle: 'Test your typing WPM and accuracy in real-time with distraction-free text, mechanical keyboard sounds, and Eye Mascot judging.',
 
     // Reaction Time Test
     reactionTestTitle: 'Reaction Time Test',

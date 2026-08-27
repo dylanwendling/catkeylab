@@ -354,6 +354,86 @@
 .kb-key.w-2-5 { min-width: 110px; }
 .kb-key.w-space { min-width: 280px; }
 
+/* Monkeytype-Style Typing Test Canvas */
+.typing-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.25rem 2rem;
+  min-height: 220px;
+  position: relative;
+  outline: none;
+  cursor: text;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.typing-words-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  font-size: 1.55rem;
+  font-weight: 500;
+  font-family: monospace, var(--font-family);
+  line-height: 1.8;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.tp-word {
+  display: flex;
+  position: relative;
+}
+
+.tp-word.current-word {
+  color: var(--text-secondary);
+}
+
+.tp-letter {
+  transition: color 0.08s ease;
+  position: relative;
+}
+
+.tp-letter.correct {
+  color: var(--accent-emerald);
+}
+
+.tp-letter.incorrect {
+  color: var(--accent-rose);
+  text-decoration: underline;
+}
+
+.tp-letter.current-letter::before {
+  content: '';
+  position: absolute;
+  left: -2px;
+  top: 10%;
+  bottom: 10%;
+  width: 2.5px;
+  background: var(--accent-cyan);
+  animation: blink-caret 1s infinite;
+  box-shadow: 0 0 8px var(--accent-cyan);
+}
+
+@keyframes blink-caret {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.typing-focus-notice {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(13, 17, 23, 0.88);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-cyan);
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+}
+
 /* Hero Quick Test Box Component */
 .hero-quick-test-card {
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));

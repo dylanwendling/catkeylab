@@ -25,6 +25,7 @@ export function renderHeader(container) {
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
+          <a href="#typing-test" class="nav-link" data-route="typing-test" data-i18n="navTypingTest">⌨️⚡ ${t('navTypingTest')}</a>
           <a href="#mouse-test" class="nav-link" data-route="mouse-test" data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</a>
           <a href="#keyboard-test" class="nav-link" data-route="keyboard-test" data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</a>
           <a href="#auto-clicker" class="nav-link" data-route="auto-clicker" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
@@ -39,6 +40,7 @@ export function renderHeader(container) {
             <div class="dropdown-menu">
               <a href="#tools" class="dropdown-item"><strong>All Tools Directory</strong></a>
               <div style="height:1px; background:var(--border-color); margin:0.3rem 0;"></div>
+              <a href="#typing-test" class="dropdown-item" data-i18n="navTypingTest">⌨️⚡ ${t('navTypingTest')}</a>
               <a href="#mouse-test" class="dropdown-item" data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</a>
               <a href="#keyboard-test" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</a>
               <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>

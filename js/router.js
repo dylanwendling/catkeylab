@@ -15,6 +15,7 @@ import { renderMouseTest, cleanupMouseTest } from './tools/mouseTest.js';
 import { renderKeyboardTest, cleanupKeyboardTest } from './tools/keyboardTest.js';
 import { renderReactionTimeTest, cleanupReactionTimeTest } from './tools/reactionTimeTest.js';
 import { renderDoubleClickTest, cleanupDoubleClickTest } from './tools/doubleClickTest.js';
+import { renderTypingTest, cleanupTypingTest } from './tools/typingTest.js';
 
 let currentCleanup = null;
 
@@ -25,6 +26,18 @@ export function triggerRandomTool() {
 }
 
 export const TOOL_METADATA = {
+  'typing-test': {
+    titleKey: 'typingTestTitle',
+    desc: 'Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.',
+    icon: '⌨️⚡',
+    category: 'speed',
+    renderFn: renderTypingTest,
+    cleanupFn: cleanupTypingTest,
+    faqs: [
+      { q: 'How is typing speed (WPM) calculated?', a: 'WPM (Words Per Minute) is calculated as (Standardized Words Typed / Minutes Elapsed), where 1 standardized word equals 5 characters.' },
+      { q: 'How does the Eye Mascot judge typing speed?', a: 'The mascot calculates your final WPM and accuracy percentage, reacting with expressions and funny judging dialogue based on your performance level.' }
+    ]
+  },
   'mouse-test': {
     titleKey: 'mouseTestTitle',
     desc: 'Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.',
