@@ -20,7 +20,7 @@ export function renderFooter(container) {
             <p data-i18n="footerAbout">${t('footerAbout')}</p>
             <div style="margin-top:0.6rem;">
               <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="footer-link" style="color:var(--accent-amber); font-weight:700; display:inline-flex; align-items:center; gap:0.35rem;">
-                <span>🎮 Created by SnowyOrca on itch.io</span> ↗
+                <span>🎮 Created by Dylan on itch.io</span> ↗
               </a>
             </div>
             <div class="privacy-badge" style="margin-top:0.6rem;">
