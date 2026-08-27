@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Interactive Cat Mascot Component Styles
+   ClickPulse - Interactive Cat Mascot Component Styles (Ginger Tabby Upgrade)
    ========================================================================== */
 
 .mascot-container {
@@ -9,53 +9,57 @@
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   user-select: none;
   pointer-events: none;
 }
 
-/* Speech Bubble */
+/* Speech Bubble (Pinned Safely Inside Viewport - No Overflow!) */
 .mascot-speech-bubble {
   position: absolute;
-  bottom: 110%;
-  left: 50%;
-  transform: translateX(-50%) scale(0.8);
-  background: var(--bg-card);
-  color: var(--text-primary);
-  border: 1px solid var(--accent-cyan);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(6, 182, 212, 0.2);
-  padding: 0.5rem 0.9rem;
+  bottom: 115%;
+  left: 0;
+  transform: scale(0.85);
+  transform-origin: bottom left;
+  background: #1e293b;
+  color: #ffffff;
+  border: 2px solid #f97316;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), 0 0 14px rgba(249, 115, 22, 0.3);
+  padding: 0.6rem 0.95rem;
   border-radius: var(--radius-md);
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  white-space: nowrap;
+  max-width: 220px;
+  white-space: normal;
+  word-wrap: break-word;
+  line-height: 1.35;
   opacity: 0;
   visibility: hidden;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: auto;
+  z-index: 1005;
 }
 
 .mascot-speech-bubble.active {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) scale(1);
+  transform: scale(1);
 }
 
 .mascot-speech-bubble::after {
   content: '';
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 6px;
+  left: 36px;
+  border-width: 7px;
   border-style: solid;
-  border-color: var(--accent-cyan) transparent transparent transparent;
+  border-color: #f97316 transparent transparent transparent;
 }
 
 /* Cat Character Canvas Frame */
 .cat-character {
-  width: 76px;
-  height: 76px;
+  width: 80px;
+  height: 80px;
   position: relative;
   cursor: pointer;
   pointer-events: auto;
@@ -66,29 +70,54 @@
   transform: scale(1.08);
 }
 
-/* Cat Head Surface */
+/* Cat Head Surface - Vibrant Ginger Tabby Orange */
 .cat-head {
-  width: 70px;
-  height: 62px;
-  background: linear-gradient(135deg, #1f293d, #111827);
-  border: 2.5px solid var(--accent-cyan);
-  border-radius: 40px 40px 32px 32px;
+  width: 74px;
+  height: 66px;
+  background: linear-gradient(135deg, #fb923c, #ea580c);
+  border: 3px solid #7c2d12;
+  border-radius: 42px 42px 34px 34px;
   position: relative;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.3);
   overflow: hidden;
 }
 
-/* Cat Ears */
+/* Tabby Forehead Stripes */
+.cat-head::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 12px;
+  background: radial-gradient(circle, #9a3412 40%, transparent 70%);
+  opacity: 0.6;
+}
+
+/* Cat Ears with Pink Inner Pads */
 .cat-ear {
   position: absolute;
-  top: -12px;
-  width: 22px;
-  height: 24px;
-  background: #111827;
-  border: 2.5px solid var(--accent-cyan);
+  top: -14px;
+  width: 24px;
+  height: 26px;
+  background: #ea580c;
+  border: 2.5px solid #7c2d12;
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
   transition: transform 0.15s ease;
   z-index: -1;
+}
+
+.cat-ear::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 14px;
+  background: #fda4af; /* Cute Pink Inner Ear */
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
 }
 
 .cat-ear-left {
@@ -102,56 +131,54 @@
 }
 
 .cat-character.play-mode .cat-ear-left {
-  transform: rotate(-25deg) translateY(-3px);
+  transform: rotate(-28deg) translateY(-4px);
 }
 
 .cat-character.play-mode .cat-ear-right {
-  transform: rotate(25deg) translateY(-3px);
+  transform: rotate(28deg) translateY(-4px);
 }
 
-/* Cat Eyes Area */
+/* Cat Eyes Area - Vibrant Emerald Irises */
 .cat-eyes-row {
   display: flex;
   justify-content: space-between;
-  padding: 0 10px;
+  padding: 0 11px;
   margin-top: 14px;
 }
 
 .cat-sclera {
-  width: 20px;
-  height: 20px;
-  background: #0f172a;
+  width: 22px;
+  height: 22px;
+  background: #10b981; /* Glowing Emerald Cat Eye Iris */
   border-radius: 50%;
-  border: 1.5px solid var(--accent-cyan);
+  border: 2px solid #064e3b;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: inset 0 0 6px rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6), inset 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 .cat-pupil {
-  width: 9px;
-  height: 14px;
-  background: var(--accent-cyan);
+  width: 7px;
+  height: 15px;
+  background: #090d16; /* Black slit pupil */
   border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent-cyan);
   transition: height 0.15s ease, width 0.15s ease;
 }
 
 .cat-character.play-mode .cat-pupil {
-  width: 14px;
-  height: 14px; /* Dilated play pupils! */
-  background: #38bdf8;
-  box-shadow: 0 0 12px #38bdf8;
+  width: 15px;
+  height: 15px; /* Dilated play pupils! */
+  background: #020617;
 }
 
 /* Eyelids / Blinking */
 .cat-eyelid {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: #111827;
+  background: #ea580c;
   transform: scaleY(0);
   transform-origin: top;
   transition: transform 0.1s ease;
@@ -178,68 +205,76 @@
 }
 
 .cat-nose {
-  width: 8px;
-  height: 6px;
-  background: #f472b6; /* Cute pink nose */
+  width: 9px;
+  height: 7px;
+  background: #f43f5e; /* Vibrant Pink Nose */
   border-radius: 50% 50% 40% 40%;
-  box-shadow: 0 0 6px rgba(244, 114, 182, 0.5);
+  box-shadow: 0 0 6px rgba(244, 63, 94, 0.6);
 }
 
 .cat-whiskers {
   position: absolute;
-  top: 18px;
+  top: 20px;
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 2px;
+  padding: 0 1px;
   pointer-events: none;
 }
 
 .whisker-line {
-  width: 16px;
-  height: 1px;
-  background: rgba(240, 246, 252, 0.4);
+  width: 18px;
+  height: 1.5px;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
 }
 
 .cat-character.purring .whisker-line {
-  animation: vibrate-whisker 0.2s infinite;
+  animation: vibrate-whisker 0.18s infinite;
 }
 
 @keyframes vibrate-whisker {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(1px); }
+  50% { transform: translateY(1.5px); }
 }
 
-/* Cat Paws Reaching Out (Play Mode / Swatting) */
+/* Cat Paws Reaching & Tracking Cursor */
 .cat-paw {
   position: absolute;
-  bottom: -6px;
-  width: 18px;
-  height: 16px;
-  background: #1f293d;
-  border: 2px solid var(--accent-cyan);
+  bottom: -4px;
+  width: 20px;
+  height: 18px;
+  background: #fff7ed; /* White paw pads */
+  border: 2.5px solid #7c2d12;
   border-radius: 10px 10px 6px 6px;
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  transition: transform 0.08s ease-out;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cat-paw::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 6px;
+  background: #fda4af; /* Pink Paw Pad */
+  border-radius: 50%;
 }
 
 .cat-paw-left { left: 8px; }
 .cat-paw-right { right: 8px; }
 
-.cat-character.play-mode .cat-paw-left {
-  transform: translateY(-8px) rotate(-15deg);
-}
-
-.cat-character.play-mode .cat-paw-right {
-  transform: translateY(-8px) rotate(15deg);
-}
-
 /* Floating Heart / Paw Print Particles */
 .floating-particle {
   position: absolute;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   pointer-events: none;
   animation: float-up-fade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  z-index: 1001;
+  z-index: 1008;
 }
 
 @keyframes float-up-fade {
@@ -249,6 +284,6 @@
   }
   100% {
     opacity: 0;
-    transform: translateY(-50px) scale(1.3);
+    transform: translateY(-55px) scale(1.3);
   }
 }

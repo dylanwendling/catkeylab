@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Interactive Cat Mascot Component
+   ClickPulse - Interactive Cat Mascot Component (Ginger Tabby Upgrade)
    ========================================================================== */
 
 import { playClickSound } from '../audio.js';
@@ -39,6 +39,8 @@ const FAST_SCROLL_DIALOGUES = [
 
 let leftPupilEl = null;
 let rightPupilEl = null;
+let leftPawEl = null;
+let rightPawEl = null;
 let catEl = null;
 let speechEl = null;
 
@@ -46,6 +48,16 @@ let targetPupilX = 0;
 let targetPupilY = 0;
 let currentPupilX = 0;
 let currentPupilY = 0;
+
+let targetLeftPawX = 0;
+let targetLeftPawY = 0;
+let currentLeftPawX = 0;
+let currentLeftPawY = 0;
+
+let targetRightPawX = 0;
+let targetRightPawY = 0;
+let currentRightPawX = 0;
+let currentRightPawY = 0;
 
 let isMouseNear = false;
 let speechTimeout = null;
@@ -84,14 +96,16 @@ export function initCatMascot() {
             <div class="whisker-line"></div>
           </div>
         </div>
-        <div class="cat-paw cat-paw-left"></div>
-        <div class="cat-paw cat-paw-right"></div>
+        <div id="cat-paw-left" class="cat-paw cat-paw-left"></div>
+        <div id="cat-paw-right" class="cat-paw cat-paw-right"></div>
       </div>
     </div>
   `;
 
   leftPupilEl = document.getElementById('cat-pupil-left');
   rightPupilEl = document.getElementById('cat-pupil-right');
+  leftPawEl = document.getElementById('cat-paw-left');
+  rightPawEl = document.getElementById('cat-paw-right');
   catEl = document.getElementById('cat-character');
   speechEl = document.getElementById('mascot-speech');
 
@@ -106,7 +120,7 @@ export function initCatMascot() {
   catEl.addEventListener('mouseenter', handlePetting);
 
   // Start Animation Loops
-  requestAnimationFrame(animatePupils);
+  requestAnimationFrame(animateMascot);
   scheduleBlink();
   schedulePeriodicSpeech();
 
@@ -120,23 +134,19 @@ export function initCatMascot() {
  * Pet the Cat Reaction (Synthesizes purr chime sound, spawns heart particle, pops speech)
  */
 function handlePetting(e) {
-  if (e && e.type === 'mouseenter' && Math.random() > 0.4) return; // don't over-trigger on enter
+  if (e && e.type === 'mouseenter' && Math.random() > 0.4) return;
 
-  // Synthesize Purr Sound Audio Chime
   playPurrSound();
 
   if (!catEl) return;
 
-  // Apply Purr animation class
   catEl.classList.add('purring');
   setTimeout(() => {
     if (catEl) catEl.classList.remove('purring');
   }, 1800);
 
-  // Spawn Floating Heart or Paw Particle
   spawnFloatingParticle(e);
 
-  // Pick random purr dialogue
   const line = PURR_DIALOGUES[Math.floor(Math.random() * PURR_DIALOGUES.length)];
   showSpeechBubble(line);
 }
@@ -199,9 +209,8 @@ function handleScroll() {
 
   if (timeDelta > 50) {
     const scrollDelta = Math.abs(currentScrollY - lastScrollY);
-    const scrollSpeed = (scrollDelta / timeDelta) * 1000; // px/sec
+    const scrollSpeed = (scrollDelta / timeDelta) * 1000;
 
-    // If scrolling faster than 2200 px/sec and at least 7 sec since last judgment
     if (scrollSpeed > 2200 && now - lastJudgementTime > 7000) {
       lastJudgementTime = now;
       judgeFastScroll();
@@ -258,7 +267,7 @@ export function judgeTypingSpeed(wpm, accuracy) {
 }
 
 /**
- * Mouse Pupil Tracking & Mouse Pounce / Play Mode Detection
+ * Mouse Pupil Tracking & Cursor-Tracking Swatting Paws
  */
 function handleMouseMove(e) {
   if (!catEl) return;
@@ -271,19 +280,40 @@ function handleMouseMove(e) {
   const deltaY = e.clientY - catCenterY;
   const distance = Math.hypot(deltaX, deltaY);
 
-  // Mouse Pounce / Play Mode (< 160px)
-  if (distance < 160 && !isMouseNear) {
-    isMouseNear = true;
-    catEl.classList.add('play-mode');
-    if (Math.random() < 0.45) {
-      showSpeechBubble("mrrp! mouse detected!");
+  // Mouse Play Mode & Paw Cursor Tracking (< 220px)
+  if (distance < 220) {
+    if (!isMouseNear) {
+      isMouseNear = true;
+      catEl.classList.add('play-mode');
+      if (Math.random() < 0.4) {
+        showSpeechBubble("mrrp! mouse detected!");
+      }
     }
-  } else if (distance >= 160 && isMouseNear) {
-    isMouseNear = false;
-    catEl.classList.remove('play-mode');
+
+    // Calculate paw reach vector toward cursor
+    const maxPawReach = 18; // max pixels paws reach out
+    const pawAngle = Math.atan2(deltaY, deltaX);
+    const pawReachDist = Math.min(distance * 0.12, maxPawReach);
+
+    targetLeftPawX = Math.cos(pawAngle) * pawReachDist;
+    targetLeftPawY = Math.sin(pawAngle) * pawReachDist - 6;
+
+    targetRightPawX = Math.cos(pawAngle) * (pawReachDist * 0.9);
+    targetRightPawY = Math.sin(pawAngle) * (pawReachDist * 0.9) - 6;
+
+  } else {
+    if (isMouseNear) {
+      isMouseNear = false;
+      catEl.classList.remove('play-mode');
+    }
+
+    targetLeftPawX = 0;
+    targetLeftPawY = 0;
+    targetRightPawX = 0;
+    targetRightPawY = 0;
   }
 
-  // Constrain max pupil offset distance inside sclera (~6px)
+  // Pupil offset calculation
   const maxRadius = 6;
   const angle = Math.atan2(deltaY, deltaX);
   const pupilDistance = Math.min(distance * 0.08, maxRadius);
@@ -293,18 +323,35 @@ function handleMouseMove(e) {
 }
 
 /**
- * Smooth Lerp pupil positioning frame loop
+ * Smooth Lerp frame loop for both pupils and cursor-tracking paws
  */
-function animatePupils() {
+function animateMascot() {
+  // Smooth pupil tracking
   if (leftPupilEl && rightPupilEl) {
     currentPupilX += (targetPupilX - currentPupilX) * 0.14;
     currentPupilY += (targetPupilY - currentPupilY) * 0.14;
 
-    const transformStr = `translate(${currentPupilX.toFixed(2)}px, ${currentPupilY.toFixed(2)}px)`;
-    leftPupilEl.style.transform = transformStr;
-    rightPupilEl.style.transform = transformStr;
+    const pupilTransform = `translate(${currentPupilX.toFixed(2)}px, ${currentPupilY.toFixed(2)}px)`;
+    leftPupilEl.style.transform = pupilTransform;
+    rightPupilEl.style.transform = pupilTransform;
   }
-  requestAnimationFrame(animatePupils);
+
+  // Smooth paw cursor swatting tracking
+  if (leftPawEl && rightPawEl) {
+    currentLeftPawX += (targetLeftPawX - currentLeftPawX) * 0.18;
+    currentLeftPawY += (targetLeftPawY - currentLeftPawY) * 0.18;
+
+    currentRightPawX += (targetRightPawX - currentRightPawX) * 0.18;
+    currentRightPawY += (targetRightPawY - currentRightPawY) * 0.18;
+
+    const rotLeft = (currentLeftPawX * 1.5).toFixed(1);
+    const rotRight = (currentRightPawX * 1.5).toFixed(1);
+
+    leftPawEl.style.transform = `translate(${currentLeftPawX.toFixed(2)}px, ${currentLeftPawY.toFixed(2)}px) rotate(${rotLeft}deg)`;
+    rightPawEl.style.transform = `translate(${currentRightPawX.toFixed(2)}px, ${currentRightPawY.toFixed(2)}px) rotate(${rotRight}deg)`;
+  }
+
+  requestAnimationFrame(animateMascot);
 }
 
 /**
