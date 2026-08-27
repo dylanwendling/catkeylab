@@ -56,7 +56,7 @@ CatKeyLab features **Nibbles**, a playful Ginger Tabby Cat wearing a ruby red co
 
 ### 🧶 2. Throwable Yarn Ball Toy (`yarnBall.js`)
 - **Physics Drag & Throw**: Drag and flick the Yarn Ball 🧶 across your screen. Features momentum friction damping (`0.94`) and screen boundary bounce physics!
-- **Cat Interactivity**: Drag or toss the yarn ball near Nibbles (< 280px) to see both paws and pupils track the yarn in real-time, swatting at the ball silently with playful speech popups (*"my toy!"*, *"swat! 🧶"*, *"purrrrr... yarn!"*).
+- **Cat Interactivity**: Drag or toss the yarn ball near Nibbles to see both paws and pupils track the yarn in real-time, swatting at the ball silently with playful speech popups (*"my toy!"*, *"swat! 🧶"*, *"purrrrr... yarn!"*).
 
 ### 🥣 3. Cat Food Bowl & Fish Feeding (`foodBowl.js`)
 - **Interactive Food Bowl**: Click or drag the Cat Food Bowl 🥣 in the bottom-right corner to spawn fresh, draggable **Fish 🐟**.

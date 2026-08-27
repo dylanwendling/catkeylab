@@ -666,7 +666,7 @@ function renderMeetNibblesPage(container) {
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
             <h3 style="font-size:1.2rem; color:var(--accent-cyan); margin-bottom:0.5rem;">🐾 Swatting Paws & Petting</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Move your cursor close to Nibbles (&lt; 220px) to see his white paws reach out to swat! Click Nibbles directly to pet him and hear him purr.</p>
+            <p style="color:var(--text-secondary); line-height:1.6;">Move your cursor close to Nibbles to see his white paws reach out to swat! Click Nibbles directly to pet him and hear him purr.</p>
           </div>
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
@@ -676,7 +676,7 @@ function renderMeetNibblesPage(container) {
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
             <h3 style="font-size:1.2rem; color:var(--accent-rose); margin-bottom:0.5rem;">🧶 Throwable Yarn Ball Toy</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Drag and toss the red yarn ball 🧶 across your screen. Throw it near Nibbles (&lt; 280px) to watch his paws and pupils eagerly swat at the toy!</p>
+            <p style="color:var(--text-secondary); line-height:1.6;">Drag and toss the red yarn ball 🧶 across your screen. Throw it near Nibbles to watch his paws and pupils eagerly swat at the toy!</p>
           </div>
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
