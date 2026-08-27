@@ -1,182 +1,254 @@
 /* ==========================================================================
-   ClickPulse - Interactive Eye Mascot Component Styles
+   ClickPulse - Interactive Cat Mascot Component Styles
    ========================================================================== */
 
 .mascot-container {
   position: fixed;
-  bottom: 24px;
-  left: 24px;
-  z-index: 999;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  pointer-events: none; /* Container passes pointer events except mascot itself */
+  align-items: center;
   user-select: none;
+  pointer-events: none;
 }
 
-/* Mascot Speech Bubble */
+/* Speech Bubble */
 .mascot-speech-bubble {
-  background: #ffffff;
-  color: #0f172a;
-  padding: 8px 14px;
-  border-radius: 12px;
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-cyan);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 10px rgba(6, 182, 212, 0.2);
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-md);
   font-size: 0.85rem;
   font-weight: 700;
-  font-family: var(--font-family);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 0 2px #0f172a;
-  margin-bottom: 8px;
-  margin-left: 10px;
-  position: relative;
-  opacity: 0;
-  transform: translateY(6px) scale(0.95);
-  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
   white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: auto;
 }
 
 .mascot-speech-bubble.active {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
 }
 
 .mascot-speech-bubble::after {
   content: '';
   position: absolute;
-  bottom: -6px;
-  left: 16px;
-  width: 10px;
-  height: 10px;
-  background: #ffffff;
-  border-right: 2px solid #0f172a;
-  border-bottom: 2px solid #0f172a;
-  transform: rotate(45deg);
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: var(--accent-cyan) transparent transparent transparent;
 }
 
-/* Eye Character Shell */
-.mascot-character {
-  width: 58px;
-  height: 58px;
-  background: #ffffff;
-  border: 3px solid #0f172a;
-  border-radius: 50%;
+/* Cat Character Canvas Frame */
+.cat-character {
+  width: 76px;
+  height: 76px;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 3px 0 #0f172a;
   cursor: pointer;
   pointer-events: auto;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cat-character:hover {
+  transform: scale(1.08);
+}
+
+/* Cat Head Surface */
+.cat-head {
+  width: 70px;
+  height: 62px;
+  background: linear-gradient(135deg, #1f293d, #111827);
+  border: 2.5px solid var(--accent-cyan);
+  border-radius: 40px 40px 32px 32px;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.1);
   overflow: hidden;
 }
 
-.mascot-character:hover {
-  transform: translateY(-3px) scale(1.06);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 4px 0 #0f172a;
-}
-
-.mascot-character:active {
-  transform: translateY(1px) scale(0.98);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 0 #0f172a;
-}
-
-/* Sclera & Iris */
-.mascot-sclera {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: radial-gradient(circle at 35% 35%, #ffffff 60%, #e2e8f0 100%);
-}
-
-.mascot-pupil {
+/* Cat Ears */
+.cat-ear {
+  position: absolute;
+  top: -12px;
   width: 22px;
-  height: 22px;
+  height: 24px;
+  background: #111827;
+  border: 2.5px solid var(--accent-cyan);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  transition: transform 0.15s ease;
+  z-index: -1;
+}
+
+.cat-ear-left {
+  left: 4px;
+  transform: rotate(-15deg);
+}
+
+.cat-ear-right {
+  right: 4px;
+  transform: rotate(15deg);
+}
+
+.cat-character.play-mode .cat-ear-left {
+  transform: rotate(-25deg) translateY(-3px);
+}
+
+.cat-character.play-mode .cat-ear-right {
+  transform: rotate(25deg) translateY(-3px);
+}
+
+/* Cat Eyes Area */
+.cat-eyes-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  margin-top: 14px;
+}
+
+.cat-sclera {
+  width: 20px;
+  height: 20px;
   background: #0f172a;
   border-radius: 50%;
-  position: absolute;
-  transition: width 0.15s ease, height 0.15s ease;
+  border: 1.5px solid var(--accent-cyan);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 6px rgba(6, 182, 212, 0.4);
 }
 
-/* Iris Highlight Catchlight */
-.mascot-pupil::after {
-  content: '';
-  position: absolute;
-  top: 3px;
-  right: 4px;
-  width: 6px;
-  height: 6px;
-  background: #ffffff;
+.cat-pupil {
+  width: 9px;
+  height: 14px;
+  background: var(--accent-cyan);
   border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-cyan);
+  transition: height 0.15s ease, width 0.15s ease;
 }
 
-/* Eyelids for Blinking */
-.mascot-eyelid-top, .mascot-eyelid-bottom {
+.cat-character.play-mode .cat-pupil {
+  width: 14px;
+  height: 14px; /* Dilated play pupils! */
+  background: #38bdf8;
+  box-shadow: 0 0 12px #38bdf8;
+}
+
+/* Eyelids / Blinking */
+.cat-eyelid {
   position: absolute;
-  left: 0;
-  right: 0;
-  background: #0f172a;
-  z-index: 10;
-  transition: height 0.08s ease-in-out;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #111827;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.1s ease;
+  z-index: 5;
 }
 
-.mascot-eyelid-top {
-  top: 0;
-  height: 0%;
-  border-bottom: 2px solid #0f172a;
+.cat-character.blinking .cat-eyelid {
+  transform: scaleY(1);
 }
 
-.mascot-eyelid-bottom {
-  bottom: 0;
-  height: 0%;
-  border-top: 2px solid #0f172a;
+.cat-character.squint .cat-eyelid {
+  transform: scaleY(0.65);
 }
 
-/* Eyelid Blink State */
-.mascot-character.blinking .mascot-eyelid-top,
-.mascot-character.blinking .mascot-eyelid-bottom {
-  height: 50%;
+/* Cat Snout, Nose & Whiskers */
+.cat-snout {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Expression Modifiers */
-.mascot-character.surprised .mascot-pupil {
-  width: 28px;
-  height: 28px;
+.cat-nose {
+  width: 8px;
+  height: 6px;
+  background: #f472b6; /* Cute pink nose */
+  border-radius: 50% 50% 40% 40%;
+  box-shadow: 0 0 6px rgba(244, 114, 182, 0.5);
 }
 
-.mascot-character.squint .mascot-eyelid-top,
-.mascot-character.squint .mascot-eyelid-bottom {
-  height: 25%;
+.cat-whiskers {
+  position: absolute;
+  top: 18px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2px;
+  pointer-events: none;
 }
 
-.mascot-character.happy .mascot-eyelid-bottom {
-  height: 40%;
-  border-radius: 50% 50% 0 0;
+.whisker-line {
+  width: 16px;
+  height: 1px;
+  background: rgba(240, 246, 252, 0.4);
 }
 
-.mascot-character.wink .mascot-eyelid-top,
-.mascot-character.wink .mascot-eyelid-bottom {
-  height: 50%;
+.cat-character.purring .whisker-line {
+  animation: vibrate-whisker 0.2s infinite;
 }
 
-/* Responsive adjustment for mobile */
-@media (max-width: 640px) {
-  .mascot-container {
-    bottom: 16px;
-    left: 16px;
+@keyframes vibrate-whisker {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(1px); }
+}
+
+/* Cat Paws Reaching Out (Play Mode / Swatting) */
+.cat-paw {
+  position: absolute;
+  bottom: -6px;
+  width: 18px;
+  height: 16px;
+  background: #1f293d;
+  border: 2px solid var(--accent-cyan);
+  border-radius: 10px 10px 6px 6px;
+  transition: transform 0.2s ease;
+}
+
+.cat-paw-left { left: 8px; }
+.cat-paw-right { right: 8px; }
+
+.cat-character.play-mode .cat-paw-left {
+  transform: translateY(-8px) rotate(-15deg);
+}
+
+.cat-character.play-mode .cat-paw-right {
+  transform: translateY(-8px) rotate(15deg);
+}
+
+/* Floating Heart / Paw Print Particles */
+.floating-particle {
+  position: absolute;
+  font-size: 1.2rem;
+  pointer-events: none;
+  animation: float-up-fade 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  z-index: 1001;
+}
+
+@keyframes float-up-fade {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(0.6);
   }
-  .mascot-character {
-    width: 48px;
-    height: 48px;
-  }
-  .mascot-pupil {
-    width: 18px;
-    height: 18px;
+  100% {
+    opacity: 0;
+    transform: translateY(-50px) scale(1.3);
   }
 }

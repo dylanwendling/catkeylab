@@ -4,7 +4,7 @@
 
 import { t } from '../i18n.js';
 import { playClickSound } from '../audio.js';
-import { judgeTypingSpeed } from '../components/eyeMascot.js';
+import { judgeTypingSpeed } from '../components/catMascot.js';
 import { triggerRandomTool } from '../router.js';
 
 const WORD_BANK = [

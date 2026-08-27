@@ -7,7 +7,7 @@ import { initAudio } from './audio.js';
 import { initI18n, t } from './i18n.js';
 import { renderHeader } from './components/header.js';
 import { renderFooter } from './components/footer.js';
-import { initEyeMascot } from './components/eyeMascot.js';
+import { initCatMascot } from './components/catMascot.js';
 import { handleRoute } from './router.js';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initAudio();
   initI18n();
 
-  // 2. Initialize Interactive Eye Mascot
-  initEyeMascot();
+  // 2. Initialize Interactive Cat Mascot
+  initCatMascot();
 
   // 3. Setup Global Mouse Tracking Spotlight Aura & Card Parallax
   initMouseSpotlight();
