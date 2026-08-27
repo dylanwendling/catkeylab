@@ -72,6 +72,22 @@ export function randomizeAnonHandle() {
   return profile;
 }
 
+// Cross-Tab BroadcastChannel Engine
+const syncChannel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel('catkeylab_leaderboard_sync') : null;
+let updateCallback = null;
+
+export function setLeaderboardUpdateCallback(cb) {
+  updateCallback = cb;
+}
+
+if (syncChannel) {
+  syncChannel.onmessage = (event) => {
+    if (event.data && event.data.type === 'SCORE_SUBMITTED') {
+      if (updateCallback) updateCallback(event.data.testId);
+    }
+  };
+}
+
 // Get Leaderboard Data for a Test
 export function getLeaderboard(testId) {
   // Purge old mock storage key if present
@@ -146,6 +162,14 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
   allBoards[testId] = topList;
   localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(allBoards));
 
+  // Notify other tabs in real-time
+  if (syncChannel) {
+    syncChannel.postMessage({ type: 'SCORE_SUBMITTED', testId, entry: newEntry });
+  }
+
+  // Background Cloud Sync (Async Non-Blocking)
+  syncGlobalCloud(testId, newEntry);
+
   // Find user rank position
   const rankIdx = topList.findIndex(item => item.handle === profile.handle);
   const userRank = rankIdx !== -1 ? rankIdx + 1 : topList.length + 1;
@@ -159,6 +183,20 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
     profile,
     isTopThree: userRank <= 3
   };
+}
+
+// Background Cloud Synchronization Engine
+async function syncGlobalCloud(testId, entry) {
+  try {
+    // Post to global broadcast endpoint if available
+    const url = 'https://kvdb.io/N9rRjZ31bW1Kz38Q4vX92k/catkeylab_scores';
+    const payload = { testId, entry, timestamp: Date.now() };
+    await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  } catch (e) {}
 }
 
 // Calculate Percentile Rating

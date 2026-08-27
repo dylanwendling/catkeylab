@@ -3,7 +3,7 @@
    ========================================================================== */
 
 import { t } from '../i18n.js';
-import { getAnonProfile, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard } from '../leaderboard.js';
+import { getAnonProfile, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard, setLeaderboardUpdateCallback } from '../leaderboard.js';
 
 let activeTestId = 'reaction-time-test';
 
@@ -69,6 +69,13 @@ export function renderLeaderboardView(container) {
 
   bindEvents();
   renderTable(activeTestId);
+
+  // Register real-time cross-tab sync callback
+  setLeaderboardUpdateCallback((testId) => {
+    if (!testId || testId === activeTestId) {
+      renderTable(activeTestId);
+    }
+  });
 }
 
 function bindEvents() {
