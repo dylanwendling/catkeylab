@@ -155,7 +155,6 @@ function handlePetting(e) {
 }
 
 const YARN_DIALOGUES = [
-  "got the yarn! 🧶",
   "my toy!",
   "mrrp! yarn!",
   "swat! 🧶",
