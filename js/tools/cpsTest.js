@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - CPS Test (Clicks Per Second) Tool Component
+   CatKeyLab - CPS Test (Clicks Per Second) Tool Component
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -249,13 +249,13 @@ function resetTest() {
 }
 
 function getBestCPS(dur) {
-  return localStorage.getItem(`clickpulse_cps_best_${dur}`) || '0.0';
+  return localStorage.getItem(`catkeylab_cps_best_${dur}`) || '0.0';
 }
 
 function saveBestCPS(dur, cps) {
   const current = parseFloat(getBestCPS(dur));
   if (parseFloat(cps) > current) {
-    localStorage.setItem(`clickpulse_cps_best_${dur}`, cps);
+    localStorage.setItem(`catkeylab_cps_best_${dur}`, cps);
   }
 }
 

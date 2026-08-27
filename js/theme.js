@@ -1,8 +1,8 @@
 /* ==========================================================================
-   ClickPulse - Theme Management System
+   CatKeyLab - Theme Management System
    ========================================================================== */
 
-const THEME_STORAGE_KEY = 'clickpulse_theme';
+const THEME_STORAGE_KEY = 'catkeylab_theme';
 
 export function initTheme() {
   const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);

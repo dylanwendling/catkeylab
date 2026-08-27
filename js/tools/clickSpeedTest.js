@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Click Speed Test Component
+   CatKeyLab - Click Speed Test Component
    ========================================================================== */
 
 import { t } from '../i18n.js';

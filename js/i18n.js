@@ -20,7 +20,7 @@ export const LANGUAGES = [
 
 export const translations = {
   en: {
-    siteName: 'CatnipLab 🐾',
+    siteName: 'CatKeyLab 🐾',
     tagline: 'Handcrafted Online Hardware Testers & Typing Speed Challenge',
     navHome: 'Home',
     navAutoClicker: 'Auto Clicker',
@@ -1316,7 +1316,7 @@ let currentLang = 'en';
 export function initI18n() {
   const urlParams = new URLSearchParams(window.location.search);
   const langParam = urlParams.get('lang');
-  const savedLang = localStorage.getItem('clickpulse_lang');
+  const savedLang = localStorage.getItem('catkeylab_lang');
 
   if (langParam && translations[langParam]) {
     currentLang = langParam;
@@ -1336,7 +1336,7 @@ export function initI18n() {
 export function setLanguage(lang, reloadUI = true) {
   if (!translations[lang]) return;
   currentLang = lang;
-  localStorage.setItem('clickpulse_lang', lang);
+  localStorage.setItem('catkeylab_lang', lang);
   document.documentElement.lang = lang;
 
   if (reloadUI && window.updatePageTranslations) {

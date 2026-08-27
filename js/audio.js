@@ -1,12 +1,12 @@
 /* ==========================================================================
-   ClickPulse - Synthesized Web Audio & Haptic System
+   CatKeyLab - Synthesized Web Audio & Haptic System
    ========================================================================== */
 
 let audioCtx = null;
 let soundEnabled = true;
 
 export function initAudio() {
-  soundEnabled = localStorage.getItem('clickpulse_sound') !== 'false';
+  soundEnabled = localStorage.getItem('catkeylab_sound') !== 'false';
   
   // Attach document-wide gesture listeners to unlock Web Audio context automatically
   const unlock = () => {
@@ -36,7 +36,7 @@ export function getAudioContext() {
 
 export function toggleSound() {
   soundEnabled = !soundEnabled;
-  localStorage.setItem('clickpulse_sound', soundEnabled);
+  localStorage.setItem('catkeylab_sound', soundEnabled);
   return soundEnabled;
 }
 

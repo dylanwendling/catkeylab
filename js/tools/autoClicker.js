@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Online Auto Clicker Tool Component
+   CatKeyLab - Online Auto Clicker Tool Component
    ========================================================================== */
 
 import { t } from '../i18n.js';

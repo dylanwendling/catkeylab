@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Double Click Tester Component
+   CatKeyLab - Double Click Tester Component
    ========================================================================== */
 
 import { t } from '../i18n.js';

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Interactive Cat Mascot Component (Ginger Tabby Upgrade)
+   CatKeyLab - Interactive Cat Mascot Component (Ginger Tabby Upgrade)
    ========================================================================== */
 
 import { playClickSound, getAudioContext } from '../audio.js';

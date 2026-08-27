@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - FAQ & JSON-LD Schema Generator Component
+   CatKeyLab - FAQ & JSON-LD Schema Generator Component
    ========================================================================== */
 
 export function renderFAQ(container, faqData = []) {

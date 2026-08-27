@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Client Route Engine & SEO Meta Coordinator
+   CatKeyLab - Client Route Engine & SEO Meta Coordinator
    ========================================================================== */
 
 import { t, getCurrentLang } from './i18n.js';

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Main Application Entry Point
+   CatKeyLab - Main Application Entry Point
    ========================================================================== */
 
 import { initTheme } from './theme.js';

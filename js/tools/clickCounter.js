@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Online Click Counter Tool Component
+   CatKeyLab - Online Click Counter Tool Component
    ========================================================================== */
 
 import { t } from '../i18n.js';

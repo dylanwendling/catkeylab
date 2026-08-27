@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Interactive Mouse & Hardware Button Tester Component
+   CatKeyLab - Interactive Mouse & Hardware Button Tester Component
    ========================================================================== */
 
 import { t } from '../i18n.js';

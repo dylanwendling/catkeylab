@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Reaction Time Test Component
+   CatKeyLab - Reaction Time Test Component
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -133,13 +133,13 @@ function getRatingString(ms) {
 }
 
 function getBestReaction() {
-  return localStorage.getItem('clickpulse_reaction_best') || '0';
+  return localStorage.getItem('catkeylab_reaction_best') || '0';
 }
 
 function saveBestReaction(ms) {
   const current = parseInt(getBestReaction());
   if (current === 0 || ms < current) {
-    localStorage.setItem('clickpulse_reaction_best', ms);
+    localStorage.setItem('catkeylab_reaction_best', ms);
   }
 }
 

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Interactive Eye Mascot Component
+   CatKeyLab - Interactive Eye Mascot Component
    ========================================================================== */
 
 import { playClickSound } from '../audio.js';

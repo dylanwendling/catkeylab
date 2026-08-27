@@ -1,7 +1,7 @@
-# Render Blueprint Specification for ClickPulse
+# Render Blueprint Specification for CatKeyLab
 services:
   - type: web
-    name: clickpulse
+    name: catkeylab
     runtime: static
     buildCommand: ""
     staticPublishPath: ./

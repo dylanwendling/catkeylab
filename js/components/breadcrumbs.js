@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Breadcrumbs Component for SEO
+   CatKeyLab - Breadcrumbs Component for SEO
    ========================================================================== */
 
 import { t } from '../i18n.js';

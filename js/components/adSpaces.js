@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Non-Intrusive Ad Space Component
+   CatKeyLab - Non-Intrusive Ad Space Component
    ========================================================================== */
 
 export function renderAdSpace(type = 'banner') {

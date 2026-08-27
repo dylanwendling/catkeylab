@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Typing Speed Challenge Tool (Gamified WPM Tester)
+   CatKeyLab - Typing Speed Challenge Tool (Gamified WPM Tester)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -40,7 +40,7 @@ let confettiAnimationId = null;
 export function renderTypingTest(container) {
   cleanupTypingTest();
 
-  const savedBest = localStorage.getItem('clickpulse_best_wpm') || '0';
+  const savedBest = localStorage.getItem('catkeylab_best_wpm') || '0';
 
   container.innerHTML = `
     <div class="tool-wrapper" style="border:1px solid var(--accent-cyan-glow);">
@@ -298,10 +298,10 @@ function finishTest() {
   const finalAccuracy = Math.round((correctChars / Math.max(1, totalTypedChars)) * 100);
 
   // Update Personal Best
-  const currentBest = parseInt(localStorage.getItem('clickpulse_best_wpm') || '0', 10);
+  const currentBest = parseInt(localStorage.getItem('catkeylab_best_wpm') || '0', 10);
   const isNewHigh = finalWpm > currentBest;
   if (isNewHigh) {
-    localStorage.setItem('clickpulse_best_wpm', finalWpm.toString());
+    localStorage.setItem('catkeylab_best_wpm', finalWpm.toString());
     const bestEl = document.getElementById('tt-best-val');
     if (bestEl) bestEl.textContent = finalWpm;
   }

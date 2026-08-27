@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ClickPulse - Interactive Keyboard Tester Component
+   CatKeyLab - Interactive Keyboard Tester Component
    ========================================================================== */
 
 import { t } from '../i18n.js';
