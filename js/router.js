@@ -888,10 +888,9 @@ function renderMeetNibblesPage(container) {
             <h3 style="color:var(--accent-primary); font-size:1.2rem; margin-bottom:0.5rem;">🎴 Cat Card Memory Match</h3>
             <p style="color:var(--text-secondary); line-height:1.6;">Flip 3D cat cards to test your memory and find all 8 matching pairs in the fewest turns possible.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  `;le="color:var(--accent-primary); font-size:1.2rem; margin-bottom:0.5rem;">🥣 Cat Food Bowl & Fish</h3>
+
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+            <h3 style="color:var(--accent-primary); font-size:1.2rem; margin-bottom:0.5rem;">🥣 Cat Food Bowl & Fish</h3>
             <p style="color:var(--text-secondary); line-height:1.6;">Click the blue cat bowl 🥣 in the bottom-right corner to spawn fresh fish 🐟. Drag fish to Nibbles to feed him yummy treats!</p>
           </div>
         </div>
