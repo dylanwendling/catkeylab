@@ -11,7 +11,7 @@ import { initCatMascot } from './components/catMascot.js';
 import { initYarnBall } from './components/yarnBall.js';
 import { handleRoute } from './router.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+function startApp() {
   // 1. Initialize Core Subsystems
   initTheme();
   initAudio();
@@ -24,26 +24,32 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. Setup Global Mouse Tracking Spotlight Aura & Card Parallax
   initMouseSpotlight();
 
-  // 3. Render Global Layout Components
+  // 4. Render Global Layout Components
   const headerContainer = document.getElementById('app-header');
   const footerContainer = document.getElementById('app-footer');
 
   if (headerContainer) renderHeader(headerContainer);
   if (footerContainer) renderFooter(footerContainer);
 
-  // 4. Register Translation Updater Callback
+  // 5. Register Translation Updater Callback
   window.updatePageTranslations = () => {
     if (headerContainer) renderHeader(headerContainer);
     if (footerContainer) renderFooter(footerContainer);
     handleRoute();
   };
 
-  // 5. Bind Client Route Listeners
+  // 6. Bind Client Route Listeners
   window.addEventListener('hashchange', handleRoute);
   
   // Initial Route Render
   handleRoute();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', startApp);
+} else {
+  startApp();
+}
 
 /**
  * Hardware-accelerated cursor spotlight aura & interactive card tilt physics
