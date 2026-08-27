@@ -23,6 +23,9 @@ export function renderHeader(container) {
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
+          <a href="#nibbles" class="nav-link" data-route="nibbles">
+            <span>Meet Nibbles 🐱</span>
+          </a>
           
           <a href="#typing-test" class="nav-link nav-link-featured" data-route="typing-test">
             <span>⌨️ Typing Challenge</span>
@@ -103,6 +106,9 @@ export function renderHeader(container) {
       <div id="mobile-drawer" class="mobile-drawer">
         <a href="#" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
+        </a>
+        <a href="#nibbles" class="mobile-nav-link" data-route="nibbles">
+          <span>🐱 Meet Nibbles the Cat</span>
         </a>
         <a href="#typing-test" class="mobile-nav-link" data-route="typing-test">
           <span>⌨️ Typing Speed Test</span>

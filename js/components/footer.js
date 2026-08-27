@@ -61,6 +61,7 @@ export function renderFooter(container) {
           <div>
             <h4 class="footer-title">Platform & Privacy</h4>
             <div class="footer-links">
+              <a href="https://catkeylab.onrender.com/#nibbles" class="footer-link" style="color:var(--accent-emerald); font-weight:700;">Meet Nibbles 🐱</a>
               <a href="https://catkeylab.onrender.com/#about" class="footer-link">About CatKeyLab</a>
               <a href="https://catkeylab.onrender.com/#privacy" class="footer-link">Privacy Policy</a>
               <a href="https://catkeylab.onrender.com/#terms" class="footer-link">Terms of Service</a>
