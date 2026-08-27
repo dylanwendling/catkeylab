@@ -317,33 +317,62 @@ export function judgeTypingSpeed(wpm, accuracy) {
 }
 
 /**
- * Mouse Pupil Tracking & Cursor-Tracking Swatting Paws
+let currentMouseX = 0;
+let currentMouseY = 0;
+let yarnPosX = null;
+let yarnPosY = null;
+
+export function trackYarnPosition(x, y) {
+  yarnPosX = x;
+  yarnPosY = y;
+  updateTracking();
+}
+
+/**
+ * Mouse & Yarn Pupil Tracking & Swatting Paws
  */
 function handleMouseMove(e) {
+  currentMouseX = e.clientX;
+  currentMouseY = e.clientY;
+  updateTracking();
+}
+
+function updateTracking() {
   if (!catEl) return;
 
   const rect = catEl.getBoundingClientRect();
   const catCenterX = rect.left + rect.width / 2;
   const catCenterY = rect.top + rect.height / 2;
 
-  const deltaX = e.clientX - catCenterX;
-  const deltaY = e.clientY - catCenterY;
+  // Determine whether to track Yarn Ball or Mouse Cursor
+  let targetX = currentMouseX;
+  let targetY = currentMouseY;
+  let isYarnActive = false;
+
+  if (yarnPosX !== null && yarnPosY !== null) {
+    const distToYarn = Math.hypot(yarnPosX - catCenterX, yarnPosY - catCenterY);
+    if (distToYarn < 280) {
+      targetX = yarnPosX;
+      targetY = yarnPosY;
+      isYarnActive = true;
+    }
+  }
+
+  const deltaX = targetX - catCenterX;
+  const deltaY = targetY - catCenterY;
   const distance = Math.hypot(deltaX, deltaY);
 
-  // Mouse Play Mode & Paw Cursor Tracking (< 220px)
-  if (distance < 220) {
+  // Play Mode & Paw Reach Tracking (< 240px)
+  if (distance < 240) {
     if (!isMouseNear) {
       isMouseNear = true;
       catEl.classList.add('play-mode');
-      if (Math.random() < 0.4) {
-        showSpeechBubble("mrrp! mouse detected!");
-      }
     }
 
-    // Calculate paw reach vector toward cursor
-    const maxPawReach = 18; // max pixels paws reach out
+    // Calculate paw reach vector toward yarn/cursor
+    const maxPawReach = 20; // max pixels paws reach out
     const pawAngle = Math.atan2(deltaY, deltaX);
-    const pawReachDist = Math.min(distance * 0.12, maxPawReach);
+    const pawReachDist = Math.min(distance * 0.14, maxPawReach);
 
     targetLeftPawX = Math.cos(pawAngle) * pawReachDist;
     targetLeftPawY = Math.sin(pawAngle) * pawReachDist - 6;
