@@ -21,14 +21,7 @@ let aimCurrentPos = { x: 0, y: 0 };
 let ballMoving = false;
 let holeCompleted = false;
 
-// Power-Ups Active State
-let powerUps = {
-  aimAssist: false,
-  ballMagnet: false,
-  superShot: false
-};
-
-let lastBallState = null; // For Undo powerup
+let lastBallState = null; // For Undo Shot
 
 // Ball Physics Object
 let ball = {
@@ -37,7 +30,7 @@ let ball = {
   vx: 0,
   vy: 0,
   radius: 9,
-  friction: 0.985,
+  friction: 0.982,
   color: '#ffffff'
 };
 
@@ -57,10 +50,10 @@ const HOLES = [
     ballStart: { x: 100, y: 250 },
     holePos: { x: 700, y: 250 },
     walls: [
-      { x: 380, y: 100, w: 30, h: 300 } // Center wall obstacle
+      { x: 380, y: 100, w: 35, h: 300, label: '🧱 BUMPER WALL' }
     ],
     sandTraps: [
-      { x: 480, y: 150, w: 120, h: 200 }
+      { x: 480, y: 150, w: 130, h: 200, label: '🏖️ SAND TRAP' }
     ],
     waterHazards: [],
     icePatches: [],
@@ -74,20 +67,20 @@ const HOLES = [
     ballStart: { x: 100, y: 150 },
     holePos: { x: 720, y: 400 },
     walls: [
-      { x: 250, y: 0, w: 20, h: 320 },
-      { x: 500, y: 180, w: 20, h: 320 }
+      { x: 240, y: 0, w: 25, h: 310, label: '🧱 BUMPER WALL' },
+      { x: 500, y: 180, w: 25, h: 320, label: '🧱 BUMPER WALL' }
     ],
     sandTraps: [
-      { x: 320, y: 350, w: 150, h: 100 }
+      { x: 310, y: 360, w: 160, h: 110, label: '🏖️ SAND TRAP' }
     ],
     waterHazards: [
-      { x: 300, y: 100, w: 180, h: 180 }
+      { x: 290, y: 100, w: 190, h: 180, label: '🌊 WATER HAZARD (+1)' }
     ],
     icePatches: [],
     portals: [
-      { inX: 200, inY: 420, outX: 620, outY: 100, radius: 22 }
+      { inX: 180, inY: 420, outX: 630, outY: 100, radius: 25, label: '🌀 PORTAL' }
     ],
-    windmill: { x: 600, y: 250, radius: 55, angle: 0, speed: 0.03 }
+    windmill: { x: 610, y: 250, radius: 60, angle: 0, speed: 0.03, label: '🌀 WINDMILL' }
   },
   {
     name: 'Hole 3: Ice & Snow Peaks ❄️',
@@ -96,21 +89,21 @@ const HOLES = [
     ballStart: { x: 90, y: 420 },
     holePos: { x: 710, y: 100 },
     walls: [
-      { x: 200, y: 200, w: 400, h: 25 },
-      { x: 380, y: 0, w: 25, h: 200 }
+      { x: 200, y: 200, w: 400, h: 25, label: '🧱 BUMPER WALL' },
+      { x: 380, y: 0, w: 25, h: 200, label: '🧱 BUMPER WALL' }
     ],
     sandTraps: [],
     waterHazards: [
-      { x: 450, y: 280, w: 180, h: 140 }
+      { x: 450, y: 280, w: 180, h: 140, label: '🌊 WATER HAZARD (+1)' }
     ],
     icePatches: [
-      { x: 250, y: 50, w: 120, h: 140 },
-      { x: 50, y: 250, w: 130, h: 130 }
+      { x: 250, y: 50, w: 120, h: 140, label: '🧊 SLICK ICE' },
+      { x: 50, y: 240, w: 130, h: 130, label: '🧊 SLICK ICE' }
     ],
     portals: [
-      { inX: 120, inY: 100, outX: 680, outY: 380, radius: 22 }
+      { inX: 120, inY: 100, outX: 680, outY: 380, radius: 25, label: '🌀 PORTAL' }
     ],
-    windmill: { x: 390, y: 320, radius: 65, angle: 0, speed: -0.04 }
+    windmill: { x: 390, y: 330, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' }
   }
 ];
 
@@ -123,7 +116,7 @@ export function renderCatMiniGolfGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles Ultimate 2D Mini Golf</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Drag back on the ball to aim & shoot! Master wind, rain, sand traps, portals, and ice hazards with Nibbles 🐱.
+          Click & drag backward on the golf ball to aim & shoot! Avoid sand traps, water hazards, and bumper walls.
         </p>
 
         <!-- Weather & Control Bar -->
@@ -146,15 +139,9 @@ export function renderCatMiniGolfGame(container) {
               <button class="btn btn-secondary btn-sm golf-weather-btn" data-weather="snow" title="Snow Weather">❄️</button>
               <button class="btn btn-secondary btn-sm golf-weather-btn" data-weather="night" title="Night Mode">🌙</button>
             </div>
-          </div>
-        </div>
 
-        <!-- Power-Ups Bar -->
-        <div style="display:flex; justify-content:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
-          <button id="pu-aim-btn" class="btn btn-secondary btn-sm" style="border-color:var(--accent-cyan);">🎯 Aim Assist (Off)</button>
-          <button id="pu-magnet-btn" class="btn btn-secondary btn-sm" style="border-color:var(--accent-amber);">🧲 Ball Magnet (Off)</button>
-          <button id="pu-supershot-btn" class="btn btn-secondary btn-sm" style="border-color:var(--accent-rose);">🚀 Super Shot (Off)</button>
-          <button id="pu-undo-btn" class="btn btn-secondary btn-sm" style="border-color:var(--accent-emerald);">↩️ Undo Shot</button>
+            <button id="pu-undo-btn" class="btn btn-secondary btn-sm" style="border-color:var(--accent-emerald); font-weight:700;">↩️ Undo Shot</button>
+          </div>
         </div>
 
         <!-- Main Golf Canvas Display -->
@@ -294,7 +281,7 @@ function updatePhysics() {
   if (ballMoving) {
     const currentSpeed = Math.hypot(ball.vx, ball.vy);
 
-    // Apply Wind Force (only when ball is actively rolling to allow static friction stop)
+    // Apply Wind Force (only when ball is rolling)
     if (currentSpeed > 0.35) {
       ball.vx += wind.x * 0.04;
       ball.vy += wind.y * 0.04;
@@ -340,7 +327,6 @@ function updatePhysics() {
     ball.vx *= currentFriction;
     ball.vy *= currentFriction;
 
-    // Check Wall Collisions & Bounces
     // Outer Border Bounce
     if (ball.x - ball.radius < 10) { ball.x = 10 + ball.radius; ball.vx *= -0.75; playClickSound(500, 0.02); }
     if (ball.x + ball.radius > 790) { ball.x = 790 - ball.radius; ball.vx *= -0.75; playClickSound(500, 0.02); }
@@ -351,7 +337,6 @@ function updatePhysics() {
     hole.walls.forEach(w => {
       if (ball.x + ball.radius > w.x && ball.x - ball.radius < w.x + w.w &&
           ball.y + ball.radius > w.y && ball.y - ball.radius < w.y + w.h) {
-        // Bounce X or Y
         if (ball.x < w.x || ball.x > w.x + w.w) ball.vx *= -0.8;
         if (ball.y < w.y || ball.y > w.y + w.h) ball.vy *= -0.8;
         playClickSound(600, 0.02);
@@ -368,21 +353,11 @@ function updatePhysics() {
       }
     });
 
-    // Ball Magnet Powerup Pull
-    if (powerUps.ballMagnet) {
-      const distToHole = Math.hypot(hole.holePos.x - ball.x, hole.holePos.y - ball.y);
-      if (distToHole < 80) {
-        ball.vx += (hole.holePos.x - ball.x) * 0.04;
-        ball.vy += (hole.holePos.y - ball.y) * 0.04;
-      }
-    }
-
     // Stop Threshold (Static Ground Friction)
     if (Math.hypot(ball.vx, ball.vy) < 0.25) {
       ball.vx = 0;
       ball.vy = 0;
       ballMoving = false;
-    }
     }
 
     // Check Hole Drop (Victory on current hole)
@@ -416,65 +391,106 @@ function renderCanvas() {
   ctx.fillRect(0, 0, 800, 500);
 
   // Outer Border Frame
-  ctx.strokeStyle = '#1b4332';
+  ctx.strokeStyle = '#34d399';
   ctx.lineWidth = 10;
   ctx.strokeRect(5, 5, 790, 490);
 
-  // 2. Render Sand Traps 🏖️
+  ctx.font = 'bold 12px sans-serif';
+
+  // 2. Render Sand Traps 🏖️ with Bold Borders & Labels
   hole.sandTraps.forEach(sand => {
     ctx.fillStyle = '#fde047';
     ctx.fillRect(sand.x, sand.y, sand.w, sand.h);
-    ctx.fillStyle = 'rgba(0,0,0,0.06)';
-    ctx.fillText('🏖️ Sand Trap', sand.x + 10, sand.y + 20);
+    ctx.strokeStyle = '#ca8a04';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(sand.x, sand.y, sand.w, sand.h);
+
+    ctx.fillStyle = '#854d0e';
+    ctx.fillText(sand.label || '🏖️ SAND TRAP', sand.x + 10, sand.y + 22);
   });
 
-  // 3. Render Water Hazards 🌊
+  // 3. Render Water Hazards 🌊 with Bold Borders & Labels
   hole.waterHazards.forEach(water => {
     ctx.fillStyle = '#3b82f6';
     ctx.fillRect(water.x, water.y, water.w, water.h);
+    ctx.strokeStyle = '#1d4ed8';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(water.x, water.y, water.w, water.h);
+
     ctx.fillStyle = '#ffffff';
-    ctx.font = '12px sans-serif';
-    ctx.fillText('🌊 Water Hazard (+1)', water.x + 10, water.y + 20);
+    ctx.fillText(water.label || '🌊 WATER HAZARD (+1)', water.x + 10, water.y + 22);
   });
 
-  // 4. Render Ice Patches 🧊
+  // 4. Render Ice Patches 🧊 with Bold Borders & Labels
   hole.icePatches.forEach(ice => {
     ctx.fillStyle = '#93c5fd';
     ctx.fillRect(ice.x, ice.y, ice.w, ice.h);
+    ctx.strokeStyle = '#3b82f6';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(ice.x, ice.y, ice.w, ice.h);
+
     ctx.fillStyle = '#1e3a8a';
-    ctx.fillText('🧊 Slick Ice', ice.x + 10, ice.y + 20);
+    ctx.fillText(ice.label || '🧊 SLICK ICE', ice.x + 10, ice.y + 22);
   });
 
-  // 5. Render Obstacle Walls 🧱
-  ctx.fillStyle = '#64748b';
+  // 5. Render Obstacle Walls 🧱 with High-Contrast Outlines & Labels
   hole.walls.forEach(w => {
+    ctx.fillStyle = '#475569';
     ctx.fillRect(w.x, w.y, w.w, w.h);
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(w.x, w.y, w.w, w.h);
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('🧱 WALL', w.x + 4, w.y + (w.h > 40 ? 25 : 16));
   });
 
-  // 6. Render Portals 🌀
+  // 6. Render Portals 🌀 with Outlines & Labels
   hole.portals.forEach(p => {
+    // Portal Entrance
     ctx.beginPath();
     ctx.arc(p.inX, p.inY, p.radius, 0, Math.PI * 2);
     ctx.fillStyle = '#a855f7';
     ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('🌀 IN', p.inX - 14, p.inY - p.radius - 6);
+
+    // Portal Exit
     ctx.beginPath();
     ctx.arc(p.outX, p.outY, p.radius, 0, Math.PI * 2);
     ctx.fillStyle = '#ec4899';
     ctx.fill();
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('🌀 OUT', p.outX - 18, p.outY - p.radius - 6);
   });
 
-  // 7. Render Windmill 🌀
+  // 7. Render Windmill 🌀 with Outlines & Labels
   if (hole.windmill) {
     const wm = hole.windmill;
     ctx.save();
     ctx.translate(wm.x, wm.y);
     ctx.rotate(wm.angle);
     ctx.fillStyle = '#ef4444';
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 2;
+
     for (let i = 0; i < 4; i++) {
       ctx.rotate(Math.PI / 2);
-      ctx.fillRect(-6, 0, 12, wm.radius);
+      ctx.fillRect(-7, 0, 14, wm.radius);
+      ctx.strokeRect(-7, 0, 14, wm.radius);
     }
     ctx.restore();
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('🌀 WINDMILL', wm.x - 35, wm.y - wm.radius - 10);
   }
 
   // 8. Render Hole Cup & Flag ⛳
@@ -482,8 +498,8 @@ function renderCanvas() {
   ctx.arc(hole.holePos.x, hole.holePos.y, 14, 0, Math.PI * 2);
   ctx.fillStyle = '#0f172a';
   ctx.fill();
-  ctx.strokeStyle = '#ffffff';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#34d399';
+  ctx.lineWidth = 3;
   ctx.stroke();
 
   // Flag pole & red flag
@@ -491,18 +507,21 @@ function renderCanvas() {
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(hole.holePos.x, hole.holePos.y);
-  ctx.lineTo(hole.holePos.x, hole.holePos.y - 35);
+  ctx.lineTo(hole.holePos.x, hole.holePos.y - 38);
   ctx.stroke();
   ctx.fillStyle = '#ef4444';
   ctx.beginPath();
-  ctx.moveTo(hole.holePos.x, hole.holePos.y - 35);
-  ctx.lineTo(hole.holePos.x + 18, hole.holePos.y - 27);
-  ctx.lineTo(hole.holePos.x, hole.holePos.y - 20);
+  ctx.moveTo(hole.holePos.x, hole.holePos.y - 38);
+  ctx.lineTo(hole.holePos.x + 20, hole.holePos.y - 30);
+  ctx.lineTo(hole.holePos.x, hole.holePos.y - 22);
   ctx.fill();
+
+  ctx.fillStyle = '#34d399';
+  ctx.fillText('⛳ CUP', hole.holePos.x - 18, hole.holePos.y + 28);
 
   // 9. Render Weather Particles (Rain / Snow)
   if (weatherMode === 'rain') {
-    ctx.strokeStyle = 'rgba(147, 197, 253, 0.6)';
+    ctx.strokeStyle = 'rgba(147, 197, 253, 0.7)';
     ctx.lineWidth = 1.5;
     weatherParticles.forEach(p => {
       p.y += p.speed;
@@ -513,7 +532,7 @@ function renderCanvas() {
       ctx.stroke();
     });
   } else if (weatherMode === 'snow') {
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
     weatherParticles.forEach(p => {
       p.y += p.speed * 0.5;
       p.x += Math.sin(p.y * 0.05) * 0.5;
@@ -524,29 +543,17 @@ function renderCanvas() {
     });
   }
 
-  // 10. Aim Trajectory Line & Perfect Aim Assist Powerup
+  // 10. Aim Vector Line
   if (isAiming) {
     const dx = aimStartPos.x - aimCurrentPos.x;
     const dy = aimStartPos.y - aimCurrentPos.y;
 
-    // Shot Arrow Vector
-    ctx.strokeStyle = powerUps.superShot ? '#ef4444' : '#f59e0b';
+    ctx.strokeStyle = '#f59e0b';
     ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(ball.x, ball.y);
     ctx.lineTo(ball.x + dx * 0.8, ball.y + dy * 0.8);
     ctx.stroke();
-
-    // Aim Assist Extended Projection
-    if (powerUps.aimAssist) {
-      ctx.strokeStyle = 'rgba(6, 182, 212, 0.6)';
-      ctx.setLineDash([5, 5]);
-      ctx.beginPath();
-      ctx.moveTo(ball.x, ball.y);
-      ctx.lineTo(ball.x + dx * 2.5, ball.y + dy * 2.5);
-      ctx.stroke();
-      ctx.setLineDash([]);
-    }
   }
 
   // 11. Render Golf Ball ⚪
@@ -562,17 +569,13 @@ function renderCanvas() {
 function shootBall(powerX, powerY) {
   if (ballMoving || holeCompleted) return;
 
-  // Save State for Undo Powerup
+  // Save State for Undo Shot
   lastBallState = { x: ball.x, y: ball.y, strokes: strokeCount, total: totalStrokes };
 
-  let speedMult = powerUps.superShot ? 0.22 : 0.12;
+  const speedMult = 0.12;
 
   ball.vx = powerX * speedMult;
   ball.vy = powerY * speedMult;
-
-  powerUps.superShot = false; // Consume single-use super shot
-  const superBtn = document.getElementById('pu-supershot-btn');
-  if (superBtn) superBtn.textContent = '🚀 Super Shot (Off)';
 
   ballMoving = true;
   strokeCount++;
@@ -616,10 +619,6 @@ function bindEvents() {
   const resetBtn = document.getElementById('golf-reset-btn');
   const modalRetry = document.getElementById('golf-modal-retry');
   const weatherBtns = document.querySelectorAll('.golf-weather-btn');
-
-  const aimBtn = document.getElementById('pu-aim-btn');
-  const magnetBtn = document.getElementById('pu-magnet-btn');
-  const superBtn = document.getElementById('pu-supershot-btn');
   const undoBtn = document.getElementById('pu-undo-btn');
 
   if (resetBtn) resetBtn.addEventListener('click', () => loadHole(0));
@@ -639,28 +638,6 @@ function bindEvents() {
       initWeatherParticles();
     });
   });
-
-  // Power-Up Toggles
-  if (aimBtn) {
-    aimBtn.addEventListener('click', () => {
-      powerUps.aimAssist = !powerUps.aimAssist;
-      aimBtn.textContent = `🎯 Aim Assist (${powerUps.aimAssist ? 'ON' : 'Off'})`;
-    });
-  }
-
-  if (magnetBtn) {
-    magnetBtn.addEventListener('click', () => {
-      powerUps.ballMagnet = !powerUps.ballMagnet;
-      magnetBtn.textContent = `🧲 Ball Magnet (${powerUps.ballMagnet ? 'ON' : 'Off'})`;
-    });
-  }
-
-  if (superBtn) {
-    superBtn.addEventListener('click', () => {
-      powerUps.superShot = !powerUps.superShot;
-      superBtn.textContent = `🚀 Super Shot (${powerUps.superShot ? 'ON' : 'Off'})`;
-    });
-  }
 
   if (undoBtn) {
     undoBtn.addEventListener('click', () => {
