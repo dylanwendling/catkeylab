@@ -63,11 +63,13 @@
   position: relative;
   cursor: pointer;
   pointer-events: auto;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  will-change: transform;
+  transform: translateZ(0);
+  transition: transform 0.15s ease-out;
 }
 
 .cat-character:hover {
-  transform: scale(1.08);
+  transform: translateZ(0) scale(1.04);
 }
 
 /* Cat Head Surface - Vibrant Ginger Tabby Orange */
@@ -80,6 +82,8 @@
   position: relative;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.3);
   overflow: visible;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 /* Cat Ears with Pink Inner Pads (Symmetrically Centered) */
