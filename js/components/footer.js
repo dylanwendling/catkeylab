@@ -31,17 +31,16 @@ export function renderFooter(container) {
 
           <!-- Tools Column -->
           <div>
-            <h4 class="footer-title" data-i18n="navTools">${t('navTools')}</h4>
+            <h4 class="footer-title">Human Benchmarks</h4>
             <div class="footer-links">
-              <a href="#typing-test" class="footer-link" data-i18n="navTypingTest">${t('navTypingTest')}</a>
-              <a href="#auto-clicker" class="footer-link" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
-              <a href="#cps-test" class="footer-link" data-i18n="navCPSTest">${t('navCPSTest')}</a>
-              <a href="#click-speed-test" class="footer-link" data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</a>
-              <a href="#click-counter" class="footer-link" data-i18n="navClickCounter">${t('navClickCounter')}</a>
-              <a href="#mouse-test" class="footer-link" data-i18n="navMouseTest">${t('navMouseTest')}</a>
-              <a href="#keyboard-test" class="footer-link" data-i18n="navKeyboardTest">${t('navKeyboardTest')}</a>
-              <a href="#reaction-time-test" class="footer-link" data-i18n="navReactionTimeTest">${t('navReactionTimeTest')}</a>
-              <a href="#double-click-test" class="footer-link" data-i18n="navDoubleClickTest">${t('navDoubleClickTest')}</a>
+              <a href="#reaction-time-test" class="footer-link">Reaction Time</a>
+              <a href="#sequence-memory-test" class="footer-link">Sequence Memory</a>
+              <a href="#aim-trainer-test" class="footer-link">Aim Trainer</a>
+              <a href="#number-memory-test" class="footer-link">Number Memory</a>
+              <a href="#verbal-memory-test" class="footer-link">Verbal Memory</a>
+              <a href="#chimp-test" class="footer-link">Chimp Test</a>
+              <a href="#visual-memory-test" class="footer-link">Visual Memory</a>
+              <a href="#typing-test" class="footer-link">Typing Speed</a>
             </div>
           </div>
 

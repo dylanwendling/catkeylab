@@ -17,6 +17,13 @@ import { renderReactionTimeTest, cleanupReactionTimeTest } from './tools/reactio
 import { renderDoubleClickTest, cleanupDoubleClickTest } from './tools/doubleClickTest.js';
 import { renderTypingTest, cleanupTypingTest } from './tools/typingTest.js';
 
+import { renderSequenceMemoryTest, cleanupSequenceMemoryTest } from './tools/sequenceMemoryTest.js';
+import { renderAimTrainerTest, cleanupAimTrainerTest } from './tools/aimTrainerTest.js';
+import { renderNumberMemoryTest, cleanupNumberMemoryTest } from './tools/numberMemoryTest.js';
+import { renderVerbalMemoryTest, cleanupVerbalMemoryTest } from './tools/verbalMemoryTest.js';
+import { renderChimpTest, cleanupChimpTest } from './tools/chimpTest.js';
+import { renderVisualMemoryTest, cleanupVisualMemoryTest } from './tools/visualMemoryTest.js';
+
 let currentCleanup = null;
 
 export function triggerRandomTool() {
@@ -33,6 +40,83 @@ export function triggerRandomTool() {
 }
 
 export const TOOL_METADATA = {
+  'reaction-time-test': {
+    titleKey: 'reactionTestTitle',
+    desc: 'Test your visual reaction time in milliseconds. Wait for the signal to turn green and click as fast as you can.',
+    icon: '⏱️',
+    category: 'speed',
+    renderFn: renderReactionTimeTest,
+    cleanupFn: cleanupReactionTimeTest,
+    faqs: [
+      { q: 'What is the average human reaction time?', a: 'The average visual reaction time for humans is between 200ms and 250ms.' }
+    ]
+  },
+  'sequence-memory-test': {
+    titleKey: 'sequenceTestTitle',
+    desc: 'Remember an increasingly long pattern of button presses with Simon Says interactive tones.',
+    icon: '🧠',
+    category: 'memory',
+    renderFn: renderSequenceMemoryTest,
+    cleanupFn: cleanupSequenceMemoryTest,
+    faqs: [
+      { q: 'How does the Sequence Memory test work?', a: 'Watch the sequence of glowing pads, then repeat it in exact order. Each round adds one extra pad to the sequence.' }
+    ]
+  },
+  'aim-trainer-test': {
+    titleKey: 'aimTestTitle',
+    desc: 'How quickly can you hit 30 targets? Test your mouse precision and reflex speed.',
+    icon: '🎯',
+    category: 'speed',
+    renderFn: renderAimTrainerTest,
+    cleanupFn: cleanupAimTrainerTest,
+    faqs: [
+      { q: 'What is a good score on Aim Trainer?', a: 'Under 300 milliseconds per target is considered fast aiming speed for gaming.' }
+    ]
+  },
+  'number-memory-test': {
+    titleKey: 'numberTestTitle',
+    desc: 'Remember the longest number sequence you can. The number length increases every level.',
+    icon: '🔢',
+    category: 'memory',
+    renderFn: renderNumberMemoryTest,
+    cleanupFn: cleanupNumberMemoryTest,
+    faqs: [
+      { q: 'What is average number memory capacity?', a: 'Most humans can hold around 7 digits in working short-term memory.' }
+    ]
+  },
+  'verbal-memory-test': {
+    titleKey: 'verbalTestTitle',
+    desc: 'Keep as many words in short term memory as possible. Identify whether each word is SEEN or NEW.',
+    icon: '💬',
+    category: 'memory',
+    renderFn: renderVerbalMemoryTest,
+    cleanupFn: cleanupVerbalMemoryTest,
+    faqs: [
+      { q: 'How is Verbal Memory scored?', a: 'You earn 1 point for every correct SEEN or NEW guess with 3 lives total.' }
+    ]
+  },
+  'chimp-test': {
+    titleKey: 'chimpTestTitle',
+    desc: 'Are you smarter than a chimpanzee? Memorize number locations before they turn into blank tiles.',
+    icon: '🐒',
+    category: 'memory',
+    renderFn: renderChimpTest,
+    cleanupFn: cleanupChimpTest,
+    faqs: [
+      { q: 'Why is it called the Chimp Test?', a: 'Based on Kyoto University research where chimpanzees outperformed humans in rapid working memory tests.' }
+    ]
+  },
+  'visual-memory-test': {
+    titleKey: 'visualTestTitle',
+    desc: 'Remember an increasingly large board of squares as the grid expands.',
+    icon: '🔳',
+    category: 'memory',
+    renderFn: renderVisualMemoryTest,
+    cleanupFn: cleanupVisualMemoryTest,
+    faqs: [
+      { q: 'How does Visual Memory scale?', a: 'The board expands from 3x3 up to 7x7 grid with progressively more highlighted squares to remember.' }
+    ]
+  },
   'typing-test': {
     titleKey: 'typingTestTitle',
     desc: 'Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.',
@@ -114,17 +198,6 @@ export const TOOL_METADATA = {
     cleanupFn: cleanupClickCounter,
     faqs: [
       { q: 'Can I use keyboard keys to increment the counter?', a: 'Yes! You can press the Spacebar or Enter key to count clicks effortlessly.' }
-    ]
-  },
-  'reaction-time-test': {
-    titleKey: 'reactionTestTitle',
-    desc: 'Test your visual reaction time in milliseconds. Wait for the signal to turn green and click as fast as you can.',
-    icon: '⏱️',
-    category: 'speed',
-    renderFn: renderReactionTimeTest,
-    cleanupFn: cleanupReactionTimeTest,
-    faqs: [
-      { q: 'What is the average human reaction time?', a: 'The average visual reaction time for humans is between 200ms and 250ms.' }
     ]
   },
   'double-click-test': {
@@ -372,6 +445,7 @@ function renderToolsDirectoryPage(container) {
         
         <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
           <button class="btn btn-sm btn-primary tool-filter-btn active" data-filter="all" data-i18n="filterAll">${t('filterAll')}</button>
+          <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="memory" data-i18n="filterMemory">${t('filterMemory') || '🧠 Cognitive Memory'}</button>
           <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="clicking" data-i18n="filterClicking">${t('filterClicking')}</button>
           <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="speed" data-i18n="filterSpeed">${t('filterSpeed')}</button>
           <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="hardware" data-i18n="filterHardware">${t('filterHardware')}</button>

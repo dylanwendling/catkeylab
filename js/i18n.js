@@ -30,6 +30,12 @@ export const translations = {
     navMouseTest: 'Mouse Test',
     navKeyboardTest: 'Keyboard Test',
     navReactionTimeTest: 'Reaction Time Test',
+    navSequenceMemoryTest: 'Sequence Memory',
+    navAimTrainerTest: 'Aim Trainer',
+    navNumberMemoryTest: 'Number Memory',
+    navVerbalMemoryTest: 'Verbal Memory',
+    navChimpTest: 'Chimp Test',
+    navVisualMemoryTest: 'Visual Memory',
     navDoubleClickTest: 'Double Click Test',
     navTypingTest: 'Typing Test',
     navTools: 'Tools',
@@ -37,18 +43,33 @@ export const translations = {
     
     // Hero
     heroBadge: '⚡ 100% Free & In-Browser Tools',
-    heroTitle: 'Free Online Browser Clicking & Testing Tools',
-    heroSubtitle: 'Use powerful browser-based clicking, mouse, keyboard, and speed testing utilities directly in your browser. No downloads, 100% private & instant.',
+    heroTitle: 'Free Online Browser Benchmarks & Hardware Testing Tools',
+    heroSubtitle: 'Use powerful browser-based human benchmark tests, mouse, keyboard, and speed testing utilities directly in your browser. No downloads, 100% private & instant.',
     btnTryAutoClicker: 'Try Auto Clicker',
     btnExploreTools: 'Explore All Tools',
 
     // Tools Header
-    toolsDirectoryTitle: 'All Browser Clicking & Hardware Testing Tools',
-    toolsDirectorySubtitle: 'Choose from our complete suite of browser-native clicking utilities, mouse diagnostics, and speed testers.',
+    toolsDirectoryTitle: 'All Human Benchmarks & Hardware Testing Tools',
+    toolsDirectorySubtitle: 'Choose from our complete suite of cognitive benchmark games, clicking utilities, mouse diagnostics, and speed testers.',
     filterAll: 'All Tools',
+    filterMemory: '🧠 Cognitive Memory',
     filterClicking: 'Clicking Tools',
     filterSpeed: 'Speed & CPS Tests',
     filterHardware: 'Hardware Testers',
+
+    // Benchmark Titles
+    sequenceTestTitle: 'Sequence Memory Test',
+    sequenceTestSubtitle: 'Remember an increasingly long pattern of button presses with audio tones.',
+    aimTestTitle: 'Aim Trainer Test',
+    aimTestSubtitle: 'How quickly can you hit 30 targets? Test your mouse reflex & accuracy.',
+    numberTestTitle: 'Number Memory Test',
+    numberTestSubtitle: 'Remember the longest number sequence you can.',
+    verbalTestTitle: 'Verbal Memory Test',
+    verbalTestSubtitle: 'Keep as many words in short term memory as possible.',
+    chimpTestTitle: 'Chimp Test',
+    chimpTestSubtitle: 'Are you smarter than a chimpanzee? Memorize numbers before they hide.',
+    visualTestTitle: 'Visual Memory Test',
+    visualTestSubtitle: 'Remember an increasingly large board of squares.',
 
     // Shared Tool UI
     btnStart: 'Start',

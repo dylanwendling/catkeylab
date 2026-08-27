@@ -24,10 +24,22 @@ export function renderHeader(container) {
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
           
-          <a href="#typing-test" class="nav-link nav-link-featured" data-route="typing-test">
-            <span>⌨️ Typing Challenge</span>
-            <span class="nav-badge-hot">HOT</span>
-          </a>
+          <!-- Benchmarks Dropdown -->
+          <div class="dropdown" id="benchmarks-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🧠 Benchmarks ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="#reaction-time-test" class="dropdown-item">⏱️ Reaction Time Test</a>
+              <a href="#sequence-memory-test" class="dropdown-item">🧠 Sequence Memory Test</a>
+              <a href="#aim-trainer-test" class="dropdown-item">🎯 Aim Trainer</a>
+              <a href="#number-memory-test" class="dropdown-item">🔢 Number Memory Test</a>
+              <a href="#verbal-memory-test" class="dropdown-item">💬 Verbal Memory Test</a>
+              <a href="#chimp-test" class="dropdown-item">🐒 Chimp Test</a>
+              <a href="#visual-memory-test" class="dropdown-item">🔳 Visual Memory Test</a>
+              <a href="#typing-test" class="dropdown-item">⌨️ WPM Typing Test</a>
+            </div>
+          </div>
 
           <!-- Hardware Dropdown -->
           <div class="dropdown" id="hardware-dropdown">
@@ -43,14 +55,13 @@ export function renderHeader(container) {
           <!-- Speed & Tools Dropdown -->
           <div class="dropdown" id="tools-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>⚡ All Tools ▾</span>
+              <span>⚡ All Utilities ▾</span>
             </button>
             <div class="dropdown-menu">
               <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
               <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
-              <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">⏱️ Click Speed Test</a>
+              <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">🚀 Click Speed Test</a>
               <a href="#click-counter" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
-              <a href="#reaction-time-test" class="dropdown-item" data-i18n="navReactionTimeTest">🎯 Reaction Time Test</a>
               <a href="#double-click-test" class="dropdown-item" data-i18n="navDoubleClickTest">⚡ Double Click Test</a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
               <a href="#tools" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
