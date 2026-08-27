@@ -219,6 +219,7 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
     score: scoreVal,
     display: scoreDisplay,
     date: "Just now",
+    timestamp: Date.now(),
     isUser: true
   };
 

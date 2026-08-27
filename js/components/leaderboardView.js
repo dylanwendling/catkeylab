@@ -190,7 +190,7 @@ function renderTable(testId) {
                 ${item.display}
               </td>
               <td style="text-align:right; color:var(--text-muted); font-size:0.85rem;">
-                ${item.date || 'Recent'}
+                ${formatRelativeTime(item.timestamp, item.date)}
               </td>
             </tr>
           `;
@@ -198,4 +198,21 @@ function renderTable(testId) {
       </tbody>
     </table>
   `;
+}
+
+function formatRelativeTime(timestamp, fallbackDate) {
+  if (!timestamp) return fallbackDate || 'Just now';
+
+  const elapsedSec = Math.floor((Date.now() - timestamp) / 1000);
+
+  if (elapsedSec < 60) return 'Just now';
+  const mins = Math.floor(elapsedSec / 60);
+  if (mins < 60) return `${mins}m ago`;
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d ago`;
+
+  const dateObj = new Date(timestamp);
+  return dateObj.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }

@@ -341,27 +341,39 @@ function renderHomePage(container) {
         </div>
 
         <div class="grid grid-cols-4">
-          ${Object.keys(TOOL_METADATA).map(key => {
-            const tool = TOOL_METADATA[key];
-            const isFeatured = key === 'typing-test' || key === 'mouse-test' || key === 'keyboard-test';
-            return `
-              <div class="tool-card ${isFeatured ? 'featured-tool-card' : ''}" style="${isFeatured ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
-                <div>
-                  <div class="tool-card-header">
-                    <div class="tool-card-icon" style="font-size:2rem;">${tool.icon}</div>
-                    <span class="tool-card-badge" style="${isFeatured ? 'background:rgba(6,182,212,0.2); color:var(--accent-cyan);' : ''}">${isFeatured ? '🔥 TOP SEARCHED' : tool.category}</span>
+          ${(() => {
+            const featuredOrder = ['typing-test', 'mouse-test', 'keyboard-test', 'cps-test'];
+            const sortedToolKeys = Object.keys(TOOL_METADATA).sort((a, b) => {
+              const indexA = featuredOrder.indexOf(a);
+              const indexB = featuredOrder.indexOf(b);
+              if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+              if (indexA !== -1) return -1;
+              if (indexB !== -1) return 1;
+              return 0;
+            });
+
+            return sortedToolKeys.map(key => {
+              const tool = TOOL_METADATA[key];
+              const isFeatured = featuredOrder.includes(key);
+              return `
+                <div class="tool-card ${isFeatured ? 'featured-tool-card' : ''}" style="${isFeatured ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
+                  <div>
+                    <div class="tool-card-header">
+                      <div class="tool-card-icon" style="font-size:2rem;">${tool.icon}</div>
+                      <span class="tool-card-badge" style="${isFeatured ? 'background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;' : ''}">${isFeatured ? '🔥 TOP SEARCHED' : tool.category}</span>
+                    </div>
+                    <h3 class="tool-card-title">${t(tool.titleKey)}</h3>
+                    <p class="tool-card-desc">${tool.desc}</p>
                   </div>
-                  <h3 class="tool-card-title">${t(tool.titleKey)}</h3>
-                  <p class="tool-card-desc">${tool.desc}</p>
+                  <div class="tool-card-footer">
+                    <a href="#${key}" class="btn ${isFeatured ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%;">
+                      <span>${t('btnUseTool')} ${tool.icon}</span> →
+                    </a>
+                  </div>
                 </div>
-                <div class="tool-card-footer">
-                  <a href="#${key}" class="btn ${isFeatured ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%;">
-                    <span>${t('btnUseTool')} ${tool.icon}</span> →
-                  </a>
-                </div>
-              </div>
-            `;
-          }).join('')}
+              `;
+            }).join('');
+          })()}
         </div>
       </div>
     </section>
