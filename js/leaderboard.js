@@ -151,7 +151,7 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
   const userRank = rankIdx !== -1 ? rankIdx + 1 : topList.length + 1;
 
   // Calculate Percentile Rating
-  const percentile = getPercentile(testId, scoreVal);
+  const percentile = getPercentile(testId, scoreVal, userRank);
 
   return {
     rank: userRank,
@@ -162,65 +162,77 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 }
 
 // Calculate Percentile Rating
-export function getPercentile(testId, score) {
+export function getPercentile(testId, score, rank = null) {
+  // If player achieved Rank #1, #2, or #3 on the leaderboard, prioritize their rank!
+  if (rank === 1) return "Top 1% (Leaderboard #1 Leader! 🥇)";
+  if (rank === 2) return "Top 2% (Leaderboard #2 🥈)";
+  if (rank === 3) return "Top 3% (Leaderboard #3 🥉)";
+
   switch (testId) {
     case 'reaction-time-test':
-      if (score < 160) return "Top 1% (Superhuman Reflexes)";
-      if (score < 190) return "Top 5% (Pro Gamer Level)";
-      if (score < 220) return "Top 15% (Above Average)";
-      if (score < 260) return "Top 40% (Average)";
-      return "Bottom 30%";
+      if (score < 180) return "Top 1% (Superhuman Reflexes)";
+      if (score < 210) return "Top 5% (Pro Gamer Level)";
+      if (score < 250) return "Top 15% (Above Average)";
+      if (score < 300) return "Top 40% (Average)";
+      return "Top 60% (Casual)";
 
     case 'typing-test':
-      if (score >= 120) return "Top 1% (Godlike Typist)";
-      if (score >= 90) return "Top 5% (Pro Speed)";
-      if (score >= 70) return "Top 15% (Fast Typist)";
-      if (score >= 50) return "Top 40% (Average Typist)";
-      return "Bottom 30%";
+      if (score >= 110) return "Top 1% (Godlike Typist)";
+      if (score >= 85) return "Top 5% (Speed Demon)";
+      if (score >= 65) return "Top 15% (Fast Typist)";
+      if (score >= 45) return "Top 40% (Average Typist)";
+      return "Top 60% (Novice)";
 
     case 'sequence-memory-test':
-      if (score >= 20) return "Top 1% (Grandmaster)";
-      if (score >= 15) return "Top 5% (Exceptional)";
-      if (score >= 11) return "Top 15% (Above Average)";
-      if (score >= 7) return "Top 40% (Average)";
-      return "Bottom 30%";
+      if (score >= 15) return "Top 1% (Grandmaster)";
+      if (score >= 11) return "Top 5% (Exceptional)";
+      if (score >= 8) return "Top 15% (Above Average)";
+      if (score >= 5) return "Top 40% (Average)";
+      return "Top 60% (Casual)";
 
     case 'aim-trainer-test':
-      if (score < 220) return "Top 1% (Sharpshooter)";
-      if (score < 260) return "Top 5% (Pro Aim)";
-      if (score < 300) return "Top 15% (Above Average)";
-      if (score < 350) return "Top 40% (Average)";
-      return "Bottom 30%";
+      if (score < 240) return "Top 1% (Sharpshooter)";
+      if (score < 280) return "Top 5% (Pro Aim)";
+      if (score < 330) return "Top 15% (Above Average)";
+      if (score < 400) return "Top 40% (Average)";
+      return "Top 60% (Casual)";
 
     case 'number-memory-test':
-      if (score >= 16) return "Top 1% (Photographic Memory)";
-      if (score >= 12) return "Top 5% (Pro Memory)";
-      if (score >= 9) return "Top 15% (Above Average)";
-      if (score >= 7) return "Top 40% (Average)";
-      return "Bottom 30%";
+      if (score >= 14) return "Top 1% (Photographic Memory)";
+      if (score >= 10) return "Top 5% (Pro Memory)";
+      if (score >= 7) return "Top 15% (Above Average)";
+      if (score >= 5) return "Top 40% (Average)";
+      return "Top 60% (Casual)";
 
     case 'verbal-memory-test':
-      if (score >= 110) return "Top 1% (Master Recall)";
-      if (score >= 80) return "Top 5% (Pro Recall)";
-      if (score >= 55) return "Top 15% (Above Average)";
-      if (score >= 35) return "Top 40% (Average)";
-      return "Bottom 30%";
+      if (score >= 80) return "Top 1% (Master Recall)";
+      if (score >= 55) return "Top 5% (Pro Recall)";
+      if (score >= 35) return "Top 15% (Above Average)";
+      if (score >= 20) return "Top 40% (Average)";
+      return "Top 60% (Casual)";
 
     case 'chimp-test':
-      if (score >= 15) return "Top 1% (Chimp Master)";
-      if (score >= 12) return "Top 5% (Superior)";
-      if (score >= 9) return "Top 15% (Above Average)";
-      if (score >= 7) return "Top 40% (Average)";
-      return "Bottom 30%";
+      if (score >= 13) return "Top 1% (Chimp Master)";
+      if (score >= 10) return "Top 5% (Superior)";
+      if (score >= 7) return "Top 15% (Above Average)";
+      if (score >= 5) return "Top 40% (Average)";
+      return "Top 60% (Casual)";
 
     case 'visual-memory-test':
-      if (score >= 16) return "Top 1% (Spatial Master)";
-      if (score >= 13) return "Top 5% (Pro Spatial)";
-      if (score >= 10) return "Top 15% (Above Average)";
-      if (score >= 7) return "Top 40% (Average)";
-      return "Bottom 30%";
+      if (score >= 14) return "Top 1% (Spatial Master)";
+      if (score >= 11) return "Top 5% (Pro Spatial)";
+      if (score >= 8) return "Top 15% (Above Average)";
+      if (score >= 5) return "Top 40% (Average)";
+      return "Top 60% (Casual)";
+
+    case 'cps-test':
+      if (score >= 12) return "Top 1% (Cybergod Clicker)";
+      if (score >= 10) return "Top 5% (Cheetah Clicker)";
+      if (score >= 8) return "Top 15% (Rabbit Clicker)";
+      if (score >= 6) return "Top 40% (Greyhound Clicker)";
+      return "Top 60% (Casual)";
 
     default:
-      return "Top 20%";
+      return "Top 15%";
   }
 }
