@@ -398,7 +398,7 @@ function renderHomePage(container) {
         <div class="grid grid-cols-4">
           ${(() => {
             const playCounts = getToolPlayCounts();
-            const defaultPopular = ['typing-test', 'mouse-test', 'keyboard-test', 'cps-test'];
+            const defaultPopular = ['typing-test', 'mouse-test', 'keyboard-test', 'cat-mini-golf-game'];
 
             const sortedToolKeys = Object.keys(TOOL_METADATA).sort((a, b) => {
               const countA = (playCounts[a] || 0) + (defaultPopular.includes(a) ? 100 : 0);
