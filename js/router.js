@@ -613,10 +613,10 @@ function renderLegalPage(container, type) {
           <h3 style="color:var(--accent-cyan); font-size:1.2rem; margin-bottom:1rem;">Platform & Information</h3>
           <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
             <li><a href="#nibbles" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles the Cat</a></li>
-            <li><a href="https://catkeylab.onrender.com/#about" style="color:var(--text-primary); font-weight:600;">About CatKeyLab</a></li>
-            <li><a href="https://catkeylab.onrender.com/#privacy" style="color:var(--text-primary); font-weight:600;">Privacy Policy</a></li>
-            <li><a href="https://catkeylab.onrender.com/#terms" style="color:var(--text-primary); font-weight:600;">Terms of Service</a></li>
-            <li><a href="https://catkeylab.onrender.com/#sitemap" style="color:var(--text-primary); font-weight:600;">Sitemap & Index</a></li>
+            <li><a href="https://catkeylab.com/#about" style="color:var(--text-primary); font-weight:600;">About CatKeyLab</a></li>
+            <li><a href="https://catkeylab.com/#privacy" style="color:var(--text-primary); font-weight:600;">Privacy Policy</a></li>
+            <li><a href="https://catkeylab.com/#terms" style="color:var(--text-primary); font-weight:600;">Terms of Service</a></li>
+            <li><a href="https://catkeylab.com/#sitemap" style="color:var(--text-primary); font-weight:600;">Sitemap & Index</a></li>
           </ul>
         </div>
       </div>
