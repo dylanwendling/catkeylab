@@ -5,10 +5,12 @@
 import { playClickSound, getAudioContext } from '../audio.js';
 
 const CAT_DIALOGUES = [
+  "hi, i'm Nibbles! 🐾",
   "meow.",
   "purrrrr...",
   "i saw your cursor!",
   "click that one, human.",
+  "Nibbles loves fish! 🐟",
   "mouse looks delicious today.",
   "testing keys, are we?",
   "mrrp?",
@@ -73,8 +75,8 @@ export function initCatMascot() {
 
   container.innerHTML = `
     <div class="mascot-container">
-      <div id="mascot-speech" class="mascot-speech-bubble">meow.</div>
-      <div id="cat-character" class="cat-character" aria-label="ClickPulse Cat Mascot">
+      <div id="mascot-speech" class="mascot-speech-bubble">hi, i'm Nibbles! 🐾</div>
+      <div id="cat-character" class="cat-character" aria-label="Nibbles the Cat Mascot">
         <div class="cat-ear cat-ear-left"></div>
         <div class="cat-ear cat-ear-right"></div>
         <div class="cat-head">

@@ -203,7 +203,7 @@ function renderHomePage(container) {
           <span>Test Mouse Hardware, Keyboard Keys & Typing Speed</span> 🐾
         </h1>
         <p class="hero-subtitle">
-          Tested & approved by the CatnipLab mascot. Free, private, browser-based tools to verify mouse buttons (MB1-MB5, right click, scroll), keyboard switches, and WPM typing speed.
+          Tested & approved by Nibbles the Cat mascot. Free, private, browser-based tools to verify mouse buttons (MB1-MB5, right click, scroll), keyboard switches, and WPM typing speed.
         </p>
         <div class="hero-ctas">
           <a href="#typing-test" class="btn btn-primary btn-lg">
@@ -227,9 +227,9 @@ function renderHomePage(container) {
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
             <div style="font-weight:700; font-size:1.1rem; color:var(--accent-emerald); display:flex; align-items:center; gap:0.5rem;">
               <span class="status-dot" style="background:var(--accent-emerald);"></span>
-              <span>🐱 Mascot Hardware Inspector</span>
+              <span>⚡ Instant Mouse & Keyboard Quick Inspector</span>
             </div>
-            <span style="font-size:0.8rem; color:var(--text-muted);">Click mouse or press any key to test live</span>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Click anywhere or press any key right now to inspect live</span>
           </div>
 
           <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:1rem; text-align:center;">
