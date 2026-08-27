@@ -278,6 +278,38 @@
 .cat-paw-left { left: 8px; }
 .cat-paw-right { right: 8px; }
 
+/* Nibbles Collar & Bell */
+.cat-collar {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 58px;
+  height: 8px;
+  background: linear-gradient(90deg, #e11d48, #f43f5e);
+  border: 1.5px solid #881337;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 6;
+}
+
+.cat-bell {
+  font-size: 0.7rem;
+  margin-top: 5px;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.5));
+  animation: jingle-bell 2.5s ease-in-out infinite;
+}
+
+@keyframes jingle-bell {
+  0%, 80%, 100% { transform: rotate(0deg); }
+  85% { transform: rotate(-12deg); }
+  90% { transform: rotate(12deg); }
+  95% { transform: rotate(-6deg); }
+}
+
 /* Floating Heart / Paw Print Particles */
 .floating-particle {
   position: absolute;

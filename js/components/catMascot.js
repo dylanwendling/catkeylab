@@ -76,7 +76,7 @@ export function initCatMascot() {
   container.innerHTML = `
     <div class="mascot-container">
       <div id="mascot-speech" class="mascot-speech-bubble">hi, i'm Nibbles! 🐾</div>
-      <div id="cat-character" class="cat-character" aria-label="Nibbles the Cat Mascot">
+      <div id="cat-character" class="cat-character" aria-label="Nibbles the Cat">
         <div class="cat-ear cat-ear-left"></div>
         <div class="cat-ear cat-ear-right"></div>
         <div class="cat-head">
@@ -102,6 +102,9 @@ export function initCatMascot() {
             <div class="whisker-line whisker-top"></div>
             <div class="whisker-line whisker-mid"></div>
             <div class="whisker-line whisker-bot"></div>
+          </div>
+          <div class="cat-collar">
+            <div class="cat-bell">🔔</div>
           </div>
         </div>
         <div id="cat-paw-left" class="cat-paw cat-paw-left"></div>
