@@ -27,6 +27,22 @@ import { renderLeaderboardView } from './components/leaderboardView.js';
 
 let currentCleanup = null;
 
+function trackToolUsage(toolId) {
+  try {
+    let usage = JSON.parse(localStorage.getItem('catkeylab_tool_play_counts')) || {};
+    usage[toolId] = (usage[toolId] || 0) + 1;
+    localStorage.setItem('catkeylab_tool_play_counts', JSON.stringify(usage));
+  } catch (e) {}
+}
+
+function getToolPlayCounts() {
+  try {
+    return JSON.parse(localStorage.getItem('catkeylab_tool_play_counts')) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
 export function triggerRandomTool() {
   const currentHash = window.location.hash.replace('#', '') || '';
   const allKeys = Object.keys(TOOL_METADATA);
@@ -241,6 +257,7 @@ export function handleRoute() {
     renderBreadcrumbs(breadcrumbsContainer, 'Anonymous Leaderboards 🏆');
     updateSEOMetadata('Anonymous Leaderboards & High Scores - CatKeyLab 🐾', '100% private, anonymous high scores and rank percentiles across all human benchmark tests.');
   } else if (TOOL_METADATA[hash]) {
+    trackToolUsage(hash);
     const meta = TOOL_METADATA[hash];
     renderToolPage(mainContainer, hash, meta);
     renderBreadcrumbs(breadcrumbsContainer, t(meta.titleKey));
@@ -342,31 +359,37 @@ function renderHomePage(container) {
 
         <div class="grid grid-cols-4">
           ${(() => {
-            const featuredOrder = ['typing-test', 'mouse-test', 'keyboard-test', 'cps-test'];
+            const playCounts = getToolPlayCounts();
+            const defaultPopular = ['typing-test', 'mouse-test', 'keyboard-test', 'cps-test'];
+            
             const sortedToolKeys = Object.keys(TOOL_METADATA).sort((a, b) => {
-              const indexA = featuredOrder.indexOf(a);
-              const indexB = featuredOrder.indexOf(b);
-              if (indexA !== -1 && indexB !== -1) return indexA - indexB;
-              if (indexA !== -1) return -1;
-              if (indexB !== -1) return 1;
-              return 0;
+              const countA = playCounts[a] || (defaultPopular.includes(a) ? 10 : 0);
+              const countB = playCounts[b] || (defaultPopular.includes(b) ? 10 : 0);
+              return countB - countA;
             });
+
+            const topFour = new Set(sortedToolKeys.slice(0, 4));
 
             return sortedToolKeys.map(key => {
               const tool = TOOL_METADATA[key];
-              const isFeatured = featuredOrder.includes(key);
+              const isPopular = topFour.has(key);
+              const count = playCounts[key] || 0;
+              const badgeLabel = isPopular 
+                ? (count > 0 ? `🔥 ${count} ${count === 1 ? 'Play' : 'Plays'}` : '🔥 TOP SEARCHED') 
+                : tool.category;
+
               return `
-                <div class="tool-card ${isFeatured ? 'featured-tool-card' : ''}" style="${isFeatured ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
+                <div class="tool-card ${isPopular ? 'featured-tool-card' : ''}" style="${isPopular ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
                   <div>
                     <div class="tool-card-header">
                       <div class="tool-card-icon" style="font-size:2rem;">${tool.icon}</div>
-                      <span class="tool-card-badge" style="${isFeatured ? 'background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;' : ''}">${isFeatured ? '🔥 TOP SEARCHED' : tool.category}</span>
+                      <span class="tool-card-badge" style="${isPopular ? 'background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;' : ''}">${badgeLabel}</span>
                     </div>
                     <h3 class="tool-card-title">${t(tool.titleKey)}</h3>
                     <p class="tool-card-desc">${tool.desc}</p>
                   </div>
                   <div class="tool-card-footer">
-                    <a href="#${key}" class="btn ${isFeatured ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%;">
+                    <a href="#${key}" class="btn ${isPopular ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%;">
                       <span>${t('btnUseTool')} ${tool.icon}</span> →
                     </a>
                   </div>
