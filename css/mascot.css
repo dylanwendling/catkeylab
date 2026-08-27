@@ -441,80 +441,52 @@
   opacity: 0;
 }
 
-/* Mobile Mascot Quick Action Dock */
-.mobile-mascot-bar {
-  display: none;
-}
-
+/* ==========================================================================
+   Mobile Viewport Auto-Positioning (Top-Right Hero Header Area)
+   ========================================================================== */
 @media (max-width: 768px) {
   .mascot-container {
-    bottom: 80px;
-    left: 10px;
-    transform: scale(0.75);
-    transform-origin: bottom left;
+    position: fixed;
+    top: 68px;
+    right: 15px;
+    left: auto;
+    bottom: auto;
+    z-index: 1005;
+    transform: scale(0.85);
+    transform-origin: top right;
+  }
+
+  .mascot-speech-bubble {
+    top: 105%;
+    bottom: auto;
+    left: auto;
+    right: 0;
+    transform-origin: top right;
+  }
+
+  .mascot-speech-bubble::after {
+    top: auto;
+    bottom: 100%;
+    right: 30px;
+    left: auto;
+    border-color: transparent transparent #f97316 transparent;
   }
 
   .yarn-ball-container {
-    bottom: 80px;
-    right: 65px;
-    transform: scale(0.8);
+    position: fixed;
+    top: 72px;
+    right: 105px;
+    bottom: auto;
+    z-index: 1004;
+    transform: scale(0.85);
   }
 
   .food-bowl-container {
-    bottom: 80px;
-    right: 10px;
-    transform: scale(0.8);
-  }
-
-  /* Floating Mobile Quick Action Dock - Firefox & Universal Mobile Support */
-  .mobile-mascot-bar {
-    display: flex;
     position: fixed;
-    bottom: max(16px, env(safe-area-inset-bottom, 16px));
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 99999;
-    background: #0f172a; /* Solid Firefox fallback */
-    background: rgba(15, 23, 42, 0.95);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 2px solid #f97316;
-    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 20px rgba(249, 115, 22, 0.4);
-    border-radius: 9999px;
-    padding: 0.4rem 0.75rem;
-    gap: 0.5rem;
-    align-items: center;
-    pointer-events: auto;
-    width: max-content;
-    max-width: 92vw;
-  }
-
-  /* Firefox Mobile Specific Viewport Adjustment */
-  @supports (-moz-appearance: none) {
-    .mobile-mascot-bar {
-      bottom: max(20px, env(safe-area-inset-bottom, 20px));
-    }
-  }
-
-  .mobile-mascot-btn {
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 9999px;
-    color: #ffffff;
-    font-size: 0.88rem;
-    font-weight: 800;
-    padding: 0.45rem 0.85rem;
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    cursor: pointer;
-    touch-action: manipulation;
-    transition: transform 0.15s ease, background 0.15s ease;
-    white-space: nowrap;
-  }
-
-  .mobile-mascot-btn:active {
-    transform: scale(0.92);
-    background: rgba(249, 115, 22, 0.4);
+    top: 72px;
+    right: 165px;
+    bottom: auto;
+    z-index: 1003;
+    transform: scale(0.85);
   }
 }

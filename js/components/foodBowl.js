@@ -122,19 +122,3 @@ function checkCatFeedingProximity(isRelease = false) {
     }
   }
 }
-
-export function spawnFishCenter() {
-  if (activeFishEl) activeFishEl.remove();
-
-  fishX = (window.innerWidth / 2);
-  fishY = (window.innerHeight / 2);
-
-  activeFishEl = document.createElement('div');
-  activeFishEl.className = 'draggable-fish';
-  activeFishEl.innerHTML = '🐟';
-  document.body.appendChild(activeFishEl);
-
-  updateFishPosition();
-  playClickSound(900, 0.04);
-  checkCatFeedingProximity(true);
-}
