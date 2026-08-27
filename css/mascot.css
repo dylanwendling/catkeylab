@@ -79,10 +79,10 @@
   border-radius: 42px 42px 34px 34px;
   position: relative;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255, 255, 255, 0.3);
-  overflow: hidden;
+  overflow: visible;
 }
 
-/* Cat Ears with Pink Inner Pads */
+/* Cat Ears with Pink Inner Pads (Symmetrically Centered) */
 .cat-ear {
   position: absolute;
   top: -14px;
@@ -108,21 +108,21 @@
 }
 
 .cat-ear-left {
-  left: 4px;
-  transform: rotate(-15deg);
+  left: 8px;
+  transform: rotate(-14deg);
 }
 
 .cat-ear-right {
-  right: 4px;
-  transform: rotate(15deg);
+  right: 8px;
+  transform: rotate(14deg);
 }
 
 .cat-character.play-mode .cat-ear-left {
-  transform: rotate(-28deg) translateY(-4px);
+  transform: rotate(-26deg) translateY(-4px);
 }
 
 .cat-character.play-mode .cat-ear-right {
-  transform: rotate(28deg) translateY(-4px);
+  transform: rotate(26deg) translateY(-4px);
 }
 
 /* Cat Eyes Area - Vibrant Emerald Irises */
@@ -180,7 +180,7 @@
   transform: scaleY(0.65);
 }
 
-/* Cat Snout, Nose & Whiskers */
+/* Cat Snout, Nose & Natural Fanned Whiskers */
 .cat-snout {
   position: absolute;
   bottom: 12px;
@@ -201,39 +201,39 @@
 
 .cat-whiskers {
   position: absolute;
-  top: 38px;
+  top: 36px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
   pointer-events: none;
+  z-index: 8;
 }
 
 .cat-whiskers-left {
-  left: 1px;
+  left: -14px;
   align-items: flex-end;
 }
 
 .cat-whiskers-right {
-  right: 1px;
+  right: -14px;
   align-items: flex-start;
 }
 
 .whisker-line {
   height: 1.5px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
   border-radius: 1px;
 }
 
-/* Fanned Left Whiskers */
-.cat-whiskers-left .whisker-top { width: 17px; transform: rotate(-12deg); transform-origin: right center; }
-.cat-whiskers-left .whisker-mid { width: 19px; transform: rotate(0deg); }
-.cat-whiskers-left .whisker-bot { width: 17px; transform: rotate(12deg); transform-origin: right center; }
+/* Fanned Left Whiskers Spaced Out */
+.cat-whiskers-left .whisker-top { width: 22px; transform: rotate(-16deg); transform-origin: right center; margin-bottom: 4px; }
+.cat-whiskers-left .whisker-mid { width: 25px; transform: rotate(0deg); transform-origin: right center; margin-bottom: 4px; }
+.cat-whiskers-left .whisker-bot { width: 22px; transform: rotate(16deg); transform-origin: right center; }
 
-/* Fanned Right Whiskers */
-.cat-whiskers-right .whisker-top { width: 17px; transform: rotate(12deg); transform-origin: left center; }
-.cat-whiskers-right .whisker-mid { width: 19px; transform: rotate(0deg); }
-.cat-whiskers-right .whisker-bot { width: 17px; transform: rotate(-12deg); transform-origin: left center; }
+/* Fanned Right Whiskers Spaced Out */
+.cat-whiskers-right .whisker-top { width: 22px; transform: rotate(16deg); transform-origin: left center; margin-bottom: 4px; }
+.cat-whiskers-right .whisker-mid { width: 25px; transform: rotate(0deg); transform-origin: left center; margin-bottom: 4px; }
+.cat-whiskers-right .whisker-bot { width: 22px; transform: rotate(-16deg); transform-origin: left center; }
 
 .cat-character.purring .whisker-line {
   animation: vibrate-whisker 0.18s infinite;
