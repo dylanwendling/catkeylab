@@ -3,8 +3,6 @@
    ========================================================================== */
 
 import { playClickSound, getAudioContext } from '../audio.js';
-import { throwYarnBallAuto } from './yarnBall.js';
-import { spawnFishAutoFeed } from './foodBowl.js';
 
 const CAT_DIALOGUES = [
   "hi, i'm Nibbles! 🐾",
@@ -113,19 +111,6 @@ export function initCatMascot() {
         <div id="cat-paw-right" class="cat-paw cat-paw-right"></div>
       </div>
     </div>
-
-    <!-- Mobile Floating Cat Companion Control Dock -->
-    <div id="mobile-mascot-dock" class="mobile-mascot-dock">
-      <button id="mobile-dock-pet" class="mobile-dock-btn" title="Pet Nibbles the Cat!">
-        <span>🐱 Pet Nibbles</span>
-      </button>
-      <button id="mobile-dock-yarn" class="mobile-dock-btn" title="Throw Yarn Ball!">
-        <span>🧶 Play Yarn</span>
-      </button>
-      <button id="mobile-dock-fish" class="mobile-dock-btn" title="Feed Nibbles Fish!">
-        <span>🥣 Feed Fish</span>
-      </button>
-    </div>
   `;
 
   leftPupilEl = document.getElementById('cat-pupil-left');
@@ -143,21 +128,6 @@ export function initCatMascot() {
 
   // Pet the Cat Handler (Click ONLY for 100% Reliable Audio Playback)
   catEl.addEventListener('click', handlePetting);
-
-  // Mobile Dock Button Handlers
-  const mobilePetBtn = document.getElementById('mobile-dock-pet');
-  const mobileYarnBtn = document.getElementById('mobile-dock-yarn');
-  const mobileFishBtn = document.getElementById('mobile-dock-fish');
-
-  if (mobilePetBtn) mobilePetBtn.addEventListener('click', handlePetting);
-  if (mobileYarnBtn) mobileYarnBtn.addEventListener('click', () => {
-    throwYarnBallAuto();
-    showSpeechBubble("yay, yarn! 🧶");
-  });
-  if (mobileFishBtn) mobileFishBtn.addEventListener('click', () => {
-    spawnFishAutoFeed();
-    showSpeechBubble("yummy fish! 🐟");
-  });
 
   // Start Animation Loops
   requestAnimationFrame(animateMascot);
