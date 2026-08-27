@@ -201,20 +201,21 @@
 
 .cat-whiskers {
   position: absolute;
-  top: 36px;
+  top: 32px;
   display: flex;
   flex-direction: column;
+  gap: 5px;
   pointer-events: none;
   z-index: 8;
 }
 
 .cat-whiskers-left {
-  left: -14px;
+  left: -18px;
   align-items: flex-end;
 }
 
 .cat-whiskers-right {
-  right: -14px;
+  right: -18px;
   align-items: flex-start;
 }
 
@@ -225,23 +226,23 @@
   border-radius: 1px;
 }
 
-/* Fanned Left Whiskers Spaced Out */
-.cat-whiskers-left .whisker-top { width: 22px; transform: rotate(-16deg); transform-origin: right center; margin-bottom: 4px; }
-.cat-whiskers-left .whisker-mid { width: 25px; transform: rotate(0deg); transform-origin: right center; margin-bottom: 4px; }
-.cat-whiskers-left .whisker-bot { width: 22px; transform: rotate(16deg); transform-origin: right center; }
+/* Fanned Open Left Whiskers at Idle */
+.cat-whiskers-left .whisker-top { width: 24px; transform: rotate(-22deg); transform-origin: right center; }
+.cat-whiskers-left .whisker-mid { width: 26px; transform: rotate(-4deg); transform-origin: right center; }
+.cat-whiskers-left .whisker-bot { width: 24px; transform: rotate(18deg); transform-origin: right center; }
 
-/* Fanned Right Whiskers Spaced Out */
-.cat-whiskers-right .whisker-top { width: 22px; transform: rotate(16deg); transform-origin: left center; margin-bottom: 4px; }
-.cat-whiskers-right .whisker-mid { width: 25px; transform: rotate(0deg); transform-origin: left center; margin-bottom: 4px; }
-.cat-whiskers-right .whisker-bot { width: 22px; transform: rotate(-16deg); transform-origin: left center; }
+/* Fanned Open Right Whiskers at Idle */
+.cat-whiskers-right .whisker-top { width: 24px; transform: rotate(22deg); transform-origin: left center; }
+.cat-whiskers-right .whisker-mid { width: 26px; transform: rotate(4deg); transform-origin: left center; }
+.cat-whiskers-right .whisker-bot { width: 24px; transform: rotate(-18deg); transform-origin: left center; }
 
 .cat-character.purring .whisker-line {
-  animation: vibrate-whisker 0.18s infinite;
+  animation: vibrate-whisker 0.15s infinite;
 }
 
 @keyframes vibrate-whisker {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(1.5px); }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
 }
 
 /* Cat Paws Reaching & Tracking Cursor */
