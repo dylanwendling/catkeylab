@@ -70,6 +70,34 @@ export function playClickSound(freq = 600, duration = 0.04) {
   }
 }
 
+export function playSuccessSound() {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+
+    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6 victory chime
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const startTime = ctx.currentTime + idx * 0.08;
+      const duration = 0.15;
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, startTime);
+
+      gain.gain.setValueAtTime(0.12, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(startTime);
+      osc.stop(startTime + duration);
+    });
+  } catch (e) {}
+}
+
 export function triggerVibration(pattern = 30) {
   if ('vibrate' in navigator) {
     try {
