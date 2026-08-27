@@ -21,6 +21,17 @@ const DIALOGUE_LINES = [
   "looking good!"
 ];
 
+const FAST_SCROLL_DIALOGUES = [
+  "whoa, slow down!",
+  "scrolling fast today, huh?",
+  "are you racing someone?",
+  "my pupil can't keep up with that!",
+  "did you miss something up there?",
+  "judging your scroll speed hard right now...",
+  "speed reader alert!",
+  "calm down on that scroll wheel!"
+];
+
 const EXPRESSIONS = ['happy', 'surprised', 'squint', 'wink'];
 
 let pupilEl = null;
@@ -35,6 +46,10 @@ let currentPupilY = 0;
 let isMouseNear = false;
 let speechTimeout = null;
 let lastSpeechTime = 0;
+
+let lastScrollY = window.scrollY;
+let lastScrollTime = Date.now();
+let lastJudgementTime = 0;
 
 export function initEyeMascot() {
   const container = document.getElementById('eye-mascot-container');
@@ -59,8 +74,9 @@ export function initEyeMascot() {
 
   if (!eyeEl || !pupilEl) return;
 
-  // Bind Mouse & Touch Events
+  // Bind Mouse, Touch & Scroll Events
   window.addEventListener('mousemove', handleMouseMove);
+  window.addEventListener('scroll', handleScroll, { passive: true });
   eyeEl.addEventListener('click', handleMascotClick);
 
   // Start Animation Loops
@@ -72,6 +88,46 @@ export function initEyeMascot() {
   setTimeout(() => {
     showSpeechBubble("hey.");
   }, 2000);
+}
+
+/**
+ * Fast Scroll Judgement Detection
+ */
+function handleScroll() {
+  const now = Date.now();
+  const currentScrollY = window.scrollY;
+  const timeDelta = now - lastScrollTime;
+
+  if (timeDelta > 50) {
+    const scrollDelta = Math.abs(currentScrollY - lastScrollY);
+    const scrollSpeed = (scrollDelta / timeDelta) * 1000; // pixels per sec
+
+    // If scrolling faster than 2200 px/sec and at least 7 sec since last scroll judgment
+    if (scrollSpeed > 2200 && now - lastJudgementTime > 7000) {
+      lastJudgementTime = now;
+      judgeFastScroll();
+    }
+
+    lastScrollY = currentScrollY;
+    lastScrollTime = now;
+  }
+}
+
+/**
+ * Trigger judging reaction when user scrolls fast
+ */
+function judgeFastScroll() {
+  if (!eyeEl) return;
+
+  // Apply squint / judging expression
+  eyeEl.classList.add('squint');
+  setTimeout(() => {
+    if (eyeEl) eyeEl.classList.remove('squint');
+  }, 2400);
+
+  // Pick random judging speech line
+  const line = FAST_SCROLL_DIALOGUES[Math.floor(Math.random() * FAST_SCROLL_DIALOGUES.length)];
+  showSpeechBubble(line);
 }
 
 /**
