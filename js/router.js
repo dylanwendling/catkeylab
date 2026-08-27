@@ -361,29 +361,25 @@ function renderHomePage(container) {
           ${(() => {
             const playCounts = getToolPlayCounts();
             const defaultPopular = ['typing-test', 'mouse-test', 'keyboard-test', 'cps-test'];
-            
+
             const sortedToolKeys = Object.keys(TOOL_METADATA).sort((a, b) => {
-              const countA = playCounts[a] || (defaultPopular.includes(a) ? 10 : 0);
-              const countB = playCounts[b] || (defaultPopular.includes(b) ? 10 : 0);
+              const countA = (playCounts[a] || 0) + (defaultPopular.includes(a) ? 100 : 0);
+              const countB = (playCounts[b] || 0) + (defaultPopular.includes(b) ? 100 : 0);
               return countB - countA;
             });
 
-            const topFour = new Set(sortedToolKeys.slice(0, 4));
+            const topFourSet = new Set(sortedToolKeys.slice(0, 4));
 
             return sortedToolKeys.map(key => {
               const tool = TOOL_METADATA[key];
-              const isPopular = topFour.has(key);
-              const count = playCounts[key] || 0;
-              const badgeLabel = isPopular 
-                ? (count > 0 ? `🔥 ${count} ${count === 1 ? 'Play' : 'Plays'}` : '🔥 TOP SEARCHED') 
-                : tool.category;
+              const isPopular = topFourSet.has(key);
 
               return `
                 <div class="tool-card ${isPopular ? 'featured-tool-card' : ''}" style="${isPopular ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
                   <div>
                     <div class="tool-card-header">
                       <div class="tool-card-icon" style="font-size:2rem;">${tool.icon}</div>
-                      <span class="tool-card-badge" style="${isPopular ? 'background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;' : ''}">${badgeLabel}</span>
+                      <span class="tool-card-badge" style="${isPopular ? 'background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;' : ''}">${isPopular ? '🔥 TOP SEARCHED' : tool.category.toUpperCase()}</span>
                     </div>
                     <h3 class="tool-card-title">${t(tool.titleKey)}</h3>
                     <p class="tool-card-desc">${tool.desc}</p>
