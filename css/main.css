@@ -490,13 +490,11 @@ main {
 
 .btn-primary:hover {
   background: var(--accent-primary-hover);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 #1f6beb;
+  box-shadow: 0 4px 16px rgba(56, 139, 253, 0.45);
 }
 
 .btn-primary:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 0 #1f6beb;
+  transform: scale(0.98);
 }
 
 .btn-secondary {
@@ -509,13 +507,11 @@ main {
 .btn-secondary:hover {
   background: var(--bg-card-hover);
   border-color: var(--text-muted);
-  transform: translateY(-2px);
-  box-shadow: 0 5px 0 #161b22;
+  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
 }
 
 .btn-secondary:active {
-  transform: translateY(1px);
-  box-shadow: 0 1px 0 #161b22;
+  transform: scale(0.98);
 }
 
 .btn-surprise {

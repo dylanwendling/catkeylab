@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * Hardware-accelerated cursor spotlight aura & interactive card tilt physics
+ * Hardware-accelerated cursor spotlight aura
  */
 function initMouseSpotlight() {
   let requestID = null;
@@ -85,29 +85,6 @@ function initMouseSpotlight() {
         document.documentElement.style.setProperty('--mouse-y', `${mouseY}px`);
         requestID = null;
       });
-    }
-  });
-
-  // Card 3D tilt effect on hover
-  document.addEventListener('mousemove', (e) => {
-    const card = e.target.closest('.tool-card, .hero-quick-test-card, .stat-box');
-    if (!card) return;
-
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const rotateX = ((y - centerY) / centerY) * -5;
-    const rotateY = ((x - centerX) / centerX) * 5;
-
-    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
-  });
-
-  document.addEventListener('mouseout', (e) => {
-    const card = e.target.closest('.tool-card, .hero-quick-test-card, .stat-box');
-    if (card) {
-      card.style.transform = '';
     }
   });
 }
