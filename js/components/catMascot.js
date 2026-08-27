@@ -325,7 +325,6 @@ let yarnPosY = null;
 export function trackYarnPosition(x, y) {
   yarnPosX = x;
   yarnPosY = y;
-  updateTracking();
 }
 
 /**
@@ -334,7 +333,6 @@ export function trackYarnPosition(x, y) {
 function handleMouseMove(e) {
   currentMouseX = e.clientX;
   currentMouseY = e.clientY;
-  updateTracking();
 }
 
 function updateTracking() {
@@ -347,14 +345,12 @@ function updateTracking() {
   // Determine whether to track Yarn Ball or Mouse Cursor
   let targetX = currentMouseX;
   let targetY = currentMouseY;
-  let isYarnActive = false;
 
   if (yarnPosX !== null && yarnPosY !== null) {
     const distToYarn = Math.hypot(yarnPosX - catCenterX, yarnPosY - catCenterY);
     if (distToYarn < 280) {
       targetX = yarnPosX;
       targetY = yarnPosY;
-      isYarnActive = true;
     }
   }
 
@@ -405,6 +401,8 @@ function updateTracking() {
  * Smooth Lerp frame loop for both pupils and cursor-tracking paws
  */
 function animateMascot() {
+  updateTracking();
+
   // Smooth pupil tracking
   if (leftPupilEl && rightPupilEl) {
     currentPupilX += (targetPupilX - currentPupilX) * 0.14;
