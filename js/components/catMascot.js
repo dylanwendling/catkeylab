@@ -3,6 +3,8 @@
    ========================================================================== */
 
 import { playClickSound, getAudioContext } from '../audio.js';
+import { throwYarnCenter } from './yarnBall.js';
+import { spawnFishCenter } from './foodBowl.js';
 
 const CAT_DIALOGUES = [
   "hi, i'm Nibbles! 🐾",
@@ -111,6 +113,13 @@ export function initCatMascot() {
         <div id="cat-paw-right" class="cat-paw cat-paw-right"></div>
       </div>
     </div>
+
+    <!-- Floating Mobile Mascot Quick Action Dock -->
+    <div id="mobile-mascot-bar" class="mobile-mascot-bar">
+      <button id="mobile-btn-pet" class="mobile-mascot-btn">🐱 Pet</button>
+      <button id="mobile-btn-yarn" class="mobile-mascot-btn">🧶 Yarn</button>
+      <button id="mobile-btn-fish" class="mobile-mascot-btn">🐟 Feed</button>
+    </div>
   `;
 
   leftPupilEl = document.getElementById('cat-pupil-left');
@@ -121,6 +130,21 @@ export function initCatMascot() {
   speechEl = document.getElementById('mascot-speech');
 
   if (!catEl) return;
+
+  // Bind Mobile Quick Action Dock Handlers
+  const mobilePetBtn = document.getElementById('mobile-btn-pet');
+  const mobileYarnBtn = document.getElementById('mobile-btn-yarn');
+  const mobileFishBtn = document.getElementById('mobile-btn-fish');
+
+  if (mobilePetBtn) {
+    mobilePetBtn.addEventListener('click', (e) => handlePetting(e));
+  }
+  if (mobileYarnBtn) {
+    mobileYarnBtn.addEventListener('click', () => throwYarnCenter());
+  }
+  if (mobileFishBtn) {
+    mobileFishBtn.addEventListener('click', () => spawnFishCenter());
+  }
 
   // Bind Mouse, Touch & Scroll Events
   window.addEventListener('mousemove', handleMouseMove);

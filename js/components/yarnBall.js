@@ -153,3 +153,13 @@ function checkCatProximity() {
     reactToYarn(yarnCenterX, yarnCenterY);
   }
 }
+
+export function throwYarnCenter() {
+  if (!yarnEl) return;
+  posX = (window.innerWidth / 2) - 28;
+  posY = (window.innerHeight / 2) - 28;
+  velX = (Math.random() - 0.5) * 400;
+  velY = -350;
+  playClickSound(600, 0.05);
+  updateYarnPosition();
+}
