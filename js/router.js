@@ -20,8 +20,15 @@ import { renderTypingTest, cleanupTypingTest } from './tools/typingTest.js';
 let currentCleanup = null;
 
 export function triggerRandomTool() {
-  const keys = Object.keys(TOOL_METADATA);
-  const randomKey = keys[Math.floor(Math.random() * keys.length)];
+  const currentHash = window.location.hash.replace('#', '') || '';
+  const allKeys = Object.keys(TOOL_METADATA);
+  
+  // Filter out current active tool so user always gets a different surprise tool
+  const availableKeys = allKeys.filter(key => key !== currentHash);
+  
+  if (availableKeys.length === 0) return;
+
+  const randomKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
   window.location.hash = `#${randomKey}`;
 }
 
