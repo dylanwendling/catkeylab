@@ -32,6 +32,8 @@ export function getAudioContext() {
     audioCtx.resume().catch(() => {});
   }
   return audioCtx;
+}
+
 export function toggleSound() {
   soundEnabled = !soundEnabled;
   localStorage.setItem('clickpulse_sound', soundEnabled);
