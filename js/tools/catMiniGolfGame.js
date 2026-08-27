@@ -44,24 +44,24 @@ let weatherParticles = [];
 
 // 18 Full Playable Mini Golf Holes
 const ALL_18_HOLES = [
-  { name: 'Hole 1: Sunny Tee ☀️', par: 3, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [], sandTraps: [{ x: 400, y: 180, w: 100, h: 140, label: '🏖️ SAND TRAP' }], waterHazards: [], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 2: Bumper Alley 🧱', par: 3, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [{ x: 380, y: 100, w: 35, h: 300, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 3: Sand Trap Bend 🏖️', par: 3, weather: 'sun', ballStart: { x: 100, y: 150 }, holePos: { x: 700, y: 380 }, walls: [{ x: 300, y: 0, w: 30, h: 300, label: '🧱 BUMPER WALL' }], sandTraps: [{ x: 450, y: 200, w: 140, h: 160, label: '🏖️ SAND TRAP' }], waterHazards: [], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 4: Windmill Pass 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: { x: 400, y: 250, radius: 70, angle: 0, speed: 0.03, label: '🌀 WINDMILL' } },
-  { name: 'Hole 5: Water Crossing 🌊', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 330, y: 100, w: 140, h: 300, label: '🌊 WATER HAZARD (+1)' }], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 6: Portal Jump 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 120 }, holePos: { x: 700, y: 400 }, walls: [{ x: 260, y: 0, w: 30, h: 350, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [{ inX: 180, inY: 400, outX: 620, outY: 120, radius: 25, label: '🌀 PORTAL' }], windmill: null },
-  { name: 'Hole 7: Ice Slide 🧊', par: 4, weather: 'snow', ballStart: { x: 90, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [{ x: 250, y: 120, w: 300, h: 260, label: '🧊 SLICK ICE' }], portals: [], windmill: null },
-  { name: 'Hole 8: Double Bumper 🧱', par: 4, weather: 'sun', ballStart: { x: 100, y: 100 }, holePos: { x: 700, y: 400 }, walls: [{ x: 250, y: 0, w: 30, h: 320, label: '🧱 BUMPER WALL' }, { x: 500, y: 180, w: 30, h: 320, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 9: Forest Loop 🌴', par: 5, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 400 }, walls: [{ x: 240, y: 0, w: 25, h: 310, label: '🧱 WALL' }], sandTraps: [{ x: 310, y: 360, w: 160, h: 110, label: '🏖️ SAND' }], waterHazards: [{ x: 290, y: 100, w: 190, h: 180, label: '🌊 WATER' }], icePatches: [], portals: [{ inX: 180, inY: 420, outX: 630, outY: 100, radius: 25, label: '🌀 PORTAL' }], windmill: { x: 610, y: 250, radius: 60, angle: 0, speed: 0.03, label: '🌀 WINDMILL' } },
-  { name: 'Hole 10: Rainy Slalom 🌧️', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [{ x: 300, y: 100, w: 30, h: 180, label: '🧱 WALL' }, { x: 500, y: 220, w: 30, h: 180, label: '🧱 WALL' }], sandTraps: [{ x: 380, y: 180, w: 90, h: 140, label: '🏖️ SAND' }], waterHazards: [], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 11: Narrow Water Bridge 🌉', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 250, y: 50, w: 300, h: 160, label: '🌊 WATER' }, { x: 250, y: 290, w: 300, h: 160, label: '🌊 WATER' }], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 12: Portal Maze 🌀', par: 4, weather: 'night', ballStart: { x: 90, y: 400 }, holePos: { x: 710, y: 100 }, walls: [{ x: 200, y: 150, w: 400, h: 30, label: '🧱 WALL' }, { x: 400, y: 300, w: 30, h: 180, label: '🧱 WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [{ inX: 140, inY: 100, outX: 680, outY: 400, radius: 25, label: '🌀 PORTAL' }], windmill: null },
-  { name: 'Hole 13: Double Windmill 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmill: { x: 300, y: 250, radius: 60, angle: 0, speed: 0.035, label: '🌀 WINDMILL' } },
-  { name: 'Hole 14: Snowy Ice Run 🧊', par: 4, weather: 'snow', ballStart: { x: 90, y: 100 }, holePos: { x: 710, y: 400 }, walls: [{ x: 350, y: 0, w: 30, h: 320, label: '🧱 WALL' }], sandTraps: [], waterHazards: [], icePatches: [{ x: 120, y: 220, w: 200, h: 180, label: '🧊 SLICK ICE' }, { x: 420, y: 100, w: 200, h: 180, label: '🧊 SLICK ICE' }], portals: [], windmill: null },
-  { name: 'Hole 15: Sand & Water Combo 🏖️', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [], sandTraps: [{ x: 250, y: 100, w: 120, h: 300, label: '🏖️ SAND' }], waterHazards: [{ x: 450, y: 100, w: 120, h: 300, label: '🌊 WATER' }], icePatches: [], portals: [], windmill: null },
-  { name: 'Hole 16: Windmill Water Gauntlet 🌀', par: 5, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 420, y: 100, w: 150, h: 300, label: '🌊 WATER' }], icePatches: [], portals: [], windmill: { x: 280, y: 250, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' } },
-  { name: 'Hole 17: Island Green ⛳', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 250, y: 50, w: 350, h: 400, label: '🌊 WATER HAZARD (+1)' }], icePatches: [], portals: [{ inX: 180, inY: 250, outX: 710, outY: 150, radius: 25, label: '🌀 PORTAL' }], windmill: null },
-  { name: 'Hole 18: Grand Finale 🏆', par: 5, weather: 'night', ballStart: { x: 90, y: 420 }, holePos: { x: 710, y: 100 }, walls: [{ x: 200, y: 200, w: 400, h: 25, label: '🧱 WALL' }], sandTraps: [{ x: 120, y: 100, w: 100, h: 100, label: '🏖️ SAND' }], waterHazards: [{ x: 450, y: 280, w: 180, h: 140, label: '🌊 WATER' }], icePatches: [{ x: 250, y: 50, w: 120, h: 140, label: '🧊 ICE' }], portals: [{ inX: 120, inY: 280, outX: 680, outY: 380, radius: 25, label: '🌀 PORTAL' }], windmill: { x: 390, y: 330, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' } }
+  { name: 'Hole 1: Sunny Tee ☀️', par: 3, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [], sandTraps: [{ x: 400, y: 180, w: 100, h: 140, label: '🏖️ SAND TRAP' }], waterHazards: [], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 2: Bumper Alley 🧱', par: 3, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [{ x: 380, y: 100, w: 35, h: 300, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 3: Sand Trap Bend 🏖️', par: 3, weather: 'sun', ballStart: { x: 100, y: 150 }, holePos: { x: 700, y: 380 }, walls: [{ x: 300, y: 0, w: 30, h: 300, label: '🧱 BUMPER WALL' }], sandTraps: [{ x: 450, y: 200, w: 140, h: 160, label: '🏖️ SAND TRAP' }], waterHazards: [], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 4: Windmill Pass 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmills: [{ x: 400, y: 250, radius: 70, angle: 0, speed: 0.03, label: '🌀 WINDMILL' }] },
+  { name: 'Hole 5: Water Crossing 🌊', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 330, y: 100, w: 140, h: 300, label: '🌊 WATER HAZARD (+1)' }], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 6: Portal Jump 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 120 }, holePos: { x: 700, y: 400 }, walls: [{ x: 260, y: 0, w: 30, h: 350, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [{ inX: 180, inY: 400, outX: 620, outY: 120, radius: 25, label: '🌀 PORTAL' }], windmills: [] },
+  { name: 'Hole 7: Ice Slide 🧊', par: 4, weather: 'snow', ballStart: { x: 90, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [{ x: 250, y: 120, w: 300, h: 260, label: '🧊 SLICK ICE' }], portals: [], windmills: [] },
+  { name: 'Hole 8: Double Bumper 🧱', par: 4, weather: 'sun', ballStart: { x: 100, y: 100 }, holePos: { x: 700, y: 400 }, walls: [{ x: 250, y: 0, w: 30, h: 320, label: '🧱 BUMPER WALL' }, { x: 500, y: 180, w: 30, h: 320, label: '🧱 BUMPER WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 9: Forest Loop 🌴', par: 5, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 400 }, walls: [{ x: 240, y: 0, w: 25, h: 310, label: '🧱 WALL' }], sandTraps: [{ x: 310, y: 360, w: 160, h: 110, label: '🏖️ SAND' }], waterHazards: [{ x: 290, y: 100, w: 190, h: 180, label: '🌊 WATER' }], icePatches: [], portals: [{ inX: 180, inY: 420, outX: 630, outY: 100, radius: 25, label: '🌀 PORTAL' }], windmills: [{ x: 610, y: 250, radius: 60, angle: 0, speed: 0.03, label: '🌀 WINDMILL' }] },
+  { name: 'Hole 10: Rainy Slalom 🌧️', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [{ x: 300, y: 100, w: 30, h: 180, label: '🧱 WALL' }, { x: 500, y: 220, w: 30, h: 180, label: '🧱 WALL' }], sandTraps: [{ x: 380, y: 180, w: 90, h: 140, label: '🏖️ SAND' }], waterHazards: [], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 11: Narrow Water Bridge 🌉', par: 4, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 250, y: 50, w: 300, h: 160, label: '🌊 WATER' }, { x: 250, y: 290, w: 300, h: 160, label: '🌊 WATER' }], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 12: Portal Maze 🌀', par: 4, weather: 'night', ballStart: { x: 90, y: 400 }, holePos: { x: 710, y: 100 }, walls: [{ x: 200, y: 150, w: 400, h: 30, label: '🧱 WALL' }, { x: 400, y: 300, w: 30, h: 180, label: '🧱 WALL' }], sandTraps: [], waterHazards: [], icePatches: [], portals: [{ inX: 140, inY: 100, outX: 680, outY: 400, radius: 25, label: '🌀 PORTAL' }], windmills: [] },
+  { name: 'Hole 13: Double Windmill 🌀', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [], icePatches: [], portals: [], windmills: [{ x: 280, y: 250, radius: 60, angle: 0, speed: 0.035, label: '🌀 WINDMILL 1' }, { x: 520, y: 250, radius: 60, angle: Math.PI / 4, speed: -0.035, label: '🌀 WINDMILL 2' }] },
+  { name: 'Hole 14: Snowy Ice Run 🧊', par: 4, weather: 'snow', ballStart: { x: 90, y: 100 }, holePos: { x: 710, y: 400 }, walls: [{ x: 350, y: 0, w: 30, h: 320, label: '🧱 WALL' }], sandTraps: [], waterHazards: [], icePatches: [{ x: 120, y: 220, w: 200, h: 180, label: '🧊 SLICK ICE' }, { x: 420, y: 100, w: 200, h: 180, label: '🧊 SLICK ICE' }], portals: [], windmills: [] },
+  { name: 'Hole 15: Sand & Water Combo 🏖️', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [], sandTraps: [{ x: 250, y: 100, w: 120, h: 300, label: '🏖️ SAND' }], waterHazards: [{ x: 450, y: 100, w: 120, h: 300, label: '🌊 WATER' }], icePatches: [], portals: [], windmills: [] },
+  { name: 'Hole 16: Windmill Water Gauntlet 🌀', par: 5, weather: 'rain', ballStart: { x: 100, y: 250 }, holePos: { x: 720, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 420, y: 100, w: 150, h: 300, label: '🌊 WATER' }], icePatches: [], portals: [], windmills: [{ x: 280, y: 250, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' }] },
+  { name: 'Hole 17: Island Green ⛳', par: 4, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 710, y: 250 }, walls: [], sandTraps: [], waterHazards: [{ x: 250, y: 50, w: 350, h: 400, label: '🌊 WATER HAZARD (+1)' }], icePatches: [], portals: [{ inX: 180, inY: 250, outX: 710, outY: 150, radius: 25, label: '🌀 PORTAL' }], windmills: [] },
+  { name: 'Hole 18: Grand Finale 🏆', par: 5, weather: 'night', ballStart: { x: 90, y: 420 }, holePos: { x: 710, y: 100 }, walls: [{ x: 200, y: 200, w: 400, h: 25, label: '🧱 WALL' }], sandTraps: [{ x: 120, y: 100, w: 100, h: 100, label: '🏖️ SAND' }], waterHazards: [{ x: 450, y: 280, w: 180, h: 140, label: '🌊 WATER' }], icePatches: [{ x: 250, y: 50, w: 120, h: 140, label: '🧊 ICE' }], portals: [{ inX: 120, inY: 280, outX: 680, outY: 380, radius: 25, label: '🌀 PORTAL' }], windmills: [{ x: 390, y: 330, radius: 65, angle: 0, speed: -0.04, label: '🌀 WINDMILL' }] }
 ];
 
 export function renderCatMiniGolfGame(container) {
@@ -237,23 +237,20 @@ function gameLoop() {
 function updatePhysics() {
   const hole = ALL_18_HOLES[currentHoleIndex];
 
-  // Update Windmill Blade Angle
-  if (hole.windmill) {
-    hole.windmill.angle += hole.windmill.speed;
+  // Update Windmills Angle
+  if (hole.windmills && hole.windmills.length > 0) {
+    hole.windmills.forEach(wm => {
+      wm.angle += wm.speed;
+    });
   }
 
-  // Ball Movement Dynamics
+  // Ball Movement Dynamics & Sub-Stepping Physics (Prevents Wall Tunneling)
   if (ballMoving) {
-    const currentSpeed = Math.hypot(ball.vx, ball.vy);
+    const SUB_STEPS = 5;
+    const stepVx = ball.vx / SUB_STEPS;
+    const stepVy = ball.vy / SUB_STEPS;
 
-    // Apply Wind Force (only when ball is rolling)
-    if (currentSpeed > 0.35) {
-      ball.vx += wind.x * 0.04;
-      ball.vy += wind.y * 0.04;
-    }
-
-    // Check Surface Friction
-    let currentFriction = 0.982;
+    let currentFriction = 0.984;
 
     // Sand Traps Check
     hole.sandTraps.forEach(sand => {
@@ -265,14 +262,63 @@ function updatePhysics() {
     // Ice Patches Check
     hole.icePatches.forEach(ice => {
       if (ball.x > ice.x && ball.x < ice.x + ice.w && ball.y > ice.y && ball.y < ice.y + ice.h) {
-        currentFriction = 0.994; // Super slick
+        currentFriction = 0.995; // Super slick
       }
     });
+
+    for (let s = 0; s < SUB_STEPS; s++) {
+      ball.x += stepVx;
+      ball.y += stepVy;
+
+      // Outer Border Collisions
+      if (ball.x - ball.radius < 10) { ball.x = 10 + ball.radius; ball.vx = Math.abs(ball.vx) * 0.75; playClickSound(500, 0.02); }
+      if (ball.x + ball.radius > 790) { ball.x = 790 - ball.radius; ball.vx = -Math.abs(ball.vx) * 0.75; playClickSound(500, 0.02); }
+      if (ball.y - ball.radius < 10) { ball.y = 10 + ball.radius; ball.vy = Math.abs(ball.vy) * 0.75; playClickSound(500, 0.02); }
+      if (ball.y + ball.radius > 490) { ball.y = 490 - ball.radius; ball.vy = -Math.abs(ball.vy) * 0.75; playClickSound(500, 0.02); }
+
+      // Bumper Wall Continuous Collision Resolution
+      hole.walls.forEach(w => {
+        if (ball.x + ball.radius > w.x && ball.x - ball.radius < w.x + w.w &&
+            ball.y + ball.radius > w.y && ball.y - ball.radius < w.y + w.h) {
+
+          const overlapLeft = (ball.x + ball.radius) - w.x;
+          const overlapRight = (w.x + w.w) - (ball.x - ball.radius);
+          const overlapTop = (ball.y + ball.radius) - w.y;
+          const overlapBottom = (w.y + w.h) - (ball.y - ball.radius);
+
+          const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+
+          if (minOverlap === overlapLeft) {
+            ball.x = w.x - ball.radius;
+            ball.vx = -Math.abs(ball.vx) * 0.8;
+          } else if (minOverlap === overlapRight) {
+            ball.x = w.x + w.w + ball.radius;
+            ball.vx = Math.abs(ball.vx) * 0.8;
+          } else if (minOverlap === overlapTop) {
+            ball.y = w.y - ball.radius;
+            ball.vy = -Math.abs(ball.vy) * 0.8;
+          } else if (minOverlap === overlapBottom) {
+            ball.y = w.y + w.h + ball.radius;
+            ball.vy = Math.abs(ball.vy) * 0.8;
+          }
+          playClickSound(600, 0.02);
+        }
+      });
+    }
+
+    // Apply Friction Decay & Wind
+    const currentSpeed = Math.hypot(ball.vx, ball.vy);
+    if (currentSpeed > 0.35) {
+      ball.vx += wind.x * 0.04;
+      ball.vy += wind.y * 0.04;
+    }
+
+    ball.vx *= currentFriction;
+    ball.vy *= currentFriction;
 
     // Water Hazard Check
     hole.waterHazards.forEach(water => {
       if (ball.x > water.x && ball.x < water.x + water.w && ball.y > water.y && ball.y < water.y + water.h) {
-        // Water Penalty
         strokeCount++;
         totalStrokes++;
         playClickSound(300, 0.05);
@@ -282,29 +328,6 @@ function updatePhysics() {
         ball.vy = 0;
         ballMoving = false;
         updateHUD();
-      }
-    });
-
-    // Apply Velocity
-    ball.x += ball.vx;
-    ball.y += ball.vy;
-
-    ball.vx *= currentFriction;
-    ball.vy *= currentFriction;
-
-    // Outer Border Bounce
-    if (ball.x - ball.radius < 10) { ball.x = 10 + ball.radius; ball.vx *= -0.75; playClickSound(500, 0.02); }
-    if (ball.x + ball.radius > 790) { ball.x = 790 - ball.radius; ball.vx *= -0.75; playClickSound(500, 0.02); }
-    if (ball.y - ball.radius < 10) { ball.y = 10 + ball.radius; ball.vy *= -0.75; playClickSound(500, 0.02); }
-    if (ball.y + ball.radius > 490) { ball.y = 490 - ball.radius; ball.vy *= -0.75; playClickSound(500, 0.02); }
-
-    // Custom Obstacle Walls Collision
-    hole.walls.forEach(w => {
-      if (ball.x + ball.radius > w.x && ball.x - ball.radius < w.x + w.w &&
-          ball.y + ball.radius > w.y && ball.y - ball.radius < w.y + w.h) {
-        if (ball.x < w.x || ball.x > w.x + w.w) ball.vx *= -0.8;
-        if (ball.y < w.y || ball.y > w.y + w.h) ball.vy *= -0.8;
-        playClickSound(600, 0.02);
       }
     });
 
@@ -435,25 +458,26 @@ function renderCanvas() {
     ctx.fillText('🌀 OUT', p.outX - 18, p.outY - p.radius - 6);
   });
 
-  // 7. Render Windmill 🌀 with Outlines & Labels
-  if (hole.windmill) {
-    const wm = hole.windmill;
-    ctx.save();
-    ctx.translate(wm.x, wm.y);
-    ctx.rotate(wm.angle);
-    ctx.fillStyle = '#ef4444';
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
+  // 7. Render Windmills 🌀 (Supports Multiple Windmills per Hole)
+  if (hole.windmills && hole.windmills.length > 0) {
+    hole.windmills.forEach(wm => {
+      ctx.save();
+      ctx.translate(wm.x, wm.y);
+      ctx.rotate(wm.angle);
+      ctx.fillStyle = '#ef4444';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
 
-    for (let i = 0; i < 4; i++) {
-      ctx.rotate(Math.PI / 2);
-      ctx.fillRect(-7, 0, 14, wm.radius);
-      ctx.strokeRect(-7, 0, 14, wm.radius);
-    }
-    ctx.restore();
+      for (let i = 0; i < 4; i++) {
+        ctx.rotate(Math.PI / 2);
+        ctx.fillRect(-7, 0, 14, wm.radius);
+        ctx.strokeRect(-7, 0, 14, wm.radius);
+      }
+      ctx.restore();
 
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('🌀 WINDMILL', wm.x - 35, wm.y - wm.radius - 10);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText(wm.label || '🌀 WINDMILL', wm.x - 35, wm.y - wm.radius - 10);
+    });
   }
 
   // 8. Render Hole Cup & Flag ⛳
@@ -533,7 +557,15 @@ function shootBall(powerX, powerY) {
 
   lastBallState = { x: ball.x, y: ball.y, strokes: strokeCount, total: totalStrokes };
 
-  const speedMult = 0.12;
+  // Cap maximum shot power to prevent excessive speed tunneling
+  const powerMag = Math.hypot(powerX, powerY);
+  const maxPower = 180;
+  if (powerMag > maxPower) {
+    powerX = (powerX / powerMag) * maxPower;
+    powerY = (powerY / powerMag) * maxPower;
+  }
+
+  const speedMult = 0.11;
 
   ball.vx = powerX * speedMult;
   ball.vy = powerY * speedMult;
