@@ -3,7 +3,7 @@
    ========================================================================== */
 
 import { t } from '../i18n.js';
-import { getAnonProfile, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard, setLeaderboardUpdateCallback } from '../leaderboard.js';
+import { getAnonProfile, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard, setLeaderboardUpdateCallback, fetchGlobalLeaderboards } from '../leaderboard.js';
 
 let activeTestId = 'reaction-time-test';
 
@@ -21,6 +21,12 @@ const TEST_TABS = [
 
 export function renderLeaderboardView(container) {
   const profile = getAnonProfile();
+
+  // Open directly to the last played test tab
+  const lastTest = localStorage.getItem('catkeylab_last_active_test');
+  if (lastTest && TEST_TABS.some(t => t.id === lastTest)) {
+    activeTestId = lastTest;
+  }
 
   container.innerHTML = `
     <div class="container section" style="padding-top:1.5rem;">
@@ -46,6 +52,7 @@ export function renderLeaderboardView(container) {
           </div>
         </div>
         <div class="lb-profile-actions">
+          <button id="lb-sync-cloud-btn" class="btn btn-secondary btn-sm">🔄 Refresh Live Scores</button>
           <button id="lb-cycle-emoji-btn" class="btn btn-secondary btn-sm">🎭 Cycle Emoji</button>
           <button id="lb-randomize-btn" class="btn btn-primary btn-sm">🎲 Randomize Name & Emoji</button>
         </div>
@@ -81,6 +88,7 @@ export function renderLeaderboardView(container) {
 function bindEvents() {
   const tabs = document.querySelectorAll('.lb-tab-btn');
   const avatarBtn = document.getElementById('lb-avatar-btn');
+  const syncCloudBtn = document.getElementById('lb-sync-cloud-btn');
   const cycleEmojiBtn = document.getElementById('lb-cycle-emoji-btn');
   const randomizeBtn = document.getElementById('lb-randomize-btn');
 
@@ -89,9 +97,21 @@ function bindEvents() {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       activeTestId = tab.dataset.tab;
+      localStorage.setItem('catkeylab_last_active_test', activeTestId);
       renderTable(activeTestId);
     });
   });
+
+  if (syncCloudBtn) {
+    syncCloudBtn.addEventListener('click', async () => {
+      syncCloudBtn.textContent = '⏳ Syncing...';
+      await fetchGlobalLeaderboards();
+      renderTable(activeTestId);
+      setTimeout(() => {
+        syncCloudBtn.textContent = '🔄 Refresh Live Scores';
+      }, 600);
+    });
+  }
 
   const handleAvatarCycle = () => {
     const updated = cycleAnonAvatar();

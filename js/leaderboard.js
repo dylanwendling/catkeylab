@@ -88,11 +88,11 @@ if (syncChannel) {
   };
 }
 
-const GLOBAL_KV_URL = 'https://kvdb.io/CatKeyLab_Live_Sync_2026/scores_v4';
+const GLOBAL_BLOB_URL = 'https://jsonblob.com/api/jsonBlob/1278149811099688960';
 
 // Purge old local storage keys to guarantee 100% clean data slate
 function purgeOldKeys() {
-  ['catkeylab_leaderboards', 'catkeylab_leaderboards_v2', 'catkeylab_leaderboards_v3'].forEach(k => {
+  ['catkeylab_leaderboards', 'catkeylab_leaderboards_v2', 'catkeylab_leaderboards_v3', 'catkeylab_leaderboards_v4'].forEach(k => {
     if (localStorage.getItem(k)) localStorage.removeItem(k);
   });
 }
@@ -101,14 +101,17 @@ purgeOldKeys();
 // Fetch Global Remote Leaderboards from Cloud Store
 export async function fetchGlobalLeaderboards() {
   try {
-    const res = await fetch(GLOBAL_KV_URL);
+    const res = await fetch(GLOBAL_BLOB_URL, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
+    });
     if (!res.ok) return;
     const remoteData = await res.json();
     if (!remoteData || typeof remoteData !== 'object') return;
 
     let localBoards = {};
     try {
-      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v4')) || {};
+      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v5')) || {};
     } catch (e) {}
 
     let hasChanges = false;
@@ -140,7 +143,7 @@ export async function fetchGlobalLeaderboards() {
     });
 
     if (hasChanges) {
-      localStorage.setItem('catkeylab_leaderboards_v4', JSON.stringify(localBoards));
+      localStorage.setItem('catkeylab_leaderboards_v5', JSON.stringify(localBoards));
       if (updateCallback) updateCallback();
     }
   } catch (e) {
@@ -148,14 +151,14 @@ export async function fetchGlobalLeaderboards() {
   }
 }
 
-// Automatic 4-Second Live Polling Loop across all clients
-setInterval(fetchGlobalLeaderboards, 4000);
+// Automatic 3-Second Live Polling Loop across all clients
+setInterval(fetchGlobalLeaderboards, 3000);
 
 // Get Leaderboard Data for a Test
 export function getLeaderboard(testId) {
   purgeOldKeys();
 
-  let boards = localStorage.getItem('catkeylab_leaderboards_v4');
+  let boards = localStorage.getItem('catkeylab_leaderboards_v5');
   let data = null;
 
   if (boards) {
@@ -166,7 +169,7 @@ export function getLeaderboard(testId) {
 
   if (!data) {
     data = INITIAL_LEADERBOARDS;
-    localStorage.setItem('catkeylab_leaderboards_v4', JSON.stringify(data));
+    localStorage.setItem('catkeylab_leaderboards_v5', JSON.stringify(data));
   }
 
   const list = data[testId] || [];
@@ -183,6 +186,8 @@ export function getLeaderboard(testId) {
 // Submit Anonymous Score
 export function submitScore(testId, scoreVal, scoreDisplay) {
   if (scoreVal <= 0) return null;
+
+  localStorage.setItem('catkeylab_last_active_test', testId);
 
   const profile = getAnonProfile();
   const list = getLeaderboard(testId);
@@ -217,13 +222,13 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 
   let allBoards = {};
   try {
-    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v4')) || INITIAL_LEADERBOARDS;
+    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v5')) || INITIAL_LEADERBOARDS;
   } catch (e) {
     allBoards = INITIAL_LEADERBOARDS;
   }
 
   allBoards[testId] = topList;
-  localStorage.setItem('catkeylab_leaderboards_v4', JSON.stringify(allBoards));
+  localStorage.setItem('catkeylab_leaderboards_v5', JSON.stringify(allBoards));
 
   // Notify other local tabs in real-time
   if (syncChannel) {
@@ -255,7 +260,10 @@ async function syncGlobalCloud(testId, newEntry) {
   try {
     let remoteData = {};
     try {
-      const res = await fetch(GLOBAL_KV_URL);
+      const res = await fetch(GLOBAL_BLOB_URL, {
+        method: 'GET',
+        headers: { 'Accept': 'application/json' }
+      });
       if (res.ok) remoteData = await res.json() || {};
     } catch (e) {}
 
@@ -274,9 +282,13 @@ async function syncGlobalCloud(testId, newEntry) {
     currentList.sort((a, b) => isLowerBetter ? a.score - b.score : b.score - a.score);
     remoteData[testId] = currentList.slice(0, 50);
 
-    await fetch(GLOBAL_KV_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    // Save updated global leaderboards to cloud store
+    await fetch(GLOBAL_BLOB_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
       body: JSON.stringify(remoteData)
     });
   } catch (e) {
