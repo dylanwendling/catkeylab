@@ -200,7 +200,7 @@ function renderHomePage(container) {
           🐾 CatKeyLab • Handcrafted Hardware Testers & Typing Speed Challenge
         </div>
         <h1 class="hero-title">
-          <span>Test Mouse Hardware, Keyboard Keys & Typing Speed</span> 🐾
+          <span>Test Mouse Hardware, Keyboard Keys &amp; <span style="white-space: nowrap;">Typing Speed 🐾</span></span>
         </h1>
         <p class="hero-subtitle">
           Tested & approved by Nibbles the Cat. Free, private, browser-based tools to verify mouse buttons (MB1-MB5, right click, scroll), keyboard switches, and WPM typing speed.
