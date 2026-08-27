@@ -47,7 +47,7 @@ export function renderTypingTest(container) {
       <div class="tool-header-bar">
         <div class="tool-title-group">
           <h1>
-            <span style="font-size:2rem;">⌨️⚡</span>
+            <span style="font-size:2rem; display:inline-flex; align-items:center; justify-content:center; letter-spacing:0.05em;">⌨️⚡</span>
             <span data-i18n="typingTestTitle">${t('typingTestTitle')}</span>
           </h1>
           <p class="tool-subtitle-text">Distraction-free, minimal typing speed test. Type words smoothly and let Nibbles the Cat judge your WPM!</p>
