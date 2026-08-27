@@ -121,9 +121,8 @@ export function initCatMascot() {
   window.addEventListener('mousemove', handleMouseMove);
   window.addEventListener('scroll', handleScroll, { passive: true });
 
-  // Pet the Cat Handlers (Click + Hover Petting)
+  // Pet the Cat Handler (Click ONLY for 100% Reliable Audio Playback)
   catEl.addEventListener('click', handlePetting);
-  catEl.addEventListener('mouseenter', handlePetting);
 
   // Start Animation Loops
   requestAnimationFrame(animateMascot);
@@ -137,11 +136,9 @@ export function initCatMascot() {
 }
 
 /**
- * Pet the Cat Reaction (Synthesizes purr chime sound, spawns heart particle, pops speech)
+ * Pet the Cat Reaction (Synthesizes purr chime sound, spawns heart particle, pops speech on Click)
  */
 function handlePetting(e) {
-  if (e && e.type === 'mouseenter' && Math.random() > 0.4) return;
-
   playPurrSound();
 
   if (!catEl) return;
