@@ -154,6 +154,47 @@ function handlePetting(e) {
   showSpeechBubble(line);
 }
 
+const YARN_DIALOGUES = [
+  "got the yarn! 🧶",
+  "my toy!",
+  "mrrp! yarn!",
+  "swat! 🧶",
+  "catch!",
+  "purrrrr... yarn!"
+];
+
+export function getMascotPosition() {
+  if (!catEl) return { x: 60, y: window.innerHeight - 60 };
+  const rect = catEl.getBoundingClientRect();
+  return {
+    x: rect.left + rect.width / 2,
+    y: rect.top + rect.height / 2
+  };
+}
+
+let lastYarnReaction = 0;
+export function reactToYarn(yarnX, yarnY) {
+  const now = Date.now();
+  if (now - lastYarnReaction < 800) return;
+  lastYarnReaction = now;
+
+  playPurrSound();
+
+  if (catEl) {
+    catEl.classList.add('play-mode');
+    catEl.classList.add('purring');
+    setTimeout(() => {
+      if (catEl) {
+        catEl.classList.remove('play-mode');
+        catEl.classList.remove('purring');
+      }
+    }, 1600);
+  }
+
+  const line = YARN_DIALOGUES[Math.floor(Math.random() * YARN_DIALOGUES.length)];
+  showSpeechBubble(line);
+}
+
 /**
  * Synthesize Purr Chime Sound via Web Audio API
  */
