@@ -3,7 +3,7 @@
    ========================================================================== */
 
 import { t } from '../i18n.js';
-import { getAnonProfile, updateAnonHandle, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard } from '../leaderboard.js';
+import { getAnonProfile, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard } from '../leaderboard.js';
 
 let activeTestId = 'reaction-time-test';
 
