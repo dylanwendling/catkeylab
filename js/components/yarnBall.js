@@ -2,7 +2,7 @@
    CatnipLab - Interactive Throwable Yarn Ball Toy Component 🧶
    ========================================================================== */
 
-import { getMascotPosition, reactToYarn } from './catMascot.js';
+import { getMascotPosition, reactToYarn, updateYarnPawTracking } from './catMascot.js';
 import { playClickSound } from '../audio.js';
 
 let yarnEl = null;
@@ -144,6 +144,10 @@ function checkCatProximity() {
   const yarnCenterY = posY + 28;
 
   const dist = Math.hypot(yarnCenterX - mascotPos.x, yarnCenterY - mascotPos.y);
+
+  if (dist < 280) {
+    updateYarnPawTracking(yarnCenterX, yarnCenterY);
+  }
 
   if (dist < 160) {
     reactToYarn(yarnCenterX, yarnCenterY);

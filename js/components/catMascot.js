@@ -172,17 +172,52 @@ export function getMascotPosition() {
   };
 }
 
+export function updateYarnPawTracking(yarnX, yarnY) {
+  if (!catEl) return;
+
+  const rect = catEl.getBoundingClientRect();
+  const catCenterX = rect.left + rect.width / 2;
+  const catCenterY = rect.top + rect.height / 2;
+
+  const deltaX = yarnX - catCenterX;
+  const deltaY = yarnY - catCenterY;
+  const distance = Math.hypot(deltaX, deltaY);
+
+  if (distance < 280) {
+    catEl.classList.add('play-mode');
+
+    // Calculate paw reach vector directly toward yarn ball coordinates!
+    const maxPawReach = 28;
+    const pawAngle = Math.atan2(deltaY, deltaX);
+    const pawReachDist = Math.min(distance * 0.2, maxPawReach);
+
+    targetLeftPawX = Math.cos(pawAngle) * pawReachDist;
+    targetLeftPawY = Math.sin(pawAngle) * pawReachDist - 8;
+
+    targetRightPawX = Math.cos(pawAngle) * (pawReachDist * 0.95);
+    targetRightPawY = Math.sin(pawAngle) * (pawReachDist * 0.95) - 8;
+
+    // Also update pupil target to track the yarn ball!
+    const maxRadius = 6;
+    const pupilDistance = Math.min(distance * 0.08, maxRadius);
+    targetPupilX = Math.cos(pawAngle) * pupilDistance;
+    targetPupilY = Math.sin(pawAngle) * pupilDistance;
+  }
+}
+
 let lastYarnReaction = 0;
 export function reactToYarn(yarnX, yarnY) {
   const now = Date.now();
   if (now - lastYarnReaction < 800) return;
   lastYarnReaction = now;
 
-  playPurrSound();
-
+  // Silent reaction (no sound on yarn hit as requested)
   if (catEl) {
     catEl.classList.add('play-mode');
     catEl.classList.add('purring');
+
+    updateYarnPawTracking(yarnX, yarnY);
+
     setTimeout(() => {
       if (catEl) {
         catEl.classList.remove('play-mode');
