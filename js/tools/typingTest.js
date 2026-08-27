@@ -352,6 +352,7 @@ function showResultsModal(wpm, rawWpm, accuracy, errors, isNewHigh) {
       ${isNewHigh ? '<div class="new-record-banner">🔥 NEW PERSONAL BEST SCORE! 🔥</div>' : ''}
       <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:0.25rem;">Test Complete!</h2>
       <div class="rank-badge-pill ${rankClass}">${rankTitle}</div>
+      <div style="color:var(--accent-cyan); font-weight:700; margin-bottom:1rem; font-size:1rem;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</div>
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem; margin-bottom:1.5rem;">
         <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
@@ -373,11 +374,14 @@ function showResultsModal(wpm, rawWpm, accuracy, errors, isNewHigh) {
       </div>
 
       <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-        <button id="modal-retry-btn" class="btn btn-primary btn-lg" style="flex:1; min-width:180px;">
+        <button id="modal-retry-btn" class="btn btn-primary btn-lg" style="flex:1; min-width:160px;">
           🎮 Try Again (Enter)
         </button>
-        <button id="modal-surprise-btn" class="btn btn-surprise btn-lg" style="flex:1; min-width:180px;">
-          🎲 Try Random Tool
+        <a href="#leaderboards" class="btn btn-secondary btn-lg" style="flex:1; min-width:160px;">
+          🏆 View Leaderboard
+        </a>
+        <button id="modal-surprise-btn" class="btn btn-surprise btn-lg" style="flex:1; min-width:160px;">
+          🎲 Surprise Tool
         </button>
       </div>
     </div>

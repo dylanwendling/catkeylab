@@ -203,7 +203,11 @@ function handleGameOver() {
   const resultView = document.getElementById('vb-result-view');
   if (resultView) resultView.style.display = 'flex';
 
-  document.getElementById('vb-final-score-text').innerHTML = `Score: ${score} words<br><span style="font-size:1.1rem; color:var(--accent-emerald);">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
+  document.getElementById('vb-final-score-text').innerHTML = `
+    <div>Score: ${score} words</div>
+    <div style="font-size:1.1rem; color:var(--accent-emerald); font-weight:700; margin-top:0.4rem; margin-bottom:0.75rem;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</div>
+    <a href="#leaderboards" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
+  `;
 }
 
 function hideAllViews() {

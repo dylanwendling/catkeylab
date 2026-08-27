@@ -95,7 +95,10 @@ export function renderCPSTest(container) {
           </div>
         </div>
 
-        <button id="cps-modal-close" class="btn btn-primary btn-lg" style="width:100%;">Try Again</button>
+        <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+          <button id="cps-modal-close" class="btn btn-primary btn-lg" style="flex:1; min-width:140px;">Try Again</button>
+          <a href="#leaderboards" class="btn btn-secondary btn-lg" style="flex:1; min-width:140px;">🏆 View Leaderboard</a>
+        </div>
       </div>
     </div>
   `;

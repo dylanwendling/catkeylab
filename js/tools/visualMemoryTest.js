@@ -213,7 +213,11 @@ function handleGameOver() {
   const bestScore = localStorage.getItem('catkeylab_visual_best') || targetCount;
 
   if (title) title.textContent = `Game Over - Level ${level}`;
-  if (desc) desc.innerHTML = `Personal Best: <strong>${bestScore} Tiles</strong><br><span style="color:var(--accent-cyan); font-weight:700;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</span>`;
+  if (desc) desc.innerHTML = `
+    <div>Personal Best: <strong>${bestScore} Tiles</strong></div>
+    <div style="color:var(--accent-cyan); font-weight:700; margin-top:0.4rem; margin-bottom:0.75rem;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</div>
+    <a href="#leaderboards" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
+  `;
   if (startBtn) startBtn.textContent = 'Try Again';
 
   if (overlay) overlay.style.display = 'flex';

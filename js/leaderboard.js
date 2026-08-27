@@ -88,7 +88,15 @@ if (syncChannel) {
   };
 }
 
-const GLOBAL_KV_URL = 'https://kvdb.io/CatKeyLab_Global_2026/global_boards_v1';
+const GLOBAL_KV_URL = 'https://kvdb.io/CatKeyLab_Live_Sync_2026/scores_v4';
+
+// Purge old local storage keys to guarantee 100% clean data slate
+function purgeOldKeys() {
+  ['catkeylab_leaderboards', 'catkeylab_leaderboards_v2', 'catkeylab_leaderboards_v3'].forEach(k => {
+    if (localStorage.getItem(k)) localStorage.removeItem(k);
+  });
+}
+purgeOldKeys();
 
 // Fetch Global Remote Leaderboards from Cloud Store
 export async function fetchGlobalLeaderboards() {
@@ -100,7 +108,7 @@ export async function fetchGlobalLeaderboards() {
 
     let localBoards = {};
     try {
-      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v2')) || {};
+      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v4')) || {};
     } catch (e) {}
 
     let hasChanges = false;
@@ -132,7 +140,7 @@ export async function fetchGlobalLeaderboards() {
     });
 
     if (hasChanges) {
-      localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(localBoards));
+      localStorage.setItem('catkeylab_leaderboards_v4', JSON.stringify(localBoards));
       if (updateCallback) updateCallback();
     }
   } catch (e) {
@@ -140,14 +148,14 @@ export async function fetchGlobalLeaderboards() {
   }
 }
 
+// Automatic 4-Second Live Polling Loop across all clients
+setInterval(fetchGlobalLeaderboards, 4000);
+
 // Get Leaderboard Data for a Test
 export function getLeaderboard(testId) {
-  // Purge old mock storage key if present
-  if (localStorage.getItem('catkeylab_leaderboards')) {
-    localStorage.removeItem('catkeylab_leaderboards');
-  }
+  purgeOldKeys();
 
-  let boards = localStorage.getItem('catkeylab_leaderboards_v2');
+  let boards = localStorage.getItem('catkeylab_leaderboards_v4');
   let data = null;
 
   if (boards) {
@@ -158,7 +166,7 @@ export function getLeaderboard(testId) {
 
   if (!data) {
     data = INITIAL_LEADERBOARDS;
-    localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(data));
+    localStorage.setItem('catkeylab_leaderboards_v4', JSON.stringify(data));
   }
 
   const list = data[testId] || [];
@@ -209,13 +217,13 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 
   let allBoards = {};
   try {
-    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v2')) || INITIAL_LEADERBOARDS;
+    allBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v4')) || INITIAL_LEADERBOARDS;
   } catch (e) {
     allBoards = INITIAL_LEADERBOARDS;
   }
 
   allBoards[testId] = topList;
-  localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(allBoards));
+  localStorage.setItem('catkeylab_leaderboards_v4', JSON.stringify(allBoards));
 
   // Notify other local tabs in real-time
   if (syncChannel) {
@@ -224,6 +232,8 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 
   // Push to Global Cloud Store asynchronously
   syncGlobalCloud(testId, newEntry);
+
+  if (updateCallback) updateCallback(testId);
 
   // Find user rank position
   const rankIdx = topList.findIndex(item => item.handle === profile.handle);

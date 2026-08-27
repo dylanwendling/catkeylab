@@ -111,7 +111,11 @@ function handleBoxClick() {
     targetBox.className = 'reaction-box reaction-state-result';
     icon.textContent = '🏆';
     title.textContent = `${reactionTime} ms`;
-    sub.innerHTML = `${getRatingString(reactionTime)} • <strong>${rankInfo ? rankInfo.percentile : ''}</strong> (Click to try again)`;
+    sub.innerHTML = `
+      <div style="margin-bottom:0.5rem;">${getRatingString(reactionTime)} • <strong>${rankInfo ? rankInfo.percentile : ''}</strong></div>
+      <a href="#leaderboards" class="btn btn-secondary btn-sm" style="pointer-events:auto; z-index:10; position:relative;">🏆 View Global Leaderboard</a>
+      <div style="font-size:0.85rem; color:var(--text-muted); margin-top:0.5rem;">(Click box anywhere to try again)</div>
+    `;
 
     updateDashboard(reactionTime);
   }
