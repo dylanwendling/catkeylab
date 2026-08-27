@@ -651,7 +651,7 @@ function bindEvents() {
     });
   }
 
-  // Pointer Aim & Drag Listeners on Canvas
+  // Pointer Aim & Drag Listeners on Canvas & Window
   if (!canvas) return;
 
   const getCanvasPos = (e) => {
@@ -669,29 +669,41 @@ function bindEvents() {
     const pos = getCanvasPos(e);
     const distToBall = Math.hypot(pos.x - ball.x, pos.y - ball.y);
 
-    if (distToBall < 35) {
+    if (distToBall < 45) {
       isAiming = true;
       aimStartPos = { x: ball.x, y: ball.y };
       aimCurrentPos = pos;
+      try {
+        canvas.setPointerCapture(e.pointerId);
+      } catch (err) {}
     }
   });
 
-  canvas.addEventListener('pointermove', (e) => {
+  const handlePointerMove = (e) => {
     if (isAiming) {
       aimCurrentPos = getCanvasPos(e);
     }
-  });
+  };
 
-  canvas.addEventListener('pointerup', (e) => {
+  const handlePointerUp = (e) => {
     if (isAiming) {
       isAiming = false;
+      try {
+        canvas.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+
       const dx = aimStartPos.x - aimCurrentPos.x;
       const dy = aimStartPos.y - aimCurrentPos.y;
       if (Math.hypot(dx, dy) > 10) {
         shootBall(dx, dy);
       }
     }
-  });
+  };
+
+  window.addEventListener('pointermove', handlePointerMove);
+  window.addEventListener('pointerup', handlePointerUp);
+  canvas.addEventListener('pointermove', handlePointerMove);
+  canvas.addEventListener('pointerup', handlePointerUp);
 }
 
 export function cleanupCatMiniGolfGame() {
