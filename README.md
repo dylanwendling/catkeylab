@@ -63,7 +63,7 @@ CatKeyLab features **Nibbles**, a playful Ginger Tabby Cat wearing a ruby red co
 
 CatKeyLab includes nine specialized, feature-rich interactive modules accessible via client-side hash routing:
 
-### ⌨️⚡ 1. Typing Speed Challenge (WPM) (`#typing-test`)
+### ⌨️ 1. Typing Speed Challenge (WPM) (`#typing-test`)
 - **Minimal WPM Testing**: Distraction-free typing test inspired by Monkeytype.
 - **Custom Time Limits**: Choose between 15s, 30s, 60s, or 120s testing durations.
 - **Mechanical Sound Synthesis**: Synthesizes authentic mechanical key clicks as you type.
@@ -75,7 +75,7 @@ CatKeyLab includes nine specialized, feature-rich interactive modules accessible
 - **Scroll Wheel Diagnostics**: Detects scroll direction (Up/Down) and measures scroll velocity.
 - **Dynamic Visual Mouse Diagram**: Highlighted SVG diagram updating instantly as buttons are pressed.
 
-### ⌨️ 3. Visual Keyboard Tester (`#keyboard-test`)
+### 🖥️ 3. Visual Keyboard Tester (`#keyboard-test`)
 - **Interactive Visual Keyboard Canvas**: Highlights pressed keys on a virtual layout in real-time.
 - **DOM KeyCode Inspector**: Displays detailed DOM event properties (`key`, `code`, `keyCode`, `location`).
 - **Modifier Key Tracking**: Monitors active state for Shift, Control, Alt, and Meta/Command keys.

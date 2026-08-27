@@ -25,7 +25,7 @@ export function renderHeader(container) {
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
           
           <a href="#typing-test" class="nav-link nav-link-featured" data-route="typing-test">
-            <span>⌨️⚡ Typing Challenge</span>
+            <span>⌨️ Typing Challenge</span>
             <span class="nav-badge-hot">HOT</span>
           </a>
 
@@ -105,13 +105,13 @@ export function renderHeader(container) {
           <span data-i18n="navHome">${t('navHome')}</span>
         </a>
         <a href="#typing-test" class="mobile-nav-link" data-route="typing-test">
-          <span>⌨️⚡ Typing Speed Test</span>
+          <span>⌨️ Typing Speed Test</span>
         </a>
         <a href="#mouse-test" class="mobile-nav-link" data-route="mouse-test">
           <span>🖱️ Mouse Hardware Tester</span>
         </a>
         <a href="#keyboard-test" class="mobile-nav-link" data-route="keyboard-test">
-          <span>⌨️ Keyboard Key Tester</span>
+          <span>🖥️ Keyboard Key Tester</span>
         </a>
         <a href="#auto-clicker" class="mobile-nav-link" data-route="auto-clicker">
           <span>🤖 Online Auto Clicker</span>

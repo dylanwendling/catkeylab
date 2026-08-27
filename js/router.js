@@ -36,7 +36,7 @@ export const TOOL_METADATA = {
   'typing-test': {
     titleKey: 'typingTestTitle',
     desc: 'Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.',
-    icon: '⌨️⚡',
+    icon: '⌨️',
     category: 'speed',
     renderFn: renderTypingTest,
     cleanupFn: cleanupTypingTest,
@@ -60,7 +60,7 @@ export const TOOL_METADATA = {
   'keyboard-test': {
     titleKey: 'keyboardTestTitle',
     desc: 'Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.',
-    icon: '⌨️',
+    icon: '🖥️',
     category: 'hardware',
     renderFn: renderKeyboardTest,
     cleanupFn: cleanupKeyboardTest,
@@ -215,7 +215,7 @@ function renderHomePage(container) {
           </a>
           <a href="#keyboard-test" class="btn btn-secondary btn-lg">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
-            <span>⌨️ Test Keyboard Keys</span>
+            <span>🖥️ Test Keyboard Keys</span>
           </a>
           <button id="hero-surprise-btn" class="btn btn-surprise btn-lg">
             <span>🎲 Surprise Me!</span>
@@ -487,9 +487,9 @@ function renderLegalPage(container, type) {
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
         <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:1rem; margin-top:0.75rem;">
-          <div><strong>⌨️⚡ Typing Speed (WPM)</strong>: Distraction-free Monkeytype-inspired test with mechanical key sounds.</div>
+          <div><strong>⌨️ Typing Speed (WPM)</strong>: Distraction-free Monkeytype-inspired test with mechanical key sounds.</div>
           <div><strong>🖱️ Mouse Hardware Tester</strong>: MB1–MB5 buttons, scroll wheel direction, and velocity inspector.</div>
-          <div><strong>⌨️ Keyboard Key Tester</strong>: NKRO key rollover verification and DOM KeyCode inspector.</div>
+          <div><strong>🖥️ Keyboard Key Tester</strong>: NKRO key rollover verification and DOM KeyCode inspector.</div>
           <div><strong>🎯 Online Auto Clicker</strong>: In-browser automated clicking simulator with interval controls.</div>
           <div><strong>⚡ CPS Speed Test</strong>: Timed clicks-per-second benchmarking with high score badges.</div>
           <div><strong>🚀 Click Speed Test</strong>: Real-time velocity analytics and click consistency gauges.</div>
@@ -581,9 +581,9 @@ function renderLegalPage(container, type) {
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--accent-emerald); font-size:1.2rem; margin-bottom:1rem;">⌨️ Hardware & Typing Tools</h3>
           <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
-            <li><a href="#typing-test" style="color:var(--text-primary); font-weight:600;">⌨️⚡ Typing Speed Challenge (WPM)</a></li>
+            <li><a href="#typing-test" style="color:var(--text-primary); font-weight:600;">⌨️ Typing Speed Challenge (WPM)</a></li>
             <li><a href="#mouse-test" style="color:var(--text-primary); font-weight:600;">🖱️ Mouse Button & Movement Tester</a></li>
-            <li><a href="#keyboard-test" style="color:var(--text-primary); font-weight:600;">⌨️ Visual Keyboard Switch Tester</a></li>
+            <li><a href="#keyboard-test" style="color:var(--text-primary); font-weight:600;">🖥️ Visual Keyboard Switch Tester</a></li>
             <li><a href="#auto-clicker" style="color:var(--text-primary); font-weight:600;">🎯 In-Browser Online Auto Clicker</a></li>
             <li><a href="#cps-test" style="color:var(--text-primary); font-weight:600;">⚡ CPS Test (Clicks Per Second)</a></li>
             <li><a href="#click-speed-test" style="color:var(--text-primary); font-weight:600;">🚀 Click Velocity & Burst Speed Test</a></li>

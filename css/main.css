@@ -641,8 +641,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
-  letter-spacing: -0.08em;
+  font-size: 1.5rem;
   line-height: 1;
 }
 

@@ -17,7 +17,7 @@ export function renderKeyboardTest(container) {
       <div class="tool-header-bar">
         <div class="tool-title-group">
           <h1>
-            <span style="font-size:2rem;">⌨️</span>
+            <span style="font-size:2rem;">🖥️</span>
             <span data-i18n="keyboardTestTitle">${t('keyboardTestTitle')}</span>
           </h1>
           <p class="tool-subtitle-text">Test key rollover, ghosting, keycode events, and mechanical switch registration in real-time.</p>
