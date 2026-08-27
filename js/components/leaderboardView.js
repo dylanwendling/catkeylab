@@ -47,8 +47,7 @@ export function renderLeaderboardView(container) {
         </div>
         <div class="lb-profile-actions">
           <button id="lb-cycle-emoji-btn" class="btn btn-secondary btn-sm">🎭 Cycle Emoji</button>
-          <button id="lb-randomize-btn" class="btn btn-secondary btn-sm">🎲 Randomize All</button>
-          <button id="lb-edit-btn" class="btn btn-primary btn-sm">✏️ Edit Name</button>
+          <button id="lb-randomize-btn" class="btn btn-primary btn-sm">🎲 Randomize Name & Emoji</button>
         </div>
       </div>
 
@@ -77,7 +76,6 @@ function bindEvents() {
   const avatarBtn = document.getElementById('lb-avatar-btn');
   const cycleEmojiBtn = document.getElementById('lb-cycle-emoji-btn');
   const randomizeBtn = document.getElementById('lb-randomize-btn');
-  const editBtn = document.getElementById('lb-edit-btn');
 
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
@@ -106,19 +104,6 @@ function bindEvents() {
       if (handleEl) handleEl.textContent = updated.handle;
       if (iconEl) iconEl.textContent = updated.avatar;
       renderTable(activeTestId);
-    });
-  }
-
-  if (editBtn) {
-    editBtn.addEventListener('click', () => {
-      const current = getAnonProfile();
-      const input = prompt("Enter your anonymous cat alias:", current.handle);
-      if (input && input.trim()) {
-        const updated = updateAnonHandle(input);
-        const handleEl = document.getElementById('lb-handle-text');
-        if (handleEl) handleEl.textContent = updated.handle;
-        renderTable(activeTestId);
-      }
     });
   }
 }

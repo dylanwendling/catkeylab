@@ -48,14 +48,7 @@ export function getAnonProfile() {
   return newProfile;
 }
 
-export function updateAnonHandle(customName) {
-  const profile = getAnonProfile();
-  if (customName && customName.trim().length > 0) {
-    profile.handle = customName.trim().substring(0, 24);
-    localStorage.setItem('catkeylab_anon_profile', JSON.stringify(profile));
-  }
-  return profile;
-}
+
 
 export function cycleAnonAvatar() {
   const profile = getAnonProfile();
