@@ -18,7 +18,12 @@ export function renderFooter(container) {
               <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
             </a>
             <p data-i18n="footerAbout">${t('footerAbout')}</p>
-            <div class="privacy-badge">
+            <div style="margin-top:0.6rem;">
+              <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="footer-link" style="color:var(--accent-amber); font-weight:700; display:inline-flex; align-items:center; gap:0.35rem;">
+                <span>🎮 Created by SnowyOrca on itch.io</span> ↗
+              </a>
+            </div>
+            <div class="privacy-badge" style="margin-top:0.6rem;">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
               <span data-i18n="privacyNotice">${t('privacyNotice')}</span>
             </div>

@@ -32,7 +32,12 @@
 
 ## 📖 Overview
 
-**CatKeyLab** ([catkeylab.com](https://catkeylab.com/)) is a lightweight, high-performance web application built for testing mouse hardware, keyboard switches, WPM typing speed, click velocity, and reaction latency directly inside your web browser.
+**CatKeyLab** ([catkeylab.com](https://catkeylab.com/)) is a lightweight, high-performance web application created by **SnowyOrca** ([snowyorca.itch.io](https://snowyorca.itch.io/)) built for testing mouse hardware, keyboard switches, WPM typing speed, click velocity, and reaction latency directly inside your web browser.
+
+<p align="center">
+  <img src="./assets/orange-cat.jpg" width="340" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="border-radius:12px; border:3px solid #f97316;" /><br>
+  <em>Meet the adorable real-life orange cat sitting in a box who inspired Nibbles! 🐱</em>
+</p>
 
 Unlike bloated desktop software, CatKeyLab operates **100% client-side**, requiring **zero downloads, zero plugins, zero accounts, and zero tracking**. All hardware test measurements, typing accuracy calculations, and high score benchmarks process locally in your browser sandbox to guarantee absolute privacy and instant performance.
 

@@ -463,6 +463,25 @@ function renderLegalPage(container, type) {
     </p>
 
     <div style="line-height:1.8; color:var(--text-secondary); display:flex; flex-direction:column; gap:1.5rem;">
+      <!-- SnowyOrca & Real Orange Cat Creator Showcase -->
+      <div style="background:linear-gradient(135deg, rgba(249,115,22,0.14), rgba(16,185,129,0.14)); border:2px solid #f97316; padding:1.75rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+        <img src="./assets/orange-cat.jpg" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="width:150px; height:150px; object-fit:cover; border-radius:var(--radius-md); border:3px solid #fb923c; box-shadow:0 8px 20px rgba(249,115,22,0.3); flex-shrink:0;" />
+        <div style="flex:1; min-width:240px;">
+          <div style="display:inline-block; background:rgba(249,115,22,0.2); color:#f97316; font-size:0.75rem; font-weight:800; padding:0.25rem 0.6rem; border-radius:var(--radius-full); text-transform:uppercase; margin-bottom:0.5rem;">
+            🐾 Creator Showcase
+          </div>
+          <h2 style="font-size:1.5rem; font-weight:800; color:var(--text-primary); margin-bottom:0.5rem;">
+            Meet the Real Orange Cat Behind Nibbles! 🐱
+          </h2>
+          <p style="color:var(--text-secondary); margin-bottom:1.25rem; line-height:1.6;">
+            CatKeyLab is created by <strong>SnowyOrca</strong>! Inspired by this adorable real-life orange cat sitting in a box, Nibbles accompanies you across all hardware tests and WPM challenges. Check out more games, projects, and interactive creations on itch.io!
+          </p>
+          <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg, #f97316, #ea580c); border:none; box-shadow:0 4px 14px rgba(249,115,22,0.4); font-weight:700;">
+            <span>🎮 Visit SnowyOrca on itch.io</span> ↗
+          </a>
+        </div>
+      </div>
+
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
         <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">📖 Overview</h3>
         <p>
