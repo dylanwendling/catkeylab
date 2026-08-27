@@ -88,6 +88,58 @@ if (syncChannel) {
   };
 }
 
+const GLOBAL_KV_URL = 'https://kvdb.io/CatKeyLab_Global_2026/global_boards_v1';
+
+// Fetch Global Remote Leaderboards from Cloud Store
+export async function fetchGlobalLeaderboards() {
+  try {
+    const res = await fetch(GLOBAL_KV_URL);
+    if (!res.ok) return;
+    const remoteData = await res.json();
+    if (!remoteData || typeof remoteData !== 'object') return;
+
+    let localBoards = {};
+    try {
+      localBoards = JSON.parse(localStorage.getItem('catkeylab_leaderboards_v2')) || {};
+    } catch (e) {}
+
+    let hasChanges = false;
+
+    Object.keys(INITIAL_LEADERBOARDS).forEach(testId => {
+      const remoteList = Array.isArray(remoteData[testId]) ? remoteData[testId] : [];
+      const localList = Array.isArray(localBoards[testId]) ? localBoards[testId] : [];
+
+      const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
+      const mergedMap = new Map();
+
+      [...localList, ...remoteList].forEach(item => {
+        if (!item || !item.handle || typeof item.score !== 'number') return;
+        const existing = mergedMap.get(item.handle);
+        if (!existing) {
+          mergedMap.set(item.handle, item);
+        } else {
+          const isBetter = isLowerBetter ? item.score < existing.score : item.score > existing.score;
+          if (isBetter) mergedMap.set(item.handle, item);
+        }
+      });
+
+      const mergedList = Array.from(mergedMap.values())
+        .sort((a, b) => isLowerBetter ? a.score - b.score : b.score - a.score)
+        .slice(0, 50);
+
+      localBoards[testId] = mergedList;
+      hasChanges = true;
+    });
+
+    if (hasChanges) {
+      localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(localBoards));
+      if (updateCallback) updateCallback();
+    }
+  } catch (e) {
+    // Offline resilience
+  }
+}
+
 // Get Leaderboard Data for a Test
 export function getLeaderboard(testId) {
   // Purge old mock storage key if present
@@ -110,6 +162,9 @@ export function getLeaderboard(testId) {
   }
 
   const list = data[testId] || [];
+
+  // Trigger background cloud pull
+  fetchGlobalLeaderboards();
 
   // Sort logic (Lower is better for reaction-time and aim-trainer; Higher is better for others)
   const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
@@ -162,12 +217,12 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
   allBoards[testId] = topList;
   localStorage.setItem('catkeylab_leaderboards_v2', JSON.stringify(allBoards));
 
-  // Notify other tabs in real-time
+  // Notify other local tabs in real-time
   if (syncChannel) {
     syncChannel.postMessage({ type: 'SCORE_SUBMITTED', testId, entry: newEntry });
   }
 
-  // Background Cloud Sync (Async Non-Blocking)
+  // Push to Global Cloud Store asynchronously
   syncGlobalCloud(testId, newEntry);
 
   // Find user rank position
@@ -185,18 +240,38 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
   };
 }
 
-// Background Cloud Synchronization Engine
-async function syncGlobalCloud(testId, entry) {
+// Global Cloud Synchronization Engine
+async function syncGlobalCloud(testId, newEntry) {
   try {
-    // Post to global broadcast endpoint if available
-    const url = 'https://kvdb.io/N9rRjZ31bW1Kz38Q4vX92k/catkeylab_scores';
-    const payload = { testId, entry, timestamp: Date.now() };
-    await fetch(url, {
+    let remoteData = {};
+    try {
+      const res = await fetch(GLOBAL_KV_URL);
+      if (res.ok) remoteData = await res.json() || {};
+    } catch (e) {}
+
+    const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test';
+    const currentList = Array.isArray(remoteData[testId]) ? remoteData[testId] : [];
+
+    const existingIdx = currentList.findIndex(item => item.handle === newEntry.handle);
+    if (existingIdx !== -1) {
+      const prev = currentList[existingIdx];
+      const isBetter = isLowerBetter ? newEntry.score < prev.score : newEntry.score > prev.score;
+      if (isBetter) currentList[existingIdx] = newEntry;
+    } else {
+      currentList.push(newEntry);
+    }
+
+    currentList.sort((a, b) => isLowerBetter ? a.score - b.score : b.score - a.score);
+    remoteData[testId] = currentList.slice(0, 50);
+
+    await fetch(GLOBAL_KV_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).catch(() => {});
-  } catch (e) {}
+      body: JSON.stringify(remoteData)
+    });
+  } catch (e) {
+    // Offline resilience
+  }
 }
 
 // Calculate Percentile Rating

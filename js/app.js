@@ -11,12 +11,14 @@ import { initCatMascot } from './components/catMascot.js';
 import { initYarnBall } from './components/yarnBall.js';
 import { initFoodBowl } from './components/foodBowl.js';
 import { handleRoute } from './router.js';
+import { fetchGlobalLeaderboards } from './leaderboard.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. Initialize Core Subsystems
+  // 1. Initialize Core Subsystems & Cloud Leaderboards
   initTheme();
   initAudio();
   initI18n();
+  fetchGlobalLeaderboards();
 
   // 2. Initialize Interactive Cat Mascot, Throwable Yarn Ball & Food Bowl 🥣🐟
   initCatMascot();
