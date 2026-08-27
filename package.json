@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "CatnipLab - Online Hardware Testers & Typing Speed Challenge",
   "private": true,
-  "main": "index.js",
+  "main": "index.html",
   "scripts": {
-    "start": "node index.js",
+    "start": "serve -s . -l ${PORT:-3000}",
     "build": "echo 'No build required for static site'"
   },
   "dependencies": {

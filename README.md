@@ -1,6 +1,6 @@
-# 🐾 CatnipLab 🌿
+# ⚡ ClickPulse
 
-<h3 align="center">Handcrafted Online Hardware Testers, Typing Speed Challenge & Cat Mascot</h3>
+<h3 align="center">Free, Private & Powerful Online Browser Clicking & Hardware Testing Suite</h3>
 
 <p align="center">
   <a href="#key-features"><img src="https://img.shields.io/badge/Tools-8_Interactive_Modules-blue.svg?style=for-the-badge" alt="8 Tools"></a>
