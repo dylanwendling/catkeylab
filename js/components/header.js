@@ -25,30 +25,35 @@ export function renderHeader(container) {
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
           <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
-          <a href="#typing-test" class="nav-link" data-route="typing-test" data-i18n="navTypingTest">⌨️⚡ ${t('navTypingTest')}</a>
-          <a href="#mouse-test" class="nav-link" data-route="mouse-test" data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</a>
-          <a href="#keyboard-test" class="nav-link" data-route="keyboard-test" data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</a>
-          <a href="#auto-clicker" class="nav-link" data-route="auto-clicker" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
-          <a href="#cps-test" class="nav-link" data-route="cps-test" data-i18n="navCPSTest">${t('navCPSTest')}</a>
+          <a href="#typing-test" class="nav-link nav-link-featured" data-route="typing-test" data-i18n="navTypingTest">⌨️⚡ ${t('navTypingTest')}</a>
 
-          <!-- Tools Dropdown -->
-          <div class="dropdown" id="tools-dropdown">
+          <!-- Hardware Dropdown -->
+          <div class="dropdown" id="hardware-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span data-i18n="navTools">${t('navTools')}</span>
+              <span>🖱️ Hardware Tests</span>
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
-              <a href="#tools" class="dropdown-item"><strong>All Tools Directory</strong></a>
-              <div style="height:1px; background:var(--border-color); margin:0.3rem 0;"></div>
-              <a href="#typing-test" class="dropdown-item" data-i18n="navTypingTest">⌨️⚡ ${t('navTypingTest')}</a>
-              <a href="#mouse-test" class="dropdown-item" data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</a>
-              <a href="#keyboard-test" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</a>
-              <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">${t('navAutoClicker')}</a>
-              <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">${t('navCPSTest')}</a>
-              <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</a>
-              <a href="#click-counter" class="dropdown-item" data-i18n="navClickCounter">${t('navClickCounter')}</a>
-              <a href="#reaction-time-test" class="dropdown-item" data-i18n="navReactionTimeTest">${t('navReactionTimeTest')}</a>
-              <a href="#double-click-test" class="dropdown-item" data-i18n="navDoubleClickTest">${t('navDoubleClickTest')}</a>
+              <a href="#mouse-test" class="dropdown-item" data-i18n="navMouseTest">🖱️ Mouse Hardware Tester</a>
+              <a href="#keyboard-test" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ Keyboard Key Tester</a>
+            </div>
+          </div>
+
+          <!-- Speed & Tools Dropdown -->
+          <div class="dropdown" id="tools-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>⚡ Speed & Utilities</span>
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu">
+              <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
+              <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
+              <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">⏱️ Click Speed Test</a>
+              <a href="#click-counter" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
+              <a href="#reaction-time-test" class="dropdown-item" data-i18n="navReactionTimeTest">🎯 Reaction Time Test</a>
+              <a href="#double-click-test" class="dropdown-item" data-i18n="navDoubleClickTest">⚡ Double Click Test</a>
+              <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
+              <a href="#tools" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
             </div>
           </div>
         </nav>
@@ -58,6 +63,9 @@ export function renderHeader(container) {
           <button id="nav-surprise-btn" class="btn btn-sm btn-surprise" style="padding:0.45rem 0.9rem;">
             <span>🎲 Surprise Me!</span>
           </button>
+
+          <!-- Vertical Separator Divider -->
+          <div class="header-divider"></div>
 
           <!-- Language Selector Dropdown -->
           <div class="dropdown" id="lang-dropdown">
@@ -96,38 +104,36 @@ export function renderHeader(container) {
         <a href="#" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
         </a>
+        <a href="#typing-test" class="mobile-nav-link" data-route="typing-test">
+          <span>⌨️⚡ Typing Speed Test</span>
+        </a>
         <a href="#mouse-test" class="mobile-nav-link" data-route="mouse-test">
-          <span data-i18n="navMouseTest">🖱️ ${t('navMouseTest')}</span>
+          <span>🖱️ Mouse Hardware Tester</span>
         </a>
         <a href="#keyboard-test" class="mobile-nav-link" data-route="keyboard-test">
-          <span data-i18n="navKeyboardTest">⌨️ ${t('navKeyboardTest')}</span>
+          <span>⌨️ Keyboard Key Tester</span>
         </a>
         <a href="#auto-clicker" class="mobile-nav-link" data-route="auto-clicker">
-          <span data-i18n="navAutoClicker">${t('navAutoClicker')}</span>
+          <span>🤖 Online Auto Clicker</span>
         </a>
         <a href="#cps-test" class="mobile-nav-link" data-route="cps-test">
-          <span data-i18n="navCPSTest">${t('navCPSTest')}</span>
+          <span>⚡ CPS Speed Test</span>
         </a>
         <a href="#click-speed-test" class="mobile-nav-link" data-route="click-speed-test">
-          <span data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</span>
+          <span>⏱️ Click Speed Test</span>
         </a>
         <a href="#click-counter" class="mobile-nav-link" data-route="click-counter">
-          <span data-i18n="navClickCounter">${t('navClickCounter')}</span>
-        </a>
-        <a href="#mouse-test" class="mobile-nav-link" data-route="mouse-test">
-          <span data-i18n="navMouseTest">${t('navMouseTest')}</span>
-        </a>
-        <a href="#keyboard-test" class="mobile-nav-link" data-route="keyboard-test">
-          <span data-i18n="navKeyboardTest">${t('navKeyboardTest')}</span>
+          <span>🔢 Digital Click Counter</span>
         </a>
         <a href="#reaction-time-test" class="mobile-nav-link" data-route="reaction-time-test">
-          <span data-i18n="navReactionTimeTest">${t('navReactionTimeTest')}</span>
+          <span>🎯 Reaction Time Test</span>
         </a>
         <a href="#double-click-test" class="mobile-nav-link" data-route="double-click-test">
-          <span data-i18n="navDoubleClickTest">${t('navDoubleClickTest')}</span>
+          <span>⚡ Double Click Test</span>
         </a>
+        <div style="height:1px; background:var(--border-color); margin:0.5rem 0;"></div>
         <a href="#tools" class="mobile-nav-link" data-route="tools">
-          <strong data-i18n="navTools">${t('navTools')} Directory</strong>
+          <strong>📂 All Tools Directory</strong>
         </a>
       </div>
     </header>
