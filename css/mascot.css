@@ -177,7 +177,7 @@
 }
 
 .cat-character.squint .cat-eyelid {
-  transform: scaleY(0.65);
+  transform: scaleY(0.40);
 }
 
 /* Cat Snout, Nose & Natural Fanned Whiskers */
