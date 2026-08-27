@@ -163,7 +163,6 @@ const YARN_DIALOGUES = [
   "my toy!",
   "mrrp! yarn!",
   "swat! 🧶",
-  "catch!",
   "purrrrr...\nyarn!"
 ];
 
