@@ -91,9 +91,15 @@ export function initCatMascot() {
           <div class="cat-snout">
             <div class="cat-nose"></div>
           </div>
-          <div class="cat-whiskers">
-            <div class="whisker-line"></div>
-            <div class="whisker-line"></div>
+          <div class="cat-whiskers cat-whiskers-left">
+            <div class="whisker-line whisker-top"></div>
+            <div class="whisker-line whisker-mid"></div>
+            <div class="whisker-line whisker-bot"></div>
+          </div>
+          <div class="cat-whiskers cat-whiskers-right">
+            <div class="whisker-line whisker-top"></div>
+            <div class="whisker-line whisker-mid"></div>
+            <div class="whisker-line whisker-bot"></div>
           </div>
         </div>
         <div id="cat-paw-left" class="cat-paw cat-paw-left"></div>
