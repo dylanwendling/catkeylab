@@ -166,6 +166,22 @@ After starting the server, open your browser and navigate to:
 http://localhost:8000
 ```
 
+### ☁️ Deploying to Render.com
+
+#### Option A: Static Site (Recommended - 100% Free)
+1. Go to [Render Dashboard](https://dashboard.render.com/) and click **New +** -> **Static Site**.
+2. Connect your GitHub / GitLab repository.
+3. Configure the settings:
+   - **Build Command**: (leave blank)
+   - **Publish Directory**: `.` (or `./`)
+4. Click **Create Static Site**.
+
+#### Option B: Web Service (Node.js)
+If you created a **Web Service** on Render, the repository now includes a [`package.json`](file:///c:/Users/thema/.gemini/antigravity-ide/scratch/clickpulse/package.json) file configured with `serve`:
+- **Build Command**: `npm run build` (or leave blank)
+- **Start Command**: `npm start` (runs `serve -s . -l $PORT`)
+- **Publish / Port**: Render automatically sets `$PORT`.
+
 ---
 
 ## 🌐 Internationalization (i18n)

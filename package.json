@@ -1,0 +1,17 @@
+{
+  "name": "clickpulse",
+  "version": "1.0.0",
+  "description": "Free Online Browser Clicking & Testing Tools",
+  "private": true,
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -s . -l ${PORT:-3000}",
+    "build": "echo 'No build required for static site'"
+  },
+  "dependencies": {
+    "serve": "^14.2.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

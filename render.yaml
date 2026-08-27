@@ -1,0 +1,7 @@
+# Render Blueprint Specification for ClickPulse
+services:
+  - type: web
+    name: clickpulse
+    runtime: static
+    buildCommand: ""
+    staticPublishPath: ./
