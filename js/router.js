@@ -25,7 +25,6 @@ import { renderChimpTest, cleanupChimpTest } from './tools/chimpTest.js';
 import { renderVisualMemoryTest, cleanupVisualMemoryTest } from './tools/visualMemoryTest.js';
 import { renderFishMazeGame, cleanupFishMazeGame } from './tools/fishMazeGame.js';
 import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryGame.js';
-import { renderCatBattleshipGame, cleanupCatBattleshipGame } from './tools/catBattleshipGame.js';
 import { renderLeaderboardView } from './components/leaderboardView.js';
 
 let currentCleanup = null;
@@ -157,17 +156,6 @@ export const TOOL_METADATA = {
     cleanupFn: cleanupCardMemoryGame,
     faqs: [
       { q: 'How many cards are in the Memory Match grid?', a: '16 cards total, containing 8 matching cat pairs.' }
-    ]
-  },
-  'cat-battleship-game': {
-    titleKey: 'catBattleshipTitle',
-    desc: 'Command your Cat Fleet against AI Nibbles in a 10x10 naval battle!',
-    icon: '🚢',
-    category: 'games',
-    renderFn: renderCatBattleshipGame,
-    cleanupFn: cleanupCatBattleshipGame,
-    faqs: [
-      { q: 'What ships are in the Cat Battleship fleet?', a: 'Cardboard Fort (5), Cat Tree Tower (4), Fish Tank (3), Scratching Post (3), and Cozy Cat Bed (2).' }
     ]
   },
   'typing-test': {

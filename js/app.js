@@ -44,7 +44,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 5. Bind Client Route Listeners
   window.addEventListener('hashchange', handleRoute);
-  
+
+  // Global Link Interceptor for same-hash clicks (e.g. "Play Test Now" buttons)
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (link) {
+      const targetHash = link.getAttribute('href').replace('#', '').trim();
+      const currentHash = window.location.hash.replace('#', '').trim();
+      if (targetHash === currentHash) {
+        e.preventDefault();
+        handleRoute();
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      } else {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' });
+        }, 10);
+      }
+    }
+  });
+
   // Initial Route Render
   handleRoute();
 });
