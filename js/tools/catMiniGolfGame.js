@@ -42,6 +42,10 @@ let wind = { x: 0, y: 0, strength: 0 };
 let weatherMode = 'sun'; // 'sun', 'rain', 'snow', 'night'
 let weatherParticles = [];
 
+// Confetti & Celebration System
+let confettiParticles = [];
+let isHoleInOne = false;
+
 // 18 Full Playable Mini Golf Holes
 const ALL_18_HOLES = [
   { name: 'Hole 1: Sunny Tee ☀️', par: 3, weather: 'sun', ballStart: { x: 100, y: 250 }, holePos: { x: 700, y: 250 }, walls: [], sandTraps: [{ x: 350, y: 140, w: 120, h: 100, label: '🏖️ SAND TRAP' }, { x: 350, y: 260, w: 120, h: 100, label: '🏖️ SAND TRAP' }], waterHazards: [], icePatches: [], portals: [], windmills: [], slides: [] },
@@ -184,6 +188,8 @@ function loadHole(index) {
   strokeCount = 0;
   holeCompleted = false;
   ballMoving = false;
+  confettiParticles = [];
+  isHoleInOne = false;
 
   ball.x = hole.ballStart.x;
   ball.y = hole.ballStart.y;
@@ -194,6 +200,28 @@ function loadHole(index) {
   generateWind();
   initWeatherParticles();
   updateHUD();
+}
+
+function spawnConfetti(originX, originY) {
+  confettiParticles = [];
+  const colors = ['#f43f5e', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#fde047', '#06b6d4'];
+  for (let i = 0; i < 140; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 12 + 3;
+    confettiParticles.push({
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 5,
+      size: Math.random() * 8 + 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.25,
+      gravity: 0.2,
+      drag: 0.97,
+      shape: Math.random() > 0.4 ? 'rect' : 'circle'
+    });
+  }
 }
 
 function generateWind() {
@@ -399,7 +427,18 @@ function updatePhysics() {
       ball.vx = 0;
       ball.vy = 0;
       ballMoving = false;
-      playSuccessSound();
+
+      // Hole-in-One Confetti & Sound Celebration 🏆🎉
+      if (strokeCount === 1) {
+        isHoleInOne = true;
+        spawnConfetti(hole.holePos.x, hole.holePos.y);
+        playSuccessSound();
+        setTimeout(() => playSuccessSound(), 160);
+      } else {
+        playSuccessSound();
+      }
+
+      const delay = strokeCount === 1 ? 2400 : 1200;
 
       setTimeout(() => {
         if (currentHoleIndex + 1 < selectedMaxHoles) {
@@ -407,7 +446,7 @@ function updatePhysics() {
         } else {
           finishCourse();
         }
-      }, 1200);
+      }, delay);
     }
   }
 }
@@ -611,6 +650,53 @@ function renderCanvas() {
   ctx.strokeStyle = '#0f172a';
   ctx.lineWidth = 2;
   ctx.stroke();
+
+  // 12. Render & Animate Confetti Particles 🎊 (Hole-In-One Explosion)
+  if (confettiParticles.length > 0) {
+    confettiParticles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += p.gravity;
+      p.vx *= p.drag;
+      p.vy *= p.drag;
+      p.rotation += p.rotSpeed;
+
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+  }
+
+  // 13. Render Hole In One Celebration Banner 🏆🎉
+  if (isHoleInOne) {
+    ctx.save();
+    const bannerY = 140;
+    // Glowing Backdrop Box
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.92)';
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 4;
+    ctx.fillRect(150, bannerY - 35, 500, 70);
+    ctx.strokeRect(150, bannerY - 35, 500, 70);
+
+    // Banner Text
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#fde047';
+    ctx.font = 'extrabold 32px sans-serif';
+    ctx.shadowColor = '#f59e0b';
+    ctx.shadowBlur = 16;
+    ctx.fillText('🌟 HOLE IN ONE! 🏆🎉', 400, bannerY + 8);
+    ctx.restore();
+  }
 }
 
 function shootBall(powerX, powerY) {
