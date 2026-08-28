@@ -344,6 +344,8 @@
   height: 100vh;
   pointer-events: none;
   z-index: 1002;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .yarn-ball-toy {
@@ -472,15 +474,21 @@
   }
 }
 
-/* When Mobile Navigation Drawer is active, lower opacity & disable pointer events on floating toys */
+/* When Mobile Navigation Drawer or Dropdown Menu is active, completely hide floating mascots and toys */
 body.drawer-open .mascot-container,
 body.drawer-open .food-bowl-container,
 body.drawer-open .yarn-ball-container,
+body.menu-open .mascot-container,
+body.menu-open .food-bowl-container,
+body.menu-open .yarn-ball-container,
 body:has(.mobile-drawer.open) .mascot-container,
 body:has(.mobile-drawer.open) .food-bowl-container,
-body:has(.mobile-drawer.open) .yarn-ball-container {
-  opacity: 0.1;
+body:has(.mobile-drawer.open) .yarn-ball-container,
+body:has(.dropdown.open) .mascot-container,
+body:has(.dropdown.open) .food-bowl-container,
+body:has(.dropdown.open) .yarn-ball-container {
+  display: none !important;
+  visibility: hidden !important;
   pointer-events: none !important;
-  transition: opacity 0.25s ease;
 }
 

@@ -32,9 +32,9 @@ export function initYarnBall() {
   yarnEl = document.getElementById('yarn-ball');
   if (!yarnEl) return;
 
-  // Set initial position at bottom right
-  posX = window.innerWidth - 120;
-  posY = window.innerHeight - 100;
+  // Set initial position at bottom right safely within viewport bounds
+  posX = Math.max(10, window.innerWidth - (window.innerWidth < 640 ? 65 : 120));
+  posY = Math.max(10, window.innerHeight - (window.innerWidth < 640 ? 70 : 100));
   updateYarnPosition();
 
   // Mouse & Touch Drag Handlers
@@ -45,6 +45,14 @@ export function initYarnBall() {
   yarnEl.addEventListener('touchstart', startDrag, { passive: false });
   window.addEventListener('touchmove', onDrag, { passive: false });
   window.addEventListener('touchend', endDrag);
+
+  window.addEventListener('resize', () => {
+    const maxX = Math.max(10, window.innerWidth - 65);
+    const maxY = Math.max(10, window.innerHeight - 65);
+    if (posX > maxX) posX = maxX;
+    if (posY > maxY) posY = maxY;
+    updateYarnPosition();
+  });
 
   // Physics animation loop
   animationId = requestAnimationFrame(updatePhysics);
@@ -79,6 +87,14 @@ function onDrag(e) {
   posX += dx;
   posY += dy;
 
+  // Clamp within viewport to prevent horizontal page scrolling
+  const maxX = Math.max(10, window.innerWidth - 60);
+  const maxY = Math.max(10, window.innerHeight - 60);
+  if (posX < 5) posX = 5;
+  if (posX > maxX) posX = maxX;
+  if (posY < 5) posY = 5;
+  if (posY > maxY) posY = maxY;
+
   // Smooth velocity calculation for flicking/throwing momentum
   velX = dx * 0.8;
   velY = dy * 0.8;
@@ -107,10 +123,9 @@ function updatePhysics() {
     velX *= 0.94;
     velY *= 0.94;
 
-    // Viewport Boundary Bounce
-    const radius = 28;
-    const maxX = window.innerWidth - radius * 2;
-    const maxY = window.innerHeight - radius * 2;
+    // Viewport Boundary Bounce (Strictly Clamped)
+    const maxX = Math.max(10, window.innerWidth - 65);
+    const maxY = Math.max(10, window.innerHeight - 65);
 
     if (posX < 10) {
       posX = 10;

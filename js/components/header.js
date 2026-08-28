@@ -161,12 +161,14 @@ function bindHeaderEvents() {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdowns.forEach(other => { if (other !== dd) other.classList.remove('open'); });
-      dd.classList.toggle('open');
+      const isOpen = dd.classList.toggle('open');
+      document.body.classList.toggle('menu-open', isOpen);
     });
   });
 
   document.addEventListener('click', () => {
     dropdowns.forEach(dd => dd.classList.remove('open'));
+    document.body.classList.remove('menu-open');
   });
 
   // Language Selection
