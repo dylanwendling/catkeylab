@@ -324,10 +324,9 @@ function updatePhysics() {
 
   // Ball Movement Dynamics & Sub-Stepping Physics (Prevents Wall Tunneling)
   if (ballMoving) {
-    const SUB_STEPS = 3;
+    const SUB_STEPS = 5;
     const stepVx = ball.vx / SUB_STEPS;
     const stepVy = ball.vy / SUB_STEPS;
-    const now = Date.now();
 
     let currentFriction = 0.984;
 
@@ -349,51 +348,40 @@ function updatePhysics() {
       ball.x += stepVx;
       ball.y += stepVy;
 
-      let hitWall = false;
-
       // Outer Border Collisions
-      if (ball.x - ball.radius < 10) { ball.x = 10 + ball.radius; ball.vx = Math.abs(ball.vx) * 0.75; hitWall = true; }
-      if (ball.x + ball.radius > 790) { ball.x = 790 - ball.radius; ball.vx = -Math.abs(ball.vx) * 0.75; hitWall = true; }
-      if (ball.y - ball.radius < 10) { ball.y = 10 + ball.radius; ball.vy = Math.abs(ball.vy) * 0.75; hitWall = true; }
-      if (ball.y + ball.radius > 490) { ball.y = 490 - ball.radius; ball.vy = -Math.abs(ball.vy) * 0.75; hitWall = true; }
+      if (ball.x - ball.radius < 10) { ball.x = 10 + ball.radius; ball.vx = Math.abs(ball.vx) * 0.75; playClickSound(500, 0.02); }
+      if (ball.x + ball.radius > 790) { ball.x = 790 - ball.radius; ball.vx = -Math.abs(ball.vx) * 0.75; playClickSound(500, 0.02); }
+      if (ball.y - ball.radius < 10) { ball.y = 10 + ball.radius; ball.vy = Math.abs(ball.vy) * 0.75; playClickSound(500, 0.02); }
+      if (ball.y + ball.radius > 490) { ball.y = 490 - ball.radius; ball.vy = -Math.abs(ball.vy) * 0.75; playClickSound(500, 0.02); }
 
       // Bumper Wall Continuous Collision Resolution
-      if (hole.walls && hole.walls.length > 0) {
-        hole.walls.forEach(w => {
-          if (ball.x + ball.radius > w.x && ball.x - ball.radius < w.x + w.w &&
-              ball.y + ball.radius > w.y && ball.y - ball.radius < w.y + w.h) {
+      hole.walls.forEach(w => {
+        if (ball.x + ball.radius > w.x && ball.x - ball.radius < w.x + w.w &&
+            ball.y + ball.radius > w.y && ball.y - ball.radius < w.y + w.h) {
 
-            const overlapLeft = (ball.x + ball.radius) - w.x;
-            const overlapRight = (w.x + w.w) - (ball.x - ball.radius);
-            const overlapTop = (ball.y + ball.radius) - w.y;
-            const overlapBottom = (w.y + w.h) - (ball.y - ball.radius);
+          const overlapLeft = (ball.x + ball.radius) - w.x;
+          const overlapRight = (w.x + w.w) - (ball.x - ball.radius);
+          const overlapTop = (ball.y + ball.radius) - w.y;
+          const overlapBottom = (w.y + w.h) - (ball.y - ball.radius);
 
-            const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+          const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
 
-            if (minOverlap === overlapLeft) {
-              ball.x = w.x - ball.radius;
-              ball.vx = -Math.abs(ball.vx) * 0.8;
-            } else if (minOverlap === overlapRight) {
-              ball.x = w.x + w.w + ball.radius;
-              ball.vx = Math.abs(ball.vx) * 0.8;
-            } else if (minOverlap === overlapTop) {
-              ball.y = w.y - ball.radius;
-              ball.vy = -Math.abs(ball.vy) * 0.8;
-            } else if (minOverlap === overlapBottom) {
-              ball.y = w.y + w.h + ball.radius;
-              ball.vy = Math.abs(ball.vy) * 0.8;
-            }
-            hitWall = true;
+          if (minOverlap === overlapLeft) {
+            ball.x = w.x - ball.radius;
+            ball.vx = -Math.abs(ball.vx) * 0.8;
+          } else if (minOverlap === overlapRight) {
+            ball.x = w.x + w.w + ball.radius;
+            ball.vx = Math.abs(ball.vx) * 0.8;
+          } else if (minOverlap === overlapTop) {
+            ball.y = w.y - ball.radius;
+            ball.vy = -Math.abs(ball.vy) * 0.8;
+          } else if (minOverlap === overlapBottom) {
+            ball.y = w.y + w.h + ball.radius;
+            ball.vy = Math.abs(ball.vy) * 0.8;
           }
-        });
-      }
-
-      if (hitWall) {
-        if (!ball.lastWallSoundTime || now - ball.lastWallSoundTime > 120) {
-          ball.lastWallSoundTime = now;
-          playClickSound(500, 0.02);
+          playClickSound(600, 0.02);
         }
-      }
+      });
 
       // Water Hazard Check
       hole.waterHazards.forEach(water => {
