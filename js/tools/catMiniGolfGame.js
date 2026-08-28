@@ -104,8 +104,13 @@ export function renderCatMiniGolfGame(container) {
           </div>
         </div>
 
+        <!-- Mobile Orientation Tip -->
+        <div class="mobile-golf-tip" style="background:rgba(16,185,129,0.12); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:0.45rem 0.85rem; border-radius:var(--radius-md); font-size:0.85rem; font-weight:700; margin-bottom:0.85rem; display:none;">
+          💡 Mobile Tip: Rotate your phone to Landscape 🔄 for a giant full-screen golf view!
+        </div>
+
         <!-- Main Golf Canvas Display -->
-        <div style="position:relative; display:inline-block; max-width:100%; border-radius:var(--radius-lg); overflow:hidden; border:3px solid var(--border-color); box-shadow:0 12px 32px rgba(0,0,0,0.4);">
+        <div class="golf-canvas-card" style="position:relative; display:inline-block; max-width:100%; border-radius:var(--radius-lg); overflow:hidden; border:3px solid var(--border-color); box-shadow:0 12px 32px rgba(0,0,0,0.4);">
           <canvas id="golf-canvas" width="800" height="500" style="display:block; width:100%; height:auto; background:#1b4332; cursor:crosshair; touch-action:none; user-select:none; -webkit-user-select:none;"></canvas>
         </div>
 
@@ -581,6 +586,15 @@ function renderCanvas() {
   }
 
   // 8. Render Hole Cup & Flag ⛳
+  const pulse = (Math.sin(Date.now() * 0.005) + 1) * 0.5;
+
+  // Pulsating Target Cup Beacon
+  ctx.beginPath();
+  ctx.arc(hole.holePos.x, hole.holePos.y, 22 + pulse * 6, 0, Math.PI * 2);
+  ctx.strokeStyle = `rgba(52, 211, 153, ${0.3 + pulse * 0.5})`;
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
   ctx.beginPath();
   ctx.arc(hole.holePos.x, hole.holePos.y, 14, 0, Math.PI * 2);
   ctx.fillStyle = '#0f172a';
@@ -642,7 +656,15 @@ function renderCanvas() {
     ctx.stroke();
   }
 
-  // 11. Render Golf Ball ⚪
+  // 11. Render Golf Ball ⚪ (with Pulsing Touch Aim Aura when Idle)
+  if (!ballMoving) {
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, 16 + pulse * 5, 0, Math.PI * 2);
+    ctx.strokeStyle = `rgba(245, 158, 11, ${0.4 + pulse * 0.5})`;
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
   ctx.fillStyle = ball.color;
