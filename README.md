@@ -5,32 +5,28 @@
 
 <p align="center">
   <a href="https://catkeylab.com/"><img src="https://img.shields.io/badge/Website-catkeylab.com-orange.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"></a>
+  <a href="#-100-mobile--desktop-compatibility"><img src="https://img.shields.io/badge/Mobile-100%25_Compatible_📱-blue.svg?style=for-the-badge" alt="100% Mobile Compatible"></a>
   <a href="#key-features--included-tools"><img src="https://img.shields.io/badge/Tools-15_Interactive_Modules-emerald.svg?style=for-the-badge" alt="15 Tools"></a>
   <a href="#nibbles-the-cat--interactive-toys"><img src="https://img.shields.io/badge/Companion-Nibbles_the_Cat_🐱-orange.svg?style=for-the-badge" alt="Nibbles the Cat"></a>
   <a href="#internationalization-i18n"><img src="https://img.shields.io/badge/Languages-13_Supported-purple.svg?style=for-the-badge" alt="13 Languages"></a>
-  <a href="#technology-stack--architecture"><img src="https://img.shields.io/badge/Dependencies-Zero_External-brightgreen.svg?style=for-the-badge" alt="Zero Dependencies"></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License"></a>
 </p>
 
 ---
 
-## 📋 Table of Contents
+## 📱 100% Mobile & Desktop Compatibility
 
-- [Overview](#-overview)
-- [🏆 Anonymous Global Leaderboards](#-anonymous-global-leaderboards)
-- [🐱 Nibbles the Cat & Interactive Toys](#-nibbles-the-cat--interactive-toys)
-- [✨ Key Features & Included Tools](#-key-features--included-tools)
-- [🛠️ Technology Stack & Architecture](#️-technology-stack--architecture)
-- [📁 Project Directory Structure](#-project-directory-structure)
-- [🚀 Getting Started](#-getting-started)
-- [🌐 Internationalization (i18n)](#-internationalization-i18n)
-- [📄 License](#-license)
+CatKeyLab is fully optimized for **both mobile smartphones (iOS & Android) and desktop computers**:
+- **📱 Gboard & Soft Keyboard Support**: WPM Typing Test and Keyboard Key Tester feature dedicated mobile soft input triggers that open native virtual keyboards (Gboard, iOS, Samsung) with dummy-buffer input tracking for letter-for-letter precision and reliable backspace deletion.
+- **⛳ Touch Mini Golf & Aim Trainer**: Canvas-based games feature touch aiming controls with touch scrolling cancellation (`touch-action: none`) and expanded touch aim hitboxes for mobile fingers.
+- **🧭 Glassmorphic Bottom Navigation Dock**: Mobile devices feature a 5-tab bottom navigation dock (**🏠 Home**, **⌨️ Typing**, **⚡ CPS**, **🖱️ Hardware**, **📂 Tools**) for instant 1-tap navigation.
+- **🐱 Full-Width Mobile Screen Layout**: 100% edge-to-edge layout matching full mobile screen widths with responsive mascot positioning (`bottom: 74px`).
 
 ---
 
 ## 📖 Overview
 
-**CatKeyLab** ([catkeylab.com](https://catkeylab.com/)) is a lightweight, high-performance web application created by **Dylan** ([snowyorca.itch.io](https://snowyorca.itch.io/)) built for testing mouse hardware, keyboard switches, WPM typing speed, cognitive Human Benchmarks, and reaction latency directly inside your web browser.
+**CatKeyLab** ([catkeylab.com](https://catkeylab.com/)) is a lightweight, high-performance web application created by **Dylan** ([snowyorca.itch.io](https://snowyorca.itch.io/)) built for testing mouse hardware, keyboard switches, WPM typing speed, cognitive Human Benchmarks, and reaction latency directly inside your web browser on both mobile devices and desktops.
 
 <p align="center">
   <img src="./assets/orange-cat.jpg" width="340" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="border-radius:12px; border:3px solid #f97316;" /><br>

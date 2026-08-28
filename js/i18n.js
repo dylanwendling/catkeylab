@@ -167,7 +167,7 @@ export const translations = {
     // Footer & Meta
     privacyNotice: '100% Client-Side & Private. No data leaves your device.',
     copyright: '© 2026 CatKeyLab 🐾. All rights reserved.',
-    footerAbout: 'CatKeyLab provides free, browser-native hardware testing tools, WPM typing speed challenges, and click speed diagnostics with Nibbles the Cat.'
+    footerAbout: 'CatKeyLab provides 100% mobile and desktop compatible hardware testing tools, WPM typing speed challenges, and click speed diagnostics with Nibbles the Cat.'
   },
   es: {
     siteName: 'CatKeyLab',

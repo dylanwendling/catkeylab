@@ -20,7 +20,7 @@ export function renderKeyboardTest(container) {
             <span style="font-size:2rem;">🖥️</span>
             <span data-i18n="keyboardTestTitle">${t('keyboardTestTitle')}</span>
           </h1>
-          <p class="tool-subtitle-text">Test key rollover, ghosting, keycode events, and mechanical switch registration in real-time.</p>
+          <p class="tool-subtitle-text">Test key rollover, ghosting, keycode events, and mechanical/soft switch registration in real-time.</p>
         </div>
         <div class="header-actions">
           <button id="kt-reset-btn" class="btn btn-secondary btn-sm" style="border-color:var(--accent-rose); color:var(--accent-rose);">
@@ -28,6 +28,12 @@ export function renderKeyboardTest(container) {
           </button>
         </div>
       </div>
+
+      <!-- Hidden Input & Mobile Focus Trigger for Gboard/Soft Keyboards -->
+      <input id="kt-hidden-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" style="position:fixed; opacity:0; pointer-events:none; left:-9999px; top:-9999px; width:1px; height:1px;">
+      <button id="kt-mobile-focus-btn" class="btn btn-primary btn-md" style="width:100%; margin-bottom:1.25rem; font-weight:700; background:linear-gradient(135deg, var(--accent-primary), #059669); border:none; box-shadow:0 4px 14px var(--accent-primary-glow);">
+        📱 Tap here to open mobile keyboard (Gboard)
+      </button>
 
       <!-- Info Dashboard -->
       <div class="stats-dashboard" style="margin-bottom:1.5rem;">
@@ -156,7 +162,7 @@ export function renderKeyboardTest(container) {
       <div style="margin-top:1.5rem; background:var(--bg-card); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
         <div style="font-size:0.8rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700; margin-bottom:0.5rem;">Keystroke History Timeline</div>
         <div id="kt-history-box" style="font-family:monospace; color:var(--accent-cyan); font-size:0.9rem; word-break:break-all;">
-          Press any key on your keyboard to begin testing...
+          Press any key or tap screen keys to begin testing...
         </div>
       </div>
     </div>
@@ -170,6 +176,64 @@ function bindKeyboardEvents() {
   window.addEventListener('keyup', handleKeyup);
 
   const resetBtn = document.getElementById('kt-reset-btn');
+  const mobileFocusBtn = document.getElementById('kt-mobile-focus-btn');
+  const hiddenInput = document.getElementById('kt-hidden-input');
+
+  const focusSoftKeyboard = () => {
+    if (hiddenInput) {
+      hiddenInput.value = '  ';
+      hiddenInput.focus();
+    }
+  };
+
+  if (mobileFocusBtn) {
+    mobileFocusBtn.addEventListener('click', focusSoftKeyboard);
+    mobileFocusBtn.addEventListener('touchstart', focusSoftKeyboard, { passive: true });
+  }
+
+  // Soft Keyboard Gboard / Virtual Keyboard Mapping
+  if (hiddenInput) {
+    hiddenInput.value = '  ';
+    hiddenInput.addEventListener('input', () => {
+      const val = hiddenInput.value;
+      if (val.length < 2) {
+        // Backspace
+        triggerKeyTest('Backspace', 'Backspace');
+      } else if (val.length > 2) {
+        const added = val.slice(2);
+        for (const char of added) {
+          let code = 'Key' + char.toUpperCase();
+          if (char === ' ') code = 'Space';
+          else if (char >= '0' && char <= '9') code = 'Digit' + char;
+          triggerKeyTest(code, char === ' ' ? 'Space' : char);
+        }
+      }
+      hiddenInput.value = '  ';
+    });
+  }
+
+  // Direct Touch & Click Event Listeners on Visual On-Screen Keys
+  document.querySelectorAll('.kb-key').forEach(keyEl => {
+    const handleTouchStart = (e) => {
+      if (e.cancelable) e.preventDefault();
+      const code = keyEl.dataset.code;
+      const keyLabel = keyEl.textContent.trim();
+      triggerKeyTest(code, keyLabel);
+      keyEl.classList.add('pressed');
+    };
+
+    const handleTouchEnd = () => {
+      keyEl.classList.remove('pressed');
+    };
+
+    keyEl.addEventListener('pointerdown', handleTouchStart);
+    keyEl.addEventListener('pointerup', handleTouchEnd);
+    keyEl.addEventListener('pointerleave', handleTouchEnd);
+
+    keyEl.addEventListener('touchstart', handleTouchStart, { passive: false });
+    keyEl.addEventListener('touchend', handleTouchEnd);
+  });
+
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       uniqueTestedCodes.clear();
@@ -180,16 +244,12 @@ function bindKeyboardEvents() {
       const countEl = document.getElementById('kt-unique-count');
       const histEl = document.getElementById('kt-history-box');
       if (countEl) countEl.textContent = '0';
-      if (histEl) histEl.textContent = 'Press any key on your keyboard to begin testing...';
+      if (histEl) histEl.textContent = 'Press any key or tap screen keys to begin testing...';
     });
   }
 }
 
-function handleKeydown(e) {
-  // Prevent default scroll/tab navigation on key testing
-  if (['Space', 'Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
-    e.preventDefault();
-  }
+function triggerKeyTest(code, keyLabel) {
   playClickSound(600, 0.03);
 
   const keyDisplay = document.getElementById('kt-val-key');
@@ -198,30 +258,41 @@ function handleKeydown(e) {
   const historyBox = document.getElementById('kt-history-box');
   const uniqueCountEl = document.getElementById('kt-unique-count');
 
-  if (keyDisplay) keyDisplay.textContent = e.key === ' ' ? 'Space' : e.key;
-  if (codeDisplay) codeDisplay.textContent = e.code;
+  if (keyDisplay) keyDisplay.textContent = keyLabel === ' ' ? 'Space' : keyLabel;
+  if (codeDisplay) codeDisplay.textContent = code;
 
-  uniqueTestedCodes.add(e.code);
+  uniqueTestedCodes.add(code);
   if (uniqueCountEl) uniqueCountEl.textContent = uniqueTestedCodes.size;
 
+  if (modDisplay) modDisplay.textContent = 'None';
+
+  // Highlight Virtual Key
+  const targetKey = document.querySelector(`.kb-key[data-code="${code}"]`);
+  if (targetKey) {
+    targetKey.classList.add('pressed', 'tested-before');
+  }
+
+  // History Log
+  pressedKeysLog.unshift(`${keyLabel === ' ' ? 'Space' : keyLabel} (${code})`);
+  if (pressedKeysLog.length > 50) pressedKeysLog.pop();
+  if (historyBox) historyBox.textContent = pressedKeysLog.join('  •  ');
+}
+
+function handleKeydown(e) {
+  // Prevent default scroll/tab navigation on key testing
+  if (['Space', 'Tab', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) {
+    e.preventDefault();
+  }
+  triggerKeyTest(e.code, e.key);
+
   // Modifiers
+  const modDisplay = document.getElementById('kt-val-modifiers');
   let mods = [];
   if (e.shiftKey) mods.push('Shift');
   if (e.ctrlKey) mods.push('Ctrl');
   if (e.altKey) mods.push('Alt');
   if (e.metaKey) mods.push('Meta');
   if (modDisplay) modDisplay.textContent = mods.length ? mods.join(' + ') : 'None';
-
-  // Highlight Virtual Key
-  const targetKey = document.querySelector(`.kb-key[data-code="${e.code}"]`);
-  if (targetKey) {
-    targetKey.classList.add('pressed', 'tested-before');
-  }
-
-  // History Log
-  pressedKeysLog.unshift(`${e.key === ' ' ? 'Space' : e.key} (${e.code})`);
-  if (pressedKeysLog.length > 50) pressedKeysLog.pop();
-  if (historyBox) historyBox.textContent = pressedKeysLog.join('  •  ');
 }
 
 function handleKeyup(e) {
