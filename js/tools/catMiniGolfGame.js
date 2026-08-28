@@ -205,6 +205,7 @@ function loadHole(index) {
   generateWind();
   initWeatherParticles();
   updateHUD();
+  requestRender();
 }
 
 function spawnConfetti(originX, originY) {
@@ -261,10 +262,25 @@ function initWeatherParticles() {
   }
 }
 
+function requestRender() {
+  if (!animFrameId) {
+    animFrameId = requestAnimationFrame(gameLoop);
+  }
+}
+
 function gameLoop() {
   updatePhysics();
   renderCanvas();
-  animFrameId = requestAnimationFrame(gameLoop);
+
+  const hole = ALL_18_HOLES[currentHoleIndex];
+  const hasWindmills = hole && hole.windmills && hole.windmills.length > 0;
+  const isDynamic = ballMoving || isAiming || weatherMode !== 'clear' || confettiParticles.length > 0 || hasWindmills;
+
+  if (isDynamic) {
+    animFrameId = requestAnimationFrame(gameLoop);
+  } else {
+    animFrameId = null;
+  }
 }
 
 function updatePhysics() {
@@ -752,6 +768,7 @@ function shootBall(powerX, powerY) {
   totalStrokes++;
   playClickSound(750, 0.03);
   updateHUD();
+  requestRender();
 }
 
 function updateHUD() {
@@ -763,7 +780,7 @@ function updateHUD() {
   const totalParValEl = document.getElementById('golf-total-par-val');
   const progressEl = document.getElementById('golf-hole-progress');
 
-  if (holeTitleEl) holeTitleEl.textContent = hole.name;
+  if (holeTitleEl) holeTitleEl.textContent = `Hole ${currentHoleIndex + 1}: ${hole.name}`;
   if (parTextEl) parTextEl.textContent = `Par ${hole.par}`;
   if (strokeValEl) strokeValEl.textContent = strokeCount;
   if (totalStrokeValEl) totalStrokeValEl.textContent = totalStrokes;
@@ -821,6 +838,7 @@ function bindEvents() {
         strokeCount = lastBallState.strokes;
         totalStrokes = lastBallState.total;
         updateHUD();
+        requestRender();
       }
     });
   }
@@ -861,6 +879,7 @@ function bindEvents() {
       isAiming = true;
       aimStartPos = { x: ball.x, y: ball.y };
       aimCurrentPos = pos;
+      requestRender();
       try {
         canvas.setPointerCapture(e.pointerId);
       } catch (err) {}
@@ -871,6 +890,7 @@ function bindEvents() {
     if (e.pointerType === 'touch') return;
     if (isAiming) {
       aimCurrentPos = getCanvasPos(e);
+      requestRender();
     }
   };
 
@@ -886,6 +906,8 @@ function bindEvents() {
       const dy = aimStartPos.y - aimCurrentPos.y;
       if (Math.hypot(dx, dy) > 10) {
         shootBall(dx, dy);
+      } else {
+        requestRender();
       }
     }
   };
@@ -906,6 +928,7 @@ function bindEvents() {
       isAiming = true;
       aimStartPos = { x: ball.x, y: ball.y };
       aimCurrentPos = pos;
+      requestRender();
     }
   }, { passive: false });
 

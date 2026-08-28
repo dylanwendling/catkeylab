@@ -72,6 +72,10 @@ function startDrag(e) {
 
   if (yarnEl) yarnEl.classList.add('dragging');
   playClickSound(650, 0.03);
+
+  if (!animationId) {
+    animationId = requestAnimationFrame(updatePhysics);
+  }
 }
 
 function onDrag(e) {
@@ -112,42 +116,48 @@ function endDrag() {
 
   if (yarnEl) yarnEl.classList.remove('dragging');
   checkCatProximity();
+  if (!animationId) {
+    animationId = requestAnimationFrame(updatePhysics);
+  }
 }
 
 function updatePhysics() {
-  if (!isDragging && (Math.abs(velX) > 0.05 || Math.abs(velY) > 0.05)) {
-    posX += velX;
-    posY += velY;
+  if (isDragging || Math.abs(velX) > 0.05 || Math.abs(velY) > 0.05) {
+    if (!isDragging) {
+      posX += velX;
+      posY += velY;
 
-    // Friction damping
-    velX *= 0.94;
-    velY *= 0.94;
+      // Friction damping
+      velX *= 0.94;
+      velY *= 0.94;
 
-    // Viewport Boundary Bounce (Strictly Clamped)
-    const maxX = Math.max(10, window.innerWidth - 65);
-    const maxY = Math.max(10, window.innerHeight - 65);
+      // Viewport Boundary Bounce (Strictly Clamped)
+      const maxX = Math.max(10, window.innerWidth - 65);
+      const maxY = Math.max(10, window.innerHeight - 65);
 
-    if (posX < 10) {
-      posX = 10;
-      velX = -velX * 0.6;
-    } else if (posX > maxX) {
-      posX = maxX;
-      velX = -velX * 0.6;
+      if (posX < 10) {
+        posX = 10;
+        velX = -velX * 0.6;
+      } else if (posX > maxX) {
+        posX = maxX;
+        velX = -velX * 0.6;
+      }
+
+      if (posY < 10) {
+        posY = 10;
+        velY = -velY * 0.6;
+      } else if (posY > maxY) {
+        posY = maxY;
+        velY = -velY * 0.6;
+      }
+
+      updateYarnPosition();
+      checkCatProximity();
     }
-
-    if (posY < 10) {
-      posY = 10;
-      velY = -velY * 0.6;
-    } else if (posY > maxY) {
-      posY = maxY;
-      velY = -velY * 0.6;
-    }
-
-    updateYarnPosition();
-    checkCatProximity();
+    animationId = requestAnimationFrame(updatePhysics);
+  } else {
+    animationId = null;
   }
-
-  animationId = requestAnimationFrame(updatePhysics);
 }
 
 function updateYarnPosition() {
