@@ -267,8 +267,13 @@ function updatePhysics() {
 
   // Update Windmills Angle & Blade Physical Collisions
   if (hole.windmills && hole.windmills.length > 0) {
+    const now = Date.now();
     hole.windmills.forEach(wm => {
       wm.angle += wm.speed;
+
+      // Fast Bounding Check: Only calculate blade physics when ball is near windmill
+      const distToCenter = Math.hypot(ball.x - wm.x, ball.y - wm.y);
+      if (distToCenter > wm.radius + 35) return;
 
       // Blade Collision Physics with Golf Ball
       const bladeCount = wm.bladeCount || 4;
@@ -306,7 +311,11 @@ function updatePhysics() {
 
             ball.vx = (ball.vx - 1.75 * dot * nx) + tangentX * rotationalImpulse;
             ball.vy = (ball.vy - 1.75 * dot * ny) + tangentY * rotationalImpulse;
-            playClickSound(650, 0.03);
+
+            if (!wm.lastSoundTime || now - wm.lastSoundTime > 150) {
+              wm.lastSoundTime = now;
+              playClickSound(650, 0.03);
+            }
           }
         }
       }
@@ -540,7 +549,7 @@ function renderCanvas() {
     ctx.fillText('🌀 OUT', p.outX - 18, p.outY - p.radius - 6);
   });
 
-  // 7. Render Windmills 🌀 (Supports Multiple Windmills per Hole & Solid Blades)
+  // 7. Render Windmills 🌀 (Optimized 60FPS High-Performance Drawing)
   if (hole.windmills && hole.windmills.length > 0) {
     hole.windmills.forEach(wm => {
       ctx.save();
@@ -550,16 +559,12 @@ function renderCanvas() {
       const bladeCount = wm.bladeCount || 4;
       const angleStep = (Math.PI * 2) / bladeCount;
 
+      ctx.fillStyle = '#f97316';
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 2;
+
       for (let i = 0; i < bladeCount; i++) {
         ctx.rotate(angleStep);
-
-        const bladeGrad = ctx.createLinearGradient(-6, 0, 6, wm.radius);
-        bladeGrad.addColorStop(0, '#ef4444');
-        bladeGrad.addColorStop(1, '#f97316');
-        ctx.fillStyle = bladeGrad;
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 2;
-
         ctx.fillRect(-6, 0, 12, wm.radius);
         ctx.strokeRect(-6, 0, 12, wm.radius);
       }
