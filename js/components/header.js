@@ -148,6 +148,30 @@ export function renderHeader(container) {
         </a>
       </div>
     </header>
+
+    <!-- Concrete Mobile Bottom Navigation Bar (Screens <= 768px) -->
+    <nav id="mobile-bottom-bar" class="mobile-bottom-bar">
+      <a href="#" class="mobile-bottom-tab" data-route="">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-label">Home</span>
+      </a>
+      <a href="#typing-test" class="mobile-bottom-tab" data-route="typing-test">
+        <span class="tab-icon">⌨️</span>
+        <span class="tab-label">Typing</span>
+      </a>
+      <a href="#cps-test" class="mobile-bottom-tab" data-route="cps-test">
+        <span class="tab-icon">⚡</span>
+        <span class="tab-label">CPS</span>
+      </a>
+      <a href="#mouse-test" class="mobile-bottom-tab" data-route="mouse-test">
+        <span class="tab-icon">🖱️</span>
+        <span class="tab-label">Hardware</span>
+      </a>
+      <a href="#tools" class="mobile-bottom-tab" data-route="tools">
+        <span class="tab-icon">📂</span>
+        <span class="tab-label">Tools</span>
+      </a>
+    </nav>
   `;
 
   bindHeaderEvents();
@@ -166,9 +190,15 @@ function bindHeaderEvents() {
     });
   });
 
-  document.addEventListener('click', () => {
+  const drawer = document.getElementById('mobile-drawer');
+
+  document.addEventListener('click', (e) => {
     dropdowns.forEach(dd => dd.classList.remove('open'));
     document.body.classList.remove('menu-open');
+    if (drawer && !drawer.contains(e.target) && !e.target.closest('#hamburger-btn')) {
+      drawer.classList.remove('open');
+      document.body.classList.remove('drawer-open');
+    }
   });
 
   // Language Selection
@@ -194,12 +224,16 @@ function bindHeaderEvents() {
 
   // Mobile Drawer Toggle
   const hamburgerBtn = document.getElementById('hamburger-btn');
-  const drawer = document.getElementById('mobile-drawer');
 
   if (hamburgerBtn && drawer) {
-    hamburgerBtn.addEventListener('click', () => {
+    hamburgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const isOpen = drawer.classList.toggle('open');
       document.body.classList.toggle('drawer-open', isOpen);
+    });
+
+    drawer.addEventListener('click', (e) => {
+      e.stopPropagation();
     });
 
     drawer.querySelectorAll('a').forEach(link => {
@@ -209,4 +243,16 @@ function bindHeaderEvents() {
       });
     });
   }
+
+  // Active Bottom Bar Highlight Tracker
+  const currentHash = window.location.hash.replace('#', '').trim();
+  const bottomTabs = document.querySelectorAll('.mobile-bottom-tab');
+  bottomTabs.forEach(tab => {
+    const route = tab.dataset.route;
+    if (route === currentHash || (currentHash === '' && route === '')) {
+      tab.classList.add('active');
+    } else {
+      tab.classList.remove('active');
+    }
+  });
 }
