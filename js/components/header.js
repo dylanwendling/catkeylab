@@ -110,7 +110,7 @@ export function renderHeader(container) {
         </div>
       </div>
 
-      <!-- Mobile Navigation Drawer -->
+      <!-- Mobile Navigation Drawer (100% Mobile Benchmarks) -->
       <div id="mobile-drawer" class="mobile-drawer">
         <a href="#" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
@@ -118,26 +118,23 @@ export function renderHeader(container) {
         <a href="#typing-test" class="mobile-nav-link" data-route="typing-test">
           <span>⌨️ Typing Speed Test</span>
         </a>
-        <a href="#mouse-test" class="mobile-nav-link" data-route="mouse-test">
-          <span>🖱️ Mouse Hardware Tester</span>
-        </a>
-        <a href="#keyboard-test" class="mobile-nav-link" data-route="keyboard-test">
-          <span>🖥️ Keyboard Key Tester</span>
-        </a>
-        <a href="#auto-clicker" class="mobile-nav-link" data-route="auto-clicker">
-          <span>🤖 Online Auto Clicker</span>
-        </a>
         <a href="#cps-test" class="mobile-nav-link" data-route="cps-test">
           <span>⚡ CPS Speed Test</span>
         </a>
-        <a href="#click-speed-test" class="mobile-nav-link" data-route="click-speed-test">
-          <span>⏱️ Click Speed Test</span>
+        <a href="#aim-trainer-test" class="mobile-nav-link" data-route="aim-trainer-test">
+          <span>🎯 Aim Trainer</span>
         </a>
-        <a href="#click-counter" class="mobile-nav-link" data-route="click-counter">
-          <span>🔢 Digital Click Counter</span>
+        <a href="#cat-mini-golf-game" class="mobile-nav-link" data-route="cat-mini-golf-game">
+          <span>⛳ Nibbles Mini Golf</span>
         </a>
         <a href="#reaction-time-test" class="mobile-nav-link" data-route="reaction-time-test">
-          <span>🎯 Reaction Time Test</span>
+          <span>⏱️ Reaction Time Test</span>
+        </a>
+        <a href="#sequence-memory-test" class="mobile-nav-link" data-route="sequence-memory-test">
+          <span>🧠 Sequence Memory</span>
+        </a>
+        <a href="#click-speed-test" class="mobile-nav-link" data-route="click-speed-test">
+          <span>🚀 Click Speed Test</span>
         </a>
         <a href="#double-click-test" class="mobile-nav-link" data-route="double-click-test">
           <span>⚡ Double Click Test</span>
@@ -163,9 +160,9 @@ export function renderHeader(container) {
         <span class="tab-icon">⚡</span>
         <span class="tab-label">CPS</span>
       </a>
-      <a href="#mouse-test" class="mobile-bottom-tab" data-route="mouse-test">
-        <span class="tab-icon">🖱️</span>
-        <span class="tab-label">Hardware</span>
+      <a href="#aim-trainer-test" class="mobile-bottom-tab" data-route="aim-trainer-test">
+        <span class="tab-icon">🎯</span>
+        <span class="tab-label">Aim</span>
       </a>
       <a href="#tools" class="mobile-bottom-tab" data-route="tools">
         <span class="tab-icon">📂</span>

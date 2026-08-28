@@ -883,5 +883,13 @@ main {
     padding-left: 0.75rem !important;
     padding-right: 0.75rem !important;
   }
+
+  /* Hide Hardware Mouse & Keyboard Testers on Mobile Viewports */
+  .desktop-only-tool,
+  #hardware-dropdown,
+  .mobile-nav-link[data-route="mouse-test"],
+  .mobile-nav-link[data-route="keyboard-test"] {
+    display: none !important;
+  }
 }
 

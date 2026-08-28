@@ -15,7 +15,22 @@ export function renderMouseTest(container) {
   totalMouseClicks = 0;
   scrollDelta = 0;
 
+  const isMobile = window.innerWidth <= 768;
+
   container.innerHTML = `
+    ${isMobile ? `
+      <div style="background:var(--bg-secondary); border:1px solid var(--accent-amber); padding:1.5rem; border-radius:var(--radius-lg); text-align:center; margin-bottom:1.5rem; box-shadow:var(--shadow-md);">
+        <div style="font-size:2.2rem; margin-bottom:0.5rem;">💻 Desktop Hardware Tool</div>
+        <h3 style="color:var(--accent-amber); font-size:1.25rem; font-weight:800; margin-bottom:0.5rem;">Desktop Computer Recommended</h3>
+        <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.25rem;">Mouse Button (MB1–MB5) testing requires a desktop computer with a physical mouse attached.</p>
+        <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
+          <a href="#cps-test" class="btn btn-primary btn-sm">⚡ Try Mobile CPS Test</a>
+          <a href="#typing-test" class="btn btn-secondary btn-sm">⌨️ Try Mobile Typing Test</a>
+          <a href="#aim-trainer-test" class="btn btn-secondary btn-sm">🎯 Mobile Aim Trainer</a>
+        </div>
+      </div>
+    ` : ''}
+
     <div class="tool-wrapper" style="border:1px solid var(--accent-cyan-glow);">
       <div class="tool-header-bar">
         <div class="tool-title-group">
