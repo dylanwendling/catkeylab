@@ -750,7 +750,8 @@ function finishCourse() {
   else if (scoreDiff > 0) parDiffDisplay = `+${scoreDiff}`;
 
   playSuccessSound();
-  submitScore('cat-mini-golf-game', totalStrokes, `${totalStrokes} Strokes (${parDiffDisplay} on ${selectedMaxHoles} Holes)`);
+  const golfKey = `cat-mini-golf-game-${selectedMaxHoles}`;
+  submitScore(golfKey, totalStrokes, `${totalStrokes} Strokes (${parDiffDisplay})`);
 
   document.getElementById('golf-modal-score').textContent = totalStrokes;
   document.getElementById('golf-modal-par-diff').textContent = parDiffDisplay;

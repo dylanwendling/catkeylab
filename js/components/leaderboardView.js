@@ -20,7 +20,9 @@ const TEST_TABS = [
   { id: 'cps-test', label: '⚡ CPS Test' },
   { id: 'fish-maze-game', label: '🐟 Fish Maze' },
   { id: 'card-memory-game', label: '🎴 Card Memory' },
-  { id: 'cat-mini-golf-game', label: '⛳ Cat Mini Golf' }
+  { id: 'cat-mini-golf-game-3', label: '⛳ Mini Golf (3 Holes)' },
+  { id: 'cat-mini-golf-game-9', label: '⛳ Mini Golf (9 Holes)' },
+  { id: 'cat-mini-golf-game-18', label: '🏆 Mini Golf (18 Holes)' }
 ];
 
 export function renderLeaderboardView(container) {
@@ -112,7 +114,8 @@ function bindEvents() {
     headerPlayBtn.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-      window.location.hash = '#' + activeTestId;
+      const routeId = activeTestId.startsWith('cat-mini-golf-game') ? 'cat-mini-golf-game' : activeTestId;
+      window.location.hash = '#' + routeId;
       handleRoute();
       window.scrollTo({ top: 0, behavior: 'instant' });
     });
