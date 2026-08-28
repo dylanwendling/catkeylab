@@ -83,11 +83,12 @@ export function renderTypingTest(container) {
         </div>
       </div>
 
-      <!-- Monkeytype-Style Words Display Canvas -->
+      <!-- Monkeytype-Style Words Display Canvas with Hidden Input for Mobile Soft Keyboards -->
       <div id="typing-test-box" class="typing-box" tabindex="0">
+        <input id="typing-hidden-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" style="position:fixed; opacity:0; pointer-events:none; left:-9999px; top:-9999px; width:1px; height:1px;">
         <div id="typing-words-wrapper" class="typing-words-wrapper"></div>
         <div id="typing-focus-notice" class="typing-focus-notice">
-          <span>Click here or press any key to focus & start typing</span>
+          <span>Tap or click here to start typing ⌨️</span>
         </div>
       </div>
     </div>
@@ -102,6 +103,7 @@ export function renderTypingTest(container) {
 
 function initTypingTestLogic() {
   const box = document.getElementById('typing-test-box');
+  const hiddenInput = document.getElementById('typing-hidden-input');
   const resetBtn = document.getElementById('tt-reset-btn');
   const modeBtns = document.querySelectorAll('.mode-btn');
 
@@ -115,9 +117,53 @@ function initTypingTestLogic() {
   });
 
   if (resetBtn) resetBtn.addEventListener('click', resetTest);
+
+  const focusInput = () => {
+    if (hiddenInput) {
+      hiddenInput.focus();
+      hideFocusNotice();
+    }
+  };
+
   if (box) {
-    box.addEventListener('focus', () => hideFocusNotice());
-    box.addEventListener('blur', () => showFocusNotice());
+    box.addEventListener('click', focusInput);
+    box.addEventListener('touchstart', focusInput, { passive: true });
+    box.addEventListener('pointerdown', focusInput);
+    box.addEventListener('focus', focusInput);
+  }
+
+  if (hiddenInput) {
+    hiddenInput.addEventListener('focus', hideFocusNotice);
+    hiddenInput.addEventListener('blur', () => {
+      if (!isTestActive) showFocusNotice();
+    });
+
+    hiddenInput.addEventListener('beforeinput', (e) => {
+      if (isTestFinished) return;
+      if (e.inputType === 'deleteContentBackward') {
+        processTypedKey('Backspace');
+      } else if (e.data) {
+        for (const char of e.data) {
+          processTypedKey(char);
+        }
+      }
+      hiddenInput.value = '';
+    });
+
+    hiddenInput.addEventListener('input', () => {
+      if (hiddenInput.value) {
+        for (const char of hiddenInput.value) {
+          processTypedKey(char);
+        }
+        hiddenInput.value = '';
+      }
+    });
+
+    hiddenInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' || e.key === ' ' || e.key === 'Enter') {
+        processTypedKey(e.key);
+      }
+    });
   }
 
   window.addEventListener('keydown', handleKeyDown);
@@ -149,8 +195,11 @@ function resetTest() {
   generateWordList();
   renderWords();
 
-  const box = document.getElementById('typing-test-box');
-  if (box) box.focus();
+  const hiddenInput = document.getElementById('typing-hidden-input');
+  if (hiddenInput) {
+    hiddenInput.value = '';
+    hiddenInput.focus();
+  }
 }
 
 function generateWordList() {
@@ -175,7 +224,9 @@ function renderWords() {
 }
 
 function handleKeyDown(e) {
-  // Restart shortcut on Enter when finished
+  // If target is already the hidden input, let hiddenInput listeners handle it
+  if (e.target && e.target.id === 'typing-hidden-input') return;
+
   if (isTestFinished) {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -184,7 +235,6 @@ function handleKeyDown(e) {
     return;
   }
 
-  // Ignore modifier keys
   if (e.ctrlKey || e.altKey || e.metaKey) return;
 
   const isLetter = e.key.length === 1;
@@ -193,6 +243,21 @@ function handleKeyDown(e) {
   if (!isLetter && !isBackspace) return;
 
   e.preventDefault();
+  processTypedKey(e.key);
+}
+
+function processTypedKey(key) {
+  if (isTestFinished) {
+    if (key === 'Enter') {
+      resetTest();
+    }
+    return;
+  }
+
+  const isLetter = key.length === 1;
+  const isBackspace = key === 'Backspace';
+
+  if (!isLetter && !isBackspace) return;
 
   if (!isTestActive) {
     startTimer();
@@ -225,7 +290,7 @@ function handleKeyDown(e) {
     const targetChar = letterEls[currentLetterIndex].dataset.char;
     totalTypedChars++;
 
-    if (e.key === targetChar) {
+    if (key === targetChar) {
       correctChars++;
       letterEls[currentLetterIndex].classList.add('correct');
     } else {
@@ -239,7 +304,7 @@ function handleKeyDown(e) {
     if (currentLetterIndex < letterEls.length) {
       letterEls[currentLetterIndex].classList.add('current-letter');
     }
-  } else if (e.key === ' ') {
+  } else if (key === ' ') {
     // Move to next word on spacebar
     currentWordEl.classList.remove('current-word');
     currentWordIndex++;
