@@ -467,6 +467,10 @@
     width: 100% !important;
     min-height: 260px !important;
     max-height: 70vh !important;
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
   }
 }
 

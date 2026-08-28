@@ -619,28 +619,30 @@ function renderCanvas() {
   ctx.fillStyle = '#34d399';
   ctx.fillText('⛳ CUP', hole.holePos.x - 18, hole.holePos.y + 28);
 
-  // 9. Render Weather Particles (Rain / Snow)
+  // 9. Render Weather Particles (Rain / Snow) - Batched Single-Path Draw Calls
   if (weatherMode === 'rain') {
     ctx.strokeStyle = 'rgba(147, 197, 253, 0.7)';
     ctx.lineWidth = 1.5;
-    weatherParticles.forEach(p => {
+    ctx.beginPath();
+    for (let i = 0; i < weatherParticles.length; i++) {
+      const p = weatherParticles[i];
       p.y += p.speed;
       if (p.y > 500) p.y = 0;
-      ctx.beginPath();
       ctx.moveTo(p.x, p.y);
       ctx.lineTo(p.x - 2, p.y + p.length);
-      ctx.stroke();
-    });
+    }
+    ctx.stroke();
   } else if (weatherMode === 'snow') {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-    weatherParticles.forEach(p => {
+    ctx.beginPath();
+    for (let i = 0; i < weatherParticles.length; i++) {
+      const p = weatherParticles[i];
       p.y += p.speed * 0.5;
       p.x += Math.sin(p.y * 0.05) * 0.5;
       if (p.y > 500) p.y = 0;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fill();
-    });
+      ctx.rect(p.x, p.y, p.radius * 2, p.radius * 2);
+    }
+    ctx.fill();
   }
 
   // 10. Aim Vector Line
@@ -673,15 +675,21 @@ function renderCanvas() {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // 12. Render & Animate Confetti Particles 🎊 (Hole-In-One Explosion)
+  // 12. Render & Animate Confetti Particles 🎊 (In-place Splice Cleanup)
   if (confettiParticles.length > 0) {
-    confettiParticles.forEach(p => {
+    for (let i = confettiParticles.length - 1; i >= 0; i--) {
+      const p = confettiParticles[i];
       p.x += p.vx;
       p.y += p.vy;
       p.vy += p.gravity;
       p.vx *= p.drag;
       p.vy *= p.drag;
       p.rotation += p.rotSpeed;
+
+      if (p.y > 520) {
+        confettiParticles.splice(i, 1);
+        continue;
+      }
 
       ctx.save();
       ctx.translate(p.x, p.y);
@@ -696,7 +704,7 @@ function renderCanvas() {
         ctx.fill();
       }
       ctx.restore();
-    });
+    }
   }
 
   // 13. Render Hole In One Celebration Banner 🏆🎉
