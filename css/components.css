@@ -449,29 +449,6 @@
     padding: 1rem;
     text-align: center;
   }
-
-  .mobile-golf-tip {
-    display: block !important;
-  }
-
-  .golf-canvas-card {
-    width: 100vw !important;
-    margin-left: -0.65rem !important;
-    margin-right: -0.65rem !important;
-    border-radius: 0 !important;
-    border-left: none !important;
-    border-right: none !important;
-  }
-
-  #golf-canvas {
-    width: 100% !important;
-    min-height: 260px !important;
-    max-height: 70vh !important;
-    will-change: transform;
-    transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-  }
 }
 
 /* Hero Quick Test Box Component */

@@ -104,13 +104,8 @@ export function renderCatMiniGolfGame(container) {
           </div>
         </div>
 
-        <!-- Mobile Orientation Tip -->
-        <div class="mobile-golf-tip" style="background:rgba(16,185,129,0.12); border:1px solid var(--accent-emerald); color:var(--accent-emerald); padding:0.45rem 0.85rem; border-radius:var(--radius-md); font-size:0.85rem; font-weight:700; margin-bottom:0.85rem; display:none;">
-          💡 Mobile Tip: Rotate your phone to Landscape 🔄 for a giant full-screen golf view!
-        </div>
-
         <!-- Main Golf Canvas Display -->
-        <div class="golf-canvas-card" style="position:relative; display:inline-block; max-width:100%; border-radius:var(--radius-lg); overflow:hidden; border:3px solid var(--border-color); box-shadow:0 12px 32px rgba(0,0,0,0.4);">
+        <div style="position:relative; display:inline-block; max-width:100%; border-radius:var(--radius-lg); overflow:hidden; border:3px solid var(--border-color); box-shadow:0 12px 32px rgba(0,0,0,0.4);">
           <canvas id="golf-canvas" width="800" height="500" style="display:block; width:100%; height:auto; background:#1b4332; cursor:crosshair; touch-action:none; user-select:none; -webkit-user-select:none;"></canvas>
         </div>
 
@@ -205,7 +200,6 @@ function loadHole(index) {
   generateWind();
   initWeatherParticles();
   updateHUD();
-  requestRender();
 }
 
 function spawnConfetti(originX, originY) {
@@ -262,25 +256,10 @@ function initWeatherParticles() {
   }
 }
 
-function requestRender() {
-  if (!animFrameId) {
-    animFrameId = requestAnimationFrame(gameLoop);
-  }
-}
-
 function gameLoop() {
   updatePhysics();
   renderCanvas();
-
-  const hole = ALL_18_HOLES[currentHoleIndex];
-  const hasWindmills = hole && hole.windmills && hole.windmills.length > 0;
-  const isDynamic = ballMoving || isAiming || weatherMode !== 'clear' || confettiParticles.length > 0 || hasWindmills;
-
-  if (isDynamic) {
-    animFrameId = requestAnimationFrame(gameLoop);
-  } else {
-    animFrameId = null;
-  }
+  animFrameId = requestAnimationFrame(gameLoop);
 }
 
 function updatePhysics() {
@@ -602,15 +581,6 @@ function renderCanvas() {
   }
 
   // 8. Render Hole Cup & Flag ⛳
-  const pulse = (Math.sin(Date.now() * 0.005) + 1) * 0.5;
-
-  // Pulsating Target Cup Beacon
-  ctx.beginPath();
-  ctx.arc(hole.holePos.x, hole.holePos.y, 22 + pulse * 6, 0, Math.PI * 2);
-  ctx.strokeStyle = `rgba(52, 211, 153, ${0.3 + pulse * 0.5})`;
-  ctx.lineWidth = 3;
-  ctx.stroke();
-
   ctx.beginPath();
   ctx.arc(hole.holePos.x, hole.holePos.y, 14, 0, Math.PI * 2);
   ctx.fillStyle = '#0f172a';
@@ -635,30 +605,28 @@ function renderCanvas() {
   ctx.fillStyle = '#34d399';
   ctx.fillText('⛳ CUP', hole.holePos.x - 18, hole.holePos.y + 28);
 
-  // 9. Render Weather Particles (Rain / Snow) - Batched Single-Path Draw Calls
+  // 9. Render Weather Particles (Rain / Snow)
   if (weatherMode === 'rain') {
     ctx.strokeStyle = 'rgba(147, 197, 253, 0.7)';
     ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    for (let i = 0; i < weatherParticles.length; i++) {
-      const p = weatherParticles[i];
+    weatherParticles.forEach(p => {
       p.y += p.speed;
       if (p.y > 500) p.y = 0;
+      ctx.beginPath();
       ctx.moveTo(p.x, p.y);
       ctx.lineTo(p.x - 2, p.y + p.length);
-    }
-    ctx.stroke();
+      ctx.stroke();
+    });
   } else if (weatherMode === 'snow') {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
-    ctx.beginPath();
-    for (let i = 0; i < weatherParticles.length; i++) {
-      const p = weatherParticles[i];
+    weatherParticles.forEach(p => {
       p.y += p.speed * 0.5;
       p.x += Math.sin(p.y * 0.05) * 0.5;
       if (p.y > 500) p.y = 0;
-      ctx.rect(p.x, p.y, p.radius * 2, p.radius * 2);
-    }
-    ctx.fill();
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+    });
   }
 
   // 10. Aim Vector Line
@@ -674,15 +642,7 @@ function renderCanvas() {
     ctx.stroke();
   }
 
-  // 11. Render Golf Ball ⚪ (with Pulsing Touch Aim Aura when Idle)
-  if (!ballMoving) {
-    ctx.beginPath();
-    ctx.arc(ball.x, ball.y, 16 + pulse * 5, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(245, 158, 11, ${0.4 + pulse * 0.5})`;
-    ctx.lineWidth = 3;
-    ctx.stroke();
-  }
-
+  // 11. Render Golf Ball ⚪
   ctx.beginPath();
   ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
   ctx.fillStyle = ball.color;
@@ -691,21 +651,15 @@ function renderCanvas() {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // 12. Render & Animate Confetti Particles 🎊 (In-place Splice Cleanup)
+  // 12. Render & Animate Confetti Particles 🎊 (Hole-In-One Explosion)
   if (confettiParticles.length > 0) {
-    for (let i = confettiParticles.length - 1; i >= 0; i--) {
-      const p = confettiParticles[i];
+    confettiParticles.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
       p.vy += p.gravity;
       p.vx *= p.drag;
       p.vy *= p.drag;
       p.rotation += p.rotSpeed;
-
-      if (p.y > 520) {
-        confettiParticles.splice(i, 1);
-        continue;
-      }
 
       ctx.save();
       ctx.translate(p.x, p.y);
@@ -720,7 +674,7 @@ function renderCanvas() {
         ctx.fill();
       }
       ctx.restore();
-    }
+    });
   }
 
   // 13. Render Hole In One Celebration Banner 🏆🎉
@@ -768,7 +722,6 @@ function shootBall(powerX, powerY) {
   totalStrokes++;
   playClickSound(750, 0.03);
   updateHUD();
-  requestRender();
 }
 
 function updateHUD() {
@@ -780,7 +733,7 @@ function updateHUD() {
   const totalParValEl = document.getElementById('golf-total-par-val');
   const progressEl = document.getElementById('golf-hole-progress');
 
-  if (holeTitleEl) holeTitleEl.textContent = `Hole ${currentHoleIndex + 1}: ${hole.name}`;
+  if (holeTitleEl) holeTitleEl.textContent = hole.name;
   if (parTextEl) parTextEl.textContent = `Par ${hole.par}`;
   if (strokeValEl) strokeValEl.textContent = strokeCount;
   if (totalStrokeValEl) totalStrokeValEl.textContent = totalStrokes;
@@ -838,7 +791,6 @@ function bindEvents() {
         strokeCount = lastBallState.strokes;
         totalStrokes = lastBallState.total;
         updateHUD();
-        requestRender();
       }
     });
   }
@@ -879,7 +831,6 @@ function bindEvents() {
       isAiming = true;
       aimStartPos = { x: ball.x, y: ball.y };
       aimCurrentPos = pos;
-      requestRender();
       try {
         canvas.setPointerCapture(e.pointerId);
       } catch (err) {}
@@ -890,7 +841,6 @@ function bindEvents() {
     if (e.pointerType === 'touch') return;
     if (isAiming) {
       aimCurrentPos = getCanvasPos(e);
-      requestRender();
     }
   };
 
@@ -906,8 +856,6 @@ function bindEvents() {
       const dy = aimStartPos.y - aimCurrentPos.y;
       if (Math.hypot(dx, dy) > 10) {
         shootBall(dx, dy);
-      } else {
-        requestRender();
       }
     }
   };
@@ -928,7 +876,6 @@ function bindEvents() {
       isAiming = true;
       aimStartPos = { x: ball.x, y: ball.y };
       aimCurrentPos = pos;
-      requestRender();
     }
   }, { passive: false });
 

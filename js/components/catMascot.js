@@ -470,12 +470,6 @@ function handleMouseMove(e) {
  * Smooth Lerp frame loop for both pupils and cursor-tracking paws
  */
 function animateMascot() {
-  // If document is hidden, drawer/menu open, or mascot hidden via display:none, skip execution
-  if (document.hidden || document.body.classList.contains('drawer-open') || document.body.classList.contains('menu-open') || (catEl && catEl.offsetParent === null)) {
-    requestAnimationFrame(animateMascot);
-    return;
-  }
-
   // Smooth pupil tracking
   if (leftPupilEl && rightPupilEl) {
     currentPupilX += (targetPupilX - currentPupilX) * 0.14;
