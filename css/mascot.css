@@ -440,3 +440,47 @@
   transform: translateY(40px) scale(0.5);
   opacity: 0;
 }
+
+/* ==========================================================================
+   Mobile Responsive Rules (<= 768px) - Strictly Isolated to Small Displays
+   ========================================================================== */
+@media (max-width: 768px) {
+  .mascot-container {
+    bottom: 12px;
+    left: 12px;
+    transform: scale(0.65);
+    transform-origin: bottom left;
+  }
+
+  .food-bowl-container {
+    bottom: 14px;
+    right: 14px;
+    transform: scale(0.85);
+    transform-origin: bottom right;
+  }
+
+  .yarn-ball-toy {
+    width: 44px;
+    height: 44px;
+    font-size: 1.4rem;
+  }
+
+  .mascot-speech-bubble {
+    max-width: 170px;
+    font-size: 0.78rem;
+    padding: 0.4rem 0.7rem;
+  }
+}
+
+/* When Mobile Navigation Drawer is active, lower opacity & disable pointer events on floating toys */
+body.drawer-open .mascot-container,
+body.drawer-open .food-bowl-container,
+body.drawer-open .yarn-ball-container,
+body:has(.mobile-drawer.open) .mascot-container,
+body:has(.mobile-drawer.open) .food-bowl-container,
+body:has(.mobile-drawer.open) .yarn-ball-container {
+  opacity: 0.1;
+  pointer-events: none !important;
+  transition: opacity 0.25s ease;
+}
+

@@ -51,6 +51,7 @@ export function initYarnBall() {
 }
 
 function startDrag(e) {
+  if (e.touches && e.cancelable) e.preventDefault();
   isDragging = true;
   velX = 0;
   velY = 0;
@@ -67,6 +68,7 @@ function startDrag(e) {
 
 function onDrag(e) {
   if (!isDragging) return;
+  if (e.touches && e.cancelable) e.preventDefault();
 
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;

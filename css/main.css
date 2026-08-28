@@ -174,7 +174,7 @@ img, svg {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 9990;
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -317,7 +317,7 @@ img, svg {
   visibility: hidden;
   transform: translateY(100px);
   transition: all var(--transition-fast);
-  z-index: 120;
+  z-index: 10005;
 }
 
 .dropdown.open .dropdown-menu {
@@ -367,7 +367,7 @@ img, svg {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  z-index: 99;
+  z-index: 10000;
   transform: translateX(100%);
   transition: transform var(--transition-normal);
   overflow-y: auto;

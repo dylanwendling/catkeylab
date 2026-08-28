@@ -106,7 +106,7 @@ export function renderCatMiniGolfGame(container) {
 
         <!-- Main Golf Canvas Display -->
         <div style="position:relative; display:inline-block; max-width:100%; border-radius:var(--radius-lg); overflow:hidden; border:3px solid var(--border-color); box-shadow:0 12px 32px rgba(0,0,0,0.4);">
-          <canvas id="golf-canvas" width="800" height="500" style="display:block; width:100%; height:auto; background:#1b4332; cursor:crosshair;"></canvas>
+          <canvas id="golf-canvas" width="800" height="500" style="display:block; width:100%; height:auto; background:#1b4332; cursor:crosshair; touch-action:none; user-select:none; -webkit-user-select:none;"></canvas>
         </div>
 
         <!-- Live Golf Dashboard -->
@@ -802,13 +802,27 @@ function bindEvents() {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
+    
+    let clientX = e.clientX;
+    let clientY = e.clientY;
+
+    if (e.touches && e.touches.length > 0) {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else if (e.changedTouches && e.changedTouches.length > 0) {
+      clientX = e.changedTouches[0].clientX;
+      clientY = e.changedTouches[0].clientY;
+    }
+
     return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY
+      x: (clientX - rect.left) * scaleX,
+      y: (clientY - rect.top) * scaleY
     };
   };
 
+  // Pointer Aim & Drag Listeners (Desktop & Stylus)
   canvas.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') return; // Handled by dedicated touch listeners below
     if (ballMoving || holeCompleted) return;
     const pos = getCanvasPos(e);
     const distToBall = Math.hypot(pos.x - ball.x, pos.y - ball.y);
@@ -824,12 +838,14 @@ function bindEvents() {
   });
 
   const handlePointerMove = (e) => {
+    if (e.pointerType === 'touch') return;
     if (isAiming) {
       aimCurrentPos = getCanvasPos(e);
     }
   };
 
   const handlePointerUp = (e) => {
+    if (e.pointerType === 'touch') return;
     if (isAiming) {
       isAiming = false;
       try {
@@ -848,6 +864,45 @@ function bindEvents() {
   window.addEventListener('pointerup', handlePointerUp);
   canvas.addEventListener('pointermove', handlePointerMove);
   canvas.addEventListener('pointerup', handlePointerUp);
+
+  // Dedicated Mobile Touch Listeners with e.preventDefault() & Expanded Aim Radius (75px)
+  canvas.addEventListener('touchstart', (e) => {
+    if (ballMoving || holeCompleted) return;
+    const pos = getCanvasPos(e);
+    const distToBall = Math.hypot(pos.x - ball.x, pos.y - ball.y);
+
+    if (distToBall < 75) {
+      if (e.cancelable) e.preventDefault();
+      isAiming = true;
+      aimStartPos = { x: ball.x, y: ball.y };
+      aimCurrentPos = pos;
+    }
+  }, { passive: false });
+
+  const handleTouchMove = (e) => {
+    if (isAiming) {
+      if (e.cancelable) e.preventDefault();
+      aimCurrentPos = getCanvasPos(e);
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (isAiming) {
+      if (e.cancelable) e.preventDefault();
+      isAiming = false;
+      const dx = aimStartPos.x - aimCurrentPos.x;
+      const dy = aimStartPos.y - aimCurrentPos.y;
+      if (Math.hypot(dx, dy) > 10) {
+        shootBall(dx, dy);
+      }
+    }
+  };
+
+  window.addEventListener('touchmove', handleTouchMove, { passive: false });
+  window.addEventListener('touchend', handleTouchEnd, { passive: false });
+  window.addEventListener('touchcancel', handleTouchEnd, { passive: false });
+  canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+  canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
 }
 
 export function cleanupCatMiniGolfGame() {

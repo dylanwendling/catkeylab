@@ -196,12 +196,14 @@ function bindHeaderEvents() {
 
   if (hamburgerBtn && drawer) {
     hamburgerBtn.addEventListener('click', () => {
-      drawer.classList.toggle('open');
+      const isOpen = drawer.classList.toggle('open');
+      document.body.classList.toggle('drawer-open', isOpen);
     });
 
     drawer.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         drawer.classList.remove('open');
+        document.body.classList.remove('drawer-open');
       });
     });
   }

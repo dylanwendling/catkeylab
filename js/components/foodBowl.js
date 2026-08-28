@@ -63,6 +63,7 @@ function spawnAndStartDragFish(e) {
 
 function onDragFish(e) {
   if (!isDraggingFish || !activeFishEl) return;
+  if (e.touches && e.cancelable) e.preventDefault();
 
   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
