@@ -133,35 +133,36 @@ function initTypingTestLogic() {
   }
 
   if (hiddenInput) {
+    hiddenInput.value = '  '; // 2 dummy spaces for reliable backspace & insert tracking
+
     hiddenInput.addEventListener('focus', hideFocusNotice);
     hiddenInput.addEventListener('blur', () => {
       if (!isTestActive) showFocusNotice();
     });
 
-    hiddenInput.addEventListener('beforeinput', (e) => {
-      if (isTestFinished) return;
-      if (e.inputType === 'deleteContentBackward') {
-        processTypedKey('Backspace');
-      } else if (e.data) {
-        for (const char of e.data) {
-          processTypedKey(char);
-        }
-      }
-      hiddenInput.value = '';
-    });
-
     hiddenInput.addEventListener('input', () => {
-      if (hiddenInput.value) {
-        for (const char of hiddenInput.value) {
+      if (isTestFinished) {
+        hiddenInput.value = '  ';
+        return;
+      }
+
+      const val = hiddenInput.value;
+      if (val.length < 2) {
+        // Soft keyboard backspace pressed!
+        processTypedKey('Backspace');
+      } else if (val.length > 2) {
+        // Character(s) or space typed!
+        const added = val.slice(2);
+        for (const char of added) {
           processTypedKey(char);
         }
-        hiddenInput.value = '';
       }
+      hiddenInput.value = '  ';
     });
 
     hiddenInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Backspace' || e.key === ' ' || e.key === 'Enter') {
-        processTypedKey(e.key);
+      if (e.key === 'Enter' && isTestFinished) {
+        resetTest();
       }
     });
   }
@@ -197,7 +198,7 @@ function resetTest() {
 
   const hiddenInput = document.getElementById('typing-hidden-input');
   if (hiddenInput) {
-    hiddenInput.value = '';
+    hiddenInput.value = '  ';
     hiddenInput.focus();
   }
 }
