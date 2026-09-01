@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (HTML5 Canvas 2D)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Interactive Lure & Multi-Strike)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -13,15 +13,15 @@ import {
 } from '../audio.js';
 import { submitScore } from '../leaderboard.js';
 
-// Canvas & Engine State
+// Canvas & Context
 let canvas = null;
 let ctx = null;
 let animFrameId = null;
 
-// Game State Enum: 'IDLE', 'READY', 'CASTING', 'WAITING', 'BITE', 'REELING', 'CATCH', 'ESCAPE', 'GAMEOVER'
+// Game State Enum: 'IDLE', 'READY', 'CASTING', 'FISHING', 'STRIKING', 'BITING', 'REELING', 'CATCH', 'ESCAPE', 'GAMEOVER'
 let gameState = 'IDLE';
 
-// Game Timers & Statistics
+// Match Timers & Statistics
 let gameTimeLeft = 60.0;
 let timerInterval = null;
 let currentScore = 0;
@@ -36,50 +36,46 @@ let catchesBreakdown = {
   boot: 0
 };
 
-// Key & Event Listeners state
-let spaceListenerBound = false;
+// Key & Input Controls State
+let keysPressed = {};
+let listenersBound = false;
 
-// Bite & Reeling Mechanic Variables
-let biteTimer = null;
-let biteTimeoutId = null;
-let biteWindowTimer = 0; // seconds remaining to hit Reel
-let activeBitingFish = null;
+// Lure Underwater Physics
+let lure = {
+  x: 400,
+  y: 250,
+  vx: 0,
+  vy: 0,
+  targetX: 400,
+  targetY: 250,
+  speed: 3.5,
+  active: false,
+  wigglePhase: 0
+};
 
-// Tension Reeling Mini-Game State
-let reelingTension = 50; // 0 to 100
-let reelingProgress = 0; // 0 to 100%
-let reelingTargetZone = { start: 30, end: 75 }; // Green catch zone
-let tensionDriftSpeed = 0;
+// Multi-Strike Tease & Bite Variables
+let activeAttractedFish = null;
+let strikeCount = 0;
+let maxStrikesForCurrentFish = 2; // 1 to 3 strikes
+let strikeCooldown = 0;
+let biteReactionTimer = 0; // Window to hit Reel on full bite
 
-// World & Visual Physics Objects
-let animationTime = 0;
+// Reeling & Pulling Mechanics
+let reelingTension = 20; // 0 to 100
+let isPullingUp = false;
 
-// Boat & Nibbles Mascot Position
+// Boat & Mascot Visual Position
 let boat = {
   x: 140,
   y: 118,
-  targetY: 118,
   bobOffset: 0,
   tilt: 0
 };
 
-// Fishing Rod Tip
+// Fishing Rod Tip (Anchor for Line)
 let rodTip = {
   x: 200,
   y: 75
-};
-
-// Bobber & Line State
-let bobber = {
-  x: 0,
-  y: 0,
-  targetX: 0,
-  targetY: 0,
-  vx: 0,
-  vy: 0,
-  active: false,
-  submerged: false,
-  dipOffset: 0
 };
 
 // Line Cast Arc Animation
@@ -92,13 +88,13 @@ let castArc = {
   endY: 0
 };
 
-// Toast & Catch Text Popups
-let catchToast = null; // { text, x, y, alpha, color }
+// Toast Alerts & Particles
+let catchToast = null;
+let strikeBanner = null; // { text, x, y, alpha, color }
+let particles = [];
+let animationTime = 0;
 
-// Particle Systems
-let particles = []; // Water splashes, bubbles, sparkles, sparkles
-
-// Fish Definitions Database
+// Fish Database Definitions
 const FISH_TYPES = [
   {
     id: 'minnow',
@@ -108,10 +104,10 @@ const FISH_TYPES = [
     speed: 1.8,
     width: 32,
     height: 18,
-    color: '#38bdf8', // Sky Blue
+    color: '#38bdf8',
     accentColor: '#e0f2fe',
     rarity: 0.40,
-    biteReactionWindow: 1.6,
+    pullStrength: 0.8,
     difficulty: 1.0
   },
   {
@@ -119,13 +115,13 @@ const FISH_TYPES = [
     name: 'Orange Clownfish',
     emoji: '🐠',
     points: 250,
-    speed: 1.4,
+    speed: 1.5,
     width: 38,
     height: 24,
-    color: '#f97316', // Orange
-    accentColor: '#ffffff', // White stripes
+    color: '#f97316',
+    accentColor: '#ffffff',
     rarity: 0.30,
-    biteReactionWindow: 1.4,
+    pullStrength: 1.2,
     difficulty: 1.3
   },
   {
@@ -133,13 +129,13 @@ const FISH_TYPES = [
     name: 'Spiky Pufferfish',
     emoji: '🐡',
     points: 400,
-    speed: 1.1,
+    speed: 1.2,
     width: 44,
     height: 32,
-    color: '#eab308', // Gold/Yellow
-    accentColor: '#78350f', // Dark spikes
+    color: '#eab308',
+    accentColor: '#78350f',
     rarity: 0.17,
-    biteReactionWindow: 1.25,
+    pullStrength: 1.6,
     difficulty: 1.6
   },
   {
@@ -150,10 +146,10 @@ const FISH_TYPES = [
     speed: 2.3,
     width: 48,
     height: 26,
-    color: '#fbbf24', // Shining Gold
+    color: '#fbbf24',
     accentColor: '#d97706',
     rarity: 0.08,
-    biteReactionWindow: 1.0,
+    pullStrength: 2.2,
     difficulty: 2.0
   },
   {
@@ -164,10 +160,10 @@ const FISH_TYPES = [
     speed: 2.7,
     width: 58,
     height: 34,
-    color: '#ec4899', // Pink / Rainbow aura
+    color: '#ec4899',
     accentColor: '#a855f7',
     rarity: 0.03,
-    biteReactionWindow: 0.85,
+    pullStrength: 3.0,
     difficulty: 2.6
   },
   {
@@ -181,24 +177,20 @@ const FISH_TYPES = [
     color: '#78350f',
     accentColor: '#451a03',
     rarity: 0.02,
-    biteReactionWindow: 2.0,
+    pullStrength: 0.5,
     difficulty: 0.8
   }
 ];
 
-// Active Swimming Fish Entities
 let swimmingFish = [];
-
-// Environmental Decor (Clouds, Seaweed, Bubbles)
 let clouds = [];
 let seaweedClumps = [];
 let bubbles = [];
 
 /**
- * Initialize Canvas & Render Main HTML Component
+ * Main Render Entry Point
  */
 export function renderCatFishingGame(container) {
-  // Load saved high score from localStorage
   try {
     personalHighScore = parseInt(localStorage.getItem('catkeylab_fishing_highscore')) || 0;
   } catch (e) {
@@ -214,12 +206,12 @@ export function renderCatFishingGame(container) {
           <span style="font-size:2.2rem;">🎣</span>
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
-        <p class="section-subtitle" style="margin-bottom:1.25rem;">
-          Cast your fishing line into the water, wait for a bite ❗️, and reel in high-value fish before the 60s timer runs out!
+        <p class="section-subtitle" style="margin-bottom:1rem;">
+          Cast your lure, control its depth with <strong>Arrow Keys / D-Pad</strong>, tease fish with up to 3 strikes ⚡, and pull hooked fish UP to Nibbles' boat!
         </p>
 
         <!-- Live Dashboard Stats -->
-        <div class="stats-dashboard" style="max-width:720px; margin:0 auto 1.25rem auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:0.75rem;">
+        <div class="stats-dashboard" style="max-width:760px; margin:0 auto 1.25rem auto; display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:0.75rem;">
           <div class="stat-box">
             <div id="fg-timer" class="stat-value" style="color:var(--accent-amber);">60.0s</div>
             <div class="stat-label">Time Remaining</div>
@@ -239,23 +231,37 @@ export function renderCatFishingGame(container) {
         </div>
 
         <!-- Canvas Container -->
-        <div style="position:relative; width:100%; max-width:850px; margin:0 auto 1.25rem auto; border-radius:var(--radius-lg); overflow:hidden; border:2px solid var(--border-color); box-shadow:0 12px 32px rgba(0,0,0,0.3); background:#0284c7;">
-          <canvas id="fishing-canvas" width="850" height="460" style="display:block; width:100%; height:auto; cursor:pointer; touch-action:manipulation;"></canvas>
+        <div style="position:relative; width:100%; max-width:850px; margin:0 auto 1rem auto; border-radius:var(--radius-lg); overflow:hidden; border:2px solid var(--border-color); box-shadow:0 12px 32px rgba(0,0,0,0.3); background:#0284c7;">
+          <canvas id="fishing-canvas" width="850" height="460" style="display:block; width:100%; height:auto; cursor:pointer; touch-action:none;"></canvas>
         </div>
 
-        <!-- Action Control Bar -->
-        <div style="display:flex; justify-content:center; align-items:center; gap:1rem; flex-wrap:wrap;">
-          <button id="fg-action-btn" class="btn btn-primary btn-lg" style="min-width:240px; font-size:1.2rem; font-weight:800; padding:0.85rem 1.75rem; transition:transform 0.1s ease, box-shadow 0.2s ease;">
-            🎣 START FISHING GAME
-          </button>
-          <button id="fg-reset-btn" class="btn btn-secondary btn-lg">
-            🔄 Reset
-          </button>
+        <!-- Touch D-Pad & Action Control Bar -->
+        <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap; background:var(--bg-secondary); border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-lg); margin-bottom:1rem;">
+          
+          <!-- On-Screen Directional D-Pad -->
+          <div style="display:flex; flex-direction:column; align-items:center; gap:0.35rem;">
+            <button id="fg-dpad-up" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Up / Reel ⬆️">⬆️</button>
+            <div style="display:flex; gap:0.35rem;">
+              <button id="fg-dpad-left" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Left ⬅️">⬅️</button>
+              <button id="fg-dpad-down" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Sink / Move Down ⬇️">⬇️</button>
+              <button id="fg-dpad-right" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Right ➡️">➡️</button>
+            </div>
+          </div>
+
+          <!-- Main Action & Reel Button -->
+          <div style="display:flex; flex-direction:column; gap:0.6rem; min-width:240px; flex:1; max-width:320px;">
+            <button id="fg-action-btn" class="btn btn-primary btn-lg" style="width:100%; font-size:1.2rem; font-weight:800; padding:0.85rem 1.25rem;">
+              🎣 CAST LURE INTO WATER
+            </button>
+            <button id="fg-reset-btn" class="btn btn-secondary btn-sm" style="width:100%;">
+              🔄 New Game
+            </button>
+          </div>
         </div>
 
-        <!-- Keyboard Shortcut Hint -->
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.75rem;">
-          💡 <strong>Tip:</strong> Press <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px; border:1px solid var(--border-color);">Spacebar</kbd> or click anywhere on the water to Cast & Reel!
+        <!-- Keyboard Controls Guide -->
+        <p style="font-size:0.85rem; color:var(--text-muted);">
+          💡 <strong>Controls:</strong> Use <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Arrow Keys</kbd> or <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">WASD</kbd> to move your lure underwater. Hold <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Up Arrow / Spacebar</kbd> to pull hooked fish UP to the boat!
         </p>
 
       </div>
@@ -265,10 +271,10 @@ export function renderCatFishingGame(container) {
     <div id="fg-modal" class="modal-overlay">
       <div class="modal-card" style="text-align:center; max-width:500px; padding:2rem;">
         <div style="font-size:3rem; margin-bottom:0.5rem;" id="fg-modal-icon">🏆</div>
-        <h2 style="font-size:1.9rem; font-weight:800; margin-bottom:0.25rem;" id="fg-modal-title">Time's Up! Great Catch!</h2>
-        <p style="color:var(--text-secondary); margin-bottom:1.25rem;" id="fg-modal-subtitle">Nibbles is thrilled with today's fishing haul!</p>
+        <h2 style="font-size:1.9rem; font-weight:800; margin-bottom:0.25rem;">Time's Up! Great Haul!</h2>
+        <p style="color:var(--text-secondary); margin-bottom:1.25rem;">Nibbles purrs happily and thanks you for today's catch!</p>
 
-        <!-- Final Stats Cards -->
+        <!-- Final Score Cards -->
         <div class="stats-dashboard" style="margin-bottom:1.25rem; display:grid; grid-template-columns:1fr 1fr; gap:0.75rem;">
           <div class="stat-box">
             <div id="fg-modal-score" class="stat-value" style="color:var(--accent-emerald);">0</div>
@@ -284,8 +290,8 @@ export function renderCatFishingGame(container) {
         <div id="fg-modal-breakdown" style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.85rem 1rem; margin-bottom:1.5rem; text-align:left; font-size:0.9rem; line-height:1.7;">
         </div>
 
-        <!-- High Score Badge Banner -->
-        <div id="fg-modal-highscore-banner" style="display:none; background:linear-gradient(90deg, #f59e0b, #ec4899); color:#fff; font-weight:800; padding:0.5rem 1rem; border-radius:var(--radius-md); margin-bottom:1.25rem; font-size:1rem; box-shadow:0 4px 15px rgba(245,158,11,0.4);">
+        <!-- High Score Banner -->
+        <div id="fg-modal-highscore-banner" style="display:none; background:linear-gradient(90deg, #f59e0b, #ec4899); color:#fff; font-weight:800; padding:0.5rem 1rem; border-radius:var(--radius-md); margin-bottom:1.25rem; font-size:1rem;">
           🎉 NEW PERSONAL HIGH SCORE! 👑
         </div>
 
@@ -299,11 +305,11 @@ export function renderCatFishingGame(container) {
   `;
 
   initGameSetup();
-  bindUIEvents();
+  bindInputEvents();
 }
 
 /**
- * Initialize Canvas Context & World Geometry
+ * Setup Canvas & Initial Environment
  */
 function initGameSetup() {
   canvas = document.getElementById('fishing-canvas');
@@ -311,7 +317,6 @@ function initGameSetup() {
 
   ctx = canvas.getContext('2d');
 
-  // World Initialization
   clouds = [
     { x: 80, y: 35, speed: 0.2, size: 28 },
     { x: 340, y: 22, speed: 0.15, size: 36 },
@@ -337,56 +342,50 @@ function initGameSetup() {
     });
   }
 
-  // Populate Initial Swimming Fish underwater
-  initSwimmingFish(7);
+  initSwimmingFish(8);
 
-  // Set Default State
   gameState = 'IDLE';
   gameTimeLeft = 60.0;
   currentScore = 0;
   totalFishCaught = 0;
   catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, boot: 0 };
+  lure.active = false;
 
   updateHUD();
-  updateActionButtonText();
+  updateActionButton();
 
-  // Start Animation Loop
   if (animFrameId) cancelAnimationFrame(animFrameId);
   animationTime = 0;
   gameLoop();
 }
 
 /**
- * Populate Swimming Underwater Fish
+ * Initialize Swimming Fish Entities
  */
-function initSwimmingFish(count = 7) {
+function initSwimmingFish(count = 8) {
   swimmingFish = [];
   for (let i = 0; i < count; i++) {
     swimmingFish.push(spawnRandomFish());
   }
 }
 
-/**
- * Spawn a single swimming fish entity based on weighted rarity
- */
-function spawnRandomFish(forcedType = null) {
-  let typeObj = forcedType;
-  if (!typeObj) {
-    const rand = Math.random();
-    let cum = 0;
-    for (const f of FISH_TYPES) {
-      cum += f.rarity;
-      if (rand <= cum) {
-        typeObj = f;
-        break;
-      }
+function spawnRandomFish() {
+  const rand = Math.random();
+  let typeObj = null;
+  let cum = 0;
+
+  for (const f of FISH_TYPES) {
+    cum += f.rarity;
+    if (rand <= cum) {
+      typeObj = f;
+      break;
     }
-    if (!typeObj) typeObj = FISH_TYPES[0];
   }
+  if (!typeObj) typeObj = FISH_TYPES[0];
 
   const direction = Math.random() > 0.5 ? 1 : -1;
   const startX = direction === 1 ? -60 - Math.random() * 100 : canvas.width + 60 + Math.random() * 100;
-  const startY = 175 + Math.random() * 230; // Underwater zone (150px to 420px)
+  const startY = 180 + Math.random() * 220;
 
   return {
     type: typeObj,
@@ -396,12 +395,13 @@ function spawnRandomFish(forcedType = null) {
     dx: direction * (typeObj.speed * (0.85 + Math.random() * 0.3)),
     dy: 0,
     swimPhase: Math.random() * Math.PI * 2,
-    isTargeted: false
+    isAttracted: false,
+    isHooked: false
   };
 }
 
 /**
- * Start 60-Second Game Match
+ * Start 60-Second Match
  */
 function startGameMatch() {
   if (timerInterval) clearInterval(timerInterval);
@@ -411,12 +411,11 @@ function startGameMatch() {
   currentScore = 0;
   totalFishCaught = 0;
   catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, boot: 0 };
-  bobber.active = false;
+  lure.active = false;
 
   updateHUD();
-  updateActionButtonText();
+  updateActionButton();
 
-  // 60-second timer interval
   timerInterval = setInterval(() => {
     gameTimeLeft -= 0.1;
     if (gameTimeLeft <= 0) {
@@ -430,128 +429,145 @@ function startGameMatch() {
 }
 
 /**
- * Perform Line Cast Action
+ * Cast Lure into Ocean
  */
-function castFishingLine() {
+function castLure() {
   if (gameState !== 'READY') return;
 
   gameState = 'CASTING';
-
-  // Target spot in water: Random x between 360 and 720
-  const targetX = 360 + Math.random() * 340;
-  const targetY = 138; // Water surface line
 
   castArc.active = true;
   castArc.progress = 0;
   castArc.startX = rodTip.x;
   castArc.startY = rodTip.y;
-  castArc.endX = targetX;
-  castArc.endY = targetY;
+  castArc.endX = 400; // Drops in center ocean
+  castArc.endY = 220;
 
-  bobber.x = rodTip.x;
-  bobber.y = rodTip.y;
-  bobber.active = true;
+  lure.x = rodTip.x;
+  lure.y = rodTip.y;
+  lure.active = true;
 
   playClickSound(500, 0.08);
-  updateActionButtonText();
+  updateActionButton();
 }
 
 /**
- * Handle Bobber Splash Landing & Schedule Fish Bite
+ * Lure Lands in Water -> Enter Submerged Control State
  */
-function onBobberLanded() {
-  gameState = 'WAITING';
-  bobber.x = castArc.endX;
-  bobber.y = castArc.endY;
+function onLureLanded() {
+  gameState = 'FISHING';
+  lure.x = castArc.endX;
+  lure.y = castArc.endY;
 
-  // Create Water Splash Particles
-  createSplashParticles(bobber.x, bobber.y);
+  createSplashParticles(lure.x, lure.y);
   playSplashSound();
 
-  updateActionButtonText();
+  activeAttractedFish = null;
+  strikeCount = 0;
 
-  // Schedule bite after 1.2s to 3.2s
-  const biteWaitTime = 1200 + Math.random() * 2000;
-  
-  if (biteTimeoutId) clearTimeout(biteTimeoutId);
-  biteTimeoutId = setTimeout(() => {
-    if (gameState === 'WAITING' && gameTimeLeft > 0) {
-      triggerFishBite();
-    }
-  }, biteWaitTime);
+  updateActionButton();
 }
 
 /**
- * Trigger Fish Bite Alert Event
+ * Trigger Tease Strike Event (Strikes 1, 2, or 3)
  */
-function triggerFishBite() {
-  gameState = 'BITE';
+function triggerStrikeEvent(fishEntity) {
+  gameState = 'STRIKING';
+  activeAttractedFish = fishEntity;
+  strikeCount++;
 
-  // Select a fish to bite hook
-  activeBitingFish = spawnRandomFish().type;
-  biteWindowTimer = activeBitingFish.biteReactionWindow;
+  playClickSound(900, 0.06);
 
-  // Visual Bobber Dip & Splash
-  bobber.dipOffset = 18;
-  createSplashParticles(bobber.x, bobber.y + 10);
-  playBiteAlertSound();
+  // Sparkles & Splash at Lure
+  createSplashParticles(lure.x, lure.y);
 
-  updateActionButtonText();
-}
+  if (strikeCount < maxStrikesForCurrentFish) {
+    // Tease Strike! (Nibble 1 or 2)
+    strikeBanner = {
+      text: `⚡ STRIKE #${strikeCount}!`,
+      x: lure.x,
+      y: lure.y - 30,
+      alpha: 1.0,
+      color: '#f59e0b'
+    };
 
-/**
- * Start Interactive Tension Reeling Mini-Game
- */
-function startReelingMiniGame() {
-  if (gameState !== 'BITE') return;
-
-  gameState = 'REELING';
-
-  reelingTension = 50;
-  reelingProgress = 15; // Start with 15% bonus for fast reaction!
-  tensionDriftSpeed = (Math.random() > 0.5 ? 1 : -1) * (1.2 * activeBitingFish.difficulty);
-
-  // Define target green tension zone
-  const zoneWidth = Math.max(25, 45 - activeBitingFish.difficulty * 6);
-  const zoneStart = 25 + Math.random() * (50 - zoneWidth);
-  reelingTargetZone = { start: zoneStart, end: zoneStart + zoneWidth };
-
-  playReelSound();
-  updateActionButtonText();
-}
-
-/**
- * Player Taps/Clicks Reel Button during Reeling
- */
-function reelActionInput() {
-  if (gameState === 'READY') {
-    castFishingLine();
-  } else if (gameState === 'BITE') {
-    startReelingMiniGame();
-  } else if (gameState === 'REELING') {
-    // Increase Tension & Progress
-    reelingTension = Math.min(100, reelingTension + 12);
-    reelingProgress = Math.min(100, reelingProgress + 14);
-    playReelSound();
-
-    if (reelingProgress >= 100) {
-      completeSuccessfulCatch();
-    }
-  } else if (gameState === 'GAMEOVER' || gameState === 'IDLE') {
-    startGameMatch();
+    // Fish retreats slightly then circles back after 0.8s
+    setTimeout(() => {
+      if (gameState === 'STRIKING') {
+        gameState = 'FISHING';
+        updateActionButton();
+      }
+    }, 800);
+  } else {
+    // Final Strike -> FULL BITE / HOOKED!
+    triggerFullBiteEvent(fishEntity);
   }
 }
 
 /**
- * Successfully Caught Fish Handler
+ * Trigger Full Bite / Hooked Event
  */
-function completeSuccessfulCatch() {
-  gameState = 'CATCH';
-  const fish = activeBitingFish;
+function triggerFullBiteEvent(fishEntity) {
+  gameState = 'BITING';
+  biteReactionTimer = 1.4; // 1.4 second window to hit Reel
 
-  currentScore += fish.points;
+  playBiteAlertSound();
+
+  strikeBanner = {
+    text: `❗️ BITE! HOOKED!`,
+    x: lure.x,
+    y: lure.y - 40,
+    alpha: 1.0,
+    color: '#ef4444'
+  };
+
+  updateActionButton();
+}
+
+/**
+ * Lock Hook & Enter Active Reeling State
+ */
+function startReelingPhase() {
+  if (gameState !== 'BITING' && gameState !== 'FISHING' && gameState !== 'STRIKING') return;
+
+  gameState = 'REELING';
+  reelingTension = 30;
+
+  if (activeAttractedFish) {
+    activeAttractedFish.isHooked = true;
+  }
+
+  playReelSound();
+  updateActionButton();
+}
+
+/**
+ * Main Action Button Click Router
+ */
+function handleMainAction() {
+  if (gameState === 'IDLE' || gameState === 'GAMEOVER') {
+    startGameMatch();
+  } else if (gameState === 'READY') {
+    castLure();
+  } else if (gameState === 'BITING') {
+    startReelingPhase();
+  } else if (gameState === 'REELING') {
+    // Reel Up Action
+    isPullingUp = true;
+    setTimeout(() => { isPullingUp = false; }, 150);
+  }
+}
+
+/**
+ * Complete Successful Catch when Fish reaches Boat Surface (y <= 140)
+ */
+function completeCatch() {
+  gameState = 'CATCH';
+  const fishType = activeAttractedFish ? activeAttractedFish.type : FISH_TYPES[0];
+
+  currentScore += fishType.points;
   totalFishCaught++;
-  catchesBreakdown[fish.id] = (catchesBreakdown[fish.id] || 0) + 1;
+  catchesBreakdown[fishType.id] = (catchesBreakdown[fishType.id] || 0) + 1;
 
   if (currentScore > personalHighScore) {
     personalHighScore = currentScore;
@@ -560,74 +576,81 @@ function completeSuccessfulCatch() {
     } catch (e) {}
   }
 
-  // Create Catch Celebration Toast & Sparkles
   catchToast = {
-    text: `CAUGHT ${fish.name.toUpperCase()}! +${fish.points} PTS ${fish.emoji}`,
-    x: bobber.x,
-    y: bobber.y - 40,
+    text: `CAUGHT ${fishType.name.toUpperCase()}! +${fishType.points} PTS ${fishType.emoji}`,
+    x: lure.x,
+    y: lure.y - 40,
     alpha: 1.0,
-    color: fish.color
+    color: fishType.color
   };
 
-  createCatchSparkleParticles(bobber.x, bobber.y);
+  createCatchSparkleParticles(lure.x, lure.y);
   playSuccessSound();
+
+  // Remove caught fish entity
+  if (activeAttractedFish) {
+    const idx = swimmingFish.indexOf(activeAttractedFish);
+    if (idx !== -1) swimmingFish[idx] = spawnRandomFish();
+  }
 
   updateHUD();
 
-  // Reset bobber back to rod after 1.2s
   setTimeout(() => {
     if (gameState === 'CATCH' && gameTimeLeft > 0) {
-      bobber.active = false;
+      lure.active = false;
       gameState = 'READY';
-      updateActionButtonText();
+      updateActionButton();
     }
   }, 1200);
 }
 
 /**
- * Fish Escaped Handler
+ * Handle Fish Escape
  */
-function handleFishEscape(reason = 'Missed Reaction') {
+function handleEscape(reason = 'Line Snapped') {
   gameState = 'ESCAPE';
   
-  createSplashParticles(bobber.x, bobber.y);
+  createSplashParticles(lure.x, lure.y);
   playEscapeSound();
 
   catchToast = {
     text: `FISH ESCAPED! 💨`,
-    x: bobber.x,
-    y: bobber.y - 30,
+    x: lure.x,
+    y: lure.y - 30,
     alpha: 1.0,
     color: '#ef4444'
   };
 
+  if (activeAttractedFish) {
+    activeAttractedFish.isHooked = false;
+    activeAttractedFish.isAttracted = false;
+  }
+
   setTimeout(() => {
     if (gameState === 'ESCAPE' && gameTimeLeft > 0) {
-      bobber.active = false;
+      lure.active = false;
       gameState = 'READY';
-      updateActionButtonText();
+      updateActionButton();
     }
   }, 1000);
 }
 
 /**
- * Game Over Handler
+ * Trigger Game Over Modal
  */
 function triggerGameOver() {
   if (timerInterval) clearInterval(timerInterval);
 
   gameState = 'GAMEOVER';
-  bobber.active = false;
+  lure.active = false;
 
   updateHUD();
-  updateActionButtonText();
+  updateActionButton();
 
-  // Score Submission to Global Leaderboard
   if (currentScore > 0) {
     submitScore('cat-fishing-game', currentScore, `${currentScore} pts (${totalFishCaught} fish)`);
   }
 
-  // Render Modal Results
   const modalScore = document.getElementById('fg-modal-score');
   const modalCount = document.getElementById('fg-modal-count');
   const modalBreakdown = document.getElementById('fg-modal-breakdown');
@@ -635,7 +658,6 @@ function triggerGameOver() {
 
   if (modalScore) modalScore.textContent = currentScore;
   if (modalCount) modalCount.textContent = totalFishCaught;
-
   if (highscoreBanner) {
     highscoreBanner.style.display = currentScore > 0 && currentScore >= personalHighScore ? 'block' : 'none';
   }
@@ -661,7 +683,7 @@ function triggerGameOver() {
 }
 
 /**
- * Update HTML Stats HUD
+ * Update Stats HUD
  */
 function updateHUD() {
   const timerEl = document.getElementById('fg-timer');
@@ -676,9 +698,9 @@ function updateHUD() {
 }
 
 /**
- * Update Action Button Styles & Labels dynamically
+ * Update Action Button Styles & Labels
  */
-function updateActionButtonText() {
+function updateActionButton() {
   const btn = document.getElementById('fg-action-btn');
   if (!btn) return;
 
@@ -689,23 +711,26 @@ function updateActionButtonText() {
     btn.classList.add('btn-primary');
     btn.style.transform = 'none';
   } else if (gameState === 'READY') {
-    btn.innerHTML = '🎣 CAST LINE (Spacebar)';
+    btn.innerHTML = '🎣 CAST LURE INTO WATER';
     btn.classList.add('btn-primary');
     btn.style.transform = 'none';
   } else if (gameState === 'CASTING') {
     btn.innerHTML = '⏳ Casting Line...';
     btn.classList.add('btn-secondary');
-  } else if (gameState === 'WAITING') {
-    btn.innerHTML = '🌊 Waiting for Bite...';
+  } else if (gameState === 'FISHING') {
+    btn.innerHTML = '🌊 CONTROL LURE (ARROW KEYS / D-PAD)';
     btn.classList.add('btn-secondary');
-  } else if (gameState === 'BITE') {
-    btn.innerHTML = '⚡ REEL NOW! ❗️';
+  } else if (gameState === 'STRIKING') {
+    btn.innerHTML = '⚡ FISH STRIKING LURE!';
+    btn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    btn.style.color = '#fff';
+  } else if (gameState === 'BITING') {
+    btn.innerHTML = '⚡ REEL NOW! HOOKED! ❗️';
     btn.style.background = 'linear-gradient(135deg, #ef4444, #f97316)';
     btn.style.color = '#ffffff';
     btn.style.boxShadow = '0 0 25px rgba(239,68,68,0.8)';
-    btn.style.transform = 'scale(1.08)';
   } else if (gameState === 'REELING') {
-    btn.innerHTML = '🎣 REELING! CLICK/SPACE! ⚡';
+    btn.innerHTML = '⬆️ REEL / PULL FISH UP TO BOAT!';
     btn.style.background = 'linear-gradient(135deg, #10b981, #06b6d4)';
     btn.style.color = '#ffffff';
     btn.style.boxShadow = '0 0 25px rgba(16,185,129,0.8)';
@@ -719,95 +744,56 @@ function updateActionButtonText() {
 }
 
 /**
- * Particles Helpers
- */
-function createSplashParticles(x, y) {
-  for (let i = 0; i < 14; i++) {
-    const angle = Math.random() * Math.PI - Math.PI;
-    const speed = 1.5 + Math.random() * 3.5;
-    particles.push({
-      x: x,
-      y: y,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 2.0,
-      radius: 2 + Math.random() * 3,
-      alpha: 1.0,
-      color: '#e0f2fe',
-      life: 0.6
-    });
-  }
-}
-
-function createCatchSparkleParticles(x, y) {
-  for (let i = 0; i < 20; i++) {
-    particles.push({
-      x: x + (Math.random() * 40 - 20),
-      y: y + (Math.random() * 40 - 20),
-      vx: (Math.random() - 0.5) * 4,
-      vy: (Math.random() - 0.5) * 4 - 2,
-      radius: 3 + Math.random() * 4,
-      alpha: 1.0,
-      color: ['#fbbf24', '#38bdf8', '#ec4899', '#10b981'][Math.floor(Math.random() * 4)],
-      life: 0.9
-    });
-  }
-}
-
-/**
- * Main Canvas Render Loop (60 FPS)
+ * Main 60FPS Game Render Loop
  */
 function gameLoop() {
   animationTime += 0.03;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 1. Render Sky & Atmospheric Background
-  drawSkyBackground();
+  // 1. Draw Sky & Clouds
+  drawSky();
 
-  // 2. Render Underwater Zone & Caustics
-  drawUnderwaterWorld();
+  // 2. Draw Ocean & Underwater Environment
+  drawOcean();
 
-  // 3. Update & Render Swimming Fish
-  updateAndDrawFish();
+  // 3. Process Lure Control Physics
+  if (gameState === 'FISHING' || gameState === 'REELING') {
+    updateLureControls();
+  }
 
-  // 4. Render Floating Boat & Nibbles Cat Mascot
-  drawBoatAndNibbles();
+  // 4. Update Swimming Fish & Strike AI
+  updateFishEntities();
 
-  // 5. Update & Render Line Cast Physics & Bobber
-  updateAndDrawFishingLine();
+  // 5. Draw Boat & Nibbles
+  drawBoat();
 
-  // 6. Update Reeling Mechanics & Tension Meter
+  // 6. Draw Fishing Line & Lure
+  drawFishingLineAndLure();
+
+  // 7. Update Reeling Tension & Mechanics
   if (gameState === 'REELING') {
     updateReelingPhysics();
-    drawReelingMeterOverlay();
+    drawTensionGauge();
   }
 
-  // 7. Update & Draw Particles
+  // 8. Draw Banners & Particles
   updateAndDrawParticles();
-
-  // 8. Draw Catch Popups
-  drawCatchToast();
-
-  // 9. Draw Bite Alert Overlay Banner
-  if (gameState === 'BITE') {
-    updateBiteTimer();
-    drawBiteAlertBanner();
-  }
+  drawToastBanners();
 
   animFrameId = requestAnimationFrame(gameLoop);
 }
 
 /**
- * Render Sky & Sunrise Atmosphere
+ * Render Sky
  */
-function drawSkyBackground() {
+function drawSky() {
   const skyGrad = ctx.createLinearGradient(0, 0, 0, 140);
-  skyGrad.addColorStop(0, '#38bdf8'); // Sky blue
+  skyGrad.addColorStop(0, '#38bdf8');
   skyGrad.addColorStop(0.7, '#7dd3fc');
   skyGrad.addColorStop(1, '#bae6fd');
   ctx.fillStyle = skyGrad;
   ctx.fillRect(0, 0, canvas.width, 140);
 
-  // Sun
   ctx.save();
   ctx.fillStyle = '#fef08a';
   ctx.shadowColor = '#fde047';
@@ -817,7 +803,6 @@ function drawSkyBackground() {
   ctx.fill();
   ctx.restore();
 
-  // Moving Clouds
   clouds.forEach(c => {
     c.x += c.speed;
     if (c.x > canvas.width + 60) c.x = -60;
@@ -832,20 +817,19 @@ function drawSkyBackground() {
 }
 
 /**
- * Render Ocean Surface & Underwater Environment
+ * Render Ocean & Seabed
  */
-function drawUnderwaterWorld() {
+function drawOcean() {
   const waterSurfaceY = 135;
 
-  // Underwater Ocean Gradient
   const oceanGrad = ctx.createLinearGradient(0, waterSurfaceY, 0, canvas.height);
-  oceanGrad.addColorStop(0, '#0284c7'); // Bright ocean cyan
+  oceanGrad.addColorStop(0, '#0284c7');
   oceanGrad.addColorStop(0.4, '#0369a1');
-  oceanGrad.addColorStop(1, '#0c4a6e'); // Deep abyss blue
+  oceanGrad.addColorStop(1, '#0c4a6e');
   ctx.fillStyle = oceanGrad;
   ctx.fillRect(0, waterSurfaceY, canvas.width, canvas.height - waterSurfaceY);
 
-  // Underwater Sun Light Caustics Rays
+  // Caustics Rays
   ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
   for (let i = 0; i < 5; i++) {
     const rayX = 150 + i * 160 + Math.sin(animationTime + i) * 20;
@@ -857,7 +841,7 @@ function drawUnderwaterWorld() {
     ctx.fill();
   }
 
-  // Floating Air Bubbles
+  // Air Bubbles
   bubbles.forEach(b => {
     b.y -= b.speed;
     b.x += Math.sin(animationTime * 2 + b.wobble) * 0.4;
@@ -873,21 +857,20 @@ function drawUnderwaterWorld() {
     ctx.stroke();
   });
 
-  // Swaying Seaweed/Kelp Bed
+  // Seaweed Clumps
   seaweedClumps.forEach(s => {
     ctx.strokeStyle = s.color;
     ctx.lineWidth = 6;
     ctx.lineCap = 'round';
     ctx.beginPath();
     ctx.moveTo(s.x, canvas.height);
-    
     const tipX = s.x + Math.sin(animationTime * 1.5 + s.phase) * 25;
     const midX = s.x + Math.sin(animationTime * 1.5 + s.phase) * 12;
     ctx.quadraticCurveTo(midX, canvas.height - s.height / 2, tipX, canvas.height - s.height);
     ctx.stroke();
   });
 
-  // Water Surface Animated Waves
+  // Waves
   ctx.fillStyle = '#38bdf8';
   ctx.beginPath();
   ctx.moveTo(0, waterSurfaceY);
@@ -902,36 +885,87 @@ function drawUnderwaterWorld() {
 }
 
 /**
- * Update & Render Swimming Fish
+ * Handle Arrow Keys & D-Pad Submerged Lure Movement
  */
-function updateAndDrawFish() {
-  swimmingFish.forEach((fish, idx) => {
-    // Swim Movement
-    fish.x += fish.dx;
-    fish.swimPhase += 0.15;
-    fish.y = fish.targetY + Math.sin(fish.swimPhase) * 6;
+function updateLureControls() {
+  if (gameState === 'FISHING') {
+    let dx = 0;
+    let dy = 0;
 
-    // Wrap / Turn Around
-    if (fish.dx > 0 && fish.x > canvas.width + 80) {
-      swimmingFish[idx] = spawnRandomFish();
-    } else if (fish.dx < 0 && fish.x < -80) {
-      swimmingFish[idx] = spawnRandomFish();
+    if (keysPressed['ArrowUp'] || keysPressed['KeyW']) dy -= 1;
+    if (keysPressed['ArrowDown'] || keysPressed['KeyS']) dy += 1;
+    if (keysPressed['ArrowLeft'] || keysPressed['KeyA']) dx -= 1;
+    if (keysPressed['ArrowRight'] || keysPressed['KeyD']) dx += 1;
+
+    if (dx !== 0 || dy !== 0) {
+      lure.x += dx * lure.speed;
+      lure.y += dy * lure.speed;
+      lure.wigglePhase += 0.3;
+    } else {
+      // Natural gentle bobbing drift
+      lure.y += Math.sin(animationTime * 3) * 0.4;
     }
 
-    // Render Fish Sprite
+    // Keep Lure within ocean bounds
+    lure.x = Math.max(100, Math.min(canvas.width - 50, lure.x));
+    lure.y = Math.max(150, Math.min(canvas.height - 30, lure.y));
+  }
+}
+
+/**
+ * Update Fish Entities & Tease Strike Detection
+ */
+function updateFishEntities() {
+  swimmingFish.forEach((fish, idx) => {
+    if (fish.isHooked && gameState === 'REELING') {
+      // Fish is attached to lure! Pulls downwards/sideways
+      fish.x = lure.x;
+      fish.y = lure.y + 12;
+      return;
+    }
+
+    // Normal Swim Physics
+    if (!fish.isAttracted) {
+      fish.x += fish.dx;
+      fish.swimPhase += 0.15;
+      fish.y = fish.targetY + Math.sin(fish.swimPhase) * 6;
+
+      if (fish.dx > 0 && fish.x > canvas.width + 80) swimmingFish[idx] = spawnRandomFish();
+      else if (fish.dx < 0 && fish.x < -80) swimmingFish[idx] = spawnRandomFish();
+
+      // Check Proximity to Lure during FISHING state
+      if (gameState === 'FISHING' && lure.active) {
+        const dist = Math.hypot(fish.x - lure.x, fish.y - lure.y);
+        if (dist < 120) {
+          fish.isAttracted = true;
+          maxStrikesForCurrentFish = Math.floor(1 + Math.random() * 3); // 1 to 3 strikes!
+        }
+      }
+    } else {
+      // Fish is stalk-approaching the lure!
+      const angle = Math.atan2(lure.y - fish.y, lure.x - fish.x);
+      fish.x += Math.cos(angle) * (fish.type.speed * 1.5);
+      fish.y += Math.sin(angle) * (fish.type.speed * 1.5);
+
+      const dist = Math.hypot(fish.x - lure.x, fish.y - lure.y);
+
+      // Strike Trigger
+      if (dist < 22 && gameState === 'FISHING') {
+        triggerStrikeEvent(fish);
+      }
+    }
+
     drawFishEntity(fish);
   });
 }
 
 /**
- * Render Vector Fish Sprite with Tail Wiggle Animation
+ * Draw Vector Fish Entity
  */
 function drawFishEntity(fish) {
   ctx.save();
   ctx.translate(fish.x, fish.y);
-  
-  // Flip if moving left
-  if (fish.dx < 0) {
+  if (fish.dx < 0 || (fish.isAttracted && fish.x > lure.x)) {
     ctx.scale(-1, 1);
   }
 
@@ -940,7 +974,6 @@ function drawFishEntity(fish) {
   const h = f.height;
   const tailAngle = Math.sin(fish.swimPhase * 1.8) * 0.25;
 
-  // Tail Fin
   ctx.fillStyle = f.accentColor;
   ctx.save();
   ctx.translate(-w / 2, 0);
@@ -954,19 +987,16 @@ function drawFishEntity(fish) {
   ctx.fill();
   ctx.restore();
 
-  // Fish Body
   ctx.fillStyle = f.color;
   ctx.beginPath();
   ctx.ellipse(0, 0, w / 2, h / 2, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Special Body Patterns (Clownfish stripes, Puffer spikes, Rainbow glow)
   if (f.id === 'clownfish') {
     ctx.fillStyle = f.accentColor;
     ctx.fillRect(-w * 0.1, -h * 0.45, 6, h * 0.9);
     ctx.fillRect(w * 0.15, -h * 0.35, 5, h * 0.7);
   } else if (f.id === 'kraken') {
-    // Rainbow Aura Glow
     ctx.shadowColor = '#ec4899';
     ctx.shadowBlur = 15;
     ctx.strokeStyle = '#ffffff';
@@ -974,7 +1004,6 @@ function drawFishEntity(fish) {
     ctx.stroke();
   }
 
-  // Fish Eye
   ctx.fillStyle = '#ffffff';
   ctx.beginPath();
   ctx.arc(w / 3, -h / 5, 4, 0, Math.PI * 2);
@@ -989,9 +1018,9 @@ function drawFishEntity(fish) {
 }
 
 /**
- * Draw Boat & Nibbles Mascot
+ * Draw Boat & Nibbles Cat
  */
-function drawBoatAndNibbles() {
+function drawBoat() {
   boat.bobOffset = Math.sin(animationTime * 2.2) * 3;
   boat.tilt = Math.sin(animationTime * 1.8) * 0.03;
 
@@ -1002,8 +1031,7 @@ function drawBoatAndNibbles() {
   ctx.translate(bX, bY);
   ctx.rotate(boat.tilt);
 
-  // 1. Boat Hull
-  ctx.fillStyle = '#b45309'; // Warm Wood
+  ctx.fillStyle = '#b45309';
   ctx.beginPath();
   ctx.moveTo(-65, 0);
   ctx.lineTo(65, 0);
@@ -1015,14 +1043,13 @@ function drawBoatAndNibbles() {
   ctx.fillStyle = '#92400e';
   ctx.fillRect(-50, 3, 100, 4);
 
-  // 2. Nibbles Cat Mascot Sitting in Boat
-  // Cat Head
-  ctx.fillStyle = '#f97316'; // Ginger Orange
+  // Nibbles Cat
+  ctx.fillStyle = '#f97316';
   ctx.beginPath();
   ctx.arc(0, -22, 16, 0, Math.PI * 2);
   ctx.fill();
 
-  // Cat Ears
+  // Ears
   ctx.beginPath();
   ctx.moveTo(-12, -32);
   ctx.lineTo(-5, -42);
@@ -1035,13 +1062,13 @@ function drawBoatAndNibbles() {
   ctx.lineTo(2, -30);
   ctx.fill();
 
-  // Yellow Fisherman Bucket Hat 🎣
+  // Yellow Fisherman Hat
   ctx.fillStyle = '#eab308';
   ctx.fillRect(-15, -36, 30, 8);
   ctx.fillRect(-10, -44, 20, 10);
 
-  // Cat Eyes & Nose
-  ctx.fillStyle = '#10b981'; // Emerald Eyes
+  // Eyes
+  ctx.fillStyle = '#10b981';
   ctx.beginPath();
   ctx.arc(-5, -24, 3, 0, Math.PI * 2);
   ctx.arc(5, -24, 3, 0, Math.PI * 2);
@@ -1053,7 +1080,7 @@ function drawBoatAndNibbles() {
   ctx.arc(5, -24, 1.5, 0, Math.PI * 2);
   ctx.fill();
 
-  // 3. Fishing Rod held by Nibbles
+  // Fishing Rod
   rodTip.x = bX + 65;
   rodTip.y = bY - 45;
 
@@ -1069,178 +1096,131 @@ function drawBoatAndNibbles() {
 }
 
 /**
- * Update Line Cast Animation & Draw Fishing Line & Bobber
+ * Draw Fishing Line & Submerged Lure
  */
-function updateAndDrawFishingLine() {
-  if (!bobber.active) return;
+function drawFishingLineAndLure() {
+  if (!lure.active) return;
 
-  // Arc physics during casting
   if (castArc.active) {
     castArc.progress += 0.05;
     if (castArc.progress >= 1.0) {
       castArc.progress = 1.0;
       castArc.active = false;
-      onBobberLanded();
+      onLureLanded();
     }
-
-    const tProgress = castArc.progress;
-    bobber.x = castArc.startX + (castArc.endX - castArc.startX) * tProgress;
-    const arcHeight = -60 * Math.sin(tProgress * Math.PI);
-    bobber.y = castArc.startY + (castArc.endY - castArc.startY) * tProgress + arcHeight;
-  } else {
-    // Floating Bobber on Water Surface
-    bobber.y = 138 + Math.sin(animationTime * 3) * 2 + bobber.dipOffset;
-    if (bobber.dipOffset > 0) bobber.dipOffset *= 0.9;
+    const tP = castArc.progress;
+    lure.x = castArc.startX + (castArc.endX - castArc.startX) * tP;
+    const height = -60 * Math.sin(tP * Math.PI);
+    lure.y = castArc.startY + (castArc.endY - castArc.startY) * tP + height;
   }
 
-  // Draw Curved Tension Fishing Line
+  // Draw Curved Fishing Line
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(rodTip.x, rodTip.y);
-
-  const controlX = (rodTip.x + bobber.x) / 2;
-  const controlY = Math.max(rodTip.y, bobber.y) + (gameState === 'REELING' ? -15 : 20);
-  ctx.quadraticCurveTo(controlX, controlY, bobber.x, bobber.y);
+  const midX = (rodTip.x + lure.x) / 2;
+  const midY = (rodTip.y + lure.y) / 2 + 20;
+  ctx.quadraticCurveTo(midX, midY, lure.x, lure.y);
   ctx.stroke();
 
-  // Draw Bobber Float
+  // Draw Submerged Lure Spinner
   ctx.save();
-  ctx.translate(bobber.x, bobber.y);
+  ctx.translate(lure.x, lure.y);
+  ctx.rotate(Math.sin(lure.wigglePhase) * 0.4);
 
-  // Red Top / White Bottom Bobber
+  // Red/Gold Lure Body
   ctx.fillStyle = '#ef4444';
   ctx.beginPath();
-  ctx.arc(0, -4, 6, Math.PI, 0);
+  ctx.ellipse(0, 0, 6, 3, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = '#ffffff';
+  ctx.fillStyle = '#fbbf24';
   ctx.beginPath();
-  ctx.arc(0, -4, 6, 0, Math.PI);
+  ctx.arc(-4, 0, 3, 0, Math.PI * 2);
   ctx.fill();
 
-  // Water Ripple Rings
-  ctx.strokeStyle = 'rgba(224, 242, 254, 0.6)';
+  // Hook
+  ctx.strokeStyle = '#94a3b8';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
-  ctx.ellipse(0, 0, 14 + Math.sin(animationTime * 4) * 3, 5, 0, 0, Math.PI * 2);
+  ctx.arc(6, 3, 4, 0, Math.PI);
   ctx.stroke();
 
   ctx.restore();
 }
 
 /**
- * Bite Reaction Countdown Window Timer
- */
-function updateBiteTimer() {
-  biteWindowTimer -= 0.03;
-  if (biteWindowTimer <= 0) {
-    handleFishEscape('Reaction Window Expired');
-  }
-}
-
-/**
- * Draw Flashing "BITE!" Alert Badge & Reel Window Indicator
- */
-function drawBiteAlertBanner() {
-  ctx.save();
-  ctx.translate(bobber.x, bobber.y - 45);
-
-  const scale = 1.0 + Math.sin(animationTime * 12) * 0.15;
-  ctx.scale(scale, scale);
-
-  // Alert Box
-  ctx.fillStyle = '#ef4444';
-  ctx.shadowColor = '#ef4444';
-  ctx.shadowBlur = 20;
-  ctx.beginPath();
-  ctx.roundRect(-45, -20, 90, 32, 10);
-  ctx.fill();
-
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '900 15px Inter, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('❗️ BITE!', 0, 2);
-
-  ctx.restore();
-}
-
-/**
- * Update Tension Reeling Mechanics
+ * Update Reeling Mechanics & Pulling Fish Up to Boat (y <= 140)
  */
 function updateReelingPhysics() {
-  // Tension Drifts downward automatically if player doesn't tap
-  reelingTension = Math.max(0, reelingTension - 0.45);
+  const fishType = activeAttractedFish ? activeAttractedFish.type : FISH_TYPES[0];
 
-  // Check if tension is within target green zone
-  const inZone = reelingTension >= reelingTargetZone.start && reelingTension <= reelingTargetZone.end;
-  if (inZone) {
-    reelingProgress = Math.min(100, reelingProgress + 0.35);
+  // Check if player is holding UP arrow or Reel button
+  const isPulling = isPullingUp || keysPressed['ArrowUp'] || keysPressed['KeyW'] || keysPressed['Space'];
+
+  if (isPulling) {
+    // Pull Fish UP towards boat!
+    lure.y -= 3.2;
+    reelingTension = Math.min(100, reelingTension + 0.8 * fishType.difficulty);
+    playReelSound();
   } else {
-    reelingProgress = Math.max(0, reelingProgress - 0.15);
+    // Fish struggles & pulls DOWN towards seabed!
+    lure.y += 1.2 * fishType.pullStrength;
+    reelingTension = Math.max(0, reelingTension - 0.9);
   }
 
-  // Win or Line Snap Conditions
-  if (reelingProgress >= 100) {
-    completeSuccessfulCatch();
-  } else if (reelingTension >= 98) {
-    handleFishEscape('Line Snapped from High Tension');
+  // Horizontal Thrash
+  lure.x += Math.sin(animationTime * 6) * (1.5 * fishType.difficulty);
+  lure.x = Math.max(100, Math.min(canvas.width - 50, lure.x));
+
+  // Check Win Condition: Fish pulled UP to boat surface!
+  if (lure.y <= 140) {
+    completeCatch();
+  } else if (reelingTension >= 98 || lure.y >= canvas.height - 20) {
+    handleEscape(reelingTension >= 98 ? 'Line Snapped from High Tension' : 'Fish Pulled Away to Ocean Bed');
   }
 }
 
 /**
- * Draw Interactive Reeling Meter Bar on Canvas
+ * Draw Tension Gauge Overlay
  */
-function drawReelingMeterOverlay() {
-  const barW = 340;
-  const barH = 26;
+function drawTensionGauge() {
+  const barW = 280;
+  const barH = 22;
   const barX = (canvas.width - barW) / 2;
   const barY = 30;
 
   ctx.save();
 
-  // Background Container Card
   ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.roundRect(barX - 15, barY - 15, barW + 30, 80, 12);
+  ctx.roundRect(barX - 15, barY - 15, barW + 30, 65, 12);
   ctx.fill();
   ctx.stroke();
 
-  // Title Label
   ctx.fillStyle = '#ffffff';
   ctx.font = '800 13px Inter, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`KEEP TENSION IN GREEN ZONE! CLICK / TAP REEL! ⚡`, canvas.width / 2, barY - 2);
+  ctx.fillText(`PULL FISH UP TO BOAT! (UP ARROW / SPACEBAR) ⬆️`, canvas.width / 2, barY - 2);
 
-  // 1. Tension Meter Track
+  // Track
   ctx.fillStyle = '#334155';
   ctx.fillRect(barX, barY, barW, barH);
 
-  // Green Target Catch Zone
-  const zoneX = barX + (reelingTargetZone.start / 100) * barW;
-  const zoneW = ((reelingTargetZone.end - reelingTargetZone.start) / 100) * barW;
-  ctx.fillStyle = 'rgba(16, 185, 129, 0.7)';
-  ctx.fillRect(zoneX, barY, zoneW, barH);
-
-  // Tension Needle
-  const needleX = barX + (reelingTension / 100) * barW;
-  ctx.fillStyle = '#ef4444';
-  ctx.fillRect(needleX - 3, barY - 4, 6, barH + 8);
-
-  // 2. Catch Progress Bar Below
-  ctx.fillStyle = '#1e293b';
-  ctx.fillRect(barX, barY + barH + 6, barW, 8);
-
-  ctx.fillStyle = '#38bdf8';
-  ctx.fillRect(barX, barY + barH + 6, (reelingProgress / 100) * barW, 8);
+  // Safe Green Fill (0 to 80%) & Danger Red (80% to 100%)
+  const fillW = (reelingTension / 100) * barW;
+  const barColor = reelingTension > 80 ? '#ef4444' : '#10b981';
+  ctx.fillStyle = barColor;
+  ctx.fillRect(barX, barY, fillW, barH);
 
   ctx.restore();
 }
 
 /**
- * Update & Draw Splash/Sparkle Particles
+ * Update Particles
  */
 function updateAndDrawParticles() {
   for (let i = particles.length - 1; i >= 0; i--) {
@@ -1264,50 +1244,92 @@ function updateAndDrawParticles() {
   }
 }
 
-/**
- * Draw Catch Score Toast
- */
-function drawCatchToast() {
-  if (!catchToast) return;
-
-  catchToast.y -= 0.8;
-  catchToast.alpha -= 0.015;
-
-  if (catchToast.alpha <= 0) {
-    catchToast = null;
-    return;
+function createSplashParticles(x, y) {
+  for (let i = 0; i < 14; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1.5 + Math.random() * 3;
+    particles.push({
+      x: x,
+      y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      radius: 2 + Math.random() * 3,
+      alpha: 1.0,
+      color: '#e0f2fe'
+    });
   }
+}
 
-  ctx.save();
-  ctx.globalAlpha = catchToast.alpha;
-  ctx.fillStyle = catchToast.color;
-  ctx.shadowColor = catchToast.color;
-  ctx.shadowBlur = 10;
-  ctx.font = '900 18px Inter, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(catchToast.text, catchToast.x, catchToast.y);
-  ctx.restore();
+function createCatchSparkleParticles(x, y) {
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      x: x + (Math.random() * 40 - 20),
+      y: y + (Math.random() * 40 - 20),
+      vx: (Math.random() - 0.5) * 4,
+      vy: (Math.random() - 0.5) * 4 - 2,
+      radius: 3 + Math.random() * 4,
+      alpha: 1.0,
+      color: ['#fbbf24', '#38bdf8', '#ec4899', '#10b981'][Math.floor(Math.random() * 4)]
+    });
+  }
 }
 
 /**
- * Bind UI Buttons & Mouse/Keyboard Events
+ * Draw Text Banners (Strikes, Bites, Catches)
  */
-function bindUIEvents() {
+function drawToastBanners() {
+  if (strikeBanner) {
+    strikeBanner.y -= 0.5;
+    strikeBanner.alpha -= 0.02;
+    if (strikeBanner.alpha <= 0) {
+      strikeBanner = null;
+    } else {
+      ctx.save();
+      ctx.globalAlpha = strikeBanner.alpha;
+      ctx.fillStyle = strikeBanner.color;
+      ctx.shadowColor = strikeBanner.color;
+      ctx.shadowBlur = 12;
+      ctx.font = '900 17px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(strikeBanner.text, strikeBanner.x, strikeBanner.y);
+      ctx.restore();
+    }
+  }
+
+  if (catchToast) {
+    catchToast.y -= 0.8;
+    catchToast.alpha -= 0.015;
+    if (catchToast.alpha <= 0) {
+      catchToast = null;
+    } else {
+      ctx.save();
+      ctx.globalAlpha = catchToast.alpha;
+      ctx.fillStyle = catchToast.color;
+      ctx.shadowColor = catchToast.color;
+      ctx.shadowBlur = 12;
+      ctx.font = '900 18px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(catchToast.text, catchToast.x, catchToast.y);
+      ctx.restore();
+    }
+  }
+}
+
+/**
+ * Bind Input Listeners (Keyboard, Touch D-Pad, Mouse Drag)
+ */
+function bindInputEvents() {
   const actionBtn = document.getElementById('fg-action-btn');
   const resetBtn = document.getElementById('fg-reset-btn');
   const modalPlayAgain = document.getElementById('fg-modal-play-again');
 
-  if (actionBtn) {
-    actionBtn.addEventListener('click', reelActionInput);
-  }
-
+  if (actionBtn) actionBtn.addEventListener('click', handleMainAction);
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       document.getElementById('fg-modal').classList.remove('open');
       startGameMatch();
     });
   }
-
   if (modalPlayAgain) {
     modalPlayAgain.addEventListener('click', () => {
       document.getElementById('fg-modal').classList.remove('open');
@@ -1315,34 +1337,95 @@ function bindUIEvents() {
     });
   }
 
-  // Click on Canvas directly to Cast/Reel
-  if (canvas) {
-    canvas.addEventListener('click', (e) => {
+  // On-Screen D-Pad Touch Listeners
+  const btnUp = document.getElementById('fg-dpad-up');
+  const btnDown = document.getElementById('fg-dpad-down');
+  const btnLeft = document.getElementById('fg-dpad-left');
+  const btnRight = document.getElementById('fg-dpad-right');
+
+  const bindDpad = (el, keyName) => {
+    if (!el) return;
+    el.addEventListener('pointerdown', (e) => {
       e.preventDefault();
-      reelActionInput();
+      keysPressed[keyName] = true;
+      if (keyName === 'ArrowUp') isPullingUp = true;
     });
+    el.addEventListener('pointerup', () => {
+      keysPressed[keyName] = false;
+      if (keyName === 'ArrowUp') isPullingUp = false;
+    });
+    el.addEventListener('pointerleave', () => {
+      keysPressed[keyName] = false;
+      if (keyName === 'ArrowUp') isPullingUp = false;
+    });
+  };
+
+  bindDpad(btnUp, 'ArrowUp');
+  bindDpad(btnDown, 'ArrowDown');
+  bindDpad(btnLeft, 'ArrowLeft');
+  bindDpad(btnRight, 'ArrowRight');
+
+  // Mouse / Touch Drag on Canvas to Move Lure
+  if (canvas) {
+    let isDragging = false;
+
+    const moveLureToEvent = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const mouseX = (e.clientX - rect.left) * scaleX;
+      const mouseY = (e.clientY - rect.top) * scaleY;
+
+      if (gameState === 'FISHING' && lure.active) {
+        lure.x = Math.max(100, Math.min(canvas.width - 50, mouseX));
+        lure.y = Math.max(150, Math.min(canvas.height - 30, mouseY));
+        lure.wigglePhase += 0.4;
+      }
+    };
+
+    canvas.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      moveLureToEvent(e);
+      if (gameState === 'READY' || gameState === 'BITING' || gameState === 'IDLE') {
+        handleMainAction();
+      }
+    });
+
+    canvas.addEventListener('pointermove', (e) => {
+      if (isDragging) moveLureToEvent(e);
+    });
+
+    canvas.addEventListener('pointerup', () => { isDragging = false; });
   }
 
-  // Keyboard Spacebar Listener
-  if (!spaceListenerBound) {
+  // Keyboard Window Event Listeners
+  if (!listenersBound) {
     window.addEventListener('keydown', (e) => {
-      if (e.code === 'Space') {
-        const hash = window.location.hash.replace('#', '').trim();
-        if (hash === 'cat-fishing-game') {
-          e.preventDefault();
-          reelActionInput();
+      const hash = window.location.hash.replace('#', '').trim();
+      if (hash !== 'cat-fishing-game') return;
+
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 'Space'].includes(e.code)) {
+        e.preventDefault();
+        keysPressed[e.code] = true;
+
+        if (e.code === 'Space') {
+          handleMainAction();
         }
       }
     });
-    spaceListenerBound = true;
+
+    window.addEventListener('keyup', (e) => {
+      keysPressed[e.code] = false;
+    });
+
+    listenersBound = true;
   }
 }
 
 /**
- * Cleanup function on view navigation
+ * View Cleanup
  */
 export function cleanupCatFishingGame() {
   if (timerInterval) clearInterval(timerInterval);
-  if (biteTimeoutId) clearTimeout(biteTimeoutId);
   if (animFrameId) cancelAnimationFrame(animFrameId);
 }

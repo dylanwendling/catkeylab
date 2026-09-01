@@ -175,15 +175,15 @@ export const TOOL_METADATA = {
   },
   'cat-fishing-game': {
     titleKey: 'catFishingTitle',
-    desc: '2D Cartoon Fishing Game with Nibbles 🐱! Cast your line, watch fish swim underwater, react to bite alerts ❗️, and reel in rare fish within 60 seconds!',
+    desc: 'Interactive 2D Fishing Adventure with Nibbles 🐱! Control your lure underwater with Arrow Keys / D-Pad, tease fish with up to 3 strikes ⚡, and pull hooked fish UP to Nibbles\' boat within 60 seconds!',
     icon: '🎣',
     category: 'games',
     renderFn: renderCatFishingGame,
     cleanupFn: cleanupCatFishingGame,
     faqs: [
-      { q: 'How do I cast and reel in fish?', a: 'Click "Cast Line" or press Spacebar to throw your hook into the water. When a fish bites ❗️, click "REEL NOW!" or tap Spacebar to start reeling!' },
-      { q: 'How does the 60-second timer work?', a: 'You have 60 seconds to catch as many high-value fish as possible. Different fish give different point values from 100 PTS up to 1500 PTS for the Legendary Rainbow Fish!' },
-      { q: 'What happens if I miss the bite timing window?', a: 'If you fail to click REEL within the bite reaction window or let line tension break, the fish escapes!' }
+      { q: 'How do I control the lure underwater?', a: 'After casting your line, use your Keyboard Arrow Keys, WASD, touch D-Pad buttons, or click/drag on the water canvas to move your lure underwater and attract swimming fish!' },
+      { q: 'How do the 1-3 tease strikes work before a bite?', a: 'Attracted fish will tease and strike your lure 1 to 3 times (with "⚡ STRIKE #1!" alerts) before firmly biting the hook ("❗️ BITE! HOOKED!"). Watch out and don\'t reel too early!' },
+      { q: 'How do I pull the hooked fish up to the boat?', a: 'Once a fish bites, hold the Up Arrow key, WASD W, Spacebar, or the "REEL ⬆️" button to pull the fish vertically UP through the water column to Nibbles\' boat while managing the tension gauge!' }
     ]
   },
   'typing-test': {
