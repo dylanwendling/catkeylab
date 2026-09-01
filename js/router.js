@@ -26,6 +26,7 @@ import { renderVisualMemoryTest, cleanupVisualMemoryTest } from './tools/visualM
 import { renderFishMazeGame, cleanupFishMazeGame } from './tools/fishMazeGame.js';
 import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryGame.js';
 import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGolfGame.js';
+import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingGame.js';
 import { renderLeaderboardView } from './components/leaderboardView.js';
 
 let currentCleanup = null;
@@ -170,6 +171,19 @@ export const TOOL_METADATA = {
       { q: 'How do I aim and shoot the golf ball?', a: 'Click or touch and drag backward on the golf ball to adjust your shot angle and power meter, then release! You can drag anywhere across the screen.' },
       { q: 'How do I choose course length?', a: 'Use the course selector buttons on the control bar to choose between 3 Holes (Quick), 9 Holes (Front Nine), or full 18 Holes (Championship).' },
       { q: 'What do the course hazards & features do?', a: 'Sand traps slow down your ball with heavy drag, water hazards add +1 stroke penalty and reset the tee, ice patches slide smoothly, portals warp your ball, and rotating windmill blades deflect shots!' }
+    ]
+  },
+  'cat-fishing-game': {
+    titleKey: 'catFishingTitle',
+    desc: '2D Cartoon Fishing Game with Nibbles 🐱! Cast your line, watch fish swim underwater, react to bite alerts ❗️, and reel in rare fish within 60 seconds!',
+    icon: '🎣',
+    category: 'games',
+    renderFn: renderCatFishingGame,
+    cleanupFn: cleanupCatFishingGame,
+    faqs: [
+      { q: 'How do I cast and reel in fish?', a: 'Click "Cast Line" or press Spacebar to throw your hook into the water. When a fish bites ❗️, click "REEL NOW!" or tap Spacebar to start reeling!' },
+      { q: 'How does the 60-second timer work?', a: 'You have 60 seconds to catch as many high-value fish as possible. Different fish give different point values from 100 PTS up to 1500 PTS for the Legendary Rainbow Fish!' },
+      { q: 'What happens if I miss the bite timing window?', a: 'If you fail to click REEL within the bite reaction window or let line tension break, the fish escapes!' }
     ]
   },
   'typing-test': {
@@ -795,6 +809,7 @@ function renderLegalPage(container, type) {
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--accent-amber); font-size:1.2rem; margin-bottom:1rem;">🎮 Nibbles Companion Arcade Games</h3>
           <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
+            <li><a href="#cat-fishing-game" style="color:var(--accent-cyan); font-weight:700;">🎣 Nibbles 2D Fishing Adventure</a></li>
             <li><a href="#cat-mini-golf-game" style="color:var(--text-primary); font-weight:600;">⛳ Nibbles 2D Mini Golf (18 Holes)</a></li>
             <li><a href="#fish-maze-game" style="color:var(--text-primary); font-weight:600;">🐟 Help Nibbles Find Fish (Maze)</a></li>
             <li><a href="#card-memory-game" style="color:var(--text-primary); font-weight:600;">🎴 Cat Card Memory Match (3D)</a></li>

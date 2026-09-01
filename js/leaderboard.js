@@ -24,6 +24,7 @@ const INITIAL_LEADERBOARDS = {
   'cps-test': [],
   'fish-maze-game': [],
   'card-memory-game': [],
+  'cat-fishing-game': [],
   'cat-mini-golf-game-3': [],
   'cat-mini-golf-game-9': [],
   'cat-mini-golf-game-18': []

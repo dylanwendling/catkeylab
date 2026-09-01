@@ -20,6 +20,7 @@ const TEST_TABS = [
   { id: 'cps-test', label: '⚡ CPS Test' },
   { id: 'fish-maze-game', label: '🐟 Fish Maze' },
   { id: 'card-memory-game', label: '🎴 Card Memory' },
+  { id: 'cat-fishing-game', label: '🎣 Cat Fishing' },
   { id: 'cat-mini-golf-game-3', label: '⛳ Mini Golf (3 Holes)' },
   { id: 'cat-mini-golf-game-9', label: '⛳ Mini Golf (9 Holes)' },
   { id: 'cat-mini-golf-game-18', label: '🏆 Mini Golf (18 Holes)' }

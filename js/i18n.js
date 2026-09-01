@@ -66,6 +66,7 @@ export const translations = {
     fishMazeTitle: 'Help Nibbles Find the Fish Maze',
     cardMemoryTitle: 'Cat Card Memory Match',
     catMiniGolfTitle: 'Nibbles Ultimate 2D Mini Golf',
+    catFishingTitle: 'Nibbles 2D Fishing Adventure',
     numberTestSubtitle: 'Remember the longest number sequence you can.',
     verbalTestTitle: 'Verbal Memory Test',
     verbalTestSubtitle: 'Keep as many words in short term memory as possible.',
