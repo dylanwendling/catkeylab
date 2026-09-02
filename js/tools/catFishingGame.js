@@ -376,11 +376,17 @@ function spawnRandomFish() {
   };
 }
 
+let timerStarted = false;
+
 /**
- * Start Match
+ * Reset Game State to Ready (Waits for Player to Cast Line to Start 60s Countdown Timer)
  */
-function startGameMatch() {
-  if (timerInterval) clearInterval(timerInterval);
+function resetGameToReady() {
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  timerStarted = false;
 
   gameState = 'READY';
   gameTimeLeft = 60.0;
@@ -393,24 +399,28 @@ function startGameMatch() {
 
   updateHUD();
   updateActionButton();
-
-  timerInterval = setInterval(() => {
-    gameTimeLeft -= 0.1;
-    if (gameTimeLeft <= 0) {
-      gameTimeLeft = 0;
-      triggerGameOver();
-    }
-    updateHUD();
-  }, 100);
-
   playClickSound(800, 0.05);
 }
 
 /**
- * Cast Lure into Water
+ * Cast Lure into Water & Start Timer on First Cast!
  */
 function castLure() {
   if (gameState !== 'READY') return;
+
+  // Start 60-second match countdown clock on first cast!
+  if (!timerStarted) {
+    timerStarted = true;
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      gameTimeLeft -= 0.1;
+      if (gameTimeLeft <= 0) {
+        gameTimeLeft = 0;
+        triggerGameOver();
+      }
+      updateHUD();
+    }, 100);
+  }
 
   gameState = 'CASTING';
 
@@ -539,7 +549,7 @@ function startReelingMiniGame() {
  */
 function handleMainAction() {
   if (gameState === 'IDLE' || gameState === 'GAMEOVER') {
-    startGameMatch();
+    resetGameToReady();
   } else if (gameState === 'READY') {
     castLure();
   } else if (gameState === 'BITING') {
@@ -1430,13 +1440,13 @@ function bindInputEvents() {
   if (resetBtn) {
     resetBtn.addEventListener('click', () => {
       document.getElementById('fg-modal').classList.remove('open');
-      startGameMatch();
+      resetGameToReady();
     });
   }
   if (modalPlayAgain) {
     modalPlayAgain.addEventListener('click', () => {
       document.getElementById('fg-modal').classList.remove('open');
-      startGameMatch();
+      resetGameToReady();
     });
   }
 
