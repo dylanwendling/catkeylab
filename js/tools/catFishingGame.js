@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Detailed Mascot & Mudfish Update)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Click & Drag Lure + Golden Bell)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -197,7 +197,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL / SPACEBAR</strong> to catch!
+          <strong>Click & Drag</strong> your lure underwater, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL / SPACEBAR</strong> to catch!
         </p>
 
         <!-- Live Dashboard Stats -->
@@ -225,33 +225,19 @@ export function renderCatFishingGame(container) {
           <canvas id="fishing-canvas" width="850" height="460" style="display:block; width:100%; height:auto; cursor:pointer; touch-action:none;"></canvas>
         </div>
 
-        <!-- Touch D-Pad & Control Bar -->
-        <div style="display:flex; justify-content:center; align-items:center; gap:1.5rem; flex-wrap:wrap; background:var(--bg-secondary); border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-lg); margin-bottom:1rem;">
-          
-          <!-- On-Screen Directional D-Pad -->
-          <div style="display:flex; flex-direction:column; align-items:center; gap:0.35rem;">
-            <button id="fg-dpad-up" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Up ⬆️">⬆️</button>
-            <div style="display:flex; gap:0.35rem;">
-              <button id="fg-dpad-left" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Left ⬅️">⬅️</button>
-              <button id="fg-dpad-down" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Sink Down ⬇️">⬇️</button>
-              <button id="fg-dpad-right" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Right ➡️">➡️</button>
-            </div>
-          </div>
-
-          <!-- Main Action / Mash Reel Button -->
-          <div style="display:flex; flex-direction:column; gap:0.6rem; min-width:240px; flex:1; max-width:320px;">
-            <button id="fg-action-btn" class="btn btn-primary btn-lg" style="width:100%; font-size:1.2rem; font-weight:800; padding:0.85rem 1.25rem;">
-              🎣 CAST LURE INTO WATER
-            </button>
-            <button id="fg-reset-btn" class="btn btn-secondary btn-sm" style="width:100%;">
-              🔄 New Game
-            </button>
-          </div>
+        <!-- Main Action & Control Bar -->
+        <div style="display:flex; justify-content:center; align-items:center; gap:1rem; flex-wrap:wrap; background:var(--bg-secondary); border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-lg); margin-bottom:1rem; max-width:550px; margin-left:auto; margin-right:auto;">
+          <button id="fg-action-btn" class="btn btn-primary btn-lg" style="flex:2; font-size:1.2rem; font-weight:800; padding:0.85rem 1.25rem;">
+            🎣 CAST LURE INTO WATER
+          </button>
+          <button id="fg-reset-btn" class="btn btn-secondary btn-lg" style="flex:1; font-weight:700;">
+            🔄 New Game
+          </button>
         </div>
 
-        <!-- Keyboard Controls Guide -->
+        <!-- Keyboard & Touch Controls Guide -->
         <p style="font-size:0.85rem; color:var(--text-muted);">
-          💡 <strong>Controls:</strong> Use <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Arrow Keys</kbd> / <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">WASD</kbd> to steer lure. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> repeatedly to keep tension in the green catch zone!
+          💡 <strong>Controls:</strong> Click & Drag (or Touch Drag) to steer the lure underwater. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> or click <strong>REEL</strong> repeatedly to keep tension in the green catch zone!
         </p>
 
       </div>
@@ -735,7 +721,7 @@ function updateActionButton() {
     btn.innerHTML = '⏳ Casting Line...';
     btn.classList.add('btn-secondary');
   } else if (gameState === 'FISHING') {
-    btn.innerHTML = '🌊 MOVE LURE (ARROW KEYS / D-PAD)';
+    btn.innerHTML = '🌊 CLICK & DRAG LURE IN WATER';
     btn.classList.add('btn-secondary');
   } else if (gameState === 'STRIKING') {
     btn.innerHTML = '⚡ FISH STRIKING LURE!';
@@ -769,10 +755,6 @@ function gameLoop() {
 
   drawSky();
   drawOcean();
-
-  if (gameState === 'FISHING') {
-    updateLureControls();
-  }
 
   updateFishEntities();
   drawBoat();
@@ -884,32 +866,6 @@ function drawOcean() {
   ctx.lineTo(0, waterSurfaceY + 12);
   ctx.closePath();
   ctx.fill();
-}
-
-/**
- * Update Submerged Lure Controls
- */
-function updateLureControls() {
-  if (gameState === 'FISHING') {
-    let dx = 0;
-    let dy = 0;
-
-    if (keysPressed['ArrowUp'] || keysPressed['KeyW']) dy -= 1;
-    if (keysPressed['ArrowDown'] || keysPressed['KeyS']) dy += 1;
-    if (keysPressed['ArrowLeft'] || keysPressed['KeyA']) dx -= 1;
-    if (keysPressed['ArrowRight'] || keysPressed['KeyD']) dx += 1;
-
-    if (dx !== 0 || dy !== 0) {
-      lure.x += dx * lure.speed;
-      lure.y += dy * lure.speed;
-      lure.wigglePhase += 0.3;
-    } else {
-      lure.y += Math.sin(animationTime * 3) * 0.4;
-    }
-
-    lure.x = Math.max(100, Math.min(canvas.width - 50, lure.x));
-    lure.y = Math.max(150, Math.min(canvas.height - 30, lure.y));
-  }
 }
 
 /**
@@ -1088,9 +1044,27 @@ function drawBoat() {
   ctx.roundRect(-16, -22, 32, 22, [8, 8, 0, 0]);
   ctx.fill();
 
-  // Yellow Collar
-  ctx.fillStyle = '#fbbf24';
-  ctx.fillRect(-10, -22, 20, 3);
+  // Red Collar Band around Neck
+  ctx.fillStyle = '#ef4444';
+  ctx.fillRect(-12, -22, 24, 4);
+
+  // Golden Bell on Collar
+  ctx.fillStyle = '#f59e0b';
+  ctx.beginPath();
+  ctx.arc(0, -18, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Bell Highlight
+  ctx.fillStyle = '#fef08a';
+  ctx.beginPath();
+  ctx.arc(-1.5, -19.5, 1.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Bell Center Slot
+  ctx.fillStyle = '#78350f';
+  ctx.beginPath();
+  ctx.arc(0, -17, 1.2, 0, Math.PI * 2);
+  ctx.fill();
 
   // 4. Cat Paws holding the rod
   ctx.fillStyle = '#f97316';
@@ -1427,7 +1401,7 @@ function drawToastBanners() {
       catchToast = null;
     } else {
       ctx.save();
-      ctx.globalAlpha = catchToast.alpha;
+      catchToast.alpha = Math.max(0, catchToast.alpha);
       ctx.fillStyle = catchToast.color;
       ctx.shadowColor = catchToast.color;
       ctx.shadowBlur = 12;
@@ -1449,11 +1423,8 @@ function bindInputEvents() {
 
   if (actionBtn) {
     actionBtn.addEventListener('pointerdown', () => {
-      isReelInputActive = true;
       handleMainAction();
     });
-    actionBtn.addEventListener('pointerup', () => { isReelInputActive = false; });
-    actionBtn.addEventListener('pointerleave', () => { isReelInputActive = false; });
   }
 
   if (resetBtn) {
@@ -1469,36 +1440,7 @@ function bindInputEvents() {
     });
   }
 
-  // D-Pad Touch Listeners
-  const btnUp = document.getElementById('fg-dpad-up');
-  const btnDown = document.getElementById('fg-dpad-down');
-  const btnLeft = document.getElementById('fg-dpad-left');
-  const btnRight = document.getElementById('fg-dpad-right');
-
-  const bindDpad = (el, keyName) => {
-    if (!el) return;
-    el.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-      keysPressed[keyName] = true;
-      if (keyName === 'ArrowUp') isReelInputActive = true;
-      handleMainAction();
-    });
-    el.addEventListener('pointerup', () => {
-      keysPressed[keyName] = false;
-      if (keyName === 'ArrowUp') isReelInputActive = false;
-    });
-    el.addEventListener('pointerleave', () => {
-      keysPressed[keyName] = false;
-      if (keyName === 'ArrowUp') isReelInputActive = false;
-    });
-  };
-
-  bindDpad(btnUp, 'ArrowUp');
-  bindDpad(btnDown, 'ArrowDown');
-  bindDpad(btnLeft, 'ArrowLeft');
-  bindDpad(btnRight, 'ArrowRight');
-
-  // Mouse / Touch Drag on Canvas
+  // Mouse / Touch Drag on Canvas for Submerged Lure Controls
   if (canvas) {
     let isDragging = false;
 
@@ -1537,18 +1479,10 @@ function bindInputEvents() {
       const hash = window.location.hash.replace('#', '').trim();
       if (hash !== 'cat-fishing-game') return;
 
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'KeyW', 'KeyS', 'KeyA', 'KeyD', 'Space'].includes(e.code)) {
+      if (['Space', 'Enter'].includes(e.code)) {
         e.preventDefault();
-        keysPressed[e.code] = true;
-
-        if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
-          handleMainAction();
-        }
+        handleMainAction();
       }
-    });
-
-    window.addEventListener('keyup', (e) => {
-      keysPressed[e.code] = false;
     });
 
     listenersBound = true;
