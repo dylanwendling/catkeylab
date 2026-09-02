@@ -1,63 +1,53 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
-  <defs>
-    <!-- Premium Dark Background Gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0f172a"/>
-      <stop offset="100%" stop-color="#064e3b"/>
-    </linearGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <!-- Dark Circular Badge Background with Glowing Orange Border -->
+  <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#f97316" stroke-width="3.5"/>
 
-    <!-- Vibrant Ginger Cat Gradient -->
-    <linearGradient id="catGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#fb923c"/>
-      <stop offset="100%" stop-color="#ea580c"/>
-    </linearGradient>
+  <!-- Blue Sweater Body -->
+  <path d="M 28 68 C 28 58, 72 58, 72 68 L 72 90 L 28 90 Z" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
 
-    <!-- Emerald Glow Filter -->
-    <linearGradient id="emeraldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#34d399"/>
-      <stop offset="100%" stop-color="#059669"/>
-    </linearGradient>
-  </defs>
+  <!-- Red Collar Band -->
+  <rect x="34" y="60" width="32" height="6" fill="#ef4444" rx="2"/>
 
-  <!-- Squircle Base Frame with Neon Border Glow -->
-  <rect x="16" y="16" width="480" height="480" rx="110" fill="url(#bgGrad)" stroke="#10b981" stroke-width="12"/>
+  <!-- Golden Bell Collar -->
+  <circle cx="50" cy="67" r="6" fill="#f59e0b" stroke="#78350f" stroke-width="1.2"/>
+  <circle cx="48" cy="65" r="1.8" fill="#fef08a"/>
+  <circle cx="50" cy="68" r="1.5" fill="#78350f"/>
 
-  <!-- Left Outer & Inner Cat Ear -->
-  <polygon points="110,210 185,75 220,190" fill="#ea580c" stroke="#7c2d12" stroke-width="10" stroke-linejoin="round"/>
-  <polygon points="128,198 185,100 208,185" fill="#f472b6"/>
+  <!-- Cat Head (Orange Fur) -->
+  <circle cx="50" cy="44" r="24" fill="#f97316" stroke="#7c2d12" stroke-width="2.5"/>
 
-  <!-- Right Outer & Inner Cat Ear -->
-  <polygon points="402,210 327,75 292,190" fill="#ea580c" stroke="#7c2d12" stroke-width="10" stroke-linejoin="round"/>
-  <polygon points="384,198 327,100 304,185" fill="#f472b6"/>
+  <!-- Left Outer & Inner Pink Ear -->
+  <polygon points="26,30 36,8 44,24" fill="#f97316" stroke="#7c2d12" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="29,28 36,13 41,24" fill="#f472b6"/>
 
-  <!-- Cat Head Base Shape -->
-  <path d="M 120,240 C 120,160 392,160 392,240 C 392,380 120,380 120,240 Z" fill="url(#catGrad)" stroke="#7c2d12" stroke-width="10"/>
+  <!-- Right Outer & Inner Pink Ear -->
+  <polygon points="74,30 64,8 56,24" fill="#f97316" stroke="#7c2d12" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="71,28 64,13 59,24" fill="#f472b6"/>
 
-  <!-- Emerald Green Eyes -->
-  <ellipse cx="205" cy="275" rx="36" ry="42" fill="url(#emeraldGrad)"/>
-  <ellipse cx="307" cy="275" rx="36" ry="42" fill="url(#emeraldGrad)"/>
+  <!-- Yellow Fisherman Bucket Hat with Red Ribbon -->
+  <rect x="22" y="24" width="56" height="8" rx="3" fill="#eab308" stroke="#a16207" stroke-width="1.5"/>
+  <rect x="30" y="10" width="40" height="15" rx="3" fill="#eab308" stroke="#a16207" stroke-width="1.5"/>
+  <rect x="30" y="20" width="40" height="5" fill="#ef4444"/>
+
+  <!-- Expressive Emerald Green Cat Eyes -->
+  <ellipse cx="38" cy="42" rx="7" ry="8" fill="#10b981"/>
+  <ellipse cx="62" cy="42" rx="7" ry="8" fill="#10b981"/>
 
   <!-- Pupil Slits -->
-  <rect x="199" y="247" width="12" height="56" rx="6" fill="#000000"/>
-  <rect x="301" y="247" width="12" height="56" rx="6" fill="#000000"/>
+  <rect x="36.8" y="36.5" width="2.4" height="11" rx="1.2" fill="#000000"/>
+  <rect x="60.8" y="36.5" width="2.4" height="11" rx="1.2" fill="#000000"/>
 
-  <!-- Eye Shine Sparkles -->
-  <circle cx="192" cy="260" r="10" fill="#ffffff"/>
-  <circle cx="294" cy="260" r="10" fill="#ffffff"/>
-  <circle cx="218" cy="292" r="5" fill="#ffffff"/>
-  <circle cx="320" cy="292" r="5" fill="#ffffff"/>
+  <!-- Eye Sparkles -->
+  <circle cx="35.5" cy="39" r="2" fill="#ffffff"/>
+  <circle cx="59.5" cy="39" r="2" fill="#ffffff"/>
 
-  <!-- Cute Pink Nose -->
-  <path d="M 236,325 L 276,325 L 256,346 Z" fill="#f472b6"/>
+  <!-- Cute Pink Triangle Nose -->
+  <polygon points="46,50 54,50 50,54" fill="#f472b6"/>
 
-  <!-- Cat Mouth & Smile -->
-  <path d="M 256,346 Q 230,370 206,354 M 256,346 Q 282,370 306,354" fill="none" stroke="#78350f" stroke-width="8" stroke-linecap="round"/>
+  <!-- Cat Mouth (3) -->
+  <path d="M50,54 L50,56 Q45,59 41,56 M50,56 Q55,59 59,56" fill="none" stroke="#78350f" stroke-width="2" stroke-linecap="round"/>
 
-  <!-- Clean Minimalist White Whiskers -->
-  <path d="M 140,310 L 60,295 M 140,335 L 50,335 M 140,360 L 70,375" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.9"/>
-  <path d="M 372,310 L 452,295 M 372,335 L 462,335 M 372,360 L 442,375" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.9"/>
-
-  <!-- Sleek Keyboard Key / Paw Badge at Bottom Right -->
-  <rect x="340" y="340" width="120" height="110" rx="24" fill="#0284c7" stroke="#38bdf8" stroke-width="6"/>
-  <text x="400" y="415" font-family="Inter, sans-serif" font-size="54" font-weight="900" fill="#ffffff" text-anchor="middle">🐾</text>
+  <!-- White Cat Whiskers -->
+  <path d="M30,48 L14,44 M30,51 L12,51 M30,54 L16,58" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.95"/>
+  <path d="M70,48 L86,44 M70,51 L88,51 M70,54 L84,58" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.95"/>
 </svg>
