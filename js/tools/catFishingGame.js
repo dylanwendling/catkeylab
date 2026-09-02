@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (100% Skill-Based Mashing Engine)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Balanced Fun Mashing Engine)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -54,12 +54,12 @@ let activeAttractedFish = null; // Strictly ONLY ONE fish attracted at any time!
 let strikeCount = 0; // Exactly 3 strikes for all fish
 let biteReactionTimer = 0;
 
-// Rapid Button Mashing Reeling Mini-Game State
-let reelingTension = 20; // 0 to 100
-let reelingProgress = 10; // 0 to 100%
-let reelingTimer = 5.0; // 5-second countdown per reel attempt
+// Balanced Fun Button Mashing Reeling Mini-Game State
+let reelingTension = 45; // Starts in green zone
+let reelingProgress = 25; // 25% initial progress
+let reelingTimer = 8.0; // 8-second generous countdown per reel attempt
 let lureStartY = 240;
-let reelingTargetZone = { start: 35, end: 75 }; // Green catch zone
+let reelingTargetZone = { start: 20, end: 80 }; // Wide, forgiving green catch zone
 
 // Boat & Mascot Visual Position
 let boat = {
@@ -197,7 +197,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL / SPACEBAR</strong> to fill the catch bar!
+          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL / SPACEBAR</strong> to catch!
         </p>
 
         <!-- Live Dashboard Stats -->
@@ -522,21 +522,22 @@ function triggerFullBiteEvent(fishEntity) {
 }
 
 /**
- * Start Sweet-Spot Button Mashing Reeling Mini-Game!
+ * Start Generous, Wide-Zone Reeling Mini-Game!
  */
 function startReelingMiniGame() {
   if (gameState !== 'BITING' && gameState !== 'FISHING' && gameState !== 'STRIKING') return;
 
   gameState = 'REELING';
 
-  reelingTension = 20; // Needle starts low on left
-  reelingProgress = 10; // 10% initial progress
-  reelingTimer = 5.0; // 5 seconds timer to fill progress bar
+  reelingTension = 45; // Starts inside wide green zone
+  reelingProgress = 25; // 25% initial progress
+  reelingTimer = 8.0; // 8 seconds generous timer
   lureStartY = lure.y;
 
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
-  const zoneWidth = Math.max(30, 42 - diff * 4);
-  const zoneStart = 35 + Math.random() * (45 - zoneWidth);
+  // Wide, generous green catch zone (from 40% to 65% width depending on fish)
+  const zoneWidth = Math.max(38, 70 - diff * 12);
+  const zoneStart = 15 + Math.random() * (75 - zoneWidth);
   reelingTargetZone = { start: zoneStart, end: zoneStart + zoneWidth };
 
   if (activeAttractedFish) {
@@ -548,7 +549,7 @@ function startReelingMiniGame() {
 }
 
 /**
- * Main Action Router (Handles Mashing Taps during Reeling)
+ * Main Action Router
  */
 function handleMainAction() {
   if (gameState === 'IDLE' || gameState === 'GAMEOVER') {
@@ -558,8 +559,8 @@ function handleMainAction() {
   } else if (gameState === 'BITING') {
     startReelingMiniGame();
   } else if (gameState === 'REELING') {
-    // Button Mash Tap Boost: Increases tension needle towards right!
-    reelingTension = Math.min(100, reelingTension + 12);
+    // Smooth Button Mash Tap Boost!
+    reelingTension = Math.min(100, reelingTension + 9);
     playReelSound();
   }
 }
@@ -1173,35 +1174,35 @@ function drawFishingLineAndLure() {
 }
 
 /**
- * 100% Skill-Based Button Mashing Reeling Physics
+ * Balanced, Forgiving Button Mashing Reeling Physics
  */
 function updateReelingButtonMashingPhysics() {
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
 
-  // 1. Thrashing fish constantly pulls needle to the LEFT
-  const pullDecay = 0.6 + diff * 0.3;
+  // 1. Gentle Thrashing Pull (Very forgiving needle drift)
+  const pullDecay = 0.28 + diff * 0.12;
   reelingTension = Math.max(0, reelingTension - pullDecay);
 
-  // 2. Countdown timer
+  // 2. Generous Countdown timer (8.0s)
   reelingTimer -= 0.016;
 
-  // 3. Check if needle is inside Green Catch Zone
+  // 3. Check if needle is inside Wide Green Catch Zone
   const inZone = reelingTension >= reelingTargetZone.start && reelingTension <= reelingTargetZone.end;
   if (inZone) {
-    reelingProgress = Math.min(100, reelingProgress + 0.9); // Fill progress!
+    reelingProgress = Math.min(100, reelingProgress + 1.25); // Fast, rewarding progress fill!
   } else {
-    reelingProgress = Math.max(0, reelingProgress - 0.4); // Progress drops if outside green zone!
+    reelingProgress = Math.max(0, reelingProgress - 0.15); // Very mild decay outside zone!
   }
 
-  // 4. Update fish position vertically based ONLY on reelingProgress (0% = start pos, 100% = boat pos at y=140)
+  // 4. Update fish position vertically based on reelingProgress (0% = start pos, 100% = boat surface at y=140)
   lure.y = lureStartY - (reelingProgress / 100) * (lureStartY - 140);
 
   // 5. Win / Loss Conditions
   if (reelingProgress >= 100) {
     completeCatch();
-  } else if (reelingTension >= 98) {
+  } else if (reelingTension >= 99) {
     handleEscape('Line Snapped from Over-Mashing!');
-  } else if (reelingTimer <= 0 || (reelingProgress <= 0 && reelingTension <= 2)) {
+  } else if (reelingTimer <= 0) {
     handleEscape('Fish Slipped Hook!');
   }
 }
@@ -1239,12 +1240,12 @@ function drawReelingButtonMashingOverlay() {
   // Green Catch Zone
   const zoneX = barX + (reelingTargetZone.start / 100) * barW;
   const zoneW = ((reelingTargetZone.end - reelingTargetZone.start) / 100) * barW;
-  ctx.fillStyle = 'rgba(16, 185, 129, 0.8)';
+  ctx.fillStyle = 'rgba(16, 185, 129, 0.85)';
   ctx.fillRect(zoneX, barY, zoneW, barH);
 
   // Needle Position
   const needleX = barX + (reelingTension / 100) * barW;
-  ctx.fillStyle = reelingTension > 85 ? '#ef4444' : '#fbbf24';
+  ctx.fillStyle = reelingTension > 90 ? '#ef4444' : '#fbbf24';
   ctx.fillRect(needleX - 3, barY - 4, 6, barH + 8);
 
   // 2. Catch Progress Bar Below
