@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Click & Drag Lure + Golden Bell)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Prominent Golden Bell Layer)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -1044,36 +1044,7 @@ function drawBoat() {
   ctx.roundRect(-16, -22, 32, 22, [8, 8, 0, 0]);
   ctx.fill();
 
-  // Red Collar Band around Neck
-  ctx.fillStyle = '#ef4444';
-  ctx.fillRect(-12, -22, 24, 4);
-
-  // Golden Bell on Collar
-  ctx.fillStyle = '#f59e0b';
-  ctx.beginPath();
-  ctx.arc(0, -18, 5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Bell Highlight
-  ctx.fillStyle = '#fef08a';
-  ctx.beginPath();
-  ctx.arc(-1.5, -19.5, 1.5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // Bell Center Slot
-  ctx.fillStyle = '#78350f';
-  ctx.beginPath();
-  ctx.arc(0, -17, 1.2, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 4. Cat Paws holding the rod
-  ctx.fillStyle = '#f97316';
-  ctx.beginPath();
-  ctx.arc(8, -12, 5, 0, Math.PI * 2);
-  ctx.arc(16, -16, 5, 0, Math.PI * 2);
-  ctx.fill();
-
-  // 5. Cat Head
+  // 4. Cat Head & Ears
   ctx.fillStyle = '#f97316';
   ctx.beginPath();
   ctx.arc(0, -32, 18, 0, Math.PI * 2);
@@ -1108,14 +1079,43 @@ function drawBoat() {
   ctx.lineTo(4, -41);
   ctx.fill();
 
-  // 6. Yellow Fisherman Bucket Hat with Red Ribbon
+  // 5. Red Collar Band around Neck (ON TOP OF HEAD/BODY)
+  ctx.fillStyle = '#ef4444';
+  ctx.fillRect(-12, -17, 24, 4);
+
+  // 6. Golden Bell on Collar (PROMINENT AT FRONT)
+  ctx.fillStyle = '#f59e0b';
+  ctx.beginPath();
+  ctx.arc(0, -12, 5.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Bell Highlight
+  ctx.fillStyle = '#fef08a';
+  ctx.beginPath();
+  ctx.arc(-1.5, -13.5, 1.8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Bell Center Slot
+  ctx.fillStyle = '#78350f';
+  ctx.beginPath();
+  ctx.arc(0, -11, 1.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 7. Cat Paws holding the rod
+  ctx.fillStyle = '#f97316';
+  ctx.beginPath();
+  ctx.arc(8, -12, 5, 0, Math.PI * 2);
+  ctx.arc(16, -16, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // 8. Yellow Fisherman Bucket Hat with Red Ribbon
   ctx.fillStyle = '#eab308';
   ctx.fillRect(-18, -45, 36, 6); // Hat brim
   ctx.fillRect(-12, -54, 24, 10); // Hat crown
   ctx.fillStyle = '#ef4444';
   ctx.fillRect(-12, -47, 24, 3); // Red ribbon band
 
-  // 7. Expressive Emerald Cat Eyes & Slits
+  // 9. Expressive Emerald Cat Eyes & Slits
   ctx.fillStyle = '#10b981';
   ctx.beginPath();
   ctx.arc(-6, -34, 4, 0, Math.PI * 2);
@@ -1164,7 +1164,7 @@ function drawBoat() {
   ctx.moveTo(8, -26); ctx.lineTo(20, -26);
   ctx.stroke();
 
-  // 8. Fishing Rod held by Nibbles
+  // 10. Fishing Rod held by Nibbles
   rodTip.x = bX + 70;
   rodTip.y = bY - 50;
 
