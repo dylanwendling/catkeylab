@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Casting Power Meter Range Update)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Streamlined Direct Cast)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -18,7 +18,7 @@ let canvas = null;
 let ctx = null;
 let animFrameId = null;
 
-// Game State Enum: 'IDLE', 'READY', 'AIMING', 'CASTING', 'FISHING', 'STRIKING', 'BITING', 'REELING', 'CATCH', 'ESCAPE', 'GAMEOVER'
+// Game State Enum: 'IDLE', 'READY', 'CASTING', 'FISHING', 'STRIKING', 'BITING', 'REELING', 'CATCH', 'ESCAPE', 'GAMEOVER'
 let gameState = 'IDLE';
 
 // Match Timers & Statistics
@@ -49,11 +49,7 @@ let lure = {
   wigglePhase: 0
 };
 
-// Casting Power Range Meter State
-let castPowerMeter = 50; // 0 to 100
-let castMeterSpeed = 2.2; // Smooth, readable timing pace
-
-// Single-Fish Attraction & Exactly 3 Strikes System
+// Single-Fish Attraction System
 let activeAttractedFish = null; // Strictly ONLY ONE fish attracted at any time!
 let strikeCount = 0; // Exactly 3 strikes for all fish
 let biteReactionTimer = 0;
@@ -201,7 +197,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Aim for the <strong>center green zone for a BIG CAST 🎯</strong>, drag lure underwater to <strong>attract hungry fish 🐟</strong>, and <strong>MASH REEL</strong> to catch!
+          Click & Drag your lure underwater to <strong>attract hungry fish 🐟</strong>, and <strong>MASH REEL / SPACEBAR</strong> to catch!
         </p>
 
         <!-- Live Dashboard Stats -->
@@ -232,7 +228,7 @@ export function renderCatFishingGame(container) {
         <!-- Main Action & Control Bar -->
         <div style="display:flex; justify-content:center; align-items:center; gap:1rem; flex-wrap:wrap; background:var(--bg-secondary); border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-lg); margin-bottom:1rem; max-width:550px; margin-left:auto; margin-right:auto;">
           <button id="fg-action-btn" class="btn btn-primary btn-lg" style="flex:2; font-size:1.2rem; font-weight:800; padding:0.85rem 1.25rem;">
-            🎣 START CASTING
+            🎣 CAST LURE INTO WATER
           </button>
           <button id="fg-reset-btn" class="btn btn-secondary btn-lg" style="flex:1; font-weight:700;">
             🔄 New Game
@@ -241,7 +237,7 @@ export function renderCatFishingGame(container) {
 
         <!-- Keyboard & Touch Controls Guide -->
         <p style="font-size:0.85rem; color:var(--text-muted);">
-          💡 <strong>Controls:</strong> Time your click in the <strong>center green zone for a BIG CAST</strong>! Click & Drag lure underwater. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> / tap REEL to catch!
+          💡 <strong>Controls:</strong> Click & Drag (or Touch Drag) to steer the lure underwater. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> or click <strong>REEL</strong> repeatedly to keep tension in the green catch zone!
         </p>
 
       </div>
@@ -411,55 +407,10 @@ function startGameMatch() {
 }
 
 /**
- * Start Casting Power Meter Mini-Game
+ * Cast Lure into Water
  */
-function startCastingMeter() {
+function castLure() {
   if (gameState !== 'READY') return;
-
-  gameState = 'AIMING';
-  castPowerMeter = 50;
-
-  playClickSound(600, 0.06);
-  updateActionButton();
-}
-
-/**
- * Execute Cast from Power Meter Level
- */
-function executeCastFromMeter() {
-  if (gameState !== 'AIMING') return;
-
-  const diffFromCenter = Math.abs(castPowerMeter - 50); // 0 is dead center
-  let targetX = 400;
-  let targetY = 220;
-
-  if (diffFromCenter <= 10) {
-    // 🎯 PERFECT BIG CAST! (Hits middle green zone 40% to 60%)
-    targetX = 640 + (1 - diffFromCenter / 10) * 110; // 640px to 750px deep cast!
-    targetY = 200 + Math.random() * 80;
-
-    strikeBanner = {
-      text: `🎯 PERFECT BIG CAST! 🌊`,
-      x: canvas.width / 2,
-      y: 110,
-      alpha: 1.0,
-      color: '#10b981'
-    };
-    playSuccessSound();
-  } else {
-    // 🎣 SHORT CAST (Outside center green zone)
-    targetX = 260 + (castPowerMeter / 100) * 260; // 260px to 520px short cast
-    targetY = 220 + Math.random() * 70;
-
-    strikeBanner = {
-      text: `🎣 SHORT CAST!`,
-      x: canvas.width / 2,
-      y: 110,
-      alpha: 1.0,
-      color: '#f59e0b'
-    };
-    playClickSound(500, 0.08);
-  }
 
   gameState = 'CASTING';
 
@@ -467,13 +418,14 @@ function executeCastFromMeter() {
   castArc.progress = 0;
   castArc.startX = rodTip.x;
   castArc.startY = rodTip.y;
-  castArc.endX = targetX;
-  castArc.endY = targetY;
+  castArc.endX = 400;
+  castArc.endY = 220;
 
   lure.x = rodTip.x;
   lure.y = rodTip.y;
   lure.active = true;
 
+  playClickSound(500, 0.08);
   updateActionButton();
 }
 
@@ -589,9 +541,7 @@ function handleMainAction() {
   if (gameState === 'IDLE' || gameState === 'GAMEOVER') {
     startGameMatch();
   } else if (gameState === 'READY') {
-    startCastingMeter();
-  } else if (gameState === 'AIMING') {
-    executeCastFromMeter();
+    castLure();
   } else if (gameState === 'BITING') {
     startReelingMiniGame();
   } else if (gameState === 'REELING') {
@@ -765,15 +715,10 @@ function updateActionButton() {
     btn.innerHTML = '🎣 START FISHING GAME';
     btn.classList.add('btn-primary');
   } else if (gameState === 'READY') {
-    btn.innerHTML = '🎣 START CASTING';
+    btn.innerHTML = '🎣 CAST LURE INTO WATER';
     btn.classList.add('btn-primary');
-  } else if (gameState === 'AIMING') {
-    btn.innerHTML = '🎯 RELEASE TO CAST! (AIM FOR CENTER)';
-    btn.style.background = 'linear-gradient(135deg, #f59e0b, #10b981)';
-    btn.style.color = '#ffffff';
-    btn.style.boxShadow = '0 0 25px rgba(16,185,129,0.8)';
   } else if (gameState === 'CASTING') {
-    btn.innerHTML = '⏳ Line Flying...';
+    btn.innerHTML = '⏳ Casting Line...';
     btn.classList.add('btn-secondary');
   } else if (gameState === 'FISHING') {
     btn.innerHTML = '🌊 CLICK & DRAG LURE IN WATER';
@@ -811,17 +756,9 @@ function gameLoop() {
   drawSky();
   drawOcean();
 
-  if (gameState === 'AIMING') {
-    castPowerMeter = 50 + Math.sin(animationTime * castMeterSpeed) * 48;
-  }
-
   updateFishEntities();
   drawBoat();
   drawFishingLineAndLure();
-
-  if (gameState === 'AIMING') {
-    drawCastingPowerOverlay();
-  }
 
   if (gameState === 'REELING') {
     updateReelingButtonMashingPhysics();
@@ -1249,7 +1186,7 @@ function drawFishingLineAndLure() {
   if (!lure.active) return;
 
   if (castArc.active) {
-    castArc.progress += 0.025;
+    castArc.progress += 0.05;
     if (castArc.progress >= 1.0) {
       castArc.progress = 1.0;
       castArc.active = false;
@@ -1291,61 +1228,6 @@ function drawFishingLineAndLure() {
   ctx.beginPath();
   ctx.arc(6, 3, 4, 0, Math.PI);
   ctx.stroke();
-
-  ctx.restore();
-}
-
-/**
- * Draw Interactive Casting Power Range Overlay
- */
-function drawCastingPowerOverlay() {
-  const barW = 340;
-  const barH = 24;
-  const barX = (canvas.width - barW) / 2;
-  const barY = 25;
-
-  ctx.save();
-
-  // Container Card Overlay
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.roundRect(barX - 15, barY - 15, barW + 30, 65, 12);
-  ctx.fill();
-  ctx.stroke();
-
-  // Header Title
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '800 13px Inter, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(`🎯 CASTING POWER: TAP WHEN NEEDLE IS IN CENTER!`, canvas.width / 2, barY - 2);
-
-  // Background Bar Track
-  ctx.fillStyle = '#334155';
-  ctx.fillRect(barX, barY, barW, barH);
-
-  // Side Short Cast Zones (Yellow 0-40% & 60-100%)
-  ctx.fillStyle = 'rgba(245, 158, 11, 0.5)';
-  ctx.fillRect(barX, barY, barW * 0.4, barH);
-  ctx.fillRect(barX + barW * 0.6, barY, barW * 0.4, barH);
-
-  // Center BIG CAST Green Zone (40% to 60%)
-  ctx.fillStyle = 'rgba(16, 185, 129, 0.85)';
-  ctx.fillRect(barX + barW * 0.4, barY, barW * 0.2, barH);
-
-  // Center Label
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '900 11px Inter, sans-serif';
-  ctx.fillText(`BIG CAST`, barX + barW * 0.5, barY + 16);
-
-  // Needle Position
-  const needleX = barX + (castPowerMeter / 100) * barW;
-  const isCenter = Math.abs(castPowerMeter - 50) <= 10;
-  ctx.fillStyle = isCenter ? '#10b981' : '#f59e0b';
-  ctx.shadowColor = isCenter ? '#10b981' : '#f59e0b';
-  ctx.shadowBlur = 10;
-  ctx.fillRect(needleX - 3, barY - 4, 6, barH + 8);
 
   ctx.restore();
 }
@@ -1579,7 +1461,7 @@ function bindInputEvents() {
     canvas.addEventListener('pointerdown', (e) => {
       isDragging = true;
       moveLureToEvent(e);
-      if (gameState === 'READY' || gameState === 'AIMING' || gameState === 'BITING' || gameState === 'IDLE' || gameState === 'REELING') {
+      if (gameState === 'READY' || gameState === 'BITING' || gameState === 'IDLE' || gameState === 'REELING') {
         handleMainAction();
       }
     });
