@@ -476,21 +476,5 @@
   }
 }
 
-/* When Mobile Navigation Drawer or Dropdown Menu is active, completely hide floating mascots and toys */
-body.drawer-open .mascot-container,
-body.drawer-open .food-bowl-container,
-body.drawer-open .yarn-ball-container,
-body.menu-open .mascot-container,
-body.menu-open .food-bowl-container,
-body.menu-open .yarn-ball-container,
-body:has(.mobile-drawer.open) .mascot-container,
-body:has(.mobile-drawer.open) .food-bowl-container,
-body:has(.mobile-drawer.open) .yarn-ball-container,
-body:has(.dropdown.open) .mascot-container,
-body:has(.dropdown.open) .food-bowl-container,
-body:has(.dropdown.open) .yarn-ball-container {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-}
+/* Floating mascot and interactive toys stay visible */
 

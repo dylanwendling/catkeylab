@@ -182,8 +182,7 @@ function bindHeaderEvents() {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
       dropdowns.forEach(other => { if (other !== dd) other.classList.remove('open'); });
-      const isOpen = dd.classList.toggle('open');
-      document.body.classList.toggle('menu-open', isOpen);
+      dd.classList.toggle('open');
     });
   });
 
@@ -191,7 +190,6 @@ function bindHeaderEvents() {
 
   document.addEventListener('click', (e) => {
     dropdowns.forEach(dd => dd.classList.remove('open'));
-    document.body.classList.remove('menu-open');
     if (drawer && !drawer.contains(e.target) && !e.target.closest('#hamburger-btn')) {
       drawer.classList.remove('open');
       document.body.classList.remove('drawer-open');
