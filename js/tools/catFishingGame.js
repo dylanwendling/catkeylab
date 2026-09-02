@@ -201,7 +201,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Aim for the <strong>center green zone for a BIG CAST 🎯</strong>, drag lure underwater, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL</strong>!
+          Aim for the <strong>center green zone for a BIG CAST 🎯</strong>, drag lure underwater to <strong>attract hungry fish 🐟</strong>, and <strong>MASH REEL</strong> to catch!
         </p>
 
         <!-- Live Dashboard Stats -->

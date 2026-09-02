@@ -175,14 +175,14 @@ export const TOOL_METADATA = {
   },
   'cat-fishing-game': {
     titleKey: 'catFishingTitle',
-    desc: 'Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Master the center-zone Casting Power Meter 🎯, click & drag your lure underwater, tease fish with 3 strikes ⚡, and mash REEL to catch!',
+    desc: 'Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Master the center-zone Casting Power Meter 🎯, click & drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!',
     icon: '🎣',
     category: 'games',
     renderFn: renderCatFishingGame,
     cleanupFn: cleanupCatFishingGame,
     faqs: [
       { q: 'How does the Casting Power Meter work?', a: 'Click START CAST to launch the power meter. Time your click when the needle is in the center green zone for a PERFECT BIG CAST 🌊 far into deep water where rare fish swim!' },
-      { q: 'How do I steer the lure underwater?', a: 'Click and drag (or touch drag) your lure anywhere underwater. Swim near fish to attract them for 3 tease strikes (⚡ STRIKE #1, #2, #3) before the final bite!' },
+      { q: 'How do I steer the lure underwater?', a: 'Click and drag (or touch drag) your lure anywhere underwater to attract nearby fish to your hook before reeling them in!' },
       { q: 'How does the Reeling Mini-Game work?', a: 'Once a fish bites ("❗️ BITE! HOOKED!"), repeatedly mash the REEL button or Spacebar to keep the tension needle inside the green catch zone and pull the fish up to Nibbles\' boat!' }
     ]
   },
