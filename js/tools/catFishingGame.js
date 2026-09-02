@@ -51,7 +51,7 @@ let lure = {
 
 // Casting Power Range Meter State
 let castPowerMeter = 50; // 0 to 100
-let castMeterSpeed = 5.5;
+let castMeterSpeed = 2.2; // Smooth, readable timing pace
 
 // Single-Fish Attraction & Exactly 3 Strikes System
 let activeAttractedFish = null; // Strictly ONLY ONE fish attracted at any time!
@@ -1249,7 +1249,7 @@ function drawFishingLineAndLure() {
   if (!lure.active) return;
 
   if (castArc.active) {
-    castArc.progress += 0.05;
+    castArc.progress += 0.025;
     if (castArc.progress >= 1.0) {
       castArc.progress = 1.0;
       castArc.active = false;
