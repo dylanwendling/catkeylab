@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Balanced Fun Mashing Engine)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Sweet-Spot Goldilocks Balance)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -54,12 +54,12 @@ let activeAttractedFish = null; // Strictly ONLY ONE fish attracted at any time!
 let strikeCount = 0; // Exactly 3 strikes for all fish
 let biteReactionTimer = 0;
 
-// Balanced Fun Button Mashing Reeling Mini-Game State
-let reelingTension = 45; // Starts in green zone
-let reelingProgress = 25; // 25% initial progress
-let reelingTimer = 8.0; // 8-second generous countdown per reel attempt
+// Perfectly Balanced Button Mashing Reeling Mini-Game State
+let reelingTension = 30; // 0 to 100
+let reelingProgress = 15; // 0 to 100%
+let reelingTimer = 6.0; // 6 seconds active reel window
 let lureStartY = 240;
-let reelingTargetZone = { start: 20, end: 80 }; // Wide, forgiving green catch zone
+let reelingTargetZone = { start: 25, end: 70 }; // Perfectly balanced green catch zone
 
 // Boat & Mascot Visual Position
 let boat = {
@@ -522,22 +522,22 @@ function triggerFullBiteEvent(fishEntity) {
 }
 
 /**
- * Start Generous, Wide-Zone Reeling Mini-Game!
+ * Start Balanced In-Between Reeling Mini-Game!
  */
 function startReelingMiniGame() {
   if (gameState !== 'BITING' && gameState !== 'FISHING' && gameState !== 'STRIKING') return;
 
   gameState = 'REELING';
 
-  reelingTension = 45; // Starts inside wide green zone
-  reelingProgress = 25; // 25% initial progress
-  reelingTimer = 8.0; // 8 seconds generous timer
+  reelingTension = 30; // Starts near green zone
+  reelingProgress = 15; // 15% initial progress
+  reelingTimer = 6.0; // 6 seconds reel window
   lureStartY = lure.y;
 
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
-  // Wide, generous green catch zone (from 40% to 65% width depending on fish)
-  const zoneWidth = Math.max(38, 70 - diff * 12);
-  const zoneStart = 15 + Math.random() * (75 - zoneWidth);
+  // Perfect Goldilocks green catch zone (34% to 48% width)
+  const zoneWidth = Math.max(34, 52 - diff * 7);
+  const zoneStart = 22 + Math.random() * (60 - zoneWidth);
   reelingTargetZone = { start: zoneStart, end: zoneStart + zoneWidth };
 
   if (activeAttractedFish) {
@@ -560,7 +560,7 @@ function handleMainAction() {
     startReelingMiniGame();
   } else if (gameState === 'REELING') {
     // Smooth Button Mash Tap Boost!
-    reelingTension = Math.min(100, reelingTension + 9);
+    reelingTension = Math.min(100, reelingTension + 10);
     playReelSound();
   }
 }
@@ -1174,24 +1174,24 @@ function drawFishingLineAndLure() {
 }
 
 /**
- * Balanced, Forgiving Button Mashing Reeling Physics
+ * Goldilocks Balanced Button Mashing Reeling Physics
  */
 function updateReelingButtonMashingPhysics() {
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
 
-  // 1. Gentle Thrashing Pull (Very forgiving needle drift)
-  const pullDecay = 0.28 + diff * 0.12;
+  // 1. Natural Thrashing Pull
+  const pullDecay = 0.42 + diff * 0.18;
   reelingTension = Math.max(0, reelingTension - pullDecay);
 
-  // 2. Generous Countdown timer (8.0s)
+  // 2. Active 6.0s reel timer window
   reelingTimer -= 0.016;
 
-  // 3. Check if needle is inside Wide Green Catch Zone
+  // 3. Check if needle is inside Goldilocks Green Catch Zone
   const inZone = reelingTension >= reelingTargetZone.start && reelingTension <= reelingTargetZone.end;
   if (inZone) {
-    reelingProgress = Math.min(100, reelingProgress + 1.25); // Fast, rewarding progress fill!
+    reelingProgress = Math.min(100, reelingProgress + 1.05); // Balanced progress fill
   } else {
-    reelingProgress = Math.max(0, reelingProgress - 0.15); // Very mild decay outside zone!
+    reelingProgress = Math.max(0, reelingProgress - 0.28); // Balanced penalty outside green zone
   }
 
   // 4. Update fish position vertically based on reelingProgress (0% = start pos, 100% = boat surface at y=140)
@@ -1200,7 +1200,7 @@ function updateReelingButtonMashingPhysics() {
   // 5. Win / Loss Conditions
   if (reelingProgress >= 100) {
     completeCatch();
-  } else if (reelingTension >= 99) {
+  } else if (reelingTension >= 98) {
     handleEscape('Line Snapped from Over-Mashing!');
   } else if (reelingTimer <= 0) {
     handleEscape('Fish Slipped Hook!');
@@ -1245,7 +1245,7 @@ function drawReelingButtonMashingOverlay() {
 
   // Needle Position
   const needleX = barX + (reelingTension / 100) * barW;
-  ctx.fillStyle = reelingTension > 90 ? '#ef4444' : '#fbbf24';
+  ctx.fillStyle = reelingTension > 88 ? '#ef4444' : '#fbbf24';
   ctx.fillRect(needleX - 3, barY - 4, 6, barH + 8);
 
   // 2. Catch Progress Bar Below
