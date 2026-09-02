@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Hold-to-Charge Cast Distance)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Streamlined Direct Cast)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -18,7 +18,7 @@ let canvas = null;
 let ctx = null;
 let animFrameId = null;
 
-// Game State Enum: 'IDLE', 'READY', 'CHARGING', 'CASTING', 'FISHING', 'STRIKING', 'BITING', 'REELING', 'CATCH', 'ESCAPE', 'GAMEOVER'
+// Game State Enum: 'IDLE', 'READY', 'CASTING', 'FISHING', 'STRIKING', 'BITING', 'REELING', 'CATCH', 'ESCAPE', 'GAMEOVER'
 let gameState = 'IDLE';
 
 // Match Timers & Statistics
@@ -48,10 +48,6 @@ let lure = {
   active: false,
   wigglePhase: 0
 };
-
-// Press & Hold Cast Power State
-let castHoldPower = 0; // 0 to 100%
-let isHoldingCast = false;
 
 // Single-Fish Attraction System
 let activeAttractedFish = null; // Strictly ONLY ONE fish attracted at any time!
@@ -201,7 +197,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Hold <strong>CAST LURE</strong> (or Spacebar) to charge distance, release to launch into deep water!
+          Click & Drag your lure underwater to <strong>attract hungry fish 🐟</strong>, and <strong>MASH REEL / SPACEBAR</strong> to catch!
         </p>
 
         <!-- Live Dashboard Stats -->
@@ -232,7 +228,7 @@ export function renderCatFishingGame(container) {
         <!-- Main Action & Control Bar -->
         <div style="display:flex; justify-content:center; align-items:center; gap:1rem; flex-wrap:wrap; background:var(--bg-secondary); border:1px solid var(--border-color); padding:1rem; border-radius:var(--radius-lg); margin-bottom:1rem; max-width:550px; margin-left:auto; margin-right:auto;">
           <button id="fg-action-btn" class="btn btn-primary btn-lg" style="flex:2; font-size:1.2rem; font-weight:800; padding:0.85rem 1.25rem;">
-            🎣 HOLD TO CHARGE CAST
+            🎣 CAST LURE INTO WATER
           </button>
           <button id="fg-reset-btn" class="btn btn-secondary btn-lg" style="flex:1; font-weight:700;">
             🔄 New Game
@@ -241,7 +237,7 @@ export function renderCatFishingGame(container) {
 
         <!-- Keyboard & Touch Controls Guide -->
         <p style="font-size:0.85rem; color:var(--text-muted);">
-          💡 <strong>Controls:</strong> Hold button or <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> to charge cast distance, release to launch! Click & Drag lure underwater. Mash <strong>REEL</strong> to catch!
+          💡 <strong>Controls:</strong> Click & Drag (or Touch Drag) to steer the lure underwater. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> or click <strong>REEL</strong> repeatedly to keep tension in the green catch zone!
         </p>
 
       </div>
@@ -328,8 +324,6 @@ function initGameSetup() {
   lure.active = false;
   activeAttractedFish = null;
   strikeCount = 0;
-  castHoldPower = 0;
-  isHoldingCast = false;
 
   updateHUD();
   updateActionButton();
@@ -396,8 +390,6 @@ function startGameMatch() {
   lure.active = false;
   activeAttractedFish = null;
   strikeCount = 0;
-  castHoldPower = 0;
-  isHoldingCast = false;
 
   updateHUD();
   updateActionButton();
@@ -415,60 +407,10 @@ function startGameMatch() {
 }
 
 /**
- * Start Press & Hold Cast Charging
+ * Cast Lure into Water
  */
-function startHoldingCast() {
+function castLure() {
   if (gameState !== 'READY') return;
-
-  gameState = 'CHARGING';
-  castHoldPower = 0;
-  isHoldingCast = true;
-
-  playClickSound(600, 0.05);
-  updateActionButton();
-}
-
-/**
- * Release Charged Cast
- */
-function releaseChargedCast() {
-  if (gameState !== 'CHARGING') return;
-
-  isHoldingCast = false;
-  const power = Math.max(10, castHoldPower); // minimum 10% cast
-
-  // Target X ranges from 240px (short cast) to 750px (long deep ocean cast!)
-  const targetX = 240 + (power / 100) * 510;
-  const targetY = 210 + Math.random() * 60;
-
-  if (power >= 75) {
-    strikeBanner = {
-      text: `🎯 LONG DEEP CAST! 🌊`,
-      x: canvas.width / 2,
-      y: 110,
-      alpha: 1.0,
-      color: '#10b981'
-    };
-    playSuccessSound();
-  } else if (power >= 35) {
-    strikeBanner = {
-      text: `🌊 MEDIUM CAST!`,
-      x: canvas.width / 2,
-      y: 110,
-      alpha: 1.0,
-      color: '#06b6d4'
-    };
-    playClickSound(550, 0.07);
-  } else {
-    strikeBanner = {
-      text: `🎣 SHORT CAST!`,
-      x: canvas.width / 2,
-      y: 110,
-      alpha: 1.0,
-      color: '#f59e0b'
-    };
-    playClickSound(450, 0.07);
-  }
 
   gameState = 'CASTING';
 
@@ -476,13 +418,14 @@ function releaseChargedCast() {
   castArc.progress = 0;
   castArc.startX = rodTip.x;
   castArc.startY = rodTip.y;
-  castArc.endX = targetX;
-  castArc.endY = targetY;
+  castArc.endX = 400;
+  castArc.endY = 220;
 
   lure.x = rodTip.x;
   lure.y = rodTip.y;
   lure.active = true;
 
+  playClickSound(500, 0.08);
   updateActionButton();
 }
 
@@ -597,6 +540,8 @@ function startReelingMiniGame() {
 function handleMainAction() {
   if (gameState === 'IDLE' || gameState === 'GAMEOVER') {
     startGameMatch();
+  } else if (gameState === 'READY') {
+    castLure();
   } else if (gameState === 'BITING') {
     startReelingMiniGame();
   } else if (gameState === 'REELING') {
@@ -770,14 +715,8 @@ function updateActionButton() {
     btn.innerHTML = '🎣 START FISHING GAME';
     btn.classList.add('btn-primary');
   } else if (gameState === 'READY') {
-    btn.innerHTML = '🎣 HOLD TO CHARGE CAST';
+    btn.innerHTML = '🎣 CAST LURE INTO WATER';
     btn.classList.add('btn-primary');
-  } else if (gameState === 'CHARGING') {
-    const powerInt = Math.floor(castHoldPower);
-    btn.innerHTML = `⚡ CHARGING CAST... ${powerInt}% (RELEASE TO LAUNCH)`;
-    btn.style.background = 'linear-gradient(135deg, #f59e0b, #10b981)';
-    btn.style.color = '#ffffff';
-    btn.style.boxShadow = '0 0 25px rgba(16,185,129,0.8)';
   } else if (gameState === 'CASTING') {
     btn.innerHTML = '⏳ Casting Line...';
     btn.classList.add('btn-secondary');
@@ -817,18 +756,9 @@ function gameLoop() {
   drawSky();
   drawOcean();
 
-  if (gameState === 'CHARGING') {
-    castHoldPower = Math.min(100, castHoldPower + 2.2);
-    updateActionButton();
-  }
-
   updateFishEntities();
   drawBoat();
   drawFishingLineAndLure();
-
-  if (gameState === 'CHARGING') {
-    drawHoldChargeOverlay();
-  }
 
   if (gameState === 'REELING') {
     updateReelingButtonMashingPhysics();
@@ -1303,54 +1233,6 @@ function drawFishingLineAndLure() {
 }
 
 /**
- * Draw Interactive Hold-to-Charge Cast Overlay
- */
-function drawHoldChargeOverlay() {
-  const barW = 340;
-  const barH = 22;
-  const barX = (canvas.width - barW) / 2;
-  const barY = 25;
-
-  ctx.save();
-
-  // Container Card Overlay
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.roundRect(barX - 15, barY - 15, barW + 30, 65, 12);
-  ctx.fill();
-  ctx.stroke();
-
-  // Title
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '800 13px Inter, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(`⚡ HOLD TO CHARGE CAST DISTANCE (RELEASE TO LAUNCH)`, canvas.width / 2, barY - 2);
-
-  // Background Bar Track
-  ctx.fillStyle = '#334155';
-  ctx.fillRect(barX, barY, barW, barH);
-
-  // Fill Progress
-  const fillW = (castHoldPower / 100) * barW;
-  let barColor = '#f59e0b';
-  if (castHoldPower >= 75) barColor = '#10b981';
-  else if (castHoldPower >= 35) barColor = '#06b6d4';
-
-  ctx.fillStyle = barColor;
-  ctx.fillRect(barX, barY, fillW, barH);
-
-  // Power Label inside bar
-  ctx.fillStyle = '#ffffff';
-  ctx.font = '900 11px Inter, sans-serif';
-  const label = castHoldPower >= 75 ? 'LONG DEEP CAST 🎯' : (castHoldPower >= 35 ? 'MEDIUM CAST 🌊' : 'SHORT CAST 🎣');
-  ctx.fillText(`${label} (${Math.floor(castHoldPower)}%)`, canvas.width / 2, barY + 15);
-
-  ctx.restore();
-}
-
-/**
  * Goldilocks Balanced Button Mashing Reeling Physics
  */
 function updateReelingButtonMashingPhysics() {
@@ -1540,18 +1422,8 @@ function bindInputEvents() {
   const modalPlayAgain = document.getElementById('fg-modal-play-again');
 
   if (actionBtn) {
-    actionBtn.addEventListener('pointerdown', (e) => {
-      if (gameState === 'READY') {
-        startHoldingCast();
-      } else {
-        handleMainAction();
-      }
-    });
-
-    window.addEventListener('pointerup', () => {
-      if (gameState === 'CHARGING') {
-        releaseChargedCast();
-      }
+    actionBtn.addEventListener('pointerdown', () => {
+      handleMainAction();
     });
   }
 
@@ -1589,9 +1461,7 @@ function bindInputEvents() {
     canvas.addEventListener('pointerdown', (e) => {
       isDragging = true;
       moveLureToEvent(e);
-      if (gameState === 'READY') {
-        startHoldingCast();
-      } else if (gameState === 'BITING' || gameState === 'IDLE' || gameState === 'REELING') {
+      if (gameState === 'READY' || gameState === 'BITING' || gameState === 'IDLE' || gameState === 'REELING') {
         handleMainAction();
       }
     });
@@ -1600,12 +1470,7 @@ function bindInputEvents() {
       if (isDragging) moveLureToEvent(e);
     });
 
-    canvas.addEventListener('pointerup', () => {
-      isDragging = false;
-      if (gameState === 'CHARGING') {
-        releaseChargedCast();
-      }
-    });
+    canvas.addEventListener('pointerup', () => { isDragging = false; });
   }
 
   // Keyboard Event Listeners
@@ -1616,23 +1481,7 @@ function bindInputEvents() {
 
       if (['Space', 'Enter'].includes(e.code)) {
         e.preventDefault();
-        if (gameState === 'READY' && !e.repeat) {
-          startHoldingCast();
-        } else if (gameState !== 'CHARGING') {
-          handleMainAction();
-        }
-      }
-    });
-
-    window.addEventListener('keyup', (e) => {
-      const hash = window.location.hash.replace('#', '').trim();
-      if (hash !== 'cat-fishing-game') return;
-
-      if (['Space', 'Enter'].includes(e.code)) {
-        e.preventDefault();
-        if (gameState === 'CHARGING') {
-          releaseChargedCast();
-        }
+        handleMainAction();
       }
     });
 
