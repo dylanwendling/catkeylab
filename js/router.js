@@ -175,15 +175,15 @@ export const TOOL_METADATA = {
   },
   'cat-fishing-game': {
     titleKey: 'catFishingTitle',
-    desc: 'Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Cast your line, click & drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!',
+    desc: 'Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Press & hold to charge cast distance 🎯, click & drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!',
     icon: '🎣',
     category: 'games',
     renderFn: renderCatFishingGame,
     cleanupFn: cleanupCatFishingGame,
     faqs: [
-      { q: 'How do I cast and steer the lure underwater?', a: 'Click CAST LURE to launch your line into the ocean, then click and drag (or touch drag) your lure anywhere underwater to attract nearby fish!' },
-      { q: 'How does the Reeling Mini-Game work?', a: 'Once a fish bites ("❗️ BITE! HOOKED!"), repeatedly mash the REEL button or Spacebar to keep the tension needle inside the green catch zone and pull the fish up to Nibbles\' boat!' },
-      { q: 'How many different fish species can I catch?', a: 'There are 6 unique fish species: Silver Minnow (100 PTS), Orange Clownfish (250 PTS), Spiky Pufferfish (400 PTS), Golden Koi (750 PTS), Legendary Rainbow Fish (1500 PTS), and Brown Mudfish (50 PTS)!' }
+      { q: 'How do I charge and launch my line?', a: 'Press & hold the CAST button or Spacebar to charge your cast distance (Short 🎣, Medium 🌊, or Long Deep Cast 🎯), then release to launch into the ocean!' },
+      { q: 'How do I steer the lure underwater?', a: 'Click and drag (or touch drag) your lure anywhere underwater to attract nearby fish to your hook before reeling them in!' },
+      { q: 'How does the Reeling Mini-Game work?', a: 'Once a fish bites ("❗️ BITE! HOOKED!"), repeatedly mash the REEL button or Spacebar to keep the tension needle inside the green catch zone and pull the fish up to Nibbles\' boat!' }
     ]
   },
   'typing-test': {
