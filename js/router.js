@@ -175,15 +175,15 @@ export const TOOL_METADATA = {
   },
   'cat-fishing-game': {
     titleKey: 'catFishingTitle',
-    desc: 'Interactive 2D Fishing Adventure with Nibbles 🐱! Control your lure underwater with Arrow Keys / D-Pad, tease fish with up to 3 strikes ⚡, and pull hooked fish UP to Nibbles\' boat within 60 seconds!',
+    desc: 'Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Master the center-zone Casting Power Meter 🎯, click & drag your lure underwater, tease fish with 3 strikes ⚡, and mash REEL to catch!',
     icon: '🎣',
     category: 'games',
     renderFn: renderCatFishingGame,
     cleanupFn: cleanupCatFishingGame,
     faqs: [
-      { q: 'How do I control the lure underwater?', a: 'After casting your line, use your Keyboard Arrow Keys, WASD, touch D-Pad buttons, or click/drag on the water canvas to move your lure underwater and attract swimming fish!' },
-      { q: 'How do the 1-3 tease strikes work before a bite?', a: 'Attracted fish will tease and strike your lure 1 to 3 times (with "⚡ STRIKE #1!" alerts) before firmly biting the hook ("❗️ BITE! HOOKED!"). Watch out and don\'t reel too early!' },
-      { q: 'How do I pull the hooked fish up to the boat?', a: 'Once a fish bites, hold the Up Arrow key, WASD W, Spacebar, or the "REEL ⬆️" button to pull the fish vertically UP through the water column to Nibbles\' boat while managing the tension gauge!' }
+      { q: 'How does the Casting Power Meter work?', a: 'Click START CAST to launch the power meter. Time your click when the needle is in the center green zone for a PERFECT BIG CAST 🌊 far into deep water where rare fish swim!' },
+      { q: 'How do I steer the lure underwater?', a: 'Click and drag (or touch drag) your lure anywhere underwater. Swim near fish to attract them for 3 tease strikes (⚡ STRIKE #1, #2, #3) before the final bite!' },
+      { q: 'How does the Reeling Mini-Game work?', a: 'Once a fish bites ("❗️ BITE! HOOKED!"), repeatedly mash the REEL button or Spacebar to keep the tension needle inside the green catch zone and pull the fish up to Nibbles\' boat!' }
     ]
   },
   'typing-test': {
@@ -412,7 +412,7 @@ function renderHomePage(container) {
         <div class="grid grid-cols-4">
           ${(() => {
             const playCounts = getToolPlayCounts();
-            const defaultPopular = ['typing-test', 'mouse-test', 'keyboard-test', 'cat-mini-golf-game'];
+            const defaultPopular = ['cat-fishing-game', 'typing-test', 'mouse-test', 'cat-mini-golf-game'];
 
             const sortedToolKeys = Object.keys(TOOL_METADATA).sort((a, b) => {
               const countA = (playCounts[a] || 0) + (defaultPopular.includes(a) ? 100 : 0);
