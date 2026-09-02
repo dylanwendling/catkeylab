@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Button Mashing Reeling Engine)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (100% Skill-Based Mashing Engine)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -55,8 +55,10 @@ let strikeCount = 0; // Exactly 3 strikes for all fish
 let biteReactionTimer = 0;
 
 // Rapid Button Mashing Reeling Mini-Game State
-let reelingTension = 40; // 0 to 100
-let reelingProgress = 20; // 0 to 100%
+let reelingTension = 20; // 0 to 100
+let reelingProgress = 10; // 0 to 100%
+let reelingTimer = 5.0; // 5-second countdown per reel attempt
+let lureStartY = 240;
 let reelingTargetZone = { start: 35, end: 75 }; // Green catch zone
 
 // Boat & Mascot Visual Position
@@ -195,7 +197,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL / SPACEBAR</strong> to catch!
+          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL / SPACEBAR</strong> to fill the catch bar!
         </p>
 
         <!-- Live Dashboard Stats -->
@@ -249,7 +251,7 @@ export function renderCatFishingGame(container) {
 
         <!-- Keyboard Controls Guide -->
         <p style="font-size:0.85rem; color:var(--text-muted);">
-          💡 <strong>Controls:</strong> Use <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Arrow Keys</kbd> / <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">WASD</kbd> to steer lure. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> or click REEL repeatedly to keep tension in the green catch zone!
+          💡 <strong>Controls:</strong> Use <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Arrow Keys</kbd> / <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">WASD</kbd> to steer lure. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> repeatedly to keep tension in the green catch zone!
         </p>
 
       </div>
@@ -527,12 +529,14 @@ function startReelingMiniGame() {
 
   gameState = 'REELING';
 
-  reelingTension = 50;
-  reelingProgress = 20; // 20% initial progress
+  reelingTension = 20; // Needle starts low on left
+  reelingProgress = 10; // 10% initial progress
+  reelingTimer = 5.0; // 5 seconds timer to fill progress bar
+  lureStartY = lure.y;
 
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
-  const zoneWidth = Math.max(30, 45 - diff * 4);
-  const zoneStart = 30 + Math.random() * (45 - zoneWidth);
+  const zoneWidth = Math.max(30, 42 - diff * 4);
+  const zoneStart = 35 + Math.random() * (45 - zoneWidth);
   reelingTargetZone = { start: zoneStart, end: zoneStart + zoneWidth };
 
   if (activeAttractedFish) {
@@ -1169,31 +1173,36 @@ function drawFishingLineAndLure() {
 }
 
 /**
- * Button Mashing Reeling Mini-Game Physics
+ * 100% Skill-Based Button Mashing Reeling Physics
  */
 function updateReelingButtonMashingPhysics() {
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
 
-  // Thrashing fish constantly pulls needle to the LEFT
-  const pullDecay = 0.55 + diff * 0.25;
+  // 1. Thrashing fish constantly pulls needle to the LEFT
+  const pullDecay = 0.6 + diff * 0.3;
   reelingTension = Math.max(0, reelingTension - pullDecay);
 
-  // Pull Fish UP towards boat surface during reeling
-  lure.y -= 0.6;
+  // 2. Countdown timer
+  reelingTimer -= 0.016;
 
-  // Check if Needle is inside Green Catch Zone (35% to 75%)
+  // 3. Check if needle is inside Green Catch Zone
   const inZone = reelingTension >= reelingTargetZone.start && reelingTension <= reelingTargetZone.end;
   if (inZone) {
-    reelingProgress = Math.min(100, reelingProgress + 0.85); // Fill Catch Progress!
+    reelingProgress = Math.min(100, reelingProgress + 0.9); // Fill progress!
   } else {
-    reelingProgress = Math.max(0, reelingProgress - 0.25);
+    reelingProgress = Math.max(0, reelingProgress - 0.4); // Progress drops if outside green zone!
   }
 
-  // Win or Line Break Condition
-  if (reelingProgress >= 100 || lure.y <= 140) {
+  // 4. Update fish position vertically based ONLY on reelingProgress (0% = start pos, 100% = boat pos at y=140)
+  lure.y = lureStartY - (reelingProgress / 100) * (lureStartY - 140);
+
+  // 5. Win / Loss Conditions
+  if (reelingProgress >= 100) {
     completeCatch();
   } else if (reelingTension >= 98) {
     handleEscape('Line Snapped from Over-Mashing!');
+  } else if (reelingTimer <= 0 || (reelingProgress <= 0 && reelingTension <= 2)) {
+    handleEscape('Fish Slipped Hook!');
   }
 }
 
@@ -1209,19 +1218,19 @@ function drawReelingButtonMashingOverlay() {
   ctx.save();
 
   // Outer Card Overlay
-  ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
+  ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.roundRect(barX - 15, barY - 15, barW + 30, 80, 12);
+  ctx.roundRect(barX - 15, barY - 15, barW + 30, 85, 12);
   ctx.fill();
   ctx.stroke();
 
-  // Header Instructions
+  // Header Instructions & Timer
   ctx.fillStyle = '#ffffff';
   ctx.font = '800 13px Inter, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`⚡ MASH REEL / SPACEBAR TO KEEP NEEDLE IN GREEN! ⚡`, canvas.width / 2, barY - 2);
+  ctx.fillText(`⚡ MASH REEL / SPACEBAR! TIME: ${Math.max(0, reelingTimer).toFixed(1)}s ⚡`, canvas.width / 2, barY - 2);
 
   // 1. Tension Track
   ctx.fillStyle = '#334155';
@@ -1230,7 +1239,7 @@ function drawReelingButtonMashingOverlay() {
   // Green Catch Zone
   const zoneX = barX + (reelingTargetZone.start / 100) * barW;
   const zoneW = ((reelingTargetZone.end - reelingTargetZone.start) / 100) * barW;
-  ctx.fillStyle = 'rgba(16, 185, 129, 0.75)';
+  ctx.fillStyle = 'rgba(16, 185, 129, 0.8)';
   ctx.fillRect(zoneX, barY, zoneW, barH);
 
   // Needle Position
