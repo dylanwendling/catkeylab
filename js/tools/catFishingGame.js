@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Single Fish Lock & Zero Jitter)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Button Mashing Reeling Engine)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -50,16 +50,14 @@ let lure = {
 };
 
 // Single-Fish Attraction & Exactly 3 Strikes System
-let activeAttractedFish = null; // ONLY ONE fish attracted at any time!
+let activeAttractedFish = null; // Strictly ONLY ONE fish attracted at any time!
 let strikeCount = 0; // Exactly 3 strikes for all fish
 let biteReactionTimer = 0;
 
-// Reeling Sweet-Spot Mini-Game State
-let reelingTension = 50; // 0 to 100
-let reelingProgress = 0; // 0 to 100%
-let reelingTargetZone = { start: 30, end: 70 }; // Green catch zone
-let tensionDriftSpeed = 0;
-let isReelInputActive = false;
+// Rapid Button Mashing Reeling Mini-Game State
+let reelingTension = 40; // 0 to 100
+let reelingProgress = 20; // 0 to 100%
+let reelingTargetZone = { start: 35, end: 75 }; // Green catch zone
 
 // Boat & Mascot Visual Position
 let boat = {
@@ -197,7 +195,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and master the <strong>Reeling Mini-Game</strong>!
+          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and <strong>MASH REEL / SPACEBAR</strong> to catch!
         </p>
 
         <!-- Live Dashboard Stats -->
@@ -238,7 +236,7 @@ export function renderCatFishingGame(container) {
             </div>
           </div>
 
-          <!-- Main Action / Reel Button -->
+          <!-- Main Action / Mash Reel Button -->
           <div style="display:flex; flex-direction:column; gap:0.6rem; min-width:240px; flex:1; max-width:320px;">
             <button id="fg-action-btn" class="btn btn-primary btn-lg" style="width:100%; font-size:1.2rem; font-weight:800; padding:0.85rem 1.25rem;">
               🎣 CAST LURE INTO WATER
@@ -251,7 +249,7 @@ export function renderCatFishingGame(container) {
 
         <!-- Keyboard Controls Guide -->
         <p style="font-size:0.85rem; color:var(--text-muted);">
-          💡 <strong>Controls:</strong> Use <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Arrow Keys</kbd> or <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">WASD</kbd> to steer lure. Tap/hold <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> during Reeling to keep tension in the green zone!
+          💡 <strong>Controls:</strong> Use <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Arrow Keys</kbd> / <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">WASD</kbd> to steer lure. Mash <kbd style="background:var(--bg-tertiary); padding:0.15rem 0.4rem; border-radius:4px;">Spacebar</kbd> or click REEL repeatedly to keep tension in the green catch zone!
         </p>
 
       </div>
@@ -489,7 +487,6 @@ function triggerStrikeEvent(fishEntity) {
     setTimeout(() => {
       if (gameState === 'STRIKING') {
         gameState = 'FISHING';
-        // Re-enable attraction for this exact fish for next strike
         fishEntity.isAttracted = true;
         updateActionButton();
       }
@@ -506,6 +503,8 @@ function triggerStrikeEvent(fishEntity) {
 function triggerFullBiteEvent(fishEntity) {
   gameState = 'BITING';
   biteReactionTimer = 1.6;
+  activeAttractedFish = fishEntity;
+  fishEntity.isHooked = true; // Lock hooked state immediately so fish NEVER jitters!
 
   playBiteAlertSound();
 
@@ -521,7 +520,7 @@ function triggerFullBiteEvent(fishEntity) {
 }
 
 /**
- * Start Sweet-Spot Reeling Mini-Game Phase!
+ * Start Sweet-Spot Button Mashing Reeling Mini-Game!
  */
 function startReelingMiniGame() {
   if (gameState !== 'BITING' && gameState !== 'FISHING' && gameState !== 'STRIKING') return;
@@ -532,10 +531,9 @@ function startReelingMiniGame() {
   reelingProgress = 20; // 20% initial progress
 
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
-  const zoneWidth = Math.max(25, 42 - diff * 5);
-  const zoneStart = 25 + Math.random() * (50 - zoneWidth);
+  const zoneWidth = Math.max(30, 45 - diff * 4);
+  const zoneStart = 30 + Math.random() * (45 - zoneWidth);
   reelingTargetZone = { start: zoneStart, end: zoneStart + zoneWidth };
-  tensionDriftSpeed = (Math.random() > 0.5 ? 1 : -1) * (1.2 * diff);
 
   if (activeAttractedFish) {
     activeAttractedFish.isHooked = true;
@@ -546,7 +544,7 @@ function startReelingMiniGame() {
 }
 
 /**
- * Main Action Router
+ * Main Action Router (Handles Mashing Taps during Reeling)
  */
 function handleMainAction() {
   if (gameState === 'IDLE' || gameState === 'GAMEOVER') {
@@ -556,7 +554,7 @@ function handleMainAction() {
   } else if (gameState === 'BITING') {
     startReelingMiniGame();
   } else if (gameState === 'REELING') {
-    // Player Taps Reel / Spacebar -> Increases Tension Needle
+    // Button Mash Tap Boost: Increases tension needle towards right!
     reelingTension = Math.min(100, reelingTension + 12);
     playReelSound();
   }
@@ -744,7 +742,7 @@ function updateActionButton() {
     btn.style.color = '#ffffff';
     btn.style.boxShadow = '0 0 25px rgba(239,68,68,0.8)';
   } else if (gameState === 'REELING') {
-    btn.innerHTML = '⚡ REEL! KEEP TENSION IN GREEN! 🎣';
+    btn.innerHTML = '⚡ MASH REEL / SPACEBAR! 🎣';
     btn.style.background = 'linear-gradient(135deg, #10b981, #06b6d4)';
     btn.style.color = '#ffffff';
     btn.style.boxShadow = '0 0 25px rgba(16,185,129,0.8)';
@@ -776,8 +774,8 @@ function gameLoop() {
   drawFishingLineAndLure();
 
   if (gameState === 'REELING') {
-    updateReelingMiniGamePhysics();
-    drawReelingSweetSpotOverlay();
+    updateReelingButtonMashingPhysics();
+    drawReelingButtonMashingOverlay();
   }
 
   updateAndDrawParticles();
@@ -939,8 +937,8 @@ function updateFishEntities() {
       fish.strikeCooldown--;
     }
 
-    if (fish.isHooked && gameState === 'REELING') {
-      // Hooked fish position: Lock cleanly to lure position with ZERO jitter!
+    // If fish is hooked (during BITING or REELING state), lock position cleanly to lure with ZERO jitter!
+    if (fish.isHooked && (gameState === 'BITING' || gameState === 'REELING' || gameState === 'STRIKING')) {
       fish.x = lure.x;
       fish.y = lure.y + 14;
       drawFishEntity(fish);
@@ -985,7 +983,7 @@ function drawFishEntity(fish) {
   ctx.translate(fish.x, fish.y);
   
   if (fish.isHooked) {
-    // When hooked on line: rotate -90 deg pointing UP towards hook with smooth struggle wiggle (ZERO jitter!)
+    // Lock orientation -90 deg pointing UP towards hook with smooth struggle wiggle (ZERO jitter!)
     ctx.rotate(-Math.PI / 2 + Math.sin(animationTime * 8) * 0.12);
   } else if (fish.facing === -1) {
     ctx.scale(-1, 1);
@@ -1171,30 +1169,22 @@ function drawFishingLineAndLure() {
 }
 
 /**
- * Reeling Mini-Game Physics & Sweet-Spot Catch Progress Fill
+ * Button Mashing Reeling Mini-Game Physics
  */
-function updateReelingMiniGamePhysics() {
+function updateReelingButtonMashingPhysics() {
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
 
-  // Check if player is holding Reel key/button or tapping
-  const isPulling = keysPressed['ArrowUp'] || keysPressed['KeyW'] || keysPressed['Space'] || isReelInputActive;
+  // Thrashing fish constantly pulls needle to the LEFT
+  const pullDecay = 0.55 + diff * 0.25;
+  reelingTension = Math.max(0, reelingTension - pullDecay);
 
-  if (isPulling) {
-    reelingTension = Math.min(100, reelingTension + 1.2);
-  } else {
-    reelingTension = Math.max(0, reelingTension - 0.7);
-  }
-
-  // Tension Needle Oscillates with Fish Thrash
-  reelingTension += Math.sin(animationTime * 8) * (0.8 * diff);
-
-  // Pull Lure/Fish UP towards boat surface during reeling
+  // Pull Fish UP towards boat surface during reeling
   lure.y -= 0.6;
 
-  // Check if Tension Needle is inside Green Catch Zone
+  // Check if Needle is inside Green Catch Zone (35% to 75%)
   const inZone = reelingTension >= reelingTargetZone.start && reelingTension <= reelingTargetZone.end;
   if (inZone) {
-    reelingProgress = Math.min(100, reelingProgress + 0.65);
+    reelingProgress = Math.min(100, reelingProgress + 0.85); // Fill Catch Progress!
   } else {
     reelingProgress = Math.max(0, reelingProgress - 0.25);
   }
@@ -1203,14 +1193,14 @@ function updateReelingMiniGamePhysics() {
   if (reelingProgress >= 100 || lure.y <= 140) {
     completeCatch();
   } else if (reelingTension >= 98) {
-    handleEscape('Line Snapped from High Tension');
+    handleEscape('Line Snapped from Over-Mashing!');
   }
 }
 
 /**
- * Draw Interactive Reeling Sweet-Spot Overlay
+ * Draw Interactive Button Mashing Reeling Sweet-Spot Overlay
  */
-function drawReelingSweetSpotOverlay() {
+function drawReelingButtonMashingOverlay() {
   const barW = 340;
   const barH = 26;
   const barX = (canvas.width - barW) / 2;
@@ -1218,7 +1208,7 @@ function drawReelingSweetSpotOverlay() {
 
   ctx.save();
 
-  // Outer Overlay Container
+  // Outer Card Overlay
   ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
   ctx.lineWidth = 2;
@@ -1227,25 +1217,25 @@ function drawReelingSweetSpotOverlay() {
   ctx.fill();
   ctx.stroke();
 
-  // Instructions
+  // Header Instructions
   ctx.fillStyle = '#ffffff';
   ctx.font = '800 13px Inter, sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`REELING MINI-GAME: KEEP TENSION IN GREEN! 🎣`, canvas.width / 2, barY - 2);
+  ctx.fillText(`⚡ MASH REEL / SPACEBAR TO KEEP NEEDLE IN GREEN! ⚡`, canvas.width / 2, barY - 2);
 
   // 1. Tension Track
   ctx.fillStyle = '#334155';
   ctx.fillRect(barX, barY, barW, barH);
 
-  // Green Sweet-Spot Catch Zone
+  // Green Catch Zone
   const zoneX = barX + (reelingTargetZone.start / 100) * barW;
   const zoneW = ((reelingTargetZone.end - reelingTargetZone.start) / 100) * barW;
   ctx.fillStyle = 'rgba(16, 185, 129, 0.75)';
   ctx.fillRect(zoneX, barY, zoneW, barH);
 
-  // Red Tension Needle
+  // Needle Position
   const needleX = barX + (reelingTension / 100) * barW;
-  ctx.fillStyle = reelingTension > 80 ? '#ef4444' : '#fbbf24';
+  ctx.fillStyle = reelingTension > 85 ? '#ef4444' : '#fbbf24';
   ctx.fillRect(needleX - 3, barY - 4, 6, barH + 8);
 
   // 2. Catch Progress Bar Below
@@ -1396,6 +1386,7 @@ function bindInputEvents() {
       e.preventDefault();
       keysPressed[keyName] = true;
       if (keyName === 'ArrowUp') isReelInputActive = true;
+      handleMainAction();
     });
     el.addEventListener('pointerup', () => {
       keysPressed[keyName] = false;
@@ -1433,7 +1424,7 @@ function bindInputEvents() {
     canvas.addEventListener('pointerdown', (e) => {
       isDragging = true;
       moveLureToEvent(e);
-      if (gameState === 'READY' || gameState === 'BITING' || gameState === 'IDLE') {
+      if (gameState === 'READY' || gameState === 'BITING' || gameState === 'IDLE' || gameState === 'REELING') {
         handleMainAction();
       }
     });
@@ -1455,7 +1446,7 @@ function bindInputEvents() {
         e.preventDefault();
         keysPressed[e.code] = true;
 
-        if (e.code === 'Space') {
+        if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
           handleMainAction();
         }
       }
