@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Sweet-Spot Goldilocks Balance)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Detailed Mascot & Mudfish Update)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -33,7 +33,7 @@ let catchesBreakdown = {
   pufferfish: 0,
   koi: 0,
   kraken: 0,
-  boot: 0
+  mudfish: 0
 };
 
 // Input State
@@ -158,15 +158,15 @@ const FISH_TYPES = [
     difficulty: 2.6
   },
   {
-    id: 'boot',
-    name: 'Old Leather Boot',
-    emoji: '👞',
-    points: 25,
-    speed: 0.5,
+    id: 'mudfish',
+    name: 'Brown Mudfish',
+    emoji: '🐟',
+    points: 50,
+    speed: 0.9,
     width: 36,
-    height: 26,
+    height: 20,
     color: '#78350f',
-    accentColor: '#451a03',
+    accentColor: '#b45309',
     rarity: 0.02,
     difficulty: 0.8
   }
@@ -334,7 +334,7 @@ function initGameSetup() {
   gameTimeLeft = 60.0;
   currentScore = 0;
   totalFishCaught = 0;
-  catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, boot: 0 };
+  catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, mudfish: 0 };
   lure.active = false;
   activeAttractedFish = null;
   strikeCount = 0;
@@ -400,7 +400,7 @@ function startGameMatch() {
   gameTimeLeft = 60.0;
   currentScore = 0;
   totalFishCaught = 0;
-  catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, boot: 0 };
+  catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, mudfish: 0 };
   lure.active = false;
   activeAttractedFish = null;
   strikeCount = 0;
@@ -1043,7 +1043,7 @@ function drawFishEntity(fish) {
 }
 
 /**
- * Draw Boat & Nibbles
+ * Draw Boat & Nibbles the Cat Mascot
  */
 function drawBoat() {
   boat.bobOffset = Math.sin(animationTime * 2.2) * 3;
@@ -1056,6 +1056,7 @@ function drawBoat() {
   ctx.translate(bX, bY);
   ctx.rotate(boat.tilt);
 
+  // 1. Boat Hull
   ctx.fillStyle = '#b45309';
   ctx.beginPath();
   ctx.moveTo(-65, 0);
@@ -1068,53 +1069,137 @@ function drawBoat() {
   ctx.fillStyle = '#92400e';
   ctx.fillRect(-50, 3, 100, 4);
 
-  // Nibbles Cat
+  // 2. Nibbles Cat Wiggling Tail
+  ctx.save();
+  ctx.translate(-25, -10);
+  ctx.rotate(-0.4 + Math.sin(animationTime * 3) * 0.2);
+  ctx.strokeStyle = '#f97316';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.quadraticCurveTo(-15, -15, -22, -5);
+  ctx.stroke();
+  ctx.restore();
+
+  // 3. Nibbles Cat Body / Blue Sweater
+  ctx.fillStyle = '#0284c7';
+  ctx.beginPath();
+  ctx.roundRect(-16, -22, 32, 22, [8, 8, 0, 0]);
+  ctx.fill();
+
+  // Yellow Collar
+  ctx.fillStyle = '#fbbf24';
+  ctx.fillRect(-10, -22, 20, 3);
+
+  // 4. Cat Paws holding the rod
   ctx.fillStyle = '#f97316';
   ctx.beginPath();
-  ctx.arc(0, -22, 16, 0, Math.PI * 2);
+  ctx.arc(8, -12, 5, 0, Math.PI * 2);
+  ctx.arc(16, -16, 5, 0, Math.PI * 2);
   ctx.fill();
 
-  // Ears
+  // 5. Cat Head
+  ctx.fillStyle = '#f97316';
   ctx.beginPath();
-  ctx.moveTo(-12, -32);
-  ctx.lineTo(-5, -42);
-  ctx.lineTo(-2, -30);
+  ctx.arc(0, -32, 18, 0, Math.PI * 2);
   ctx.fill();
 
+  // Outer & Inner Pink Ears
+  // Left Ear
+  ctx.fillStyle = '#f97316';
   ctx.beginPath();
-  ctx.moveTo(12, -32);
-  ctx.lineTo(5, -42);
-  ctx.lineTo(2, -30);
+  ctx.moveTo(-15, -42);
+  ctx.lineTo(-6, -54);
+  ctx.lineTo(-2, -40);
+  ctx.fill();
+  ctx.fillStyle = '#f472b6';
+  ctx.beginPath();
+  ctx.moveTo(-13, -43);
+  ctx.lineTo(-7, -51);
+  ctx.lineTo(-4, -41);
   ctx.fill();
 
-  // Yellow Fisherman Hat
+  // Right Ear
+  ctx.fillStyle = '#f97316';
+  ctx.beginPath();
+  ctx.moveTo(15, -42);
+  ctx.lineTo(6, -54);
+  ctx.lineTo(2, -40);
+  ctx.fill();
+  ctx.fillStyle = '#f472b6';
+  ctx.beginPath();
+  ctx.moveTo(13, -43);
+  ctx.lineTo(7, -51);
+  ctx.lineTo(4, -41);
+  ctx.fill();
+
+  // 6. Yellow Fisherman Bucket Hat with Red Ribbon
   ctx.fillStyle = '#eab308';
-  ctx.fillRect(-15, -36, 30, 8);
-  ctx.fillRect(-10, -44, 20, 10);
+  ctx.fillRect(-18, -45, 36, 6); // Hat brim
+  ctx.fillRect(-12, -54, 24, 10); // Hat crown
+  ctx.fillStyle = '#ef4444';
+  ctx.fillRect(-12, -47, 24, 3); // Red ribbon band
 
-  // Eyes
+  // 7. Expressive Emerald Cat Eyes & Slits
   ctx.fillStyle = '#10b981';
   ctx.beginPath();
-  ctx.arc(-5, -24, 3, 0, Math.PI * 2);
-  ctx.arc(5, -24, 3, 0, Math.PI * 2);
+  ctx.arc(-6, -34, 4, 0, Math.PI * 2);
+  ctx.arc(6, -34, 4, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = '#000';
+  ctx.fillStyle = '#000000';
+  ctx.fillRect(-6.5, -36.5, 1.5, 5);
+  ctx.fillRect(5.5, -36.5, 1.5, 5);
+
+  // Eye sparkles
+  ctx.fillStyle = '#ffffff';
   ctx.beginPath();
-  ctx.arc(-5, -24, 1.5, 0, Math.PI * 2);
-  ctx.arc(5, -24, 1.5, 0, Math.PI * 2);
+  ctx.arc(-7.5, -35.5, 1, 0, Math.PI * 2);
+  ctx.arc(4.5, -35.5, 1, 0, Math.PI * 2);
   ctx.fill();
 
-  // Fishing Rod
-  rodTip.x = bX + 65;
-  rodTip.y = bY - 45;
+  // Cute Pink Triangle Nose & Cat Mouth (3)
+  ctx.fillStyle = '#f472b6';
+  ctx.beginPath();
+  ctx.moveTo(-2, -29);
+  ctx.lineTo(2, -29);
+  ctx.lineTo(0, -27);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle = '#78350f';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(0, -27);
+  ctx.lineTo(0, -25);
+  ctx.quadraticCurveTo(-3, -23, -5, -25);
+  ctx.moveTo(0, -25);
+  ctx.quadraticCurveTo(3, -23, 5, -25);
+  ctx.stroke();
+
+  // White Cat Whiskers
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  // Left whiskers
+  ctx.moveTo(-8, -28); ctx.lineTo(-20, -31);
+  ctx.moveTo(-8, -26); ctx.lineTo(-20, -26);
+  // Right whiskers
+  ctx.moveTo(8, -28); ctx.lineTo(20, -31);
+  ctx.moveTo(8, -26); ctx.lineTo(20, -26);
+  ctx.stroke();
+
+  // 8. Fishing Rod held by Nibbles
+  rodTip.x = bX + 70;
+  rodTip.y = bY - 50;
 
   ctx.strokeStyle = '#334155';
-  ctx.lineWidth = 3;
+  ctx.lineWidth = 3.5;
   ctx.lineCap = 'round';
   ctx.beginPath();
   ctx.moveTo(10, -15);
-  ctx.lineTo(65, -45);
+  ctx.lineTo(70, -50);
   ctx.stroke();
 
   ctx.restore();
