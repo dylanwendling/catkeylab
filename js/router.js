@@ -426,7 +426,7 @@ function renderHomePage(container) {
         <div class="grid grid-cols-4">
           ${(() => {
             const playCounts = getToolPlayCounts();
-            const defaultPopular = ['cat-mini-golf-game', 'cat-fishing-game', 'typing-test', 'mouse-test'];
+            const defaultPopular = ['cat-mini-golf-game', 'cat-fishing-game', 'fruit-slicer-game', 'typing-test'];
 
             const sortedToolKeys = Object.keys(TOOL_METADATA).sort((a, b) => {
               const indexA = defaultPopular.indexOf(a);

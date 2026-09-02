@@ -887,7 +887,7 @@ function bindInputEvents() {
   if (modalPlayAgain) {
     modalPlayAgain.addEventListener('click', () => {
       document.getElementById('fs-modal').classList.remove('open');
-      startMatch();
+      resetGameToReady();
     });
   }
 
