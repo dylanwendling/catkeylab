@@ -412,11 +412,16 @@ function renderHomePage(container) {
         <div class="grid grid-cols-4">
           ${(() => {
             const playCounts = getToolPlayCounts();
-            const defaultPopular = ['cat-fishing-game', 'typing-test', 'mouse-test', 'cat-mini-golf-game'];
+            const defaultPopular = ['cat-mini-golf-game', 'cat-fishing-game', 'typing-test', 'mouse-test'];
 
             const sortedToolKeys = Object.keys(TOOL_METADATA).sort((a, b) => {
-              const countA = (playCounts[a] || 0) + (defaultPopular.includes(a) ? 100 : 0);
-              const countB = (playCounts[b] || 0) + (defaultPopular.includes(b) ? 100 : 0);
+              const indexA = defaultPopular.indexOf(a);
+              const indexB = defaultPopular.indexOf(b);
+              if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+              if (indexA !== -1) return -1;
+              if (indexB !== -1) return 1;
+              const countA = playCounts[a] || 0;
+              const countB = playCounts[b] || 0;
               return countB - countA;
             });
 
