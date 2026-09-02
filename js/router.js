@@ -27,6 +27,7 @@ import { renderFishMazeGame, cleanupFishMazeGame } from './tools/fishMazeGame.js
 import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryGame.js';
 import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGolfGame.js';
 import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingGame.js';
+import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlicerGame.js';
 import { renderLeaderboardView } from './components/leaderboardView.js';
 
 let currentCleanup = null;
@@ -184,6 +185,19 @@ export const TOOL_METADATA = {
       { q: 'How do I cast and steer the lure underwater?', a: 'Click CAST LURE to launch your line into the ocean, then click and drag (or touch drag) your lure anywhere underwater to attract nearby fish!' },
       { q: 'How does the Reeling Mini-Game work?', a: 'Once a fish bites ("❗️ BITE! HOOKED!"), repeatedly mash the REEL button or Spacebar to keep the tension needle inside the green catch zone and pull the fish up to Nibbles\' boat!' },
       { q: 'How many different fish species can I catch?', a: 'There are 6 unique fish species: Silver Minnow (100 PTS), Orange Clownfish (250 PTS), Spiky Pufferfish (400 PTS), Golden Koi (750 PTS), Legendary Rainbow Fish (1500 PTS), and Brown Mudfish (50 PTS)!' }
+    ]
+  },
+  'fruit-slicer-game': {
+    titleKey: 'fruitSlicerTitle',
+    desc: 'Juicy 2D Fruit Slicer Arcade with Nibbles 🐱! Drag or swipe your blade to slice flying fruits ⚔️, trigger multi-slice combo multipliers, and defend your 3 lives!',
+    icon: '🍉',
+    category: 'games',
+    renderFn: renderFruitSlicerGame,
+    cleanupFn: cleanupFruitSlicerGame,
+    faqs: [
+      { q: 'How do I slice fruits on desktop and mobile?', a: 'Click and drag your mouse across the canvas (or swipe your finger on touch screens) to create a glowing blade trail. Any fruit intersecting your blade path will split in half!' },
+      { q: 'How do combos and scoring work?', a: 'Slicing multiple fruits in one quick swipe grants COMBO multipliers (2x, 3x, 4x+) for massive bonus points!' },
+      { q: 'How do I lose lives?', a: 'You start with 3 heart lives (❤️ ❤️ ❤️). If any fruit falls past the bottom of the screen unsliced, you lose 1 life. Slicing fruits keeps your run alive!' }
     ]
   },
   'typing-test': {
@@ -815,6 +829,7 @@ function renderLegalPage(container, type) {
           <h3 style="color:var(--accent-amber); font-size:1.2rem; margin-bottom:1rem;">🎮 Nibbles Companion Arcade Games</h3>
           <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
             <li><a href="#cat-fishing-game" style="color:var(--accent-cyan); font-weight:700;">🎣 Nibbles 2D Fishing Adventure</a></li>
+            <li><a href="#fruit-slicer-game" style="color:var(--text-primary); font-weight:600;">🍉 Nibbles Fruit Slicer Arcade</a></li>
             <li><a href="#cat-mini-golf-game" style="color:var(--text-primary); font-weight:600;">⛳ Nibbles 2D Mini Golf (18 Holes)</a></li>
             <li><a href="#fish-maze-game" style="color:var(--text-primary); font-weight:600;">🐟 Help Nibbles Find Fish (Maze)</a></li>
             <li><a href="#card-memory-game" style="color:var(--text-primary); font-weight:600;">🎴 Cat Card Memory Match (3D)</a></li>

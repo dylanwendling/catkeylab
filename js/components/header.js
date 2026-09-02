@@ -59,6 +59,7 @@ export function renderHeader(container) {
             </button>
             <div class="dropdown-menu">
               <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
+              <a href="#fruit-slicer-game" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
               <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
               <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">🚀 Click Speed Test</a>
               <a href="#click-counter" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>

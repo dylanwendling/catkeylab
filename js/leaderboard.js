@@ -25,6 +25,7 @@ const INITIAL_LEADERBOARDS = {
   'fish-maze-game': [],
   'card-memory-game': [],
   'cat-fishing-game': [],
+  'fruit-slicer-game': [],
   'cat-mini-golf-game-3': [],
   'cat-mini-golf-game-9': [],
   'cat-mini-golf-game-18': []
