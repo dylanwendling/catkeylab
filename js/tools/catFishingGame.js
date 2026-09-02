@@ -1,5 +1,5 @@
 /* ==========================================================================
-   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Smooth AI & Reeling Mini-Game)
+   CatKeyLab - Nibbles 2D Cartoon Fishing Game (Single Fish Lock & Zero Jitter)
    ========================================================================== */
 
 import { t } from '../i18n.js';
@@ -49,10 +49,9 @@ let lure = {
   wigglePhase: 0
 };
 
-// Tease Strike Variables
-let activeAttractedFish = null;
-let strikeCount = 0;
-let maxStrikesForCurrentFish = 2; // 1 to 3 strikes before bite
+// Single-Fish Attraction & Exactly 3 Strikes System
+let activeAttractedFish = null; // ONLY ONE fish attracted at any time!
+let strikeCount = 0; // Exactly 3 strikes for all fish
 let biteReactionTimer = 0;
 
 // Reeling Sweet-Spot Mini-Game State
@@ -198,7 +197,7 @@ export function renderCatFishingGame(container) {
           <h1 style="font-size:2rem; font-weight:800;">Nibbles 2D Fishing Adventure</h1>
         </div>
         <p class="section-subtitle" style="margin-bottom:1rem;">
-          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with up to 3 strikes ⚡, and master the <strong>Reeling Mini-Game</strong>!
+          Control your lure underwater with <strong>Arrow Keys / D-Pad</strong>, tease fish with <strong>3 strikes ⚡</strong>, and master the <strong>Reeling Mini-Game</strong>!
         </p>
 
         <!-- Live Dashboard Stats -->
@@ -231,7 +230,7 @@ export function renderCatFishingGame(container) {
           
           <!-- On-Screen Directional D-Pad -->
           <div style="display:flex; flex-direction:column; align-items:center; gap:0.35rem;">
-            <button id="fg-dpad-up" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Up / Reel ⬆️">⬆️</button>
+            <button id="fg-dpad-up" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Up ⬆️">⬆️</button>
             <div style="display:flex; gap:0.35rem;">
               <button id="fg-dpad-left" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Move Left ⬅️">⬅️</button>
               <button id="fg-dpad-down" class="btn btn-secondary" style="width:50px; height:44px; font-size:1.2rem; font-weight:800;" title="Sink Down ⬇️">⬇️</button>
@@ -337,6 +336,8 @@ function initGameSetup() {
   totalFishCaught = 0;
   catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, boot: 0 };
   lure.active = false;
+  activeAttractedFish = null;
+  strikeCount = 0;
 
   updateHUD();
   updateActionButton();
@@ -347,7 +348,7 @@ function initGameSetup() {
 }
 
 /**
- * Initialize Non-Glitching Swimming Fish Entities
+ * Initialize Swimming Fish Entities
  */
 function initSwimmingFish(count = 7) {
   swimmingFish = [];
@@ -381,7 +382,7 @@ function spawnRandomFish() {
     targetY: startY,
     dx: direction * (typeObj.speed * (0.85 + Math.random() * 0.3)),
     dy: 0,
-    facing: direction, // Stable 1 or -1 (No flipping jitter!)
+    facing: direction,
     swimPhase: Math.random() * Math.PI * 2,
     isAttracted: false,
     isHooked: false,
@@ -401,6 +402,8 @@ function startGameMatch() {
   totalFishCaught = 0;
   catchesBreakdown = { minnow: 0, clownfish: 0, pufferfish: 0, koi: 0, kraken: 0, boot: 0 };
   lure.active = false;
+  activeAttractedFish = null;
+  strikeCount = 0;
 
   updateHUD();
   updateActionButton();
@@ -458,7 +461,7 @@ function onLureLanded() {
 }
 
 /**
- * Trigger Tease Strike Event (Strikes 1, 2, or 3)
+ * Trigger Tease Strike Event (Exactly 3 Strikes for ALL fish)
  */
 function triggerStrikeEvent(fishEntity) {
   gameState = 'STRIKING';
@@ -468,8 +471,8 @@ function triggerStrikeEvent(fishEntity) {
   playClickSound(900, 0.06);
   createSplashParticles(lure.x, lure.y);
 
-  if (strikeCount < maxStrikesForCurrentFish) {
-    // Tease Strike!
+  if (strikeCount < 3) {
+    // Tease Strikes #1 and #2
     strikeBanner = {
       text: `⚡ STRIKE #${strikeCount}!`,
       x: lure.x,
@@ -478,19 +481,21 @@ function triggerStrikeEvent(fishEntity) {
       color: '#f59e0b'
     };
 
-    // Fish backs off 35px smoothly to prevent glitching
-    fishEntity.x += (fishEntity.facing === 1 ? -35 : 35);
-    fishEntity.strikeCooldown = 50; // 0.8s cooldown
+    // Fish backs off 45px smoothly
+    fishEntity.x += (fishEntity.facing === 1 ? -45 : 45);
+    fishEntity.strikeCooldown = 45; // 0.75s cooldown
     fishEntity.isAttracted = false;
 
     setTimeout(() => {
       if (gameState === 'STRIKING') {
         gameState = 'FISHING';
+        // Re-enable attraction for this exact fish for next strike
+        fishEntity.isAttracted = true;
         updateActionButton();
       }
-    }, 700);
+    }, 650);
   } else {
-    // Final Strike -> FULL BITE / HOOKED!
+    // Strike #3 -> FULL BITE / HOOKED!
     triggerFullBiteEvent(fishEntity);
   }
 }
@@ -526,7 +531,6 @@ function startReelingMiniGame() {
   reelingTension = 50;
   reelingProgress = 20; // 20% initial progress
 
-  // Set green sweet-spot catch zone
   const diff = activeAttractedFish ? activeAttractedFish.type.difficulty : 1.0;
   const zoneWidth = Math.max(25, 42 - diff * 5);
   const zoneStart = 25 + Math.random() * (50 - zoneWidth);
@@ -588,9 +592,14 @@ function completeCatch() {
   playSuccessSound();
 
   if (activeAttractedFish) {
+    activeAttractedFish.isHooked = false;
+    activeAttractedFish.isAttracted = false;
     const idx = swimmingFish.indexOf(activeAttractedFish);
     if (idx !== -1) swimmingFish[idx] = spawnRandomFish();
+    activeAttractedFish = null;
   }
+
+  strikeCount = 0;
 
   updateHUD();
 
@@ -623,7 +632,10 @@ function handleEscape(reason = 'Line Snapped') {
   if (activeAttractedFish) {
     activeAttractedFish.isHooked = false;
     activeAttractedFish.isAttracted = false;
+    activeAttractedFish = null;
   }
+
+  strikeCount = 0;
 
   setTimeout(() => {
     if (gameState === 'ESCAPE' && gameTimeLeft > 0) {
@@ -642,6 +654,11 @@ function triggerGameOver() {
 
   gameState = 'GAMEOVER';
   lure.active = false;
+  if (activeAttractedFish) {
+    activeAttractedFish.isHooked = false;
+    activeAttractedFish.isAttracted = false;
+    activeAttractedFish = null;
+  }
 
   updateHUD();
   updateActionButton();
@@ -758,7 +775,6 @@ function gameLoop() {
   drawBoat();
   drawFishingLineAndLure();
 
-  // Reeling Sweet-Spot Mini-Game Execution
   if (gameState === 'REELING') {
     updateReelingMiniGamePhysics();
     drawReelingSweetSpotOverlay();
@@ -894,47 +910,58 @@ function updateLureControls() {
 }
 
 /**
- * Update Swimming Fish & Strike AI (Zero Glitching / Jitter!)
+ * Update Swimming Fish & Single-Attraction Lock
  */
 function updateFishEntities() {
+  // Lock attraction to ONLY ONE single fish at a time
+  if (!activeAttractedFish && gameState === 'FISHING' && lure.active) {
+    let closestFish = null;
+    let closestDist = 110;
+
+    swimmingFish.forEach(fish => {
+      if (fish.strikeCooldown <= 0 && !fish.isHooked) {
+        const dist = Math.hypot(fish.x - lure.x, fish.y - lure.y);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closestFish = fish;
+        }
+      }
+    });
+
+    if (closestFish) {
+      activeAttractedFish = closestFish;
+      closestFish.isAttracted = true;
+    }
+  }
+
   swimmingFish.forEach((fish, idx) => {
     if (fish.strikeCooldown > 0) {
       fish.strikeCooldown--;
     }
 
     if (fish.isHooked && gameState === 'REELING') {
-      // Fish is hooked to lure & pulls upward towards boat during reeling!
+      // Hooked fish position: Lock cleanly to lure position with ZERO jitter!
       fish.x = lure.x;
-      fish.y = lure.y + 12;
+      fish.y = lure.y + 14;
       drawFishEntity(fish);
       return;
     }
 
-    // Normal Swimming AI
     if (!fish.isAttracted) {
+      // Normal Peaceful Swim AI
       fish.x += fish.dx;
       fish.swimPhase += 0.15;
       fish.y = fish.targetY + Math.sin(fish.swimPhase) * 6;
-      fish.facing = fish.dx >= 0 ? 1 : -1; // Smooth facing
+      fish.facing = fish.dx >= 0 ? 1 : -1;
 
       if (fish.dx > 0 && fish.x > canvas.width + 80) swimmingFish[idx] = spawnRandomFish();
       else if (fish.dx < 0 && fish.x < -80) swimmingFish[idx] = spawnRandomFish();
-
-      // Check Proximity to Lure
-      if (gameState === 'FISHING' && lure.active && fish.strikeCooldown <= 0) {
-        const dist = Math.hypot(fish.x - lure.x, fish.y - lure.y);
-        if (dist < 120) {
-          fish.isAttracted = true;
-          maxStrikesForCurrentFish = Math.floor(1 + Math.random() * 3);
-        }
-      }
     } else {
-      // Smooth Attraction Movement with Hysteresis (Deadzone) for facing direction!
+      // ONLY the active attracted fish stalks the lure!
       const angle = Math.atan2(lure.y - fish.y, lure.x - fish.x);
       fish.x += Math.cos(angle) * (fish.type.speed * 1.4);
       fish.y += Math.sin(angle) * (fish.type.speed * 1.4);
 
-      // Deadzone facing update: ONLY change facing when >8px away to avoid flipping jitter!
       if (lure.x > fish.x + 8) fish.facing = 1;
       else if (lure.x < fish.x - 8) fish.facing = -1;
 
@@ -951,14 +978,16 @@ function updateFishEntities() {
 }
 
 /**
- * Draw Vector Fish Entity (Clean, Smooth Scale Rendering)
+ * Draw Vector Fish Entity (Zero Jitter When Hooked)
  */
 function drawFishEntity(fish) {
   ctx.save();
   ctx.translate(fish.x, fish.y);
   
-  // Smooth facing (No horizontal flipping jitter!)
-  if (fish.facing === -1) {
+  if (fish.isHooked) {
+    // When hooked on line: rotate -90 deg pointing UP towards hook with smooth struggle wiggle (ZERO jitter!)
+    ctx.rotate(-Math.PI / 2 + Math.sin(animationTime * 8) * 0.12);
+  } else if (fish.facing === -1) {
     ctx.scale(-1, 1);
   }
 
@@ -1326,7 +1355,7 @@ function drawToastBanners() {
 }
 
 /**
- * Bind Input Listeners (Keyboard, Touch D-Pad, Mouse Drag)
+ * Bind Input Listeners
  */
 function bindInputEvents() {
   const actionBtn = document.getElementById('fg-action-btn');
@@ -1383,7 +1412,7 @@ function bindInputEvents() {
   bindDpad(btnLeft, 'ArrowLeft');
   bindDpad(btnRight, 'ArrowRight');
 
-  // Mouse / Touch Drag on Canvas to Move Lure
+  // Mouse / Touch Drag on Canvas
   if (canvas) {
     let isDragging = false;
 
@@ -1416,7 +1445,7 @@ function bindInputEvents() {
     canvas.addEventListener('pointerup', () => { isDragging = false; });
   }
 
-  // Keyboard Window Event Listeners
+  // Keyboard Event Listeners
   if (!listenersBound) {
     window.addEventListener('keydown', (e) => {
       const hash = window.location.hash.replace('#', '').trim();
