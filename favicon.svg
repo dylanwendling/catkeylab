@@ -1,53 +1,46 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-  <!-- Dark Circular Badge Background with Glowing Orange Border -->
-  <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#f97316" stroke-width="3.5"/>
-
-  <!-- Blue Sweater Body -->
-  <path d="M 28 68 C 28 58, 72 58, 72 68 L 72 90 L 28 90 Z" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
-
-  <!-- Red Collar Band -->
-  <rect x="34" y="60" width="32" height="6" fill="#ef4444" rx="2"/>
-
-  <!-- Golden Bell Collar -->
-  <circle cx="50" cy="67" r="6" fill="#f59e0b" stroke="#78350f" stroke-width="1.2"/>
-  <circle cx="48" cy="65" r="1.8" fill="#fef08a"/>
-  <circle cx="50" cy="68" r="1.5" fill="#78350f"/>
-
-  <!-- Cat Head (Orange Fur) -->
-  <circle cx="50" cy="44" r="24" fill="#f97316" stroke="#7c2d12" stroke-width="2.5"/>
+  <defs>
+    <linearGradient id="catHeadGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+  </defs>
 
   <!-- Left Outer & Inner Pink Ear -->
-  <polygon points="26,30 36,8 44,24" fill="#f97316" stroke="#7c2d12" stroke-width="2" stroke-linejoin="round"/>
-  <polygon points="29,28 36,13 41,24" fill="#f472b6"/>
+  <polygon points="14,40 28,10 40,36" fill="#ea580c" stroke="#7c2d12" stroke-width="3" stroke-linejoin="round"/>
+  <polygon points="18,37 28,16 36,34" fill="#f472b6"/>
 
   <!-- Right Outer & Inner Pink Ear -->
-  <polygon points="74,30 64,8 56,24" fill="#f97316" stroke="#7c2d12" stroke-width="2" stroke-linejoin="round"/>
-  <polygon points="71,28 64,13 59,24" fill="#f472b6"/>
+  <polygon points="86,40 72,10 60,36" fill="#ea580c" stroke="#7c2d12" stroke-width="3" stroke-linejoin="round"/>
+  <polygon points="82,37 72,16 64,34" fill="#f472b6"/>
 
-  <!-- Yellow Fisherman Bucket Hat with Red Ribbon -->
-  <rect x="22" y="24" width="56" height="8" rx="3" fill="#eab308" stroke="#a16207" stroke-width="1.5"/>
-  <rect x="30" y="10" width="40" height="15" rx="3" fill="#eab308" stroke="#a16207" stroke-width="1.5"/>
-  <rect x="30" y="20" width="40" height="5" fill="#ef4444"/>
+  <!-- Main Cat Head Circle (Fills the frame for max readability) -->
+  <circle cx="50" cy="54" r="40" fill="url(#catHeadGrad)" stroke="#7c2d12" stroke-width="3.5"/>
 
   <!-- Expressive Emerald Green Cat Eyes -->
-  <ellipse cx="38" cy="42" rx="7" ry="8" fill="#10b981"/>
-  <ellipse cx="62" cy="42" rx="7" ry="8" fill="#10b981"/>
+  <ellipse cx="34" cy="50" rx="10" ry="11" fill="#10b981"/>
+  <ellipse cx="66" cy="50" rx="10" ry="11" fill="#10b981"/>
 
   <!-- Pupil Slits -->
-  <rect x="36.8" y="36.5" width="2.4" height="11" rx="1.2" fill="#000000"/>
-  <rect x="60.8" y="36.5" width="2.4" height="11" rx="1.2" fill="#000000"/>
+  <rect x="32.5" y="42" width="3" height="16" rx="1.5" fill="#000000"/>
+  <rect x="64.5" y="42" width="3" height="16" rx="1.5" fill="#000000"/>
 
   <!-- Eye Sparkles -->
-  <circle cx="35.5" cy="39" r="2" fill="#ffffff"/>
-  <circle cx="59.5" cy="39" r="2" fill="#ffffff"/>
+  <circle cx="31" cy="46" r="3" fill="#ffffff"/>
+  <circle cx="63" cy="46" r="3" fill="#ffffff"/>
 
   <!-- Cute Pink Triangle Nose -->
-  <polygon points="46,50 54,50 50,54" fill="#f472b6"/>
+  <polygon points="44,63 56,63 50,69" fill="#f472b6"/>
 
-  <!-- Cat Mouth (3) -->
-  <path d="M50,54 L50,56 Q45,59 41,56 M50,56 Q55,59 59,56" fill="none" stroke="#78350f" stroke-width="2" stroke-linecap="round"/>
+  <!-- Cat Mouth -->
+  <path d="M50,69 L50,71 Q43,76 36,72 M50,71 Q57,76 64,72" fill="none" stroke="#78350f" stroke-width="2.5" stroke-linecap="round"/>
 
   <!-- White Cat Whiskers -->
-  <path d="M30,48 L14,44 M30,51 L12,51 M30,54 L16,58" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.95"/>
-  <path d="M70,48 L86,44 M70,51 L88,51 M70,54 L84,58" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.95"/>
+  <path d="M24,60 L4,55 M24,65 L2,65 M24,70 L6,75" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.95"/>
+  <path d="M76,60 L96,55 M76,65 L98,65 M76,70 L94,75" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.95"/>
+
+  <!-- Golden Bell Accent at Bottom -->
+  <circle cx="50" cy="88" r="7" fill="#f59e0b" stroke="#78350f" stroke-width="1.8"/>
+  <circle cx="47.5" cy="85.5" r="2" fill="#fef08a"/>
+  <circle cx="50" cy="89" r="1.5" fill="#78350f"/>
 </svg>
