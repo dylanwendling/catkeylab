@@ -1430,14 +1430,51 @@
   }
 }
 
+/* Tool Page Layout (Responsive Two-Column) */
+.tool-page-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .tool-page-layout {
+    display: grid;
+    /* Main column gets ~65%, sidebar gets ~35% */
+    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+}
+
 /* Tool page content wrapper */
 .tool-content-section {
   max-width: 800px;
   margin: 2rem auto 0;
 }
 
+.tool-page-sidebar .tool-content-section {
+  max-width: none;
+  margin-top: 0;
+}
+
 .tool-content-section .info-section {
   margin-bottom: 1.25rem;
+}
+
+/* Make info sections in sidebar look like distinct cards */
+.tool-page-sidebar .info-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.tool-page-sidebar .info-section h2, 
+.tool-page-sidebar .info-section h3 {
+  font-size: 1.25rem;
+  margin-top: 0;
 }
 
 /* Related tools links at bottom of tool pages */

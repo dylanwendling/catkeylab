@@ -1171,64 +1171,72 @@ function renderToolPage(container, toolKey, toolMeta) {
 
   container.innerHTML = `
     <div class="container" style="padding-top:1.5rem;">
-      <!-- Tool Title & Introduction -->
-      <div style="max-width:800px; margin:0 auto 1.5rem;">
-        <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
-          <span>${toolMeta.icon}</span> <span>${toolTitle}</span>
-        </h1>
-        ${content.intro ? `<p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">${content.intro}</p>` : ''}
+      <div class="tool-page-layout">
+        <!-- Main Column (Tool) -->
+        <div class="tool-page-main">
+          <!-- Tool Title & Introduction -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>${toolMeta.icon}</span> <span>${toolTitle}</span>
+            </h1>
+            ${content.intro ? `<p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">${content.intro}</p>` : ''}
+          </div>
+
+          <!-- Interactive Tool Widget -->
+          <div id="tool-render-box"></div>
+        </div>
+        
+        <!-- Sidebar Column (Info & Ads) -->
+        <div class="tool-page-sidebar">
+          ${renderAdSpace('banner')}
+
+          <!-- Tool Informational Content -->
+          <div class="tool-content-section">
+            ${content.howTo ? `
+              <div class="info-section">
+                <h2>How to Use ${toolTitle}</h2>
+                <ol class="info-steps">
+                  ${content.howTo.map(step => `<li>${step}</li>`).join('')}
+                </ol>
+              </div>
+            ` : ''}
+
+            ${content.whatItMeasures ? `
+              <div class="info-section">
+                <h2>What This Test Measures</h2>
+                <p>${content.whatItMeasures}</p>
+              </div>
+            ` : ''}
+
+            ${content.whyUseIt ? `
+              <div class="info-section">
+                <h2>Why Use This Test</h2>
+                <p>${content.whyUseIt}</p>
+              </div>
+            ` : ''}
+
+            ${content.interpretResults ? `
+              <div class="info-section">
+                <h2>How to Interpret Your Results</h2>
+                <p>${content.interpretResults}</p>
+              </div>
+            ` : ''}
+
+            ${content.tips ? `
+              <div class="info-section">
+                <h2>Tips for Accurate Results</h2>
+                <ul>
+                  ${content.tips.map(tip => `<li>${tip}</li>`).join('')}
+                </ul>
+              </div>
+            ` : ''}
+
+            ${relatedToolsHTML}
+          </div>
+
+          <div id="tool-faq-container"></div>
+        </div>
       </div>
-
-      <!-- Interactive Tool Widget -->
-      <div id="tool-render-box"></div>
-      
-      ${renderAdSpace('banner')}
-
-      <!-- Tool Informational Content -->
-      <div class="tool-content-section">
-        ${content.howTo ? `
-          <div class="info-section">
-            <h2>How to Use ${toolTitle}</h2>
-            <ol class="info-steps">
-              ${content.howTo.map(step => `<li>${step}</li>`).join('')}
-            </ol>
-          </div>
-        ` : ''}
-
-        ${content.whatItMeasures ? `
-          <div class="info-section">
-            <h2>What This Test Measures</h2>
-            <p>${content.whatItMeasures}</p>
-          </div>
-        ` : ''}
-
-        ${content.whyUseIt ? `
-          <div class="info-section">
-            <h2>Why Use This Test</h2>
-            <p>${content.whyUseIt}</p>
-          </div>
-        ` : ''}
-
-        ${content.interpretResults ? `
-          <div class="info-section">
-            <h2>How to Interpret Your Results</h2>
-            <p>${content.interpretResults}</p>
-          </div>
-        ` : ''}
-
-        ${content.tips ? `
-          <div class="info-section">
-            <h2>Tips for Accurate Results</h2>
-            <ul>
-              ${content.tips.map(tip => `<li>${tip}</li>`).join('')}
-            </ul>
-          </div>
-        ` : ''}
-
-        ${relatedToolsHTML}
-      </div>
-
-      <div id="tool-faq-container"></div>
     </div>
   `;
 
