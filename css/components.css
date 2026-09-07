@@ -1321,4 +1321,152 @@
   100% { transform: translate(0, 0); }
 }
 
+/* ==========================================================================
+   Informational Content Sections (Homepage & Tool Pages)
+   ========================================================================== */
+
+.info-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.75;
+}
+
+.info-section h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.info-section h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.info-section h3:first-child {
+  margin-top: 0;
+}
+
+.info-section p {
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.info-section p:last-child {
+  margin-bottom: 0;
+}
+
+.info-section ul,
+.info-section ol {
+  color: var(--text-secondary);
+  margin-left: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.info-section li {
+  margin-bottom: 0.35rem;
+}
+
+.info-section a {
+  color: var(--accent-cyan);
+  font-weight: 600;
+}
+
+.info-section a:hover {
+  color: var(--accent-emerald);
+}
+
+/* Numbered step lists for how-to sections */
+.info-steps {
+  counter-reset: step-counter;
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.info-steps li {
+  counter-increment: step-counter;
+  padding-left: 2.25rem;
+  position: relative;
+  margin-bottom: 0.6rem;
+}
+
+.info-steps li::before {
+  content: counter(step-counter);
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--accent-emerald);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Info section grid for side-by-side cards */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+  .info-section {
+    padding: 1.25rem;
+  }
+}
+
+/* Tool page content wrapper */
+.tool-content-section {
+  max-width: 800px;
+  margin: 2rem auto 0;
+}
+
+.tool-content-section .info-section {
+  margin-bottom: 1.25rem;
+}
+
+/* Related tools links at bottom of tool pages */
+.related-tools-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.related-tool-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.related-tool-link:hover {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  background: rgba(6, 182, 212, 0.08);
+  transform: translateY(-1px);
+}
 
