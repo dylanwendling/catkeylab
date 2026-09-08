@@ -79,7 +79,7 @@ export const TOOL_METADATA = {
         'Repeat for multiple attempts to get a consistent average.'
       ],
       whatItMeasures: 'This test tracks your visual reaction latency: the time between seeing a stimulus and physically responding with a mouse click. It shows how fast your brain and hand can react together.',
-      whyUseIt: 'Gamers love checking their reflexes with this, but it's also just a fun way to see how quick you are.',
+      whyUseIt: 'Gamers love checking their reflexes with this, but it\'s also just a fun way to see how quick you are.',
       interpretResults: 'Under 200ms is considered fast. 200–250ms is average for most people. 250–350ms is below average. Reaction time naturally varies between attempts, so take several tries and consider your average rather than a single result.',
       tips: [
         'Use a mouse rather than a trackpad for more consistent results.',
@@ -113,7 +113,7 @@ export const TOOL_METADATA = {
         'The test ends when you click the wrong pad in the sequence.'
       ],
       whatItMeasures: 'This test tracks your sequential short-term memory capacity: your ability to observe, store, and accurately reproduce an ordered pattern. Each additional step in the sequence increases the cognitive load on your working memory.',
-      whyUseIt: 'It's a great way to train your brain to remember patterns. It is also a well-known cognitive benchmark used in psychology.',
+      whyUseIt: 'It\'s a great way to train your brain to remember patterns. It is also a well-known cognitive benchmark used in psychology.',
       interpretResults: 'Reaching level 7–8 is average for most adults. Levels 10+ demonstrate strong sequential memory. The audio tones provide an additional memory cue: some people remember sequences better through sound than visual patterns alone.',
       tips: [
         'Pay attention to both the visual pattern and the audio tones: dual encoding helps memory.',
@@ -146,7 +146,7 @@ export const TOOL_METADATA = {
         'After hitting all 30 targets, your average time per target is displayed.'
       ],
       whatItMeasures: 'The Aim Trainer measures your target acquisition speed: how fast you can identify a target location, move your cursor to it, and click accurately. It tests your hand-eye coordination and mouse control.',
-      whyUseIt: 'A lot of FPS gamers use aim trainers to warm up and improve their tracking. But it's also helpful if you just want to get better at using your mouse.',
+      whyUseIt: 'A lot of FPS gamers use aim trainers to warm up and improve their tracking. But it\'s also helpful if you just want to get better at using your mouse.',
       interpretResults: 'Under 300ms per target is considered fast. 300–500ms is average. Over 600ms suggests room for improvement. Your score depends on mouse sensitivity, screen size, and familiarity with the exercise.',
       tips: [
         'Adjust your mouse sensitivity (DPI) to a level that feels comfortable and controlled.',
@@ -211,7 +211,7 @@ export const TOOL_METADATA = {
         'If this is the first time the word has appeared, click "NEW."',
         'Continue identifying words correctly. Three wrong answers end the test.'
       ],
-      whatItMeasures: 'This checks how well you remember words you've just seen: your ability to remember and distinguish previously encountered words from new ones. It challenges you to maintain an expanding mental list of seen words as the test progresses.',
+      whatItMeasures: 'This checks how well you remember words you\'ve just seen: your ability to remember and distinguish previously encountered words from new ones. It challenges you to maintain an expanding mental list of seen words as the test progresses.',
       whyUseIt: 'Verbal memory is fundamental to reading comprehension, language learning, and academic performance. This test provides a quick benchmark of how well you can track and recognize previously encountered verbal information.',
       interpretResults: 'Scores above 70 indicate strong verbal recall. Scores between 40–70 are average. The test becomes increasingly difficult as the pool of seen words grows, making it harder to distinguish old words from new ones.',
       tips: [
@@ -944,7 +944,7 @@ function renderHomePage(container) {
               <li>Move the mouse to verify smooth cursor tracking.</li>
               <li>Use the <a href="#double-click-test">Double Click Tester</a> to check for unintended double-click chatter.</li>
             </ol>
-            <p>If your mouse is acting up, check for buttons that don't work, buttons that trigger without being pressed (indicating switch chatter), scroll wheel directions that do not detect, or jerky cursor movement. If a single click is registering as a double-click, your mouse switch may be worn and should be tested with the <a href="#double-click-test">Double Click Tester</a>.</p>
+            <p>If your mouse is acting up, check for buttons that don\'t work, buttons that trigger without being pressed (indicating switch chatter), scroll wheel directions that do not detect, or jerky cursor movement. If a single click is registering as a double-click, your mouse switch may be worn and should be tested with the <a href="#double-click-test">Double Click Tester</a>.</p>
           </div>
         </div>
 
@@ -983,10 +983,10 @@ function renderHomePage(container) {
             Everything runs right in your browser, so it works perfectly on Windows, macOS, Linux, ChromeOS, iOS, and Android with no installation or administrator permissions. All tests happen on your own device: we never record or send your keystrokes or clicks anywhere.
           </p>
           <p style="margin-bottom:1rem; color:var(--text-secondary);">
-            <strong>What you can find out:</strong> Whether keys and buttons register correctly, which key codes your keyboard sends, whether your mouse has double-click chatter, your typing speed and accuracy, your clicking rate, and your visual reaction time. <strong>What these tests can't fix:</strong> CatKeyLab cannot access hardware internals, diagnose electrical faults, or detect issues that do not produce observable browser-level events. If a key or button does not register in the tester, the problem could be the switch, wiring, driver, or OS-level configuration.
+            <strong>What you can find out:</strong> Whether keys and buttons register correctly, which key codes your keyboard sends, whether your mouse has double-click chatter, your typing speed and accuracy, your clicking rate, and your visual reaction time. <strong>What these tests can\'t fix:</strong> CatKeyLab cannot access hardware internals, diagnose electrical faults, or detect issues that do not produce observable browser-level events. If a key or button does not register in the tester, the problem could be the switch, wiring, driver, or OS-level configuration.
           </p>
           <p style="color:var(--text-secondary);">
-            If you're having issues, try the <a href="#keyboard-test" style="color:var(--accent-cyan);">Keyboard Tester</a> or <a href="#mouse-test" style="color:var(--accent-cyan);">Mouse Tester</a> to check whether your device is sending events to the browser. If a key or button is not detected, try a different USB port, check your device drivers, or test in another browser to determine whether the issue is hardware or software.
+            If you\'re having issues, try the <a href="#keyboard-test" style="color:var(--accent-cyan);">Keyboard Tester</a> or <a href="#mouse-test" style="color:var(--accent-cyan);">Mouse Tester</a> to check whether your device is sending events to the browser. If a key or button is not detected, try a different USB port, check your device drivers, or test in another browser to determine whether the issue is hardware or software.
           </p>
         </div>
       </div>
