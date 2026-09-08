@@ -1432,9 +1432,11 @@
 
 /* Tool Page Layout (Responsive Two-Column) */
 .tool-page-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  display: block;
+}
+
+.tool-page-main {
+  margin-bottom: 2.5rem;
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -1445,6 +1447,9 @@
     gap: 1.5rem;
     align-items: start;
   }
+  .tool-page-main {
+    margin-bottom: 0;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1454,6 +1459,9 @@
     grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
     gap: 2.5rem;
     align-items: start;
+  }
+  .tool-page-main {
+    margin-bottom: 0;
   }
 }
 
