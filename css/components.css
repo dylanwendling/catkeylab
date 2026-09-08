@@ -1437,12 +1437,22 @@
   gap: 2rem;
 }
 
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tool-page-layout {
+    display: grid;
+    /* Tablet layout: reduce gap, slightly more equal columns */
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: start;
+  }
+}
+
 @media (min-width: 1024px) {
   .tool-page-layout {
     display: grid;
-    /* Main column gets ~65%, sidebar gets ~35% */
-    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
-    gap: 3rem;
+    /* Desktop layout: main column gets ~61%, sidebar gets ~39% */
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+    gap: 2.5rem;
     align-items: start;
   }
 }

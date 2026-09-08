@@ -1233,10 +1233,11 @@ function renderToolPage(container, toolKey, toolMeta) {
 
             ${relatedToolsHTML}
           </div>
-
-          <div id="tool-faq-container"></div>
         </div>
       </div>
+      
+      <!-- Full Width FAQ Section -->
+      <div id="tool-faq-container" style="margin-top: 3.5rem;"></div>
     </div>
   `;
 
