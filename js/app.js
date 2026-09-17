@@ -12,6 +12,7 @@ import { initYarnBall } from './components/yarnBall.js';
 import { initFoodBowl } from './components/foodBowl.js';
 import { handleRoute } from './router.js';
 import { fetchGlobalLeaderboards } from './leaderboard.js';
+import { initSylvaHero } from './components/sylvaHero.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Initialize Core Subsystems & Cloud Leaderboards
@@ -24,6 +25,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initCatMascot();
   initYarnBall();
   initFoodBowl();
+
+  // 3. Initialize Sylva 3D Hero Background
+  initSylvaHero();
 
   // 3. Setup Global Mouse Tracking Spotlight Aura & Card Parallax
   initMouseSpotlight();
