@@ -5,14 +5,8 @@
 const THEME_STORAGE_KEY = 'catkeylab_theme';
 
 export function initTheme() {
-  const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-  if (savedTheme) {
-    setTheme(savedTheme);
-  } else {
-    // Check OS preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(prefersDark ? 'dark' : 'light');
-  }
+  setTheme('dark');
+  // Always use dark theme with the new 3D background
 
   // Listen for OS theme changes
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {

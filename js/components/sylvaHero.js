@@ -12,10 +12,11 @@ export function initSylvaHero() {
 
   // Scene setup
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#0a1913'); // Deep forest green
+  // Calming twilight/sakura gradient background
+  scene.background = new THREE.Color('#1a1025'); 
   
-  // Fog for depth
-  scene.fog = new THREE.FogExp2('#0a1913', 0.0015);
+  // Fog for depth and color blending
+  scene.fog = new THREE.FogExp2('#2d1b36', 0.002);
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 100;
@@ -28,40 +29,54 @@ export function initSylvaHero() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-  // Particle System (Fireflies / Spores)
+  // Cherry Blossom Particle System
   const particlesGeometry = new THREE.BufferGeometry();
-  const particlesCount = 800;
+  const particlesCount = 1200; // More particles for a dense, calm falling effect
   
   const posArray = new Float32Array(particlesCount * 3);
   const scaleArray = new Float32Array(particlesCount);
+  const randomDriftArray = new Float32Array(particlesCount);
   
-  for(let i = 0; i < particlesCount * 3; i++) {
+  for(let i = 0; i < particlesCount * 3; i+=3) {
     // Spread particles over a large area
-    posArray[i] = (Math.random() - 0.5) * 400;
+    posArray[i] = (Math.random() - 0.5) * 500;   // x
+    posArray[i+1] = (Math.random() - 0.5) * 500; // y
+    posArray[i+2] = (Math.random() - 0.5) * 400; // z
   }
   for(let i = 0; i < particlesCount; i++) {
-    scaleArray[i] = Math.random();
+    scaleArray[i] = Math.random() * 0.5 + 0.5; // Random size variation
+    randomDriftArray[i] = Math.random() * Math.PI * 2; // Random phase for drifting
   }
   
   particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
   particlesGeometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1));
+  particlesGeometry.setAttribute('aDrift', new THREE.BufferAttribute(randomDriftArray, 1));
 
-  // Custom shader material for softer particles
+  // Custom shader material for soft cherry blossom petals
   const particleMaterial = new THREE.ShaderMaterial({
     uniforms: {
       time: { value: 0 },
-      color: { value: new THREE.Color('#6ee7b7') } // Emerald green
+      color1: { value: new THREE.Color('#ffb7c5') }, // Light sakura pink
+      color2: { value: new THREE.Color('#ffffff') }  // White edge
     },
     vertexShader: `
       attribute float aScale;
+      attribute float aDrift;
       uniform float time;
       varying vec2 vUv;
+      varying float vDrift;
       void main() {
+        vDrift = aDrift;
         vec4 modelPosition = modelMatrix * vec4(position, 1.0);
         
-        // Add subtle floating animation
-        modelPosition.y += sin(time * 0.5 + modelPosition.x * 0.05) * 2.0;
-        modelPosition.x += cos(time * 0.3 + modelPosition.y * 0.05) * 1.0;
+        // Gentle falling animation
+        float fallSpeed = 15.0;
+        // Wrap Y position so they loop endlessly
+        modelPosition.y = mod(modelPosition.y - (time * fallSpeed * aScale) + 250.0, 500.0) - 250.0;
+        
+        // Horizontal drift like wind
+        modelPosition.x += sin(time * 0.5 + aDrift) * 10.0 * aScale;
+        modelPosition.z += cos(time * 0.3 + aDrift) * 5.0;
         
         vec4 viewPosition = viewMatrix * modelPosition;
         vec4 projectedPosition = projectionMatrix * viewPosition;
@@ -69,73 +84,44 @@ export function initSylvaHero() {
         gl_Position = projectedPosition;
         
         // Size attenuation based on depth and scale
-        gl_PointSize = (40.0 * aScale) * (1.0 / -viewPosition.z);
+        gl_PointSize = (45.0 * aScale) * (1.0 / -viewPosition.z);
       }
     `,
     fragmentShader: `
-      uniform vec3 color;
+      uniform vec3 color1;
+      uniform vec3 color2;
+      varying float vDrift;
       void main() {
-        // Create a soft circle
-        float distanceToCenter = distance(gl_PointCoord, vec2(0.5));
-        float strength = 0.05 / distanceToCenter - 0.1;
+        // Create a soft petal-like circle
+        vec2 center = gl_PointCoord - 0.5;
+        float distanceToCenter = length(center);
         
-        gl_FragColor = vec4(color, strength);
+        if (distanceToCenter > 0.5) {
+            discard; // Make it a circle
+        }
+        
+        // Mix pink and white for a soft petal look
+        vec3 finalColor = mix(color1, color2, distanceToCenter * 2.0);
+        
+        // Soft edges
+        float alpha = (0.5 - distanceToCenter) * 2.0;
+        
+        gl_FragColor = vec4(finalColor, alpha * 0.8);
       }
     `,
     transparent: true,
-    blending: THREE.AdditiveBlending,
+    blending: THREE.NormalBlending, // Normal blending looks softer than additive for petals
     depthWrite: false
   });
 
   const particleMesh = new THREE.Points(particlesGeometry, particleMaterial);
   scene.add(particleMesh);
 
-  // Add Abstract Floating Geometric Shapes (Glassmorphism look)
-  const shapes = [];
-  const shapeGeometry = new THREE.IcosahedronGeometry(8, 0);
-  const shapeMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x10b981,
-    metalness: 0.1,
-    roughness: 0.2,
-    transmission: 0.9, // glass-like
-    thickness: 1.5,
-    ior: 1.5
-  });
-
-  for(let i = 0; i < 5; i++) {
-    const mesh = new THREE.Mesh(shapeGeometry, shapeMaterial);
-    mesh.position.set(
-      (Math.random() - 0.5) * 150,
-      (Math.random() - 0.5) * 100,
-      (Math.random() - 0.5) * 50 - 20
-    );
-    mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-    
-    // Custom properties for animation
-    mesh.userData = {
-      rotSpeedX: (Math.random() - 0.5) * 0.01,
-      rotSpeedY: (Math.random() - 0.5) * 0.01,
-      floatSpeed: Math.random() * 0.02 + 0.01,
-      floatOffset: Math.random() * Math.PI * 2
-    };
-    
-    scene.add(mesh);
-    shapes.push(mesh);
-  }
-
-  // Lighting for the shapes
+  // Soft ambient lighting (even though shader doesn't strictly use it, good for future meshes)
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
   scene.add(ambientLight);
 
-  const pointLight1 = new THREE.PointLight(0x10b981, 2, 200); // Emerald
-  pointLight1.position.set(50, 50, 50);
-  scene.add(pointLight1);
-
-  const pointLight2 = new THREE.PointLight(0x3b82f6, 2, 200); // Blueish tint
-  pointLight2.position.set(-50, -50, 20);
-  scene.add(pointLight2);
-
-  // Interaction: Mouse movement
+  // Interaction: Mouse movement for subtle parallax
   let mouseX = 0;
   let mouseY = 0;
   let targetX = 0;
@@ -165,25 +151,18 @@ export function initSylvaHero() {
 
     const elapsedTime = clock.getElapsedTime();
     
-    // Update particles
+    // Update shader time for falling logic
     particleMaterial.uniforms.time.value = elapsedTime;
     
-    // Slow scene rotation
-    particleMesh.rotation.y = elapsedTime * 0.05;
+    // Very slow scene rotation for dynamic wind effect
+    particleMesh.rotation.y = Math.sin(elapsedTime * 0.1) * 0.1;
 
-    // Update shapes
-    shapes.forEach(shape => {
-      shape.rotation.x += shape.userData.rotSpeedX;
-      shape.rotation.y += shape.userData.rotSpeedY;
-      shape.position.y += Math.sin(elapsedTime * shape.userData.floatSpeed + shape.userData.floatOffset) * 0.1;
-    });
-
-    // Smooth camera mouse follow
-    targetX = mouseX * 0.05;
-    targetY = mouseY * 0.05;
+    // Smooth camera mouse follow (very subtle and calming)
+    targetX = mouseX * 0.02;
+    targetY = mouseY * 0.02;
     
-    camera.position.x += (targetX - camera.position.x) * 0.02;
-    camera.position.y += (-targetY - camera.position.y) * 0.02;
+    camera.position.x += (targetX - camera.position.x) * 0.01;
+    camera.position.y += (-targetY - camera.position.y) * 0.01;
     camera.lookAt(scene.position);
 
     renderer.render(scene, camera);

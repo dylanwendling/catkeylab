@@ -95,12 +95,6 @@ export function renderHeader(container) {
             </div>
           </div>
 
-          <!-- Dark/Light Theme Toggle -->
-          <button id="theme-toggle-btn" class="btn btn-sm btn-secondary" aria-label="Toggle theme" style="padding:0.6rem;">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-            </svg>
-          </button>
 
           <!-- Mobile Hamburger Toggle -->
           <button id="hamburger-btn" class="hamburger-btn" aria-label="Open menu">
@@ -206,11 +200,7 @@ function bindHeaderEvents() {
     });
   });
 
-  // Theme Toggle Button
-  const themeBtn = document.getElementById('theme-toggle-btn');
-  if (themeBtn) {
-    themeBtn.addEventListener('click', toggleTheme);
-  }
+
 
   // Surprise Me Discovery Button
   const navSurpriseBtn = document.getElementById('nav-surprise-btn');
