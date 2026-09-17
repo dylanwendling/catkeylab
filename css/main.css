@@ -547,6 +547,7 @@ main {
 }
 
 .btn-primary:hover {
+  color: #ffffff;
   background: var(--accent-primary-hover);
   box-shadow: 0 4px 16px rgba(56, 139, 253, 0.45);
 }
@@ -581,6 +582,7 @@ main {
 }
 
 .btn-surprise:hover {
+  color: #ffffff;
   background: linear-gradient(135deg, #e3a830, #c48c17);
   transform: translateY(-2px);
   box-shadow: 0 5px 0 #855b08;
