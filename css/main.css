@@ -14,7 +14,8 @@
   --bg-card: #161b22;
   --bg-card-hover: #1c2128;
   --glass-border: rgba(240, 246, 252, 0.1);
-  --glass-bg: #161b22;
+  --glass-bg: rgba(22, 27, 34, 0.6);
+  --glass-bg-hover: rgba(28, 33, 40, 0.75);
 
   --text-primary: #f0f6fc;
   --text-secondary: #8b949e;
@@ -62,7 +63,8 @@
   --bg-card: #ffffff;
   --bg-card-hover: #f6f8fa;
   --glass-border: rgba(0, 0, 0, 0.08);
-  --glass-bg: #ffffff;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-bg-hover: rgba(246, 248, 250, 0.85);
 
   --text-primary: #1f2328;
   --text-secondary: #57606a;
@@ -99,7 +101,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
-  background-color: var(--bg-primary);
+  background-color: transparent;
 }
 
 /* Sylva 3D Hero Background */
@@ -178,7 +180,7 @@ img, svg {
   position: sticky;
   top: 0;
   z-index: 9990;
-  background: rgba(22, 27, 34, 0.4); /* Glassmorphism header */
+  background: var(--glass-bg); /* Use variable for light/dark mode */
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--glass-border);
@@ -639,7 +641,7 @@ main {
 
 /* Tool Cards Grid */
 .tool-card {
-  background: rgba(22, 27, 34, 0.6); /* Glassmorphism background */
+  background: var(--glass-bg); /* Use theme variable for glassmorphism */
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-lg);
   padding: 1.75rem;
@@ -669,7 +671,7 @@ main {
   transform: translateY(-4px);
   border-color: rgba(99, 102, 241, 0.4);
   box-shadow: var(--shadow-lg);
-  background: rgba(28, 33, 40, 0.75); /* Glassmorphism hover */
+  background: var(--glass-bg-hover); /* Use theme variable for glassmorphism hover */
 }
 
 .tool-card:hover::before {
