@@ -99,7 +99,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
-  background-color: transparent; /* Changed for 3D canvas */
+  background-color: var(--bg-primary);
 }
 
 /* Sylva 3D Hero Background */

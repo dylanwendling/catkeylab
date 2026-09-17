@@ -12,11 +12,11 @@ export function initSylvaHero() {
 
   // Scene setup
   const scene = new THREE.Scene();
-  // Calming twilight/sakura gradient background
-  scene.background = new THREE.Color('#1a1025'); 
-  
-  // Fog for depth and color blending
-  scene.fog = new THREE.FogExp2('#2d1b36', 0.002);
+  // Transparent background so the Light/Dark mode CSS shows underneath!
+  scene.background = null; 
+
+  // Subtle fog to fade out rain in the distance
+  scene.fog = new THREE.FogExp2('#111827', 0.0015);
 
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.z = 100;
@@ -24,102 +24,72 @@ export function initSylvaHero() {
   const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
     antialias: true,
-    alpha: true
+    alpha: true // Enable transparent background
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  // Clear color is transparent
+  renderer.setClearColor(0x000000, 0);
 
-  // Cherry Blossom Particle System
-  const particlesGeometry = new THREE.BufferGeometry();
-  const particlesCount = 1200; // More particles for a dense, calm falling effect
-  
-  const posArray = new Float32Array(particlesCount * 3);
-  const scaleArray = new Float32Array(particlesCount);
-  const randomDriftArray = new Float32Array(particlesCount);
-  
-  for(let i = 0; i < particlesCount * 3; i+=3) {
-    // Spread particles over a large area
-    posArray[i] = (Math.random() - 0.5) * 500;   // x
-    posArray[i+1] = (Math.random() - 0.5) * 500; // y
-    posArray[i+2] = (Math.random() - 0.5) * 400; // z
-  }
-  for(let i = 0; i < particlesCount; i++) {
-    scaleArray[i] = Math.random() * 0.5 + 0.5; // Random size variation
-    randomDriftArray[i] = Math.random() * Math.PI * 2; // Random phase for drifting
-  }
-  
-  particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-  particlesGeometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1));
-  particlesGeometry.setAttribute('aDrift', new THREE.BufferAttribute(randomDriftArray, 1));
+  // Calming Rain Particle System
+  const rainCount = 1500;
+  const rainGeometry = new THREE.BufferGeometry();
+  const rainPositions = new Float32Array(rainCount * 3);
+  const rainSpeeds = new Float32Array(rainCount);
 
-  // Custom shader material for soft cherry blossom petals
-  const particleMaterial = new THREE.ShaderMaterial({
-    uniforms: {
-      time: { value: 0 },
-      color1: { value: new THREE.Color('#ffb7c5') }, // Light sakura pink
-      color2: { value: new THREE.Color('#ffffff') }  // White edge
-    },
-    vertexShader: `
-      attribute float aScale;
-      attribute float aDrift;
-      uniform float time;
-      varying vec2 vUv;
-      varying float vDrift;
-      void main() {
-        vDrift = aDrift;
-        vec4 modelPosition = modelMatrix * vec4(position, 1.0);
-        
-        // Gentle falling animation
-        float fallSpeed = 15.0;
-        // Wrap Y position so they loop endlessly
-        modelPosition.y = mod(modelPosition.y - (time * fallSpeed * aScale) + 250.0, 500.0) - 250.0;
-        
-        // Horizontal drift like wind
-        modelPosition.x += sin(time * 0.5 + aDrift) * 10.0 * aScale;
-        modelPosition.z += cos(time * 0.3 + aDrift) * 5.0;
-        
-        vec4 viewPosition = viewMatrix * modelPosition;
-        vec4 projectedPosition = projectionMatrix * viewPosition;
-        
-        gl_Position = projectedPosition;
-        
-        // Size attenuation based on depth and scale
-        gl_PointSize = (45.0 * aScale) * (1.0 / -viewPosition.z);
-      }
-    `,
-    fragmentShader: `
-      uniform vec3 color1;
-      uniform vec3 color2;
-      varying float vDrift;
-      void main() {
-        // Create a soft petal-like circle
-        vec2 center = gl_PointCoord - 0.5;
-        float distanceToCenter = length(center);
-        
-        if (distanceToCenter > 0.5) {
-            discard; // Make it a circle
-        }
-        
-        // Mix pink and white for a soft petal look
-        vec3 finalColor = mix(color1, color2, distanceToCenter * 2.0);
-        
-        // Soft edges
-        float alpha = (0.5 - distanceToCenter) * 2.0;
-        
-        gl_FragColor = vec4(finalColor, alpha * 0.8);
-      }
-    `,
+  for (let i = 0; i < rainCount; i++) {
+    // Spread rain drops
+    rainPositions[i * 3] = (Math.random() - 0.5) * 400; // x
+    rainPositions[i * 3 + 1] = Math.random() * 400 - 200; // y
+    rainPositions[i * 3 + 2] = (Math.random() - 0.5) * 300; // z
+    
+    // Varying drop speeds
+    rainSpeeds[i] = Math.random() * 2 + 1.5;
+  }
+
+  rainGeometry.setAttribute('position', new THREE.BufferAttribute(rainPositions, 3));
+
+  const rainMaterial = new THREE.PointsMaterial({
+    color: 0x94a3b8, // Soft slate blue/grey for rain
+    size: 0.8,
     transparent: true,
-    blending: THREE.NormalBlending, // Normal blending looks softer than additive for petals
+    opacity: 0.6,
+    blending: THREE.NormalBlending,
     depthWrite: false
   });
 
-  const particleMesh = new THREE.Points(particlesGeometry, particleMaterial);
-  scene.add(particleMesh);
+  const rainSystem = new THREE.Points(rainGeometry, rainMaterial);
+  scene.add(rainSystem);
 
-  // Soft ambient lighting (even though shader doesn't strictly use it, good for future meshes)
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-  scene.add(ambientLight);
+  // Add a few subtle low-poly "Greenery" leaves floating around for the "Sylva" touch
+  const leaves = [];
+  const leafGeometry = new THREE.PlaneGeometry(3, 3);
+  const leafMaterial = new THREE.MeshBasicMaterial({
+    color: 0x10b981, // Emerald green
+    transparent: true,
+    opacity: 0.4,
+    side: THREE.DoubleSide,
+    depthWrite: false
+  });
+
+  for(let i = 0; i < 20; i++) {
+    const leaf = new THREE.Mesh(leafGeometry, leafMaterial);
+    leaf.position.set(
+      (Math.random() - 0.5) * 300,
+      Math.random() * 400 - 200,
+      (Math.random() - 0.5) * 200
+    );
+    leaf.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
+    
+    leaf.userData = {
+      speedY: Math.random() * 0.5 + 0.2,
+      speedX: Math.random() * 0.2 - 0.1,
+      rotSpeed: Math.random() * 0.05 + 0.01
+    };
+    
+    scene.add(leaf);
+    leaves.push(leaf);
+  }
 
   // Interaction: Mouse movement for subtle parallax
   let mouseX = 0;
@@ -143,26 +113,41 @@ export function initSylvaHero() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   });
 
-  // Animation Loop
-  const clock = new THREE.Clock();
-
   function animate() {
     requestAnimationFrame(animate);
 
-    const elapsedTime = clock.getElapsedTime();
-    
-    // Update shader time for falling logic
-    particleMaterial.uniforms.time.value = elapsedTime;
-    
-    // Very slow scene rotation for dynamic wind effect
-    particleMesh.rotation.y = Math.sin(elapsedTime * 0.1) * 0.1;
+    // Update Rain
+    const positions = rainSystem.geometry.attributes.position.array;
+    for(let i = 0; i < rainCount; i++) {
+      // Move rain down
+      positions[i * 3 + 1] -= rainSpeeds[i];
+      
+      // Reset rain when it hits the bottom
+      if (positions[i * 3 + 1] < -200) {
+        positions[i * 3 + 1] = 200;
+      }
+    }
+    rainSystem.geometry.attributes.position.needsUpdate = true;
 
-    // Smooth camera mouse follow (very subtle and calming)
-    targetX = mouseX * 0.02;
-    targetY = mouseY * 0.02;
+    // Update Leaves
+    leaves.forEach(leaf => {
+      leaf.position.y -= leaf.userData.speedY;
+      leaf.position.x += leaf.userData.speedX;
+      leaf.rotation.x += leaf.userData.rotSpeed;
+      leaf.rotation.y += leaf.userData.rotSpeed;
+
+      if (leaf.position.y < -200) {
+        leaf.position.y = 200;
+        leaf.position.x = (Math.random() - 0.5) * 300;
+      }
+    });
+
+    // Smooth camera mouse follow (very subtle parallax)
+    targetX = mouseX * 0.05;
+    targetY = mouseY * 0.05;
     
-    camera.position.x += (targetX - camera.position.x) * 0.01;
-    camera.position.y += (-targetY - camera.position.y) * 0.01;
+    camera.position.x += (targetX - camera.position.x) * 0.05;
+    camera.position.y += (-targetY - camera.position.y) * 0.05;
     camera.lookAt(scene.position);
 
     renderer.render(scene, camera);
