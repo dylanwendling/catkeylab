@@ -6,6 +6,10 @@ import { t, getCurrentLang } from './i18n.js';
 import { renderBreadcrumbs } from './components/breadcrumbs.js';
 import { renderFAQ } from './components/faq.js';
 import { renderAdSpace } from './components/adSpaces.js';
+import { renderLeaderboardView, trackToolUsage } from './components/leaderboardView.js';
+import { initYarnBall } from './components/yarnBall.js';
+import { renderDiagnosticWizard } from './components/diagnosticWizard.js';
+import { renderDailyChallengeTeaser, renderDailyChallengePage } from './components/dailyChallenge.js';
 
 import { renderAutoClicker, cleanupAutoClicker } from './tools/autoClicker.js';
 import { renderCPSTest, cleanupCPSTest } from './tools/cpsTest.js';
@@ -28,17 +32,8 @@ import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryG
 import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGolfGame.js';
 import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingGame.js';
 import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlicerGame.js';
-import { renderLeaderboardView } from './components/leaderboardView.js';
 
 let currentCleanup = null;
-
-function trackToolUsage(toolId) {
-  try {
-    let usage = JSON.parse(localStorage.getItem('catkeylab_tool_play_counts')) || {};
-    usage[toolId] = (usage[toolId] || 0) + 1;
-    localStorage.setItem('catkeylab_tool_play_counts', JSON.stringify(usage));
-  } catch (e) {}
-}
 
 function getToolPlayCounts() {
   try {
@@ -761,6 +756,10 @@ export function handleRoute() {
     renderLeaderboardView(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, 'Anonymous Leaderboards 🏆');
     updateSEOMetadata('Anonymous Leaderboards & High Scores - CatKeyLab 🐾', '100% private, anonymous high scores and rank percentiles across all human benchmark tests.');
+  } else if (hash === 'daily-challenge') {
+    renderDailyChallengePage(mainContainer);
+    renderBreadcrumbs(breadcrumbsContainer, 'Daily Challenge 📅');
+    updateSEOMetadata('Daily Challenge - CatKeyLab 🐾', 'Complete today\'s 5 daily benchmark challenges.');
   } else if (TOOL_METADATA[hash]) {
     trackToolUsage(hash);
     const meta = TOOL_METADATA[hash];
@@ -1059,6 +1058,12 @@ function renderHomePage(container) {
             </table>
           </div>
         </div>
+
+        <!-- Diagnostic Wizard -->
+        <div id="diagnostic-wizard-container"></div>
+        
+        <!-- Daily Challenge -->
+        <div id="daily-challenge-container"></div>
       </div>
     </section>
 
@@ -1098,6 +1103,16 @@ function renderHomePage(container) {
   const lbContainer = document.getElementById('home-leaderboard-container');
   if (lbContainer) {
     renderLeaderboardView(lbContainer);
+  }
+
+  const wizContainer = document.getElementById('diagnostic-wizard-container');
+  if (wizContainer) {
+    renderDiagnosticWizard(wizContainer);
+  }
+
+  const dcContainer = document.getElementById('daily-challenge-container');
+  if (dcContainer) {
+    renderDailyChallengeTeaser(dcContainer);
   }
 
   renderFAQ(document.getElementById('home-faq-container'), [

@@ -272,6 +272,11 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
   // Calculate Percentile Rating
   const percentile = getPercentile(testId, scoreVal, userRank);
 
+  // Dispatch custom event for Daily Challenge or other listeners
+  window.dispatchEvent(new CustomEvent('catkeylab-test-completed', {
+    detail: { testId, scoreVal, scoreDisplay }
+  }));
+
   return {
     rank: userRank,
     percentile,
