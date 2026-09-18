@@ -13,12 +13,10 @@ const FIREBASE_USERS_URL = 'https://catkeylab-default-rtdb.firebaseio.com/users'
 
 function getTodayString() {
   const d = new Date();
-  return \`\${d.getFullYear()}-\${String(d.getMonth() + 1).padStart(2, '0')}-\${String(d.getDate()).padStart(2, '0')}\`;
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
 function getDailyTests() {
-  const d = new Date();
-  // Use a predictable day index based on the local date string to avoid timezone shifts during the day
   const dateString = getTodayString();
   let hash = 0;
   for (let i = 0; i < dateString.length; i++) {
@@ -32,10 +30,10 @@ function getDailyTests() {
 
 async function loadUserProgress() {
   const profile = getAnonProfile();
-  const safeHandle = profile.handle.replace(/[.#$/[\\]]/g, '_');
+  const safeHandle = profile.handle.replace(/[.#$/[\]]/g, '_');
   
   try {
-    const res = await fetch(\`\${FIREBASE_USERS_URL}/\${safeHandle}/dailyChallenge.json\`);
+    const res = await fetch(`${FIREBASE_USERS_URL}/${safeHandle}/dailyChallenge.json`);
     if (res.ok) {
       const data = await res.json();
       if (data) return data;
@@ -44,7 +42,6 @@ async function loadUserProgress() {
     console.warn("Failed to load daily challenge from Firebase, falling back to localStorage", e);
   }
 
-  // Fallback to local storage
   const local = localStorage.getItem('catkeylab_daily_challenge');
   if (local) {
     try { return JSON.parse(local); } catch(e) {}
@@ -55,12 +52,12 @@ async function loadUserProgress() {
 
 async function saveUserProgress(progress) {
   const profile = getAnonProfile();
-  const safeHandle = profile.handle.replace(/[.#$/[\\]]/g, '_');
+  const safeHandle = profile.handle.replace(/[.#$/[\]]/g, '_');
   
   localStorage.setItem('catkeylab_daily_challenge', JSON.stringify(progress));
 
   try {
-    await fetch(\`\${FIREBASE_USERS_URL}/\${safeHandle}/dailyChallenge.json\`, {
+    await fetch(`${FIREBASE_USERS_URL}/${safeHandle}/dailyChallenge.json`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(progress)
@@ -81,57 +78,57 @@ export async function renderDailyChallengeTeaser(container) {
   let isCompletedToday = (progress.date === today && progress.completedTests.length === 5);
   let testsCompleted = progress.date === today ? progress.completedTests.length : 0;
   
-  let html = \`
+  let html = `
     <div class="info-section" style="margin-top:2.5rem; text-align:left;">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
         <div>
           <h3>📅 Daily Challenge</h3>
           <p style="color:var(--text-secondary);">Complete today's five tests and see how you stack up.</p>
         </div>
-        \${progress.streak > 0 ? \`<div style="background:var(--bg-secondary); border:1px solid var(--accent-emerald); padding:0.5rem 1rem; border-radius:20px; font-weight:700; color:var(--accent-emerald);">🔥 \${progress.streak} Day Streak</div>\` : ''}
+        ${progress.streak > 0 ? `<div style="background:var(--bg-secondary); border:1px solid var(--accent-emerald); padding:0.5rem 1rem; border-radius:20px; font-weight:700; color:var(--accent-emerald);">🔥 ${progress.streak} Day Streak</div>` : ''}
       </div>
       
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.5rem; margin-top:1.5rem;">
-  \`;
+  `;
 
   if (isCompletedToday) {
-    html += \`
+    html += `
         <div style="text-align:center; padding:1rem 0;">
           <h4 style="color:var(--accent-emerald); font-size:1.5rem; margin-bottom:0.5rem;">🎉 Daily Challenge Complete!</h4>
           <p style="color:var(--text-secondary); margin-bottom:1.5rem;">You've completed all 5 tests for today. Check back tomorrow for a new challenge!</p>
           <a href="#daily-challenge" class="btn btn-primary">View Results</a>
         </div>
-    \`;
+    `;
   } else {
-    html += \`
+    html += `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:1rem;">
-          <h4 style="font-size:1.2rem; color:var(--text-primary);">Today's 5 Tests (\${testsCompleted}/5 Completed)</h4>
+          <h4 style="font-size:1.2rem; color:var(--text-primary);">Today's 5 Tests (${testsCompleted}/5 Completed)</h4>
           <div style="display:flex; gap:0.5rem;">
-            \${tests.map((_, i) => \`<div style="width:12px; height:12px; border-radius:50%; \${i < testsCompleted ? 'background:var(--accent-emerald);' : 'background:var(--bg-primary); border:1px solid var(--border-color);'}"></div>\`).join('')}
+            ${tests.map((_, i) => `<div style="width:12px; height:12px; border-radius:50%; ${i < testsCompleted ? 'background:var(--accent-emerald);' : 'background:var(--bg-primary); border:1px solid var(--border-color);'}"></div>`).join('')}
           </div>
         </div>
         <ul style="list-style:none; padding:0; margin:0 0 1.5rem 0; display:flex; flex-direction:column; gap:0.5rem;">
-          \${tests.map((testId, i) => {
+          ${tests.map((testId, i) => {
             const meta = TOOL_METADATA[testId];
             const isDone = i < testsCompleted;
-            return \`
-              <li style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); opacity:\${isDone ? '0.6' : '1'};">
-                <span style="font-size:1.2rem;">\${isDone ? '✅' : meta.icon}</span>
-                <span style="font-weight:600; color:var(--text-primary); \${isDone ? 'text-decoration:line-through;' : ''}">\${meta.titleKey}</span>
+            return `
+              <li style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); opacity:${isDone ? '0.6' : '1'};">
+                <span style="font-size:1.2rem;">${isDone ? '✅' : meta.icon}</span>
+                <span style="font-weight:600; color:var(--text-primary); ${isDone ? 'text-decoration:line-through;' : ''}">${meta.titleKey}</span>
               </li>
-            \`;
+            `;
           }).join('')}
         </ul>
         <a href="#daily-challenge" class="btn btn-primary" style="width:100%; justify-content:center; padding:1rem; font-size:1.1rem;">
-          \${testsCompleted > 0 ? 'Resume Challenge' : 'Start Challenge'}
+          ${testsCompleted > 0 ? 'Resume Challenge' : 'Start Challenge'}
         </a>
-    \`;
+    `;
   }
 
-  html += \`
+  html += `
       </div>
     </div>
-  \`;
+  `;
 
   container.innerHTML = html;
 }
@@ -141,12 +138,10 @@ export async function renderDailyChallengePage(container) {
   const tests = getDailyTests();
   let progress = await loadUserProgress();
   
-  // Reset if it's a new day
   if (progress.date !== today) {
-    // Check streak
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayString = \`\${yesterday.getFullYear()}-\${String(yesterday.getMonth() + 1).padStart(2, '0')}-\${String(yesterday.getDate()).padStart(2, '0')}\`;
+    const yesterdayString = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
     
     if (progress.lastStreakDate !== yesterdayString && progress.lastStreakDate !== today) {
       progress.streak = 0;
@@ -179,31 +174,25 @@ function renderChallengeStep() {
   const testId = tests[currentIdx];
   const meta = TOOL_METADATA[testId];
 
-  container.innerHTML = \`
+  container.innerHTML = `
     <div class="container" style="padding-top:1.5rem; max-width:800px;">
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1rem 1.5rem; border-radius:var(--radius-lg); margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center;">
         <div>
           <div style="font-size:0.8rem; color:var(--text-secondary); text-transform:uppercase; font-weight:700; letter-spacing:0.05em; margin-bottom:0.25rem;">Daily Challenge</div>
-          <div style="font-size:1.2rem; font-weight:800; color:var(--text-primary);">Test \${currentIdx + 1} of 5</div>
+          <div style="font-size:1.2rem; font-weight:800; color:var(--text-primary);">Test ${currentIdx + 1} of 5</div>
         </div>
         <div style="display:flex; gap:0.5rem;">
-          \${tests.map((_, i) => \`<div style="width:14px; height:14px; border-radius:50%; \${i < currentIdx ? 'background:var(--accent-emerald);' : (i === currentIdx ? 'background:var(--accent-primary); box-shadow:0 0 10px var(--accent-primary);' : 'background:var(--bg-primary); border:1px solid var(--border-color);')}"></div>\`).join('')}
+          ${tests.map((_, i) => `<div style="width:14px; height:14px; border-radius:50%; ${i < currentIdx ? 'background:var(--accent-emerald);' : (i === currentIdx ? 'background:var(--accent-primary); box-shadow:0 0 10px var(--accent-primary);' : 'background:var(--bg-primary); border:1px solid var(--border-color);')}"></div>`).join('')}
         </div>
       </div>
       
       <div id="daily-challenge-tool-container" style="border:1px solid var(--border-color); border-radius:var(--radius-lg); background:var(--bg-primary); overflow:hidden;"></div>
     </div>
-  \`;
+  `;
 
   const toolContainer = document.getElementById('daily-challenge-tool-container');
   
-  // Intercept completion
   const onTestCompleted = async (e) => {
-    // If the tool emits multiple scores, we only take the first one or we take the final one.
-    // The user should click "Next Test"
-    
-    // Ignore if not the current test we expect
-    // Wait, cat-mini-golf-game-3 has testId 'cat-mini-golf-game-3' but the route is 'cat-mini-golf-game'
     const emittedId = e.detail.testId;
     if (!emittedId.startsWith(testId)) return; 
     
@@ -223,16 +212,15 @@ function renderChallengeStep() {
     
     await saveUserProgress(progress);
     
-    // Show overlay to continue
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:10000; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px);';
-    overlay.innerHTML = \`
+    overlay.innerHTML = `
       <div style="background:var(--bg-secondary); padding:2rem; border-radius:var(--radius-lg); border:1px solid var(--border-color); text-align:center; max-width:400px; width:90%;">
         <h2 style="font-size:1.8rem; color:var(--text-primary); margin-bottom:0.5rem;">Test Complete!</h2>
-        <p style="font-size:1.2rem; color:var(--accent-emerald); margin-bottom:1.5rem; font-weight:700;">\${e.detail.scoreDisplay}</p>
-        <button id="dc-next-btn" class="btn btn-primary btn-lg" style="width:100%; justify-content:center;">\${progress.completedTests.length === 5 ? 'View Final Results' : 'Continue to Next Test →'}</button>
+        <p style="font-size:1.2rem; color:var(--accent-emerald); margin-bottom:1.5rem; font-weight:700;">${e.detail.scoreDisplay}</p>
+        <button id="dc-next-btn" class="btn btn-primary btn-lg" style="width:100%; justify-content:center;">${progress.completedTests.length === 5 ? 'View Final Results' : 'Continue to Next Test →'}</button>
       </div>
-    \`;
+    `;
     document.body.appendChild(overlay);
     
     document.getElementById('dc-next-btn').addEventListener('click', () => {
@@ -243,30 +231,29 @@ function renderChallengeStep() {
   
   window.addEventListener('catkeylab-test-completed', onTestCompleted);
   
-  // Render the tool
   meta.renderFn(toolContainer);
 }
 
 function renderFinalResults() {
   const { progress, container } = currentChallengeState;
   
-  container.innerHTML = \`
+  container.innerHTML = `
     <div class="container" style="padding-top:2.5rem; max-width:600px;">
       <div style="text-align:center; margin-bottom:2rem;">
         <h1 style="font-size:2.5rem; color:var(--accent-emerald); margin-bottom:0.5rem; font-weight:800;">🎉 Challenge Complete!</h1>
-        <p style="color:var(--text-secondary); font-size:1.1rem;">You've completed the Daily Challenge for \${progress.date}.</p>
-        \${progress.streak > 0 ? \`<div style="display:inline-block; margin-top:1rem; background:var(--bg-secondary); border:1px solid var(--accent-emerald); padding:0.5rem 1.5rem; border-radius:30px; font-weight:700; color:var(--accent-emerald); font-size:1.1rem;">🔥 \${progress.streak} Day Streak</div>\` : ''}
+        <p style="color:var(--text-secondary); font-size:1.1rem;">You've completed the Daily Challenge for ${progress.date}.</p>
+        ${progress.streak > 0 ? `<div style="display:inline-block; margin-top:1rem; background:var(--bg-secondary); border:1px solid var(--accent-emerald); padding:0.5rem 1.5rem; border-radius:30px; font-weight:700; color:var(--accent-emerald); font-size:1.1rem;">🔥 ${progress.streak} Day Streak</div>` : ''}
       </div>
       
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); margin-bottom:2rem;">
         <h3 style="font-size:1.2rem; margin-bottom:1.5rem; color:var(--text-primary); text-align:center;">Your Results</h3>
         <div style="display:flex; flex-direction:column; gap:0.75rem;">
-          \${progress.results.map((res, i) => \`
+          ${progress.results.map((res, i) => `
             <div style="display:flex; justify-content:space-between; align-items:center; padding:1rem; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md);">
-              <span style="color:var(--text-secondary); font-weight:500;">\${i+1}. \${res.title}</span>
-              <span style="color:var(--accent-cyan); font-weight:800; font-size:1.1rem;">\${res.scoreDisplay}</span>
+              <span style="color:var(--text-secondary); font-weight:500;">${i+1}. ${res.title}</span>
+              <span style="color:var(--accent-cyan); font-weight:800; font-size:1.1rem;">${res.scoreDisplay}</span>
             </div>
-          \`).join('')}
+          `).join('')}
         </div>
       </div>
       
@@ -275,5 +262,5 @@ function renderFinalResults() {
         <a href="#" class="btn btn-primary btn-lg">Back to Home</a>
       </div>
     </div>
-  \`;
+  `;
 }
