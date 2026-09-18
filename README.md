@@ -6,7 +6,7 @@
 <p align="center">
   <a href="https://catkeylab.com/"><img src="https://img.shields.io/badge/Website-catkeylab.com-orange.svg?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Website"></a>
   <a href="#-100-mobile--desktop-compatibility"><img src="https://img.shields.io/badge/Mobile-100%25_Compatible_📱-blue.svg?style=for-the-badge" alt="100% Mobile Compatible"></a>
-  <a href="#key-features--included-tools"><img src="https://img.shields.io/badge/Tools-15_Interactive_Modules-emerald.svg?style=for-the-badge" alt="15 Tools"></a>
+  <a href="#key-features--included-tools"><img src="https://img.shields.io/badge/Tools-20_Interactive_Modules-emerald.svg?style=for-the-badge" alt="20 Tools"></a>
   <a href="#nibbles-the-cat--interactive-toys"><img src="https://img.shields.io/badge/Companion-Nibbles_the_Cat_🐱-orange.svg?style=for-the-badge" alt="Nibbles the Cat"></a>
   <a href="#internationalization-i18n"><img src="https://img.shields.io/badge/Languages-13_Supported-purple.svg?style=for-the-badge" alt="13 Languages"></a>
   <a href="#license"><img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License"></a>
@@ -67,7 +67,7 @@ CatKeyLab features **Nibbles**, a playful Ginger Tabby Cat wearing a ruby red co
 
 ## ✨ Key Features & Included Tools
 
-CatKeyLab includes fifteen specialized interactive modules accessible via client-side hash routing:
+CatKeyLab includes 20 specialized interactive modules accessible via client-side hash routing:
 
 ### 🧠 Human Benchmark & Cognitive Suite
 1. **⏱️ Reaction Time Test (`#reaction-time-test`)**: Tests visual reaction latency in milliseconds.
@@ -81,17 +81,19 @@ CatKeyLab includes fifteen specialized interactive modules accessible via client
 
 ### 🎮 Nibbles Companion Arcade Games
 9. **⛳ Nibbles 2D Mini Golf (`#cat-mini-golf-game`)**: 18-hole HTML5 Canvas 2D physics mini golf game with 3/9/18 round options, dynamic weather, wind, sand traps, water hazards, portals, and dual windmills.
-10. **🐟 Help Nibbles Find the Fish Maze (`#fish-maze-game`)**: 10x10 procedural maze puzzle guide game with keyboard & touch controls.
-11. **🎴 Cat Card Memory Match (`#card-memory-game`)**: 3D card flipping memory game matching 8 cat pairs.
+10. **🎣 Cat Fishing Game (`#cat-fishing-game`)**: Interactive 2D cartoon fishing adventure with Nibbles.
+11. **🍉 Fruit Slicer Game (`#fruit-slicer-game`)**: Juicy 2D fruit slicer arcade game to test rapid mouse/touch swiping.
+12. **🐟 Help Nibbles Find the Fish Maze (`#fish-maze-game`)**: 10x10 procedural maze puzzle guide game with keyboard & touch controls.
+13. **🎴 Cat Card Memory Match (`#card-memory-game`)**: 3D card flipping memory game matching 8 cat pairs.
 
 ### 🖱️ Hardware & Speed Diagnostics
-12. **🖱️ Mouse Hardware Tester (`#mouse-test`)**: Tests Left, Right, Middle, Side (MB4/MB5), and scroll wheel direction.
-13. **🖥️ Visual Keyboard Tester (`#keyboard-test`)**: Visual keyboard layout, NKRO rollover test, and DOM KeyCode inspector.
-14. **🎯 Online Auto Clicker (`#auto-clicker`)**: In-browser automated clicking simulator with interval controls.
-15. **⚡ CPS Test (`#cps-test`)**: Timed clicks-per-second speed benchmarking.
-16. **🚀 Click Speed Test (`#click-speed-test`)**: Real-time velocity analytics and click consistency gauges.
-17. **🔢 Digital Click Counter (`#click-counter`)**: Tactile tally counter with spacebar triggers.
-18. **👆 Double Click Chatter Test (`#double-click-test`)**: Hardware chatter detector for faulty mouse micro-switches.
+14. **🖱️ Mouse Hardware Tester (`#mouse-test`)**: Tests Left, Right, Middle, Side (MB4/MB5), and scroll wheel direction.
+15. **🖥️ Visual Keyboard Tester (`#keyboard-test`)**: Visual keyboard layout, NKRO rollover test, and DOM KeyCode inspector.
+16. **🎯 Online Auto Clicker (`#auto-clicker`)**: In-browser automated clicking simulator with interval controls.
+17. **⚡ CPS Test (`#cps-test`)**: Timed clicks-per-second speed benchmarking.
+18. **🚀 Click Speed Test (`#click-speed-test`)**: Real-time velocity analytics and click consistency gauges.
+19. **🔢 Digital Click Counter (`#click-counter`)**: Tactile tally counter with spacebar triggers.
+20. **👆 Double Click Chatter Test (`#double-click-test`)**: Hardware chatter detector for faulty mouse micro-switches.
 
 ---
 

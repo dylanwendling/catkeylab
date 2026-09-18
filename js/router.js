@@ -1391,7 +1391,7 @@ function renderLegalPage(container, type) {
       </div>
 
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules (18 Suite Modules)</h3>
+        <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.75rem;">✨ Included Tools & Modules (20 Suite Modules)</h3>
         <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1rem; margin-top:0.75rem;">
           <div><strong>⏱️ Reaction Time Test</strong>: Visual reaction latency tester in milliseconds.</div>
           <div><strong>🧠 Sequence Memory Test</strong>: Simon-says 3x3 interactive pattern recall with tones.</div>
@@ -1402,6 +1402,8 @@ function renderLegalPage(container, type) {
           <div><strong>🔳 Visual Memory Test</strong>: Spatial matrix pattern recall expanding up to 7x7 grid.</div>
           <div><strong>⌨️ Typing Speed (WPM)</strong>: Distraction-free Monkeytype-inspired test with mechanical key sounds.</div>
           <div><strong>⛳ Nibbles 2D Mini Golf</strong>: 18-hole 2D physics golf game with 3/9/18 hole rounds, portals & windmills.</div>
+          <div><strong>🎣 Cat Fishing Game</strong>: Interactive 2D cartoon fishing adventure with Nibbles.</div>
+          <div><strong>🍉 Fruit Slicer Game</strong>: Juicy 2D fruit slicer arcade game to test rapid swiping.</div>
           <div><strong>🐟 Help Nibbles Find Fish</strong>: 10x10 procedural maze puzzle guide game with touch/WASD controls.</div>
           <div><strong>🎴 Cat Card Memory Match</strong>: 3D card flipping memory game matching 8 cat pairs.</div>
           <div><strong>🖱️ Mouse Hardware Tester</strong>: MB1–MB5 buttons, scroll wheel direction, and velocity inspector.</div>
@@ -1606,6 +1608,16 @@ function renderMeetNibblesPage(container) {
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
             <h3 style="font-size:1.2rem; color:var(--accent-amber); margin-bottom:0.5rem;">⛳ Nibbles 2D Mini Golf</h3>
             <p style="color:var(--text-secondary); line-height:1.6;">Play an 18-hole HTML5 Canvas 2D physics mini golf game with Nibbles! Master wind, portals, sand traps, and dual windmills.</p>
+          </div>
+
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+            <h3 style="font-size:1.2rem; color:var(--accent-cyan); margin-bottom:0.5rem;">🎣 Cat Fishing Game</h3>
+            <p style="color:var(--text-secondary); line-height:1.6;">Help Nibbles catch fish in this interactive 2D cartoon fishing adventure by clicking rapidly when you get a bite!</p>
+          </div>
+
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+            <h3 style="font-size:1.2rem; color:var(--accent-primary); margin-bottom:0.5rem;">🍉 Nibbles Fruit Slicer</h3>
+            <p style="color:var(--text-secondary); line-height:1.6;">Swipe your mouse or finger to help Nibbles slice flying fruit in this juicy arcade minigame.</p>
           </div>
 
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
