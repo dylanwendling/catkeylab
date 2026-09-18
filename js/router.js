@@ -6,7 +6,7 @@ import { t, getCurrentLang } from './i18n.js';
 import { renderBreadcrumbs } from './components/breadcrumbs.js';
 import { renderFAQ } from './components/faq.js';
 import { renderAdSpace } from './components/adSpaces.js';
-import { renderLeaderboardView, trackToolUsage } from './components/leaderboardView.js';
+import { renderLeaderboardView } from './components/leaderboardView.js';
 import { initYarnBall } from './components/yarnBall.js';
 import { renderDiagnosticWizard } from './components/diagnosticWizard.js';
 import { renderDailyChallengeTeaser, renderDailyChallengePage } from './components/dailyChallenge.js';
@@ -34,6 +34,14 @@ import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingG
 import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlicerGame.js';
 
 let currentCleanup = null;
+
+function trackToolUsage(toolId) {
+  try {
+    let usage = JSON.parse(localStorage.getItem('catkeylab_tool_play_counts')) || {};
+    usage[toolId] = (usage[toolId] || 0) + 1;
+    localStorage.setItem('catkeylab_tool_play_counts', JSON.stringify(usage));
+  } catch (e) {}
+}
 
 function getToolPlayCounts() {
   try {
