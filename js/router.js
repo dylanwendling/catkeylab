@@ -914,6 +914,16 @@ function renderHomePage(container) {
       </div>
     </section>
 
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <!-- Diagnostic Wizard -->
+        <div id="diagnostic-wizard-container"></div>
+        
+        <!-- Daily Challenge -->
+        <div id="daily-challenge-container"></div>
+      </div>
+    </section>
+
     <!-- Informational Section: Free Online Keyboard & Mouse Testing Tools -->
     <section class="section">
       <div class="container">
@@ -1066,12 +1076,6 @@ function renderHomePage(container) {
             </table>
           </div>
         </div>
-
-        <!-- Diagnostic Wizard -->
-        <div id="diagnostic-wizard-container"></div>
-        
-        <!-- Daily Challenge -->
-        <div id="daily-challenge-container"></div>
       </div>
     </section>
 

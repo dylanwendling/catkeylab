@@ -1,5 +1,6 @@
 import { getAnonProfile } from '../leaderboard.js';
 import { TOOL_METADATA } from '../router.js';
+import { t } from '../i18n.js';
 
 const CHALLENGE_ROUTES = [
   ['cps-test', 'cat-fishing-game', 'fruit-slicer-game'],
@@ -114,13 +115,13 @@ export async function renderDailyChallengeTeaser(container) {
             return `
               <li style="display:flex; align-items:center; gap:0.75rem; padding:0.75rem; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); opacity:${isDone ? '0.6' : '1'};">
                 <span style="font-size:1.2rem;">${isDone ? '✅' : meta.icon}</span>
-                <span style="font-weight:600; color:var(--text-primary); ${isDone ? 'text-decoration:line-through;' : ''}">${meta.titleKey}</span>
+                <span style="font-weight:600; color:var(--text-primary); ${isDone ? 'text-decoration:line-through;' : ''}">${t(meta.titleKey)}</span>
               </li>
             `;
           }).join('')}
         </ul>
         <a href="#daily-challenge" class="btn btn-primary" style="width:100%; justify-content:center; padding:1rem; font-size:1.1rem;">
-          ${testsCompleted > 0 ? 'Resume Challenge' : 'Start Challenge'}
+          <span style="color:var(--bg-primary); font-weight:800;">${testsCompleted > 0 ? 'Resume Challenge' : 'Start Challenge'}</span>
         </a>
     `;
   }
@@ -201,7 +202,7 @@ function renderChallengeStep() {
     progress.completedTests.push(testId);
     progress.results.push({
       testId: testId,
-      title: meta.titleKey,
+      title: t(meta.titleKey),
       scoreDisplay: e.detail.scoreDisplay
     });
     
