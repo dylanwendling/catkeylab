@@ -961,6 +961,104 @@ function renderHomePage(container) {
             <li><strong>Keyboard rollover verification</strong>: Gamers can test whether their keyboard supports pressing multiple keys simultaneously using the <a href="#keyboard-test">Keyboard Tester</a>.</li>
           </ul>
         </div>
+
+        <!-- Which Test Do I Need? -->
+        <div class="info-section" style="margin-top:2.5rem;">
+          <h3>🧭 Which CatKeyLab Tool Should I Use?</h3>
+          <p>Find the right testing tool or game for your needs:</p>
+          <div style="overflow-x:auto; margin-top:1rem; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+            <table style="width:100%; border-collapse: collapse; text-align:left; background:var(--bg-secondary);">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-color);">
+                  <th style="padding:1rem; color:var(--text-primary);">If you want to...</th>
+                  <th style="padding:1rem; color:var(--text-primary);">Use</th>
+                </tr>
+              </thead>
+              <tbody style="color:var(--text-secondary);">
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Check whether keyboard keys work</td>
+                  <td style="padding:1rem;"><a href="#keyboard-test" style="color:var(--accent-cyan); font-weight:600;">Keyboard Tester 🖥️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test mouse buttons and scroll wheel</td>
+                  <td style="padding:1rem;"><a href="#mouse-test" style="color:var(--accent-cyan); font-weight:600;">Mouse Tester 🖱️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Check for accidental double clicks (mouse chatter)</td>
+                  <td style="padding:1rem;"><a href="#double-click-test" style="color:var(--accent-cyan); font-weight:600;">Double Click Tester 👆</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Measure raw clicking speed (burst & endurance)</td>
+                  <td style="padding:1rem;"><a href="#cps-test" style="color:var(--accent-cyan); font-weight:600;">CPS Test ⚡</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Analyze clicking speed consistency and velocity</td>
+                  <td style="padding:1rem;"><a href="#click-speed-test" style="color:var(--accent-cyan); font-weight:600;">Click Speed Test 🚀</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Measure typing speed (WPM) and accuracy</td>
+                  <td style="padding:1rem;"><a href="#typing-test" style="color:var(--accent-cyan); font-weight:600;">Typing Speed Test ⌨️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Measure visual reaction speed</td>
+                  <td style="padding:1rem;"><a href="#reaction-time-test" style="color:var(--accent-cyan); font-weight:600;">Reaction Time Test ⏱️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Practice mouse aiming and target acquisition</td>
+                  <td style="padding:1rem;"><a href="#aim-trainer-test" style="color:var(--accent-cyan); font-weight:600;">Aim Trainer 🎯</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test short-term pattern memory</td>
+                  <td style="padding:1rem;"><a href="#sequence-memory-test" style="color:var(--accent-cyan); font-weight:600;">Sequence Memory Test 🧠</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test short-term digit span memory</td>
+                  <td style="padding:1rem;"><a href="#number-memory-test" style="color:var(--accent-cyan); font-weight:600;">Number Memory Test 🔢</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test verbal word recognition memory</td>
+                  <td style="padding:1rem;"><a href="#verbal-memory-test" style="color:var(--accent-cyan); font-weight:600;">Verbal Memory Test 💬</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test spatial matrix pattern recall</td>
+                  <td style="padding:1rem;"><a href="#visual-memory-test" style="color:var(--accent-cyan); font-weight:600;">Visual Memory Test 🔳</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test rapid working memory (like chimpanzees)</td>
+                  <td style="padding:1rem;"><a href="#chimp-test" style="color:var(--accent-cyan); font-weight:600;">Chimp Test 🐒</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Automate mouse clicking inside the browser</td>
+                  <td style="padding:1rem;"><a href="#auto-clicker" style="color:var(--accent-cyan); font-weight:600;">Auto Clicker 🎯</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Count things manually (with target goals)</td>
+                  <td style="padding:1rem;"><a href="#click-counter" style="color:var(--accent-cyan); font-weight:600;">Click Counter 🔢</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Play a physics 2D mini golf game</td>
+                  <td style="padding:1rem;"><a href="#cat-mini-golf-game" style="color:var(--accent-cyan); font-weight:600;">Cat Mini Golf ⛳</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Catch fish in a rapid clicking mini-game</td>
+                  <td style="padding:1rem;"><a href="#cat-fishing-game" style="color:var(--accent-cyan); font-weight:600;">Cat Fishing Game 🎣</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Slice flying fruit with your mouse or finger</td>
+                  <td style="padding:1rem;"><a href="#fruit-slicer-game" style="color:var(--accent-cyan); font-weight:600;">Fruit Slicer 🍉</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Navigate Nibbles through a procedural maze</td>
+                  <td style="padding:1rem;"><a href="#fish-maze-game" style="color:var(--accent-cyan); font-weight:600;">Fish Maze 🐟</a></td>
+                </tr>
+                <tr>
+                  <td style="padding:1rem;">Match 3D cat cards in a visual recognition game</td>
+                  <td style="padding:1rem;"><a href="#card-memory-game" style="color:var(--accent-cyan); font-weight:600;">Card Memory Match 🎴</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </section>
 
