@@ -457,12 +457,10 @@ main {
   flex: 1;
 }
 
-/* Hero Section */
 .hero {
   padding: 4.5rem 0 3rem;
   text-align: center;
   position: relative;
-  overflow: hidden;
 }
 
 .hero::before {
