@@ -99,7 +99,7 @@ export function renderDiagnosticWizard(container) {
             <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem;">
               <h5 style="color:var(--accent-cyan); font-size:1.15rem; margin-bottom:0.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
                 ${TOOL_TITLES[rec.toolId] || rec.toolId}
-                <a href="#${rec.toolId}" class="btn btn-primary btn-sm" style="font-size:0.9rem; padding:0.4rem 1rem;">Start Test</a>
+                <a href="#${rec.toolId}" class="btn btn-primary btn-sm" style="font-size:0.9rem; padding:0.4rem 1rem; color: var(--bg-primary); font-weight: 800;">Start Test</a>
               </h5>
               <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.5rem;">
                 <span style="background:var(--bg-secondary); padding:0.15rem 0.4rem; border-radius:4px; border:1px solid var(--border-color);">Your Issue: ${rec.issueLabel}</span>
