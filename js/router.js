@@ -861,8 +861,18 @@ function renderHomePage(container) {
       </div>
     </section>
 
+    <section class="section" style="padding-top:2.5rem;">
+      <div class="container">
+        <!-- Diagnostic Wizard -->
+        <div id="diagnostic-wizard-container"></div>
+        
+        <!-- Daily Challenge -->
+        <div id="daily-challenge-container"></div>
+      </div>
+    </section>
+
     <!-- Featured Tools Grid -->
-    <section class="section">
+    <section class="section" style="padding-top:0;">
       <div class="container">
         <div class="section-header">
           <h2 class="section-title">Online Hardware Testers & Speed Utilities</h2>
@@ -911,16 +921,6 @@ function renderHomePage(container) {
             }).join('');
           })()}
         </div>
-      </div>
-    </section>
-
-    <section class="section" style="padding-top:0;">
-      <div class="container">
-        <!-- Diagnostic Wizard -->
-        <div id="diagnostic-wizard-container"></div>
-        
-        <!-- Daily Challenge -->
-        <div id="daily-challenge-container"></div>
       </div>
     </section>
 
