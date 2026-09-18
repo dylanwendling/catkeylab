@@ -871,6 +871,11 @@ function renderHomePage(container) {
       </div>
     </section>
 
+    <!-- Embedded Anonymous Leaderboards Section -->
+    <section class="section" style="padding-top:0;">
+      <div id="home-leaderboard-container"></div>
+    </section>
+
     <!-- Featured Tools Grid -->
     <section class="section" style="padding-top:0;">
       <div class="container">
@@ -1077,11 +1082,6 @@ function renderHomePage(container) {
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Embedded Anonymous Leaderboards Section -->
-    <section class="section" style="padding-top:0;">
-      <div id="home-leaderboard-container"></div>
     </section>
 
     ${renderAdSpace('banner')}
