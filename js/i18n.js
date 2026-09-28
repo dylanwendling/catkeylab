@@ -40,6 +40,10 @@ export const translations = {
     navTypingTest: 'Typing Test',
     navTools: 'Tools',
     navLanguages: 'Language',
+    navBenchmarks: 'Benchmarks',
+    navGames: 'Games',
+    navAbout: 'About',
+    navFAQ: 'FAQ',
     
     // Hero
     heroBadge: '⚡ 100% Free & In-Browser Tools',
@@ -185,6 +189,10 @@ export const translations = {
     navDoubleClickTest: 'Doble Clic',
     navTools: 'Herramientas',
     navLanguages: 'Idioma',
+    navBenchmarks: 'Pruebas',
+    navGames: 'Juegos',
+    navAbout: 'Acerca de',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Gratis y en Navegador',
     heroTitle: 'Herramientas de Clics y Pruebas Online Gratuitas',
     heroSubtitle: 'Utiliza potentes utilidades de clics, pruebas de ratón y teclado directamente en tu navegador. Sin descargas, 100% privado.',
@@ -282,6 +290,10 @@ export const translations = {
     navDoubleClickTest: 'Double Clic',
     navTools: 'Outils',
     navLanguages: 'Langue',
+    navBenchmarks: 'Benchmarks',
+    navGames: 'Jeux',
+    navAbout: 'À propos',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Gratuit & Navigateur Direct',
     heroTitle: 'Outils de Clic et Test Matériel en Ligne',
     heroSubtitle: 'Utilisez des outils puissants de clic, de souris et de clavier directement dans votre navigateur. Sans téléchargement, 100% privé.',
@@ -379,6 +391,10 @@ export const translations = {
     navDoubleClickTest: 'Doppelklick-Test',
     navTools: 'Tools',
     navLanguages: 'Sprache',
+    navBenchmarks: 'Benchmarks',
+    navGames: 'Spiele',
+    navAbout: 'Über uns',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Kostenlos & Im Browser',
     heroTitle: 'Kostenlose Online-Klick- und Hardware-Tools',
     heroSubtitle: 'Verwenden Sie leistungsstarke Klick-, Maus- und Tastatur-Tools direkt in Ihrem Browser. Keine Downloads, 100% privat.',
@@ -476,6 +492,10 @@ export const translations = {
     navDoubleClickTest: 'Duplo Clique',
     navTools: 'Ferramentas',
     navLanguages: 'Idioma',
+    navBenchmarks: 'Testes',
+    navGames: 'Jogos',
+    navAbout: 'Sobre',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Grátis no Navegador',
     heroTitle: 'Ferramentas de Clicar e Testes de Hardware Online',
     heroSubtitle: 'Use ferramentas de clique, rato e teclado no seu navegador sem transferências.',
@@ -573,6 +593,10 @@ export const translations = {
     navDoubleClickTest: 'Doppio Clic',
     navTools: 'Strumenti',
     navLanguages: 'Lingua',
+    navBenchmarks: 'Benchmark',
+    navGames: 'Giochi',
+    navAbout: 'Chi siamo',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Gratuito nel Browser',
     heroTitle: 'Strumenti di Clic e Test Hardware Online',
     heroSubtitle: 'Usa potenti utilità per clic, mouse e tastiera direttamente nel tuo browser. Senza download.',
@@ -670,6 +694,10 @@ export const translations = {
     navDoubleClickTest: 'Dubbelkliktest',
     navTools: 'Tools',
     navLanguages: 'Taal',
+    navBenchmarks: 'Benchmarks',
+    navGames: 'Games',
+    navAbout: 'Over',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Gratis & in Browser',
     heroTitle: 'Gratis Online Klik- en Hardware-Tools',
     heroSubtitle: 'Gebruik krachtige muis-, toetsenbord- en kliktools rechtstreeks in je browser. Geen downloads.',
@@ -767,6 +795,10 @@ export const translations = {
     navDoubleClickTest: 'Podwójne Kliknięcie',
     navTools: 'Narzędzia',
     navLanguages: 'Język',
+    navBenchmarks: 'Testy',
+    navGames: 'Gry',
+    navAbout: 'O nas',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Darmowe i w Przeglądarce',
     heroTitle: 'Darmowe Narzędzia do Klikania i Testów Online',
     heroSubtitle: 'Używaj zaawansowanych narzędzi do klikania, myszy i klawiatury bezpośrednio w przeglądarce. Bez pobierania.',
@@ -864,6 +896,10 @@ export const translations = {
     navDoubleClickTest: 'Çift Tıklama',
     navTools: 'Araçlar',
     navLanguages: 'Dil',
+    navBenchmarks: 'Testler',
+    navGames: 'Oyunlar',
+    navAbout: 'Hakkında',
+    navFAQ: 'SSS',
     heroBadge: '⚡ %100 Ücretsiz ve Tarayıcıda',
     heroTitle: 'Ücretsiz Çevrimiçi Tıklama ve Donanım Araçları',
     heroSubtitle: 'İndirme yapmadan doğrudan tarayıcınızda çalışan güçlü fare, klavye ve tıklama araçlarını kullanın.',
@@ -961,6 +997,10 @@ export const translations = {
     navDoubleClickTest: 'Двойной Клик',
     navTools: 'Инструменты',
     navLanguages: 'Язык',
+    navBenchmarks: 'Тесты',
+    navGames: 'Игры',
+    navAbout: 'О проекте',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% Бесплатно и в Браузере',
     heroTitle: 'Бесплатные Онлайн-Инструменты для Кликов и Тестов',
     heroSubtitle: 'Используйте мощные утилиты для кликов, проверки мыши и клавиатуры прямо в браузере. Без скачивания.',
@@ -1058,6 +1098,10 @@ export const translations = {
     navDoubleClickTest: 'ダブルクリックテスト',
     navTools: 'ツール一覧',
     navLanguages: '言語',
+    navBenchmarks: 'ベンチマーク',
+    navGames: 'ゲーム',
+    navAbout: '概要',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100%無料・ブラウザで完結',
     heroTitle: '無料オンラインクリック＆ハードウェアテスト',
     heroSubtitle: 'ダウンロード不要！ブラウザ上で高機能な自動連打、マウス、キーボードの動作確認ツールを利用できます。',
@@ -1155,6 +1199,10 @@ export const translations = {
     navDoubleClickTest: '더블 클릭',
     navTools: '도구 목록',
     navLanguages: '언어',
+    navBenchmarks: '벤치마크',
+    navGames: '게임',
+    navAbout: '소개',
+    navFAQ: 'FAQ',
     heroBadge: '⚡ 100% 무료 & 브라우저 전용',
     heroTitle: '무료 온라인 클릭 및 하드웨어 테스트 도구',
     heroSubtitle: '다운로드 없이 브라우저에서 바로 강력한 마우스, 키보드, 클릭 속도 측정 툴을 이용하세요.',
@@ -1252,6 +1300,10 @@ export const translations = {
     navDoubleClickTest: '双击测试',
     navTools: '工具大全',
     navLanguages: '语言',
+    navBenchmarks: '基准测试',
+    navGames: '游戏',
+    navAbout: '关于',
+    navFAQ: '常见问题',
     heroBadge: '⚡ 100% 免费 · 浏览器即开即用',
     heroTitle: '免费在线浏览器点击与硬件测试工具',
     heroSubtitle: '无需下载任何软件！直接在浏览器中使用强大的连点器、鼠标、键盘和反应速度测试工具。',
@@ -1359,14 +1411,43 @@ export function initI18n() {
   setLanguage(currentLang, false);
 }
 
+export function applyTranslations(root = document) {
+  root.querySelectorAll('[data-i18n]').forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    if (!key) return;
+    const translated = t(key);
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+      el.setAttribute('placeholder', translated);
+      return;
+    }
+    if (el.tagName === 'OPTION' || el.children.length === 0) {
+      el.textContent = translated;
+      return;
+    }
+    const labeled = el.querySelector('[data-i18n-text]');
+    if (labeled) {
+      labeled.textContent = translated;
+      return;
+    }
+    const textSpans = Array.from(el.querySelectorAll('span')).filter((span) => span.children.length === 0);
+    if (textSpans.length) {
+      textSpans[textSpans.length - 1].textContent = translated;
+    }
+  });
+}
+
 export function setLanguage(lang, reloadUI = true) {
   if (!translations[lang]) return;
   currentLang = lang;
   localStorage.setItem('catkeylab_lang', lang);
   document.documentElement.lang = lang;
 
-  if (reloadUI && window.updatePageTranslations) {
+  if (!reloadUI) return;
+
+  if (typeof window.updatePageTranslations === 'function') {
     window.updatePageTranslations();
+  } else {
+    applyTranslations();
   }
 }
 

@@ -4,7 +4,7 @@
 
 import { initTheme } from './theme.js';
 import { initAudio } from './audio.js';
-import { initI18n, t } from './i18n.js';
+import { initI18n, applyTranslations } from './i18n.js';
 import { renderHeader } from './components/header.js';
 import { renderFooter } from './components/footer.js';
 import { initCatMascot } from './components/catMascot.js';
@@ -41,9 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 4. Register Translation Updater Callback
   window.updatePageTranslations = () => {
+    const scrollY = window.scrollY;
     if (headerContainer) renderHeader(headerContainer);
     if (footerContainer) renderFooter(footerContainer);
     handleRoute();
+    applyTranslations();
+    window.scrollTo(0, scrollY);
   };
 
   // 5. Bind Client Route Listeners (popstate & hashchange for back-compat)

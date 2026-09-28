@@ -25,7 +25,7 @@ export function renderHeader(container) {
           <!-- Benchmarks Dropdown -->
           <div class="dropdown" id="benchmarks-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Benchmarks</span>
+              <span data-i18n="navBenchmarks">${t('navBenchmarks')}</span>
               <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
@@ -43,27 +43,27 @@ export function renderHeader(container) {
           <!-- Hardware Dropdown -->
           <div class="dropdown" id="hardware-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span data-i18n="navHardware">Hardware</span>
+              <span data-i18n="navHardware">${t('navHardware')}</span>
               <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/keyboard-test/" class="dropdown-item" data-i18n="navKeyboardTest"><span>⌨️</span> <span>Keyboard Key Tester</span></a>
-              <a href="/tools/mouse-test/" class="dropdown-item" data-i18n="navMouseTest"><span>🖱️</span> <span>Mouse Hardware Tester</span></a>
-              <a href="/tools/double-click-test/" class="dropdown-item" data-i18n="navDoubleClickTest"><span>⚡</span> <span>Double Click Tester</span></a>
+              <a href="/tools/keyboard-test/" class="dropdown-item"><span>⌨️</span> <span data-i18n="navKeyboardTest">${t('navKeyboardTest')}</span></a>
+              <a href="/tools/mouse-test/" class="dropdown-item"><span>🖱️</span> <span data-i18n="navMouseTest">${t('navMouseTest')}</span></a>
+              <a href="/tools/double-click-test/" class="dropdown-item"><span>⚡</span> <span data-i18n="navDoubleClickTest">${t('navDoubleClickTest')}</span></a>
             </div>
           </div>
 
           <!-- Speed & Tools Dropdown -->
           <div class="dropdown" id="tools-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Speed & Tools</span>
+              <span data-i18n="navTools">${t('navTools')}</span>
               <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/cps-test/" class="dropdown-item" data-i18n="navCPSTest"><span>⚡</span> <span>CPS Speed Test</span></a>
-              <a href="/tools/click-speed-test/" class="dropdown-item" data-i18n="navClickSpeedTest"><span>🚀</span> <span>Click Speed Test</span></a>
-              <a href="/tools/click-counter/" class="dropdown-item" data-i18n="navClickCounter"><span>🔢</span> <span>Digital Click Counter</span></a>
-              <a href="/tools/auto-clicker/" class="dropdown-item" data-i18n="navAutoClicker"><span>🤖</span> <span>Online Auto Clicker</span></a>
+              <a href="/tools/cps-test/" class="dropdown-item"><span>⚡</span> <span data-i18n="navCPSTest">${t('navCPSTest')}</span></a>
+              <a href="/tools/click-speed-test/" class="dropdown-item"><span>🚀</span> <span data-i18n="navClickSpeedTest">${t('navClickSpeedTest')}</span></a>
+              <a href="/tools/click-counter/" class="dropdown-item"><span>🔢</span> <span data-i18n="navClickCounter">${t('navClickCounter')}</span></a>
+              <a href="/tools/auto-clicker/" class="dropdown-item"><span>🤖</span> <span data-i18n="navAutoClicker">${t('navAutoClicker')}</span></a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
               <a href="/tools/" class="dropdown-item"><span>📂</span> <strong>All Tools Directory</strong></a>
             </div>
@@ -72,7 +72,7 @@ export function renderHeader(container) {
           <!-- Games Dropdown -->
           <div class="dropdown" id="games-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Games</span>
+              <span data-i18n="navGames">${t('navGames')}</span>
               <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
@@ -84,8 +84,8 @@ export function renderHeader(container) {
             </div>
           </div>
 
-          <a href="/about/" class="nav-link" data-route="about">About</a>
-          <a href="/faq/" class="nav-link" data-route="faq">FAQ</a>
+          <a href="/about/" class="nav-link" data-route="about" data-i18n="navAbout">${t('navAbout')}</a>
+          <a href="/faq/" class="nav-link" data-route="faq" data-i18n="navFAQ">${t('navFAQ')}</a>
         </nav>
 
         <div class="header-actions">
@@ -104,12 +104,12 @@ export function renderHeader(container) {
               <span>${currentLangObj.code.toUpperCase()}</span>
               <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="dropdown-menu dropdown-right">
+            <div class="dropdown-menu dropdown-right" role="menu">
               ${LANGUAGES.map(lang => `
-                <div class="dropdown-item ${lang.code === currentLangCode ? 'active' : ''}" data-lang="${lang.code}">
+                <button type="button" class="dropdown-item ${lang.code === currentLangCode ? 'active' : ''}" data-lang="${lang.code}" role="menuitem">
                   <span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">${lang.code.toUpperCase()}</span>
                   <span>${lang.name}</span>
-                </div>
+                </button>
               `).join('')}
             </div>
           </div>
@@ -209,38 +209,57 @@ export function renderHeader(container) {
   bindHeaderEvents();
 }
 
+let outsideClickBound = false;
+
+function closeOpenDropdowns(except) {
+  document.querySelectorAll('.dropdown.open').forEach(dd => {
+    if (dd !== except) dd.classList.remove('open');
+  });
+}
+
 function bindHeaderEvents() {
-  // Dropdown Open/Close
   const dropdowns = document.querySelectorAll('.dropdown');
   dropdowns.forEach(dd => {
-    const btn = dd.querySelector('.dropdown-btn');
+    const btn = dd.querySelector(':scope > .dropdown-btn');
     if (btn) {
       btn.addEventListener('click', (e) => {
+        e.preventDefault();
         e.stopPropagation();
-        dropdowns.forEach(other => { if (other !== dd) other.classList.remove('open'); });
-        dd.classList.toggle('open');
+        const willOpen = !dd.classList.contains('open');
+        closeOpenDropdowns(willOpen ? dd : null);
+        dd.classList.toggle('open', willOpen);
       });
     }
   });
 
   const drawer = document.getElementById('mobile-drawer');
 
-  document.addEventListener('click', (e) => {
-    dropdowns.forEach(dd => dd.classList.remove('open'));
-    if (drawer && !drawer.contains(e.target) && !e.target.closest('#hamburger-btn')) {
-      drawer.classList.remove('open');
-      document.body.classList.remove('drawer-open');
-    }
-  });
+  if (!outsideClickBound) {
+    outsideClickBound = true;
+    document.addEventListener('click', (e) => {
+      const openDropdown = e.target.closest('.dropdown.open');
+      if (!openDropdown) closeOpenDropdowns();
 
-  // Language Selection
-  const langItems = document.querySelectorAll('#lang-dropdown .dropdown-item');
-  langItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const code = item.dataset.lang;
+      const currentDrawer = document.getElementById('mobile-drawer');
+      if (currentDrawer && !currentDrawer.contains(e.target) && !e.target.closest('#hamburger-btn')) {
+        currentDrawer.classList.remove('open');
+        document.body.classList.remove('drawer-open');
+      }
+    });
+  }
+
+  const langDropdown = document.getElementById('lang-dropdown');
+  if (langDropdown) {
+    langDropdown.addEventListener('click', (e) => {
+      const item = e.target.closest('[data-lang]');
+      if (!item || !langDropdown.contains(item)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const code = item.getAttribute('data-lang');
+      langDropdown.classList.remove('open');
       setLanguage(code, true);
     });
-  });
+  }
 
   // Theme Toggle Button
   const themeBtn = document.getElementById('theme-toggle-btn');

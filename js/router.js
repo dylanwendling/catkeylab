@@ -207,15 +207,11 @@ function renderHomePage(container) {
     <!-- Hero Section -->
     <section class="hero">
       <div class="container">
-        <div class="hero-badge" style="background:linear-gradient(90deg, rgba(16,185,129,0.18), rgba(249,115,22,0.18)); border-color:rgba(16,185,129,0.35); color:var(--accent-emerald);">
-          🐾 CatKeyLab • Free Browser-Based Input Testing & Benchmarks
+        <div class="hero-badge" data-i18n="heroBadge" style="background:linear-gradient(90deg, rgba(16,185,129,0.18), rgba(249,115,22,0.18)); border-color:rgba(16,185,129,0.35); color:var(--accent-emerald);">
+          ${t('heroBadge')}
         </div>
-        <h1 class="hero-title">
-          <span>Free Online Keyboard, Mouse &amp; <span style="white-space: nowrap;">Typing Tests 🐾</span></span>
-        </h1>
-        <p class="hero-subtitle">
-          CatKeyLab provides free browser-based tools for testing keyboards, mice, typing speed, clicking performance, reaction time, memory, and other computer-input functions. No downloads, no accounts: just open and test.
-        </p>
+        <h1 class="hero-title" data-i18n="heroTitle">${t('heroTitle')}</h1>
+        <p class="hero-subtitle" data-i18n="heroSubtitle">${t('heroSubtitle')}</p>
         <div class="hero-ctas">
           <a href="/tools/typing-test/" class="btn btn-primary btn-lg">
             <span>⌨️⚡ Test Typing Speed (WPM)</span>
