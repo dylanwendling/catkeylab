@@ -163,7 +163,8 @@ export const STATIC_PAGES = {
   'sitemap': { path: '/sitemap/', title: 'Sitemap & Tools Directory - CatKeyLab', crumb: 'Sitemap' },
   'tools': { path: '/tools/', title: 'Tools & Games Directory - CatKeyLab', crumb: 'All Tools' },
   'leaderboards': { path: '/leaderboards/', title: 'Anonymous Global Leaderboards - CatKeyLab', crumb: 'Leaderboards' },
-  'nibbles': { path: '/nibbles/', title: 'Meet Nibbles 🐱 - The Real Orange Cat - CatKeyLab', crumb: 'Meet Nibbles' }
+  'meet-nibbles': { path: '/meet-nibbles/', title: 'Meet Nibbles 🐱 - The Real Orange Cat - CatKeyLab', crumb: 'Meet Nibbles' },
+  'nibbles': { path: '/meet-nibbles/', title: 'Meet Nibbles 🐱 - The Real Orange Cat - CatKeyLab', crumb: 'Meet Nibbles' }
 };
 
 /**
