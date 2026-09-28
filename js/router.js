@@ -868,12 +868,33 @@ function renderLegalPage(container, type) {
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
         <div>
           <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.25rem;">🎮 Created by Dylan</h3>
-          <p style="color:var(--text-secondary);">CatKeyLab is crafted by Dylan. Check out games, utilities, and interactive creations on itch.io!</p>
-          <p style="margin-top:0.5rem;"><a href="/nibbles/" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles the Cat & See His Real-Life Photo →</a></p>
+          <p style="color:var(--text-secondary);">CatKeyLab is designed and developed by Dylan. Check out games, utilities, and interactive creations on itch.io!</p>
         </div>
         <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="background:linear-gradient(135deg, #f97316, #ea580c); border:none; font-weight:700;">
           <span>Visit Dylan on itch.io</span> ↗
         </a>
+      </div>
+
+      <!-- Real Orange Cat Featured Hero Card (Meet Nibbles) -->
+      <div id="meet-nibbles-card" style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2rem; flex-wrap:wrap; box-shadow:0 10px 30px rgba(0,0,0,0.35);">
+        <img src="/assets/orange-cat.jpg" 
+             onerror="if(!this.dataset.tried){this.dataset.tried=1; this.src='../assets/orange-cat.jpg';}else if(this.dataset.tried==1){this.dataset.tried=2; this.src='./assets/orange-cat.jpg';}else if(this.dataset.tried==2){this.dataset.tried=3; this.src='assets/orange-cat.jpg';}" 
+             alt="Real Orange Cat in Box - Inspiration for Nibbles" 
+             style="width:300px; max-width:100%; height:300px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
+        <div style="flex:1; min-width:260px;">
+          <div style="display:inline-block; background:rgba(249,115,22,0.25); color:#f97316; font-size:0.8rem; font-weight:800; padding:0.3rem 0.75rem; border-radius:var(--radius-full); text-transform:uppercase; margin-bottom:0.75rem;">
+            🐾 Meet Nibbles in Real Life
+          </div>
+          <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-primary); margin-bottom:0.75rem;">
+            Meet Nibbles in Real Life! 🐱
+          </h2>
+          <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem; margin-bottom:1.25rem;">
+            This adorable orange cat sitting in a cardboard box is the real-life inspiration behind <strong>Nibbles</strong>! Created by <strong>Dylan</strong>, Nibbles lives on CatKeyLab to keep you company while you test hardware, practice typing, and play companion arcade games!
+          </p>
+          <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg, #f97316, #ea580c); border:none; box-shadow:0 4px 14px rgba(249,115,22,0.4); font-weight:700;">
+            <span>🎮 Visit Dylan on itch.io</span> ↗
+          </a>
+        </div>
       </div>
 
       <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
@@ -1094,7 +1115,10 @@ function renderMeetNibblesPage(container) {
 
         <!-- Real Orange Cat Featured Hero Card -->
         <div style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2rem; flex-wrap:wrap; box-shadow:0 10px 30px rgba(0,0,0,0.35); margin-bottom:2rem;">
-          <img src="./assets/orange-cat.jpg" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="width:380px; max-width:100%; height:380px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
+          <img src="/assets/orange-cat.jpg" 
+               onerror="if(!this.dataset.tried){this.dataset.tried=1; this.src='../assets/orange-cat.jpg';}else if(this.dataset.tried==1){this.dataset.tried=2; this.src='./assets/orange-cat.jpg';}else if(this.dataset.tried==2){this.dataset.tried=3; this.src='assets/orange-cat.jpg';}" 
+               alt="Real Orange Cat in Box - Inspiration for Nibbles" 
+               style="width:380px; max-width:100%; height:380px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
           <div style="flex:1; min-width:260px;">
             <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-primary); margin-bottom:0.75rem;">
               Meet Nibbles in Real Life! 🐱
