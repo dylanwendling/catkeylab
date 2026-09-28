@@ -77,7 +77,6 @@ export function renderFooter(container) {
             <h4 class="footer-title">Platform & Privacy</h4>
             <div class="footer-links">
               <a href="/about/" class="footer-link">About CatKeyLab</a>
-              <a href="/meet-nibbles/" class="footer-link">🐱 Meet Nibbles in Real Life</a>
               <a href="/faq/" class="footer-link">Frequently Asked Questions</a>
               <a href="/privacy/" class="footer-link">Privacy Policy</a>
               <a href="/terms/" class="footer-link">Terms of Service</a>

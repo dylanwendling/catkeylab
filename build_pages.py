@@ -18,9 +18,6 @@ if hasattr(sys.stderr, 'reconfigure'):
 
 BASE_URL = "https://catkeylab.com"
 
-NIBBLES_B64_FILE = os.path.join(os.path.dirname(__file__), 'assets', 'cat_b64.txt')
-NIBBLES_B64 = open(NIBBLES_B64_FILE, 'r', encoding='utf-8').read().strip() if os.path.exists(NIBBLES_B64_FILE) else ''
-
 # 1. Tool Canonical Route Configuration
 TOOL_ROUTES = {
     # Human Benchmarks & Cognitive Tests (tools/)
@@ -388,7 +385,6 @@ STATIC_FOOTER_HTML = """
           <div class="footer-title">🐾 Platform & Trust</div>
           <ul class="footer-links">
             <li><a href="/about/">About CatKeyLab & Dylan</a></li>
-            <li><a href="/meet-nibbles/">🐱 Meet Nibbles in Real Life</a></li>
             <li><a href="/faq/">Frequently Asked Questions</a></li>
             <li><a href="/leaderboards/">Anonymous Global Leaderboards</a></li>
             <li><a href="/privacy/">Privacy Policy</a></li>
@@ -1185,7 +1181,7 @@ def main():
 
     # 2. Rich Pre-rendered Platform Pages
     # About Page
-    about_body = f"""
+    about_body = """
     <div class="container section">
       <div class="tool-wrapper" style="max-width:960px; margin:0 auto;">
         <h1 style="font-size:2.2rem; font-weight:800; margin-bottom:0.5rem;">About CatKeyLab 🐾</h1>
@@ -1198,30 +1194,60 @@ def main():
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
             <div>
               <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.25rem;">🎮 Created by Dylan</h3>
-              <p style="color:var(--text-secondary);">CatKeyLab is crafted by Dylan. Check out games, utilities, and interactive creations on itch.io!</p>
-              <p style="margin-top:0.5rem;"><a href="/meet-nibbles/" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles the Cat & See His Real-Life Photo →</a></p>
+              <p style="color:var(--text-secondary);">CatKeyLab is designed and developed by Dylan. Check out games, utilities, and interactive creations on itch.io!</p>
             </div>
             <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="background:linear-gradient(135deg, #f97316, #ea580c); border:none; font-weight:700;">
               <span>Visit Dylan on itch.io</span> ↗
             </a>
           </div>
 
-          <!-- Featured Cat Card -->
-          <div style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2rem; flex-wrap:wrap; box-shadow:0 10px 30px rgba(0,0,0,0.35); margin-bottom:1rem;">
+          <!-- Featured Cat Card (Meet Nibbles in Real Life) -->
+          <div id="meet-nibbles-card" style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2rem; flex-wrap:wrap; box-shadow:0 10px 30px rgba(0,0,0,0.35);">
             <img src="/assets/orange-cat.jpg" 
-                 onerror="if(!this.dataset.failed){{this.dataset.failed=1; this.src='{NIBBLES_B64}';}}" 
+                 onerror="if(!this.dataset.tried){this.dataset.tried=1; this.src='../assets/orange-cat.jpg';}else if(this.dataset.tried==1){this.dataset.tried=2; this.src='./assets/orange-cat.jpg';}else if(this.dataset.tried==2){this.dataset.tried=3; this.src='assets/orange-cat.jpg';}" 
                  alt="Real Orange Cat in Box - Inspiration for Nibbles" 
-                 style="width:340px; max-width:100%; height:340px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
+                 style="width:320px; max-width:100%; height:320px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
             <div style="flex:1; min-width:260px;">
+              <div style="display:inline-block; background:rgba(249,115,22,0.25); color:#f97316; font-size:0.8rem; font-weight:800; padding:0.3rem 0.75rem; border-radius:var(--radius-full); text-transform:uppercase; margin-bottom:0.75rem;">
+                🐾 Meet Nibbles in Real Life
+              </div>
               <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-primary); margin-bottom:0.75rem;">
                 Meet Nibbles in Real Life! 🐱
               </h2>
-              <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem; margin-bottom:1rem;">
+              <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem; margin-bottom:1.25rem;">
                 This adorable orange cat sitting in a cardboard box is the real-life inspiration behind <strong>Nibbles</strong>! Created by <strong>Dylan</strong>, Nibbles lives on CatKeyLab to keep you company while you test hardware, practice typing, and play companion arcade games!
               </p>
-              <a href="/meet-nibbles/" class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, #f97316, #ea580c); border:none; font-weight:700;">
-                <span>🐱 View Nibbles Companion Guide & Story</span> →
+              <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg, #f97316, #ea580c); border:none; box-shadow:0 4px 14px rgba(249,115,22,0.4); font-weight:700;">
+                <span>🎮 Visit Dylan's Games on itch.io</span> ↗
               </a>
+            </div>
+          </div>
+
+          <!-- Nibbles Interactive Guide Cards -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.25rem; margin-top:0.5rem;">
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-lg);">
+              <h3 style="font-size:1.15rem; color:var(--accent-emerald); margin-bottom:0.5rem;">👀 Pupil & Cursor Tracking</h3>
+              <p style="color:var(--text-secondary); line-height:1.6; font-size:0.95rem;">Nibbles' emerald eyes follow your mouse cursor smoothly across the screen in real-time as you move around the site.</p>
+            </div>
+
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-lg);">
+              <h3 style="font-size:1.15rem; color:var(--accent-cyan); margin-bottom:0.5rem;">🐾 Swatting Paws & Petting</h3>
+              <p style="color:var(--text-secondary); line-height:1.6; font-size:0.95rem;">Move your cursor close to Nibbles (&lt; 220px) to see his white paws reach out to swat! Click Nibbles directly to pet him and hear him purr.</p>
+            </div>
+
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-lg);">
+              <h3 style="font-size:1.15rem; color:var(--accent-amber); margin-bottom:0.5rem;">⌨️ WPM Typing Judging</h3>
+              <p style="color:var(--text-secondary); line-height:1.6; font-size:0.95rem;">Take the Typing Speed Challenge! Nibbles calculates your WPM and accuracy, purring happily for fast typists or squinting judgmentally at typos.</p>
+            </div>
+
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-lg);">
+              <h3 style="font-size:1.15rem; color:var(--accent-rose); margin-bottom:0.5rem;">🧶 Throwable Yarn Ball Toy</h3>
+              <p style="color:var(--text-secondary); line-height:1.6; font-size:0.95rem;">Drag and toss the red yarn ball 🧶 across your screen. Throw it near Nibbles (&lt; 280px) to watch his paws and pupils eagerly swat at the toy!</p>
+            </div>
+
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-lg);">
+              <h3 style="color:var(--accent-primary); font-size:1.15rem; margin-bottom:0.5rem;">🥣 Cat Food Bowl & Fish</h3>
+              <p style="color:var(--text-secondary); line-height:1.6; font-size:0.95rem;">Click the blue cat bowl 🥣 in the bottom-right corner to spawn fresh fish 🐟. Drag fish to Nibbles to feed him yummy treats!</p>
             </div>
           </div>
 
@@ -1239,89 +1265,6 @@ def main():
       </div>
     </div>
     """
-
-    # Meet Nibbles Page
-    meet_nibbles_body = f"""
-    <div class="container section">
-      <div class="tool-wrapper" style="max-width:960px; margin:0 auto;">
-        <h1 style="font-size:2.4rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.6rem;">
-          <span>🐱 Meet Nibbles the Cat</span>
-        </h1>
-        <p class="hero-subtitle" style="margin-bottom:2rem; color:var(--accent-emerald); font-weight:600; font-size:1.15rem;">
-          The Real-Life Orange Cat Inspiration & Interactive Mascot Companion 🐾
-        </p>
-
-        <!-- Real Orange Cat Featured Hero Card -->
-        <div style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2.25rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2.5rem; flex-wrap:wrap; box-shadow:0 12px 35px rgba(0,0,0,0.4); margin-bottom:2.5rem;">
-          <img src="/assets/orange-cat.jpg" 
-               onerror="if(!this.dataset.failed){{this.dataset.failed=1; this.src='{NIBBLES_B64}';}}" 
-               alt="Real Orange Cat in Box - Inspiration for Nibbles" 
-               style="width:360px; max-width:100%; height:360px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 14px 32px rgba(249,115,22,0.5); flex-shrink:0; margin:0 auto;" />
-          <div style="flex:1; min-width:280px;">
-            <div style="display:inline-block; background:rgba(249,115,22,0.25); color:#f97316; font-size:0.85rem; font-weight:800; padding:0.35rem 0.85rem; border-radius:var(--radius-full); text-transform:uppercase; margin-bottom:0.85rem; letter-spacing:0.05em;">
-              🐾 Real Life Inspiration
-            </div>
-            <h2 style="font-size:2rem; font-weight:800; color:var(--text-primary); margin-bottom:0.85rem; line-height:1.25;">
-              Meet Nibbles in Real Life! 🐱
-            </h2>
-            <p style="color:var(--text-secondary); line-height:1.75; font-size:1.05rem; margin-bottom:1.5rem;">
-              This adorable orange cat sitting inside a cozy cardboard box is the real-life inspiration behind <strong>Nibbles</strong>! Created by <strong>Dylan</strong>, Nibbles lives right here on CatKeyLab to keep you company while you test hardware switches, diagnose mouse chatter, practice fast typing, and play companion arcade games!
-            </p>
-            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-              <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg, #f97316, #ea580c); border:none; box-shadow:0 4px 14px rgba(249,115,22,0.4); font-weight:700;">
-                <span>🎮 Discover Dylan's Creations on itch.io</span> ↗
-              </a>
-              <a href="/games/mini-golf/" class="btn btn-secondary" style="font-weight:600;">
-                <span>⛳ Play Mini Golf with Nibbles</span> →
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Interactive Companion Features Grid -->
-        <h2 style="font-size:1.6rem; font-weight:800; color:var(--text-primary); margin-bottom:1.25rem;">
-          ✨ What Can Nibbles Do on CatKeyLab?
-        </h2>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-bottom:2.5rem;">
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">👀</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-emerald); margin-bottom:0.5rem;">Pupil & Cursor Tracking</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Nibbles' emerald eyes dynamically follow your mouse cursor across the screen in real-time as you navigate tools.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">🐾</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-cyan); margin-bottom:0.5rem;">Swatting Paws & Petting</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Move your cursor close to Nibbles to see his white paws reach out to swat! Click Nibbles directly to pet him and hear him purr.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">⌨️</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-amber); margin-bottom:0.5rem;">Typing Speed Judging</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">During typing speed tests, Nibbles watches your accuracy. Type fast to make him purr happily, or watch him squint at typos!</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">🧶</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-rose); margin-bottom:0.5rem;">Throwable Physics Yarn Ball</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Click the yarn toggle to drop a bouncy physics yarn ball that bounces off screen edges with drag-and-throw momentum.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">🥣</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-cyan); margin-bottom:0.5rem;">Interactive Fish Feeding</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Click the cat food bowl in the mascot widget to toss fresh fish 🐟 to Nibbles and watch him celebrate.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">⛳</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-emerald); margin-bottom:0.5rem;">Companion Arcade Games</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Join Nibbles in 5 companion mini-games: Mini Golf, Cat Fishing, Fruit Slicer, Fish Maze, and 3D Card Memory.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    """ + render_ad_slot()
 
     # FAQ Page
     faq_body = """
@@ -1541,7 +1484,6 @@ def main():
           <h2 style="font-size:1.4rem; color:var(--text-primary); margin-top:2rem; margin-bottom:1rem;">📄 Platform Policies & Information</h2>
           <ul style="line-height:2.2; margin-left:1.5rem;">
             <li><a href="/about/" style="color:var(--accent-cyan); font-weight:600;">About CatKeyLab & Creator Dylan</a></li>
-            <li><a href="/meet-nibbles/" style="color:var(--accent-cyan); font-weight:600;">Meet Nibbles in Real Life 🐱 (The Real Orange Cat)</a></li>
             <li><a href="/faq/" style="color:var(--accent-cyan); font-weight:600;">Frequently Asked Questions</a></li>
             <li><a href="/privacy/" style="color:var(--accent-cyan); font-weight:600;">Privacy Policy</a></li>
             <li><a href="/terms/" style="color:var(--accent-cyan); font-weight:600;">Terms of Service</a></li>
@@ -1560,20 +1502,6 @@ def main():
             'desc': 'Learn about CatKeyLab, created by Dylan. 100% free, client-side, browser-native hardware testers, Human Benchmarks, and Nibbles the real orange cat companion.',
             'crumb': 'About',
             'body': about_body
-        },
-        'meet-nibbles': {
-            'path': '/meet-nibbles/',
-            'title': 'Meet Nibbles 🐱 - The Real Orange Cat Behind CatKeyLab',
-            'desc': 'Meet Nibbles the real-life orange cat sitting in a box! The adorable companion behind CatKeyLab hardware testing tools and arcade games by Dylan.',
-            'crumb': 'Meet Nibbles 🐱',
-            'body': meet_nibbles_body
-        },
-        'nibbles': {
-            'path': '/nibbles/',
-            'title': 'Meet Nibbles 🐱 - The Real Orange Cat Behind CatKeyLab',
-            'desc': 'Meet Nibbles the real-life orange cat sitting in a box! The adorable companion behind CatKeyLab hardware testing tools and arcade games by Dylan.',
-            'crumb': 'Meet Nibbles 🐱',
-            'body': meet_nibbles_body
         },
         'faq': {
             'path': '/faq/',
@@ -1645,12 +1573,6 @@ def main():
             f.write(html)
         generated_paths.append(p_info['path'])
         print(f"✅ Generated platform page: {out_file} ({p_info['path']})")
-
-    # Safeguard: Copy cat image into local subdirectories for direct file:// and static server browsing
-    import shutil
-    for sub in ['about', 'meet-nibbles', 'nibbles']:
-        os.makedirs(f"{sub}/assets", exist_ok=True)
-        shutil.copyfile('assets/orange-cat.jpg', f"{sub}/assets/orange-cat.jpg")
 
     # 3. Generate Pre-rendered Root Home Page (index.html)
     generate_home_page(tool_metadata)
