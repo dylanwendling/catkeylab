@@ -46,24 +46,45 @@ document.addEventListener('DOMContentLoaded', () => {
     handleRoute();
   };
 
-  // 5. Bind Client Route Listeners
+  // 5. Bind Client Route Listeners (popstate & hashchange for back-compat)
   window.addEventListener('hashchange', handleRoute);
+  window.addEventListener('popstate', handleRoute);
 
-  // Global Link Interceptor for same-hash clicks (e.g. "Play Test Now" buttons)
+  // Global Link Interceptor for smooth client routing and hash back-compat
   document.addEventListener('click', (e) => {
-    const link = e.target.closest('a[href^="#"]');
-    if (link) {
-      const targetHash = link.getAttribute('href').replace('#', '').trim();
-      const currentHash = window.location.hash.replace('#', '').trim();
-      if (targetHash === currentHash) {
+    const link = e.target.closest('a');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (!href) return;
+
+    // Handle hash links (e.g. #typing-test)
+    if (href.startsWith('#')) {
+      const targetHash = href.replace('#', '').trim();
+      if (!targetHash) {
         e.preventDefault();
+        history.pushState(null, '', '/');
         handleRoute();
         window.scrollTo({ top: 0, behavior: 'instant' });
-      } else {
-        setTimeout(() => {
-          window.scrollTo({ top: 0, behavior: 'instant' });
-        }, 10);
       }
+      return;
+    }
+
+    // Handle internal path links (e.g. /tools/typing-test/, /games/mini-golf/)
+    if (
+      href.startsWith('/') &&
+      !href.startsWith('//') &&
+      !link.target &&
+      !link.download &&
+      !e.ctrlKey &&
+      !e.metaKey &&
+      !e.shiftKey
+    ) {
+      e.preventDefault();
+      if (window.location.pathname !== href) {
+        history.pushState(null, '', href);
+      }
+      handleRoute();
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
   });
 

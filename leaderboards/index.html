@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anonymous Global Leaderboards - CatKeyLab 🏆</title>
+  <meta name="description" content="100% private, anonymous high scores and rank percentiles across all CatKeyLab human benchmark tests with live real-time updates.">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical & hreflang Tags -->
+  <link rel="canonical" href="https://catkeylab.com/leaderboards/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/leaderboards/">
+  <meta property="og:title" content="Anonymous Global Leaderboards - CatKeyLab 🏆">
+  <meta property="og:description" content="100% private, anonymous high scores and rank percentiles across all CatKeyLab human benchmark tests with live real-time updates.">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Anonymous Global Leaderboards - CatKeyLab 🏆">
+  <meta name="twitter:description" content="100% private, anonymous high scores and rank percentiles across all CatKeyLab human benchmark tests with live real-time updates.">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+</head>
+<body>
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header">
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="/" class="logo" id="header-logo">
+          <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
+            🐱
+          </div>
+          <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="nav-desktop">
+          <a href="/" class="nav-link" data-route="">Home</a>
+          
+          <!-- Benchmarks Dropdown -->
+          <div class="dropdown" id="benchmarks-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🧠 Benchmarks ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/reaction-time-test/" class="dropdown-item">⏱️ Reaction Time Test</a>
+              <a href="/tools/sequence-memory-test/" class="dropdown-item">🧠 Sequence Memory Test</a>
+              <a href="/tools/aim-trainer/" class="dropdown-item">🎯 Aim Trainer</a>
+              <a href="/tools/number-memory-test/" class="dropdown-item">🔢 Number Memory Test</a>
+              <a href="/tools/verbal-memory-test/" class="dropdown-item">💬 Verbal Memory Test</a>
+              <a href="/tools/chimp-test/" class="dropdown-item">🐒 Chimp Test</a>
+              <a href="/tools/visual-memory-test/" class="dropdown-item">🔳 Visual Memory Test</a>
+              <a href="/tools/typing-test/" class="dropdown-item">⌨️ WPM Typing Test</a>
+            </div>
+          </div>
+
+          <!-- Hardware Dropdown -->
+          <div class="dropdown" id="hardware-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🖱️ Hardware ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/keyboard-test/" class="dropdown-item">⌨️ Keyboard Key Tester</a>
+              <a href="/tools/mouse-test/" class="dropdown-item">🖱️ Mouse Hardware Tester</a>
+              <a href="/tools/double-click-test/" class="dropdown-item">⚡ Double Click Tester</a>
+            </div>
+          </div>
+
+          <!-- Speed & Tools Dropdown -->
+          <div class="dropdown" id="tools-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>⚡ Speed & Utilities ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/cps-test/" class="dropdown-item">⚡ CPS Speed Test</a>
+              <a href="/tools/click-speed-test/" class="dropdown-item">🚀 Click Speed Test</a>
+              <a href="/tools/click-counter/" class="dropdown-item">🔢 Digital Click Counter</a>
+              <a href="/tools/auto-clicker/" class="dropdown-item">🤖 Online Auto Clicker</a>
+              <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
+              <a href="/tools/" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
+            </div>
+          </div>
+
+          <!-- Games Dropdown -->
+          <div class="dropdown" id="games-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🎮 Games ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/games/mini-golf/" class="dropdown-item">⛳ Nibbles Mini Golf (18H)</a>
+              <a href="/games/fishing/" class="dropdown-item">🎣 Cat Fishing Game</a>
+              <a href="/games/fruit-slicer/" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
+              <a href="/games/fish-maze/" class="dropdown-item">🐟 Nibbles Fish Maze</a>
+              <a href="/games/card-memory/" class="dropdown-item">🎴 Card Memory Match</a>
+            </div>
+          </div>
+
+          <a href="/about/" class="nav-link" data-route="about">About</a>
+          <a href="/faq/" class="nav-link" data-route="faq">FAQ</a>
+        </nav>
+      </div>
+    </header>
+
+  </div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span class="separator">/</span>
+          <span style="color:var(--text-primary); font-weight:600;">Anonymous Leaderboards</span>
+        </nav>
+        
+    </div>
+    <div id="main-content">
+      
+    <div class="container section">
+      <div class="section-header" style="text-align:center; margin-bottom:2.5rem;">
+        <h1 class="section-title">All Tools & Benchmarks Directory</h1>
+        <p class="section-subtitle" style="max-width:700px; margin:0.5rem auto 0; color:var(--text-secondary);">Browse our complete suite of 20 online hardware testing tools, cognitive human benchmarks, and companion arcade games.</p>
+      </div>
+
+      <div class="grid grid-cols-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">⏱️</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Reaction Time Test</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Check your reaction time. Wait for the signal to turn green and click as fast as you can.</p>
+            </div>
+            <a href="/tools/reaction-time-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Reaction Time Test</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🧠</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Sequence Memory Test</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Remember an increasingly long pattern of button presses with Simon Says interactive tones.</p>
+            </div>
+            <a href="/tools/sequence-memory-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Sequence Memory Test</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🎯</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Aim Trainer</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">How quickly can you hit 30 targets? Test your mouse precision and reflex speed.</p>
+            </div>
+            <a href="/tools/aim-trainer/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Aim Trainer</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🔢</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Number Memory Test</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Remember the longest number sequence you can. The number length increases every level.</p>
+            </div>
+            <a href="/tools/number-memory-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Number Memory Test</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">💬</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Verbal Memory Test</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Keep as many words in short term memory as possible. Identify whether each word is SEEN or NEW.</p>
+            </div>
+            <a href="/tools/verbal-memory-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Verbal Memory Test</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🐒</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Chimp Test</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Are you smarter than a chimpanzee? Memorize number locations before they turn into blank tiles.</p>
+            </div>
+            <a href="/tools/chimp-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Chimp Test</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🔳</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Visual Memory Test</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Remember an increasingly large board of squares as the grid expands.</p>
+            </div>
+            <a href="/tools/visual-memory-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Visual Memory Test</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">⌨️</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Typing Speed Test (WPM)</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.</p>
+            </div>
+            <a href="/tools/typing-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Typing Speed Test (WPM)</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🖱️</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Mouse Tester</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.</p>
+            </div>
+            <a href="/tools/mouse-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Mouse Tester</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🖥️</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Keyboard Tester</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.</p>
+            </div>
+            <a href="/tools/keyboard-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Keyboard Tester</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">👆</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Double Click Tester</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Test your double-clicking speed and detect faulty mouse switch hardware chatter with millisecond precision.</p>
+            </div>
+            <a href="/tools/double-click-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Double Click Tester</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">⚡</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">CPS Test (Clicks Per Second)</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Test your Clicks Per Second (CPS) with our free online CPS calculator. Select 1s, 5s, 10s, 30s, or 60s tests and track your personal best.</p>
+            </div>
+            <a href="/tools/cps-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use CPS Test (Clicks Per Second)</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🚀</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Click Speed Test</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Measure your click velocity, burst speed, and clicking consistency with real-time analytics and dynamic speed gauges.</p>
+            </div>
+            <a href="/tools/click-speed-test/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Click Speed Test</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🔢</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Digital Click Counter</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Online digital click counter with audio sound effects, touch vibration, keyboard shortcuts (Spacebar), and target goal tracking.</p>
+            </div>
+            <a href="/tools/click-counter/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Digital Click Counter</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🎯</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Online Auto Clicker</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Free online auto clicker running directly in your browser. Set click intervals, target counts, and hotkeys with zero software downloads.</p>
+            </div>
+            <a href="/tools/auto-clicker/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Online Auto Clicker</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">⛳</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Nibbles Mini Golf (18 Holes)</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!</p>
+            </div>
+            <a href="/games/mini-golf/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Nibbles Mini Golf (18 Holes)</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🎣</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Cat Fishing Game</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Cast your line, click &amp; drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!</p>
+            </div>
+            <a href="/games/fishing/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Cat Fishing Game</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🍉</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Fruit Slicer Arcade</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Juicy 2D Fruit Slicer Arcade with Nibbles 🐱! Drag or swipe your blade to slice flying fruits ⚔️, trigger multi-slice combo multipliers, and defend your 3 lives!</p>
+            </div>
+            <a href="/games/fruit-slicer/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Fruit Slicer Arcade</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🐟</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Nibbles Fish Maze</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Help Nibbles 🐱 navigate through a dynamic maze to find and eat the delicious Fish 🐟!</p>
+            </div>
+            <a href="/games/fish-maze/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Nibbles Fish Maze</span> →
+            </a>
+          </div>
+        
+          <div class="tool-card" style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+            <div>
+              <div style="font-size:2rem; margin-bottom:0.5rem;">🎴</div>
+              <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Card Memory Match (3D)</h3>
+              <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">Flip 3D cat-themed cards to find all 8 matching pairs in the fewest turns possible.</p>
+            </div>
+            <a href="/games/card-memory/" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+              <span>Use Card Memory Match (3D)</span> →
+            </a>
+          </div>
+        
+      </div>
+      
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer">
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; box-shadow:0 0 10px rgba(16,185,129,0.3);">
+              🐱
+            </div>
+            <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
+          </div>
+          <p class="footer-desc">
+            Free, private, high-performance browser-based hardware testing suite and human benchmark tests.
+            No downloads or installation required.
+          </p>
+          <div class="footer-badges" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem;">
+            <span class="badge" style="background:rgba(16,185,129,0.1); color:var(--accent-emerald); border:1px solid rgba(16,185,129,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">100% Client-Side</span>
+            <span class="badge" style="background:rgba(6,182,212,0.1); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">No Log Tracking</span>
+            <span class="badge" style="background:rgba(249,115,22,0.1); color:var(--accent-primary); border:1px solid rgba(249,115,22,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">MIT License</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🧠 Cognitive Benchmarks</div>
+          <ul class="footer-links">
+            <li><a href="/tools/reaction-time-test/">Reaction Time Test</a></li>
+            <li><a href="/tools/sequence-memory-test/">Sequence Memory Test</a></li>
+            <li><a href="/tools/aim-trainer/">Aim Trainer</a></li>
+            <li><a href="/tools/number-memory-test/">Number Memory Test</a></li>
+            <li><a href="/tools/verbal-memory-test/">Verbal Memory Test</a></li>
+            <li><a href="/tools/chimp-test/">Chimp Test</a></li>
+            <li><a href="/tools/visual-memory-test/">Visual Memory Test</a></li>
+            <li><a href="/tools/typing-test/">Typing Speed Test (WPM)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🖱️ Hardware & Speed Tests</div>
+          <ul class="footer-links">
+            <li><a href="/tools/keyboard-test/">Keyboard Key Tester</a></li>
+            <li><a href="/tools/mouse-test/">Mouse Hardware Tester</a></li>
+            <li><a href="/tools/double-click-test/">Double Click Tester</a></li>
+            <li><a href="/tools/cps-test/">CPS Speed Test</a></li>
+            <li><a href="/tools/click-speed-test/">Click Speed Test</a></li>
+            <li><a href="/tools/click-counter/">Click Counter</a></li>
+            <li><a href="/tools/auto-clicker/">Online Auto Clicker</a></li>
+            <li><a href="/games/mini-golf/">Cat Mini Golf</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🐾 Platform & Trust</div>
+          <ul class="footer-links">
+            <li><a href="/about/">About CatKeyLab & Dylan</a></li>
+            <li><a href="/faq/">Frequently Asked Questions</a></li>
+            <li><a href="/leaderboards/">Anonymous Global Leaderboards</a></li>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+            <li><a href="/contact/">Contact & Feedback</a></li>
+            <li><a href="/sitemap/">Sitemap & Tools Directory</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="container footer-bottom-inner" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div class="copyright">
+            © 2026 CatKeyLab. Open source under the MIT License. Built with ❤️ for keyboard & hardware enthusiasts.
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">
+            Inspired by Nibbles 🐱 the Ginger Tabby Cat.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

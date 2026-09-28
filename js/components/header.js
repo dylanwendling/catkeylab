@@ -13,7 +13,7 @@ export function renderHeader(container) {
   container.innerHTML = `
     <header class="site-header">
       <div class="container header-inner">
-        <a href="#" class="logo" id="header-logo">
+        <a href="/" class="logo" id="header-logo">
           <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
             🐱
           </div>
@@ -22,7 +22,7 @@ export function renderHeader(container) {
 
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
-          <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
+          <a href="/" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
           
           <!-- Benchmarks Dropdown -->
           <div class="dropdown" id="benchmarks-dropdown">
@@ -30,14 +30,14 @@ export function renderHeader(container) {
               <span>🧠 Benchmarks ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="#reaction-time-test" class="dropdown-item">⏱️ Reaction Time Test</a>
-              <a href="#sequence-memory-test" class="dropdown-item">🧠 Sequence Memory Test</a>
-              <a href="#aim-trainer-test" class="dropdown-item">🎯 Aim Trainer</a>
-              <a href="#number-memory-test" class="dropdown-item">🔢 Number Memory Test</a>
-              <a href="#verbal-memory-test" class="dropdown-item">💬 Verbal Memory Test</a>
-              <a href="#chimp-test" class="dropdown-item">🐒 Chimp Test</a>
-              <a href="#visual-memory-test" class="dropdown-item">🔳 Visual Memory Test</a>
-              <a href="#typing-test" class="dropdown-item">⌨️ WPM Typing Test</a>
+              <a href="/tools/reaction-time-test/" class="dropdown-item">⏱️ Reaction Time Test</a>
+              <a href="/tools/sequence-memory-test/" class="dropdown-item">🧠 Sequence Memory Test</a>
+              <a href="/tools/aim-trainer/" class="dropdown-item">🎯 Aim Trainer</a>
+              <a href="/tools/number-memory-test/" class="dropdown-item">🔢 Number Memory Test</a>
+              <a href="/tools/verbal-memory-test/" class="dropdown-item">💬 Verbal Memory Test</a>
+              <a href="/tools/chimp-test/" class="dropdown-item">🐒 Chimp Test</a>
+              <a href="/tools/visual-memory-test/" class="dropdown-item">🔳 Visual Memory Test</a>
+              <a href="/tools/typing-test/" class="dropdown-item">⌨️ WPM Typing Test</a>
             </div>
           </div>
 
@@ -47,27 +47,43 @@ export function renderHeader(container) {
               <span>🖱️ Hardware ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="#mouse-test" class="dropdown-item" data-i18n="navMouseTest">🖱️ Mouse Hardware Tester</a>
-              <a href="#keyboard-test" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ Keyboard Key Tester</a>
+              <a href="/tools/keyboard-test/" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ Keyboard Key Tester</a>
+              <a href="/tools/mouse-test/" class="dropdown-item" data-i18n="navMouseTest">🖱️ Mouse Hardware Tester</a>
+              <a href="/tools/double-click-test/" class="dropdown-item" data-i18n="navDoubleClickTest">⚡ Double Click Tester</a>
             </div>
           </div>
 
           <!-- Speed & Tools Dropdown -->
           <div class="dropdown" id="tools-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>⚡ All Utilities ▾</span>
+              <span>⚡ Speed & Utilities ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
-              <a href="#fruit-slicer-game" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
-              <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
-              <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">🚀 Click Speed Test</a>
-              <a href="#click-counter" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
-              <a href="#double-click-test" class="dropdown-item" data-i18n="navDoubleClickTest">⚡ Double Click Test</a>
+              <a href="/tools/cps-test/" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
+              <a href="/tools/click-speed-test/" class="dropdown-item" data-i18n="navClickSpeedTest">🚀 Click Speed Test</a>
+              <a href="/tools/click-counter/" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
+              <a href="/tools/auto-clicker/" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
-              <a href="#tools" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
+              <a href="/tools/" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
             </div>
           </div>
+
+          <!-- Games Dropdown -->
+          <div class="dropdown" id="games-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🎮 Games ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/games/mini-golf/" class="dropdown-item">⛳ Nibbles Mini Golf (18H)</a>
+              <a href="/games/fishing/" class="dropdown-item">🎣 Cat Fishing Game</a>
+              <a href="/games/fruit-slicer/" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
+              <a href="/games/fish-maze/" class="dropdown-item">🐟 Nibbles Fish Maze</a>
+              <a href="/games/card-memory/" class="dropdown-item">🎴 Card Memory Match</a>
+            </div>
+          </div>
+
+          <a href="/about/" class="nav-link" data-route="about">About</a>
+          <a href="/faq/" class="nav-link" data-route="faq">FAQ</a>
         </nav>
 
         <div class="header-actions">
@@ -113,59 +129,74 @@ export function renderHeader(container) {
 
       <!-- Mobile Navigation Drawer (100% Mobile Benchmarks) -->
       <div id="mobile-drawer" class="mobile-drawer">
-        <a href="#" class="mobile-nav-link" data-route="">
+        <a href="/" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
         </a>
-        <a href="#typing-test" class="mobile-nav-link" data-route="typing-test">
+        <a href="/tools/typing-test/" class="mobile-nav-link" data-route="typing-test">
           <span>⌨️ Typing Speed Test</span>
         </a>
-        <a href="#cps-test" class="mobile-nav-link" data-route="cps-test">
+        <a href="/tools/cps-test/" class="mobile-nav-link" data-route="cps-test">
           <span>⚡ CPS Speed Test</span>
         </a>
-        <a href="#aim-trainer-test" class="mobile-nav-link" data-route="aim-trainer-test">
+        <a href="/tools/aim-trainer/" class="mobile-nav-link" data-route="aim-trainer">
           <span>🎯 Aim Trainer</span>
         </a>
-        <a href="#cat-mini-golf-game" class="mobile-nav-link" data-route="cat-mini-golf-game">
-          <span>⛳ Nibbles Mini Golf</span>
+        <a href="/tools/keyboard-test/" class="mobile-nav-link" data-route="keyboard-test">
+          <span>🖥️ Keyboard Tester</span>
         </a>
-        <a href="#reaction-time-test" class="mobile-nav-link" data-route="reaction-time-test">
+        <a href="/tools/mouse-test/" class="mobile-nav-link" data-route="mouse-test">
+          <span>🖱️ Mouse Tester</span>
+        </a>
+        <a href="/tools/reaction-time-test/" class="mobile-nav-link" data-route="reaction-time-test">
           <span>⏱️ Reaction Time Test</span>
         </a>
-        <a href="#sequence-memory-test" class="mobile-nav-link" data-route="sequence-memory-test">
+        <a href="/tools/sequence-memory-test/" class="mobile-nav-link" data-route="sequence-memory-test">
           <span>🧠 Sequence Memory</span>
         </a>
-        <a href="#click-speed-test" class="mobile-nav-link" data-route="click-speed-test">
-          <span>🚀 Click Speed Test</span>
+        <a href="/games/mini-golf/" class="mobile-nav-link" data-route="cat-mini-golf-game">
+          <span>⛳ Nibbles Mini Golf</span>
         </a>
-        <a href="#double-click-test" class="mobile-nav-link" data-route="double-click-test">
-          <span>⚡ Double Click Test</span>
+        <a href="/games/fishing/" class="mobile-nav-link" data-route="cat-fishing-game">
+          <span>🎣 Cat Fishing Game</span>
+        </a>
+        <a href="/games/fruit-slicer/" class="mobile-nav-link" data-route="fruit-slicer-game">
+          <span>🍉 Fruit Slicer Arcade</span>
         </a>
         <div style="height:1px; background:var(--border-color); margin:0.5rem 0;"></div>
-        <a href="#tools" class="mobile-nav-link" data-route="tools">
+        <a href="/tools/" class="mobile-nav-link" data-route="tools">
           <strong>📂 All Tools Directory</strong>
+        </a>
+        <a href="/about/" class="mobile-nav-link" data-route="about">
+          <span>ℹ️ About CatKeyLab</span>
+        </a>
+        <a href="/faq/" class="mobile-nav-link" data-route="faq">
+          <span>❓ FAQ</span>
+        </a>
+        <a href="/privacy/" class="mobile-nav-link" data-route="privacy">
+          <span>🛡️ Privacy Policy</span>
         </a>
       </div>
     </header>
 
     <!-- Concrete Mobile Bottom Navigation Bar (Screens <= 768px) -->
     <nav id="mobile-bottom-bar" class="mobile-bottom-bar">
-      <a href="#" class="mobile-bottom-tab" data-route="">
+      <a href="/" class="mobile-bottom-tab" data-route="">
         <span class="tab-icon">🏠</span>
         <span class="tab-label">Home</span>
       </a>
-      <a href="#typing-test" class="mobile-bottom-tab" data-route="typing-test">
+      <a href="/tools/typing-test/" class="mobile-bottom-tab" data-route="typing-test">
         <span class="tab-icon">⌨️</span>
         <span class="tab-label">Typing</span>
       </a>
-      <a href="#cps-test" class="mobile-bottom-tab" data-route="cps-test">
+      <a href="/tools/cps-test/" class="mobile-bottom-tab" data-route="cps-test">
         <span class="tab-icon">⚡</span>
         <span class="tab-label">CPS</span>
       </a>
-      <a href="#aim-trainer-test" class="mobile-bottom-tab" data-route="aim-trainer-test">
+      <a href="/tools/aim-trainer/" class="mobile-bottom-tab" data-route="aim-trainer">
         <span class="tab-icon">🎯</span>
         <span class="tab-label">Aim</span>
       </a>
-      <a href="#tools" class="mobile-bottom-tab" data-route="tools">
+      <a href="/tools/" class="mobile-bottom-tab" data-route="tools">
         <span class="tab-icon">📂</span>
         <span class="tab-label">Tools</span>
       </a>

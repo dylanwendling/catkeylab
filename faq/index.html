@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frequently Asked Questions - CatKeyLab 🐾 Hardware Testing FAQ</title>
+  <meta name="description" content="Common questions and answers regarding keyboard switch testing, mouse button chatter diagnostics, WPM typing speed calculations, and reaction benchmarks.">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical & hreflang Tags -->
+  <link rel="canonical" href="https://catkeylab.com/faq/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/faq/">
+  <meta property="og:title" content="Frequently Asked Questions - CatKeyLab 🐾 Hardware Testing FAQ">
+  <meta property="og:description" content="Common questions and answers regarding keyboard switch testing, mouse button chatter diagnostics, WPM typing speed calculations, and reaction benchmarks.">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Frequently Asked Questions - CatKeyLab 🐾 Hardware Testing FAQ">
+  <meta name="twitter:description" content="Common questions and answers regarding keyboard switch testing, mouse button chatter diagnostics, WPM typing speed calculations, and reaction benchmarks.">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+</head>
+<body>
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header">
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="/" class="logo" id="header-logo">
+          <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
+            🐱
+          </div>
+          <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="nav-desktop">
+          <a href="/" class="nav-link" data-route="">Home</a>
+          
+          <!-- Benchmarks Dropdown -->
+          <div class="dropdown" id="benchmarks-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🧠 Benchmarks ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/reaction-time-test/" class="dropdown-item">⏱️ Reaction Time Test</a>
+              <a href="/tools/sequence-memory-test/" class="dropdown-item">🧠 Sequence Memory Test</a>
+              <a href="/tools/aim-trainer/" class="dropdown-item">🎯 Aim Trainer</a>
+              <a href="/tools/number-memory-test/" class="dropdown-item">🔢 Number Memory Test</a>
+              <a href="/tools/verbal-memory-test/" class="dropdown-item">💬 Verbal Memory Test</a>
+              <a href="/tools/chimp-test/" class="dropdown-item">🐒 Chimp Test</a>
+              <a href="/tools/visual-memory-test/" class="dropdown-item">🔳 Visual Memory Test</a>
+              <a href="/tools/typing-test/" class="dropdown-item">⌨️ WPM Typing Test</a>
+            </div>
+          </div>
+
+          <!-- Hardware Dropdown -->
+          <div class="dropdown" id="hardware-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🖱️ Hardware ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/keyboard-test/" class="dropdown-item">⌨️ Keyboard Key Tester</a>
+              <a href="/tools/mouse-test/" class="dropdown-item">🖱️ Mouse Hardware Tester</a>
+              <a href="/tools/double-click-test/" class="dropdown-item">⚡ Double Click Tester</a>
+            </div>
+          </div>
+
+          <!-- Speed & Tools Dropdown -->
+          <div class="dropdown" id="tools-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>⚡ Speed & Utilities ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/cps-test/" class="dropdown-item">⚡ CPS Speed Test</a>
+              <a href="/tools/click-speed-test/" class="dropdown-item">🚀 Click Speed Test</a>
+              <a href="/tools/click-counter/" class="dropdown-item">🔢 Digital Click Counter</a>
+              <a href="/tools/auto-clicker/" class="dropdown-item">🤖 Online Auto Clicker</a>
+              <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
+              <a href="/tools/" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
+            </div>
+          </div>
+
+          <!-- Games Dropdown -->
+          <div class="dropdown" id="games-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>🎮 Games ▾</span>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/games/mini-golf/" class="dropdown-item">⛳ Nibbles Mini Golf (18H)</a>
+              <a href="/games/fishing/" class="dropdown-item">🎣 Cat Fishing Game</a>
+              <a href="/games/fruit-slicer/" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
+              <a href="/games/fish-maze/" class="dropdown-item">🐟 Nibbles Fish Maze</a>
+              <a href="/games/card-memory/" class="dropdown-item">🎴 Card Memory Match</a>
+            </div>
+          </div>
+
+          <a href="/about/" class="nav-link" data-route="about">About</a>
+          <a href="/faq/" class="nav-link" data-route="faq">FAQ</a>
+        </nav>
+      </div>
+    </header>
+
+  </div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="/">Home</a>
+          <span class="separator">/</span>
+          <span style="color:var(--text-primary); font-weight:600;">FAQ</span>
+        </nav>
+        
+    </div>
+    <div id="main-content">
+      
+    <div class="container section">
+      <div class="tool-wrapper" style="max-width:960px; margin:0 auto;">
+        <h1 style="font-size:2.2rem; font-weight:800; margin-bottom:0.75rem;">
+          ❓ Frequently Asked Questions
+        </h1>
+        <p class="hero-subtitle" style="margin-bottom:2rem; color:var(--text-secondary); font-size:1.1rem; line-height:1.7;">
+          Everything you need to know about testing keyboards, diagnosing mouse button issues, measuring typing speed, and understanding human cognitive benchmarks on CatKeyLab.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:1.25rem;">
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.5rem;">
+            <h3 style="font-size:1.2rem; color:var(--text-primary); margin-bottom:0.5rem;">How do I test if a keyboard key is broken or unresponsive?</h3>
+            <p style="color:var(--text-secondary); line-height:1.7;">Open the <a href="/tools/keyboard-test/" style="color:var(--accent-cyan);">Keyboard Tester</a>, click inside the test area, and press each key on your physical keyboard. Every key that registers correctly will light up on the visual layout and record its keycode in the event log. If a key fails to highlight, it is not registering with the browser, which indicates a faulty switch, debris under the keycap, or a broken circuit board trace.</p>
+          </div>
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.5rem;">
+            <h3 style="font-size:1.2rem; color:var(--text-primary); margin-bottom:0.5rem;">What is keyboard ghosting and key rollover (NKRO)?</h3>
+            <p style="color:var(--text-secondary); line-height:1.7;">Keyboard ghosting occurs when pressing multiple keys simultaneously causes some keystrokes to fail or registers unpressed keys. "NKRO" (N-Key Rollover) means your keyboard can accurately register as many keys as you press at once without limitation. You can test your keyboard rollover capability using the <a href="/tools/keyboard-test/" style="color:var(--accent-cyan);">Keyboard Tester</a> by holding down multiple keys simultaneously.</p>
+          </div>
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.5rem;">
+            <h3 style="font-size:1.2rem; color:var(--text-primary); margin-bottom:0.5rem;">How do I detect mouse double-clicking issues (switch chatter)?</h3>
+            <p style="color:var(--text-secondary); line-height:1.7;">Use our <a href="/tools/double-click-test/" style="color:var(--accent-cyan);">Double Click Tester</a>. Click once firmly inside the test zone. If the tool registers two clicks with an interval under 40 milliseconds when you only clicked once, your mouse switch is "chattering": a common mechanical failure where worn micro-switch contacts bounce involuntarily.</p>
+          </div>
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.5rem;">
+            <h3 style="font-size:1.2rem; color:var(--text-primary); margin-bottom:0.5rem;">How is typing speed (WPM) calculated?</h3>
+            <p style="color:var(--text-secondary); line-height:1.7;">Words Per Minute (WPM) is standardized as <code>(Characters Typed ÷ 5) ÷ Minutes Elapsed</code>. Any 5 keystrokes (including spaces and punctuation) count as one standardized "word". Accuracy is calculated as the percentage of correct characters out of total characters typed. Test yours on the <a href="/tools/typing-test/" style="color:var(--accent-cyan);">Typing Speed Test</a>.</p>
+          </div>
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.5rem;">
+            <h3 style="font-size:1.2rem; color:var(--text-primary); margin-bottom:0.5rem;">What is the average human visual reaction time?</h3>
+            <p style="color:var(--text-secondary); line-height:1.7;">The average visual reaction time for healthy adults is between 200ms and 250ms. Gamers and athletes often reach 150ms–190ms. Display latency, monitor refresh rate (60Hz vs 144Hz+), and mouse polling rate also affect measured times by several milliseconds. Measure yours with our <a href="/tools/reaction-time-test/" style="color:var(--accent-cyan);">Reaction Time Test</a>.</p>
+          </div>
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.5rem;">
+            <h3 style="font-size:1.2rem; color:var(--text-primary); margin-bottom:0.5rem;">What is a good CPS (Clicks Per Second) score?</h3>
+            <p style="color:var(--text-secondary); line-height:1.7;">Standard regular clicking with one finger averages 6 to 8 CPS. Gamers practicing butterfly clicking or jitter clicking routinely achieve 10 to 14+ CPS. Specialized techniques like drag clicking on textured mouse switches can reach 20+ CPS. Test your click rate on the <a href="/tools/cps-test/" style="color:var(--accent-cyan);">CPS Test</a>.</p>
+          </div>
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.5rem;">
+            <h3 style="font-size:1.2rem; color:var(--text-primary); margin-bottom:0.5rem;">Does CatKeyLab collect or transmit my keystrokes or mouse clicks?</h3>
+            <p style="color:var(--text-secondary); line-height:1.7;">No. CatKeyLab operates 100% client-side inside your browser sandbox. Your typing text, mouse coordinates, and test scores are processed locally on your device. We do not store, track, or transmit your private hardware logs.</p>
+          </div>
+        </div>
+        
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+      </div>
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer">
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; box-shadow:0 0 10px rgba(16,185,129,0.3);">
+              🐱
+            </div>
+            <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
+          </div>
+          <p class="footer-desc">
+            Free, private, high-performance browser-based hardware testing suite and human benchmark tests.
+            No downloads or installation required.
+          </p>
+          <div class="footer-badges" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem;">
+            <span class="badge" style="background:rgba(16,185,129,0.1); color:var(--accent-emerald); border:1px solid rgba(16,185,129,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">100% Client-Side</span>
+            <span class="badge" style="background:rgba(6,182,212,0.1); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">No Log Tracking</span>
+            <span class="badge" style="background:rgba(249,115,22,0.1); color:var(--accent-primary); border:1px solid rgba(249,115,22,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">MIT License</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🧠 Cognitive Benchmarks</div>
+          <ul class="footer-links">
+            <li><a href="/tools/reaction-time-test/">Reaction Time Test</a></li>
+            <li><a href="/tools/sequence-memory-test/">Sequence Memory Test</a></li>
+            <li><a href="/tools/aim-trainer/">Aim Trainer</a></li>
+            <li><a href="/tools/number-memory-test/">Number Memory Test</a></li>
+            <li><a href="/tools/verbal-memory-test/">Verbal Memory Test</a></li>
+            <li><a href="/tools/chimp-test/">Chimp Test</a></li>
+            <li><a href="/tools/visual-memory-test/">Visual Memory Test</a></li>
+            <li><a href="/tools/typing-test/">Typing Speed Test (WPM)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🖱️ Hardware & Speed Tests</div>
+          <ul class="footer-links">
+            <li><a href="/tools/keyboard-test/">Keyboard Key Tester</a></li>
+            <li><a href="/tools/mouse-test/">Mouse Hardware Tester</a></li>
+            <li><a href="/tools/double-click-test/">Double Click Tester</a></li>
+            <li><a href="/tools/cps-test/">CPS Speed Test</a></li>
+            <li><a href="/tools/click-speed-test/">Click Speed Test</a></li>
+            <li><a href="/tools/click-counter/">Click Counter</a></li>
+            <li><a href="/tools/auto-clicker/">Online Auto Clicker</a></li>
+            <li><a href="/games/mini-golf/">Cat Mini Golf</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🐾 Platform & Trust</div>
+          <ul class="footer-links">
+            <li><a href="/about/">About CatKeyLab & Dylan</a></li>
+            <li><a href="/faq/">Frequently Asked Questions</a></li>
+            <li><a href="/leaderboards/">Anonymous Global Leaderboards</a></li>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+            <li><a href="/contact/">Contact & Feedback</a></li>
+            <li><a href="/sitemap/">Sitemap & Tools Directory</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="container footer-bottom-inner" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div class="copyright">
+            © 2026 CatKeyLab. Open source under the MIT License. Built with ❤️ for keyboard & hardware enthusiasts.
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">
+            Inspired by Nibbles 🐱 the Ginger Tabby Cat.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

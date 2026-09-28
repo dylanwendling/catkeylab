@@ -6,7 +6,7 @@
   "main": "index.html",
   "scripts": {
     "start": "serve -s . -l ${PORT:-3000}",
-    "build": "echo 'No build required for static site'"
+    "build": "python build_pages.py"
   },
   "dependencies": {
     "serve": "^14.2.4"

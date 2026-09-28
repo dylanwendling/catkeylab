@@ -33,26 +33,42 @@ export function renderFooter(container) {
           <div>
             <h4 class="footer-title">Human Benchmarks</h4>
             <div class="footer-links">
-              <a href="/reaction-time-test/" class="footer-link">Reaction Time</a>
-              <a href="/sequence-memory-test/" class="footer-link">Sequence Memory</a>
-              <a href="/aim-trainer-test/" class="footer-link">Aim Trainer</a>
-              <a href="/number-memory-test/" class="footer-link">Number Memory</a>
-              <a href="/verbal-memory-test/" class="footer-link">Verbal Memory</a>
-              <a href="/chimp-test/" class="footer-link">Chimp Test</a>
-              <a href="/visual-memory-test/" class="footer-link">Visual Memory</a>
-              <a href="/typing-test/" class="footer-link">Typing Speed</a>
+              <a href="/tools/reaction-time-test/" class="footer-link">Reaction Time Test</a>
+              <a href="/tools/sequence-memory-test/" class="footer-link">Sequence Memory</a>
+              <a href="/tools/aim-trainer/" class="footer-link">Aim Trainer</a>
+              <a href="/tools/number-memory-test/" class="footer-link">Number Memory</a>
+              <a href="/tools/verbal-memory-test/" class="footer-link">Verbal Memory</a>
+              <a href="/tools/chimp-test/" class="footer-link">Chimp Test</a>
+              <a href="/tools/visual-memory-test/" class="footer-link">Visual Memory</a>
+              <a href="/tools/typing-test/" class="footer-link">Typing Speed (WPM)</a>
             </div>
           </div>
 
-          <!-- Languages Column -->
+          <!-- Hardware & Speed Column -->
           <div>
-            <h4 class="footer-title" data-i18n="navLanguages">${t('navLanguages')}</h4>
-            <div class="footer-links" style="display:grid; grid-template-columns: 1fr 1fr; gap:0.4rem;">
-              ${LANGUAGES.map(lang => `
-                <a href="javascript:void(0)" class="footer-link footer-lang-btn" data-lang="${lang.code}">
-                  ${lang.flag} ${lang.name}
-                </a>
-              `).join('')}
+            <h4 class="footer-title">Hardware & Speed</h4>
+            <div class="footer-links">
+              <a href="/tools/keyboard-test/" class="footer-link">Keyboard Key Tester</a>
+              <a href="/tools/mouse-test/" class="footer-link">Mouse Button Tester</a>
+              <a href="/tools/double-click-test/" class="footer-link">Double Click Tester</a>
+              <a href="/tools/cps-test/" class="footer-link">CPS Speed Test</a>
+              <a href="/tools/click-speed-test/" class="footer-link">Click Speed Test</a>
+              <a href="/tools/click-counter/" class="footer-link">Click Counter</a>
+              <a href="/tools/auto-clicker/" class="footer-link">Online Auto Clicker</a>
+              <a href="/tools/" class="footer-link"><strong>Browse All Tools</strong></a>
+            </div>
+          </div>
+
+          <!-- Games Column -->
+          <div>
+            <h4 class="footer-title">Arcade Games</h4>
+            <div class="footer-links">
+              <a href="/games/mini-golf/" class="footer-link">⛳ Nibbles Mini Golf</a>
+              <a href="/games/fishing/" class="footer-link">🎣 Cat Fishing Game</a>
+              <a href="/games/fruit-slicer/" class="footer-link">🍉 Fruit Slicer</a>
+              <a href="/games/fish-maze/" class="footer-link">🐟 Nibbles Fish Maze</a>
+              <a href="/games/card-memory/" class="footer-link">🎴 Card Memory Match</a>
+              <a href="/leaderboards/" class="footer-link">🏆 Leaderboards</a>
             </div>
           </div>
 
@@ -60,11 +76,12 @@ export function renderFooter(container) {
           <div>
             <h4 class="footer-title">Platform & Privacy</h4>
             <div class="footer-links">
-              <a href="https://catkeylab.com/#nibbles" class="footer-link">Meet Nibbles 🐱</a>
-              <a href="https://catkeylab.com/#about" class="footer-link">About CatKeyLab</a>
-              <a href="https://catkeylab.com/#privacy" class="footer-link">Privacy Policy</a>
-              <a href="https://catkeylab.com/#terms" class="footer-link">Terms of Service</a>
-              <a href="https://catkeylab.com/#sitemap" class="footer-link">Sitemap & Index</a>
+              <a href="/about/" class="footer-link">About CatKeyLab</a>
+              <a href="/faq/" class="footer-link">Frequently Asked Questions</a>
+              <a href="/privacy/" class="footer-link">Privacy Policy</a>
+              <a href="/terms/" class="footer-link">Terms of Service</a>
+              <a href="/contact/" class="footer-link">Contact & Support</a>
+              <a href="/sitemap/" class="footer-link">Sitemap & Index</a>
             </div>
           </div>
         </div>

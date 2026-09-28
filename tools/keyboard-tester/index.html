@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>交互式键盘按键测试 🖥️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾</title>
+  <meta name="description" content="Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical Tag -->
+  <link rel="canonical" href="https://catkeylab.com/tools/keyboard-test/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/tools/keyboard-test/">
+  <meta property="og:title" content="交互式键盘按键测试 🖥️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta property="og:description" content="Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="交互式键盘按键测试 🖥️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta name="twitter:description" content="Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "\u4ea4\u4e92\u5f0f\u952e\u76d8\u6309\u952e\u6d4b\u8bd5 - CatKeyLab",
+  "url": "https://catkeylab.com/tools/keyboard-test/",
+  "description": "Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.",
+  "operatingSystem": "All",
+  "applicationCategory": "BrowserApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://catkeylab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hardware Tests",
+      "item": "https://catkeylab.com/tools/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "\u4ea4\u4e92\u5f0f\u952e\u76d8\u6309\u952e\u6d4b\u8bd5",
+      "item": "https://catkeylab.com/tools/keyboard-test/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Does this keyboard tester support all keyboard layouts?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! The tester listens to standard DOM KeyboardEvents so any QWERTY, AZERTY, or custom layout keys will register."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I test if a specific key is broken?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Press the key in question. If it does not highlight on the visual keyboard and does not appear in the event log, the key is not sending a signal to the browser. This usually indicates a faulty key switch, broken connection, or a driver issue."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I test a laptop keyboard with this tool?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Laptop keyboards send the same keyboard events as external keyboards. Open the tester in your browser and press keys directly on your laptop keyboard."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I test a mechanical keyboard?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Mechanical keyboards work the same way through browser keyboard events. You can also use this tool to verify key rollover: press multiple keys simultaneously to see how many register at once."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why is key testing important for gaming and typing?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Key testing helps verify key rollover (NKRO), ghosting, and faulty key switches on mechanical or membrane keyboards."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body data-tool-key="keyboard-test">
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+    <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/tools/" itemprop="item"><span itemprop="name">Hardware Tests</span></a>
+        <meta itemprop="position" content="2" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span style="color:var(--text-primary); font-weight:600;" itemprop="name">交互式键盘按键测试</span>
+        <meta itemprop="position" content="3" />
+      </span>
+    </nav>
+    
+    </div>
+    <div id="main-content">
+      
+    <div class="container" style="padding-top:1.5rem;">
+      <div class="tool-page-layout">
+        <!-- Main Column (Tool) -->
+        <div class="tool-page-main">
+          <!-- Tool Title & Introduction -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>🖥️</span> <span>交互式键盘按键测试</span>
+            </h1>
+            <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">Press any key on your physical keyboard to see it highlighted on an interactive on-screen keyboard layout. This tool logs key events, key codes, and modifier key states in real-time to help you verify that every key on your keyboard is working correctly.</p>
+          </div>
+
+          <!-- Interactive Tool Widget -->
+          <div id="tool-render-box">
+            <div style="min-height:360px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-secondary); border:2px dashed var(--border-color); border-radius:var(--radius-lg); padding:2rem; text-align:center;">
+              <div style="font-size:3rem; margin-bottom:1rem;">🖥️</div>
+              <h2 style="font-size:1.5rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">交互式键盘按键测试</h2>
+              <p style="color:var(--text-secondary); max-width:480px; margin-bottom:1.5rem;">Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.</p>
+              <button class="btn btn-primary btn-lg" onclick="window.location.reload()">
+                <span>⚡ Launch 交互式键盘按键测试</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sidebar Column (Informational Only - Ads safely separated below) -->
+        <div class="tool-page-sidebar">
+          <div class="tool-content-section">
+            
+        <div class="info-section">
+          <h2>How to Use 交互式键盘按键测试</h2>
+          <ol class="info-steps"><li>Click inside the test area to make sure it has focus.</li><li>Press any key on your physical keyboard.</li><li>The corresponding key on the visual keyboard layout will highlight.</li><li>Check the event log below for detailed key code and event information.</li><li>Test all keys you want to verify: especially modifier keys (Shift, Ctrl, Alt).</li></ol>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>What This Test Measures</h2>
+          <p>This tool captures browser KeyboardEvent data for every keypress, including the key name, key code, and modifier key states. It visually maps each keypress to a standard keyboard layout so you can see exactly which keys are registering.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Why Use This Test</h2>
+          <p>Use this tool to test a newly purchased keyboard, check a used keyboard before buying, troubleshoot keys that seem unresponsive or stuck, verify key rollover (pressing multiple keys simultaneously), or inspect the exact key codes being sent by your keyboard.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>How to Interpret Your Results</h2>
+          <p>Every key you press should immediately highlight on the visual layout and appear in the event log. If a key does not register at all, it may have a faulty switch or connection. If a key registers as a different key, there may be a layout or driver issue.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Tips for Accurate Results</h2>
+          <ul><li>Test multiple keys held simultaneously to check your keyboard&#x27;s key rollover (NKRO) capability.</li><li>Try every modifier key combination (Shift, Ctrl, Alt, Win/Cmd) to verify they work together.</li><li>If testing a mechanical keyboard, press each key firmly to ensure the switch activates.</li><li>For laptop keyboards, test keys around the edges and corners where flex may affect contact.</li></ul>
+        </div>
+        
+            
+            <div class="info-section">
+              <h3>Related Tools & Benchmarks</h3>
+              <div class="related-tools-grid"><a href="/tools/mouse-test/" class="related-tool-link">Mouse Tester</a> <a href="/tools/typing-test/" class="related-tool-link">Typing Speed Test (WPM)</a> <a href="/tools/double-click-test/" class="related-tool-link">Double Click Tester</a></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Safe Ad Space BELOW the tool and guide with strict buffer margins -->
+      
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+
+      <!-- Full Width FAQ Section -->
+      
+        <div id="tool-faq-container" style="margin-top: 2rem;">
+          <h2 style="font-size:1.75rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Frequently Asked Questions</h2>
+          <div class="faq-list" style="max-width:900px; margin:0 auto;">
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Does this keyboard tester support all keyboard layouts?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Yes! The tester listens to standard DOM KeyboardEvents so any QWERTY, AZERTY, or custom layout keys will register.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How do I test if a specific key is broken?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Press the key in question. If it does not highlight on the visual keyboard and does not appear in the event log, the key is not sending a signal to the browser. This usually indicates a faulty key switch, broken connection, or a driver issue.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Can I test a laptop keyboard with this tool?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Yes. Laptop keyboards send the same keyboard events as external keyboards. Open the tester in your browser and press keys directly on your laptop keyboard.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Can I test a mechanical keyboard?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Yes. Mechanical keyboards work the same way through browser keyboard events. You can also use this tool to verify key rollover: press multiple keys simultaneously to see how many register at once.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Why is key testing important for gaming and typing?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Key testing helps verify key rollover (NKRO), ghosting, and faulty key switches on mechanical or membrane keyboards.</p>
+              </div>
+            
+          </div>
+        </div>
+        
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

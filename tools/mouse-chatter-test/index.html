@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼠标双击误触测试 👆 - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾</title>
+  <meta name="description" content="Test your double-clicking speed and detect faulty mouse switch hardware chatter with millisecond precision.">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical Tag -->
+  <link rel="canonical" href="https://catkeylab.com/tools/double-click-test/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/tools/double-click-test/">
+  <meta property="og:title" content="鼠标双击误触测试 👆 - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta property="og:description" content="Test your double-clicking speed and detect faulty mouse switch hardware chatter with millisecond precision.">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="鼠标双击误触测试 👆 - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta name="twitter:description" content="Test your double-clicking speed and detect faulty mouse switch hardware chatter with millisecond precision.">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "\u9f20\u6807\u53cc\u51fb\u8bef\u89e6\u6d4b\u8bd5 - CatKeyLab",
+  "url": "https://catkeylab.com/tools/double-click-test/",
+  "description": "Test your double-clicking speed and detect faulty mouse switch hardware chatter with millisecond precision.",
+  "operatingSystem": "All",
+  "applicationCategory": "BrowserApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://catkeylab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hardware Tests",
+      "item": "https://catkeylab.com/tools/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "\u9f20\u6807\u53cc\u51fb\u8bef\u89e6\u6d4b\u8bd5",
+      "item": "https://catkeylab.com/tools/double-click-test/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is mouse double click chatter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Mouse chatter occurs when a degraded micro-switch registers two clicks involuntarily within less than 50 milliseconds."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I know if my mouse has chatter?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Click once firmly inside the test area. If the tool registers two clicks with a very short interval (under 40ms) when you only clicked once, your mouse likely has a chatter problem."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can mouse chatter be fixed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Some users fix chatter by adjusting the Windows double-click speed setting or using debounce software. However, chatter is usually a hardware issue caused by a worn micro-switch and may ultimately require mouse replacement or switch soldering repair."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is chatter only a problem with old mice?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Chatter most commonly occurs with aged micro-switches, but it can also appear on new mice with defective switches. Even high-end gaming mice can develop chatter over time."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body data-tool-key="double-click-test">
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+    <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/tools/" itemprop="item"><span itemprop="name">Hardware Tests</span></a>
+        <meta itemprop="position" content="2" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span style="color:var(--text-primary); font-weight:600;" itemprop="name">鼠标双击误触测试</span>
+        <meta itemprop="position" content="3" />
+      </span>
+    </nav>
+    
+    </div>
+    <div id="main-content">
+      
+    <div class="container" style="padding-top:1.5rem;">
+      <div class="tool-page-layout">
+        <!-- Main Column (Tool) -->
+        <div class="tool-page-main">
+          <!-- Tool Title & Introduction -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>👆</span> <span>鼠标双击误触测试</span>
+            </h1>
+            <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">Test your double-click speed and check for mouse button &quot;chatter&quot;: a common hardware fault where a single click accidentally registers as two clicks due to a worn-out micro-switch.</p>
+          </div>
+
+          <!-- Interactive Tool Widget -->
+          <div id="tool-render-box">
+            <div style="min-height:360px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-secondary); border:2px dashed var(--border-color); border-radius:var(--radius-lg); padding:2rem; text-align:center;">
+              <div style="font-size:3rem; margin-bottom:1rem;">👆</div>
+              <h2 style="font-size:1.5rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">鼠标双击误触测试</h2>
+              <p style="color:var(--text-secondary); max-width:480px; margin-bottom:1.5rem;">Test your double-clicking speed and detect faulty mouse switch hardware chatter with millisecond precision.</p>
+              <button class="btn btn-primary btn-lg" onclick="window.location.reload()">
+                <span>⚡ Launch 鼠标双击误触测试</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sidebar Column (Informational Only - Ads safely separated below) -->
+        <div class="tool-page-sidebar">
+          <div class="tool-content-section">
+            
+        <div class="info-section">
+          <h2>How to Use 鼠标双击误触测试</h2>
+          <ol class="info-steps"><li>Click inside the test area.</li><li>The tool records the time interval between consecutive clicks in milliseconds.</li><li>Intentionally double-click to see your natural double-click speed.</li><li>To test for chatter, click once firmly and check if a second click registers unintentionally.</li><li>Intervals under 40–50ms on a single click likely indicate switch chatter.</li></ol>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>What This Test Measures</h2>
+          <p>We track the exact time between your clicks. This helps catch intentional double-clicks and accidental chatter: false double-clicks caused by degraded micro-switches.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Why Use This Test</h2>
+          <p>If your mouse is getting old, it might start double-clicking on its own. This tool helps you figure out if your mouse switch is actually failing.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>How to Interpret Your Results</h2>
+          <p>Intentional double-clicks typically register between 60–200ms apart. If you see intervals under 40ms when you are only clicking once, your mouse switch may be &quot;chattering&quot;: registering false double-clicks due to mechanical wear. Consistent chatter under 20ms strongly suggests a failing micro-switch.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Tips for Accurate Results</h2>
+          <ul><li>Click firmly and deliberately with single clicks to test for chatter: do not try to double-click.</li><li>Repeat the single-click test 10+ times to check for intermittent chatter.</li><li>If chatter is detected, the issue is typically hardware-related and may require mouse replacement or switch repair.</li><li>Test both the left and right mouse buttons separately.</li></ul>
+        </div>
+        
+            
+            <div class="info-section">
+              <h3>Related Tools & Benchmarks</h3>
+              <div class="related-tools-grid"><a href="/tools/mouse-test/" class="related-tool-link">Mouse Tester</a> <a href="/tools/click-speed-test/" class="related-tool-link">Click Speed Test</a> <a href="/tools/cps-test/" class="related-tool-link">CPS Test (Clicks Per Second)</a></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Safe Ad Space BELOW the tool and guide with strict buffer margins -->
+      
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+
+      <!-- Full Width FAQ Section -->
+      
+        <div id="tool-faq-container" style="margin-top: 2rem;">
+          <h2 style="font-size:1.75rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Frequently Asked Questions</h2>
+          <div class="faq-list" style="max-width:900px; margin:0 auto;">
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">What is mouse double click chatter?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Mouse chatter occurs when a degraded micro-switch registers two clicks involuntarily within less than 50 milliseconds.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How do I know if my mouse has chatter?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Click once firmly inside the test area. If the tool registers two clicks with a very short interval (under 40ms) when you only clicked once, your mouse likely has a chatter problem.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Can mouse chatter be fixed?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Some users fix chatter by adjusting the Windows double-click speed setting or using debounce software. However, chatter is usually a hardware issue caused by a worn micro-switch and may ultimately require mouse replacement or switch soldering repair.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Is chatter only a problem with old mice?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Chatter most commonly occurs with aged micro-switches, but it can also appear on new mice with defective switches. Even high-end gaming mice can develop chatter over time.</p>
+              </div>
+            
+          </div>
+        </div>
+        
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

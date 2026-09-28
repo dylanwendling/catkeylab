@@ -3,5 +3,5 @@ services:
   - type: web
     name: catkeylab
     runtime: static
-    buildCommand: ""
+    buildCommand: "python build_pages.py"
     staticPublishPath: ./
