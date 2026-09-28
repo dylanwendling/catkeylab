@@ -12,9 +12,9 @@ export function renderBreadcrumbs(container, currentRouteName) {
 
   container.innerHTML = `
     <nav class="breadcrumbs" aria-label="Breadcrumb">
-      <a href="#" data-i18n="navHome">${t('navHome')}</a>
+      <a href="/" data-i18n="navHome">${t('navHome')}</a>
       <span class="separator">/</span>
-      <a href="#tools" data-i18n="navTools">${t('navTools')}</a>
+      <a href="/tools/" data-i18n="navTools">${t('navTools')}</a>
       <span class="separator">/</span>
       <span style="color:var(--text-primary); font-weight:600;">${currentRouteName}</span>
     </nav>

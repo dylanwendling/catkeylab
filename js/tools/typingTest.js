@@ -443,7 +443,7 @@ function showResultsModal(wpm, rawWpm, accuracy, errors, isNewHigh) {
         <button id="modal-retry-btn" class="btn btn-primary btn-lg" style="flex:1; min-width:160px;">
           🎮 Try Again (Enter)
         </button>
-        <a href="#leaderboards" class="btn btn-secondary btn-lg" style="flex:1; min-width:160px;">
+        <a href="/leaderboards/" class="btn btn-secondary btn-lg" style="flex:1; min-width:160px;">
           🏆 View Leaderboard
         </a>
         <button id="modal-surprise-btn" class="btn btn-surprise btn-lg" style="flex:1; min-width:160px;">

@@ -206,7 +206,7 @@ function handleGameOver() {
   document.getElementById('vb-final-score-text').innerHTML = `
     <div>Score: ${score} words</div>
     <div style="font-size:1.1rem; color:var(--accent-emerald); font-weight:700; margin-top:0.4rem; margin-bottom:0.75rem;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</div>
-    <a href="#leaderboards" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
+    <a href="/leaderboards/" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
   `;
 }
 

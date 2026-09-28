@@ -270,7 +270,7 @@ export function renderCatFishingGame(container) {
 
         <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
           <button id="fg-modal-play-again" class="btn btn-primary btn-lg" style="flex:1; min-width:140px; font-weight:800;">Play Again 🔄</button>
-          <a href="#leaderboards" class="btn btn-secondary btn-lg" style="flex:1; min-width:140px;">🏆 Leaderboards</a>
+          <a href="/leaderboards/" class="btn btn-secondary btn-lg" style="flex:1; min-width:140px;">🏆 Leaderboards</a>
         </div>
       </div>
     </div>
@@ -1486,7 +1486,7 @@ function bindInputEvents() {
   // Keyboard Event Listeners
   if (!listenersBound) {
     window.addEventListener('keydown', (e) => {
-      const hash = window.location.hash.replace('#', '').trim();
+      const hash = window.location.pathname.replace(/^\/|\/$/g, '').trim();
       if (hash !== 'cat-fishing-game') return;
 
       if (['Space', 'Enter'].includes(e.code)) {

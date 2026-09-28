@@ -97,7 +97,7 @@ export async function renderDailyChallengeTeaser(container) {
         <div style="text-align:center; padding:1rem 0;">
           <h4 style="color:var(--accent-emerald); font-size:1.5rem; margin-bottom:0.5rem;">🎉 Daily Challenge Complete!</h4>
           <p style="color:var(--text-secondary); margin-bottom:1.5rem;">You've completed all 5 tests for today. Check back tomorrow for a new challenge!</p>
-          <a href="#daily-challenge" class="btn btn-primary" style="color: var(--bg-primary); font-weight: 800;">View Results</a>
+          <a href="/daily-challenge/" class="btn btn-primary" style="color: var(--bg-primary); font-weight: 800;">View Results</a>
         </div>
     `;
   } else {
@@ -120,7 +120,7 @@ export async function renderDailyChallengeTeaser(container) {
             `;
           }).join('')}
         </ul>
-        <a href="#daily-challenge" class="btn btn-primary" style="width:100%; justify-content:center; padding:1rem; font-size:1.1rem;">
+        <a href="/daily-challenge/" class="btn btn-primary" style="width:100%; justify-content:center; padding:1rem; font-size:1.1rem;">
           <span style="color:var(--bg-primary); font-weight:800;">${testsCompleted > 0 ? 'Resume Challenge' : 'Start Challenge'}</span>
         </a>
     `;
@@ -259,8 +259,8 @@ function renderFinalResults() {
       </div>
       
       <div style="display:flex; gap:1rem; justify-content:center;">
-        <a href="#tools" class="btn btn-secondary btn-lg">Return to Tools</a>
-        <a href="#" class="btn btn-primary btn-lg" style="color: var(--bg-primary); font-weight: 800;">Back to Home</a>
+        <a href="/tools/" class="btn btn-secondary btn-lg">Return to Tools</a>
+        <a href="/" class="btn btn-primary btn-lg" style="color: var(--bg-primary); font-weight: 800;">Back to Home</a>
       </div>
     </div>
   `;

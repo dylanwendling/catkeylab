@@ -13,7 +13,7 @@ export function renderHeader(container) {
   container.innerHTML = `
     <header class="site-header">
       <div class="container header-inner">
-        <a href="#" class="logo" id="header-logo">
+        <a href="/" class="logo" id="header-logo">
           <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
             🐱
           </div>
@@ -22,7 +22,7 @@ export function renderHeader(container) {
 
         <!-- Desktop Navigation Links -->
         <nav class="nav-desktop">
-          <a href="#" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
+          <a href="/" class="nav-link" data-route="" data-i18n="navHome">${t('navHome')}</a>
           
           <!-- Benchmarks Dropdown -->
           <div class="dropdown" id="benchmarks-dropdown">
@@ -30,14 +30,14 @@ export function renderHeader(container) {
               <span>🧠 Benchmarks ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="#reaction-time-test" class="dropdown-item">⏱️ Reaction Time Test</a>
-              <a href="#sequence-memory-test" class="dropdown-item">🧠 Sequence Memory Test</a>
-              <a href="#aim-trainer-test" class="dropdown-item">🎯 Aim Trainer</a>
-              <a href="#number-memory-test" class="dropdown-item">🔢 Number Memory Test</a>
-              <a href="#verbal-memory-test" class="dropdown-item">💬 Verbal Memory Test</a>
-              <a href="#chimp-test" class="dropdown-item">🐒 Chimp Test</a>
-              <a href="#visual-memory-test" class="dropdown-item">🔳 Visual Memory Test</a>
-              <a href="#typing-test" class="dropdown-item">⌨️ WPM Typing Test</a>
+              <a href="/reaction-time-test/" class="dropdown-item">⏱️ Reaction Time Test</a>
+              <a href="/sequence-memory-test/" class="dropdown-item">🧠 Sequence Memory Test</a>
+              <a href="/aim-trainer-test/" class="dropdown-item">🎯 Aim Trainer</a>
+              <a href="/number-memory-test/" class="dropdown-item">🔢 Number Memory Test</a>
+              <a href="/verbal-memory-test/" class="dropdown-item">💬 Verbal Memory Test</a>
+              <a href="/chimp-test/" class="dropdown-item">🐒 Chimp Test</a>
+              <a href="/visual-memory-test/" class="dropdown-item">🔳 Visual Memory Test</a>
+              <a href="/typing-test/" class="dropdown-item">⌨️ WPM Typing Test</a>
             </div>
           </div>
 
@@ -47,8 +47,8 @@ export function renderHeader(container) {
               <span>🖱️ Hardware ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="#mouse-test" class="dropdown-item" data-i18n="navMouseTest">🖱️ Mouse Hardware Tester</a>
-              <a href="#keyboard-test" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ Keyboard Key Tester</a>
+              <a href="/mouse-test/" class="dropdown-item" data-i18n="navMouseTest">🖱️ Mouse Hardware Tester</a>
+              <a href="/keyboard-test/" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ Keyboard Key Tester</a>
             </div>
           </div>
 
@@ -58,14 +58,14 @@ export function renderHeader(container) {
               <span>⚡ All Utilities ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="#cps-test" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
-              <a href="#fruit-slicer-game" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
-              <a href="#auto-clicker" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
-              <a href="#click-speed-test" class="dropdown-item" data-i18n="navClickSpeedTest">🚀 Click Speed Test</a>
-              <a href="#click-counter" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
-              <a href="#double-click-test" class="dropdown-item" data-i18n="navDoubleClickTest">⚡ Double Click Test</a>
+              <a href="/cps-test/" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
+              <a href="/fruit-slicer-game/" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
+              <a href="/auto-clicker/" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
+              <a href="/click-speed-test/" class="dropdown-item" data-i18n="navClickSpeedTest">🚀 Click Speed Test</a>
+              <a href="/click-counter/" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
+              <a href="/double-click-test/" class="dropdown-item" data-i18n="navDoubleClickTest">⚡ Double Click Test</a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
-              <a href="#tools" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
+              <a href="/tools/" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
             </div>
           </div>
         </nav>
@@ -113,35 +113,35 @@ export function renderHeader(container) {
 
       <!-- Mobile Navigation Drawer (100% Mobile Benchmarks) -->
       <div id="mobile-drawer" class="mobile-drawer">
-        <a href="#" class="mobile-nav-link" data-route="">
+        <a href="/" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
         </a>
-        <a href="#typing-test" class="mobile-nav-link" data-route="typing-test">
+        <a href="/typing-test/" class="mobile-nav-link" data-route="typing-test">
           <span>⌨️ Typing Speed Test</span>
         </a>
-        <a href="#cps-test" class="mobile-nav-link" data-route="cps-test">
+        <a href="/cps-test/" class="mobile-nav-link" data-route="cps-test">
           <span>⚡ CPS Speed Test</span>
         </a>
-        <a href="#aim-trainer-test" class="mobile-nav-link" data-route="aim-trainer-test">
+        <a href="/aim-trainer-test/" class="mobile-nav-link" data-route="aim-trainer-test">
           <span>🎯 Aim Trainer</span>
         </a>
-        <a href="#cat-mini-golf-game" class="mobile-nav-link" data-route="cat-mini-golf-game">
+        <a href="/cat-mini-golf-game/" class="mobile-nav-link" data-route="cat-mini-golf-game">
           <span>⛳ Nibbles Mini Golf</span>
         </a>
-        <a href="#reaction-time-test" class="mobile-nav-link" data-route="reaction-time-test">
+        <a href="/reaction-time-test/" class="mobile-nav-link" data-route="reaction-time-test">
           <span>⏱️ Reaction Time Test</span>
         </a>
-        <a href="#sequence-memory-test" class="mobile-nav-link" data-route="sequence-memory-test">
+        <a href="/sequence-memory-test/" class="mobile-nav-link" data-route="sequence-memory-test">
           <span>🧠 Sequence Memory</span>
         </a>
-        <a href="#click-speed-test" class="mobile-nav-link" data-route="click-speed-test">
+        <a href="/click-speed-test/" class="mobile-nav-link" data-route="click-speed-test">
           <span>🚀 Click Speed Test</span>
         </a>
-        <a href="#double-click-test" class="mobile-nav-link" data-route="double-click-test">
+        <a href="/double-click-test/" class="mobile-nav-link" data-route="double-click-test">
           <span>⚡ Double Click Test</span>
         </a>
         <div style="height:1px; background:var(--border-color); margin:0.5rem 0;"></div>
-        <a href="#tools" class="mobile-nav-link" data-route="tools">
+        <a href="/tools/" class="mobile-nav-link" data-route="tools">
           <strong>📂 All Tools Directory</strong>
         </a>
       </div>
@@ -149,23 +149,23 @@ export function renderHeader(container) {
 
     <!-- Concrete Mobile Bottom Navigation Bar (Screens <= 768px) -->
     <nav id="mobile-bottom-bar" class="mobile-bottom-bar">
-      <a href="#" class="mobile-bottom-tab" data-route="">
+      <a href="/" class="mobile-bottom-tab" data-route="">
         <span class="tab-icon">🏠</span>
         <span class="tab-label">Home</span>
       </a>
-      <a href="#typing-test" class="mobile-bottom-tab" data-route="typing-test">
+      <a href="/typing-test/" class="mobile-bottom-tab" data-route="typing-test">
         <span class="tab-icon">⌨️</span>
         <span class="tab-label">Typing</span>
       </a>
-      <a href="#cps-test" class="mobile-bottom-tab" data-route="cps-test">
+      <a href="/cps-test/" class="mobile-bottom-tab" data-route="cps-test">
         <span class="tab-icon">⚡</span>
         <span class="tab-label">CPS</span>
       </a>
-      <a href="#aim-trainer-test" class="mobile-bottom-tab" data-route="aim-trainer-test">
+      <a href="/aim-trainer-test/" class="mobile-bottom-tab" data-route="aim-trainer-test">
         <span class="tab-icon">🎯</span>
         <span class="tab-label">Aim</span>
       </a>
-      <a href="#tools" class="mobile-bottom-tab" data-route="tools">
+      <a href="/tools/" class="mobile-bottom-tab" data-route="tools">
         <span class="tab-icon">📂</span>
         <span class="tab-label">Tools</span>
       </a>
@@ -241,7 +241,7 @@ function bindHeaderEvents() {
   }
 
   // Active Bottom Bar Highlight Tracker
-  const currentHash = window.location.hash.replace('#', '').trim();
+  const currentHash = window.location.pathname.replace(/^\/|\/$/g, '').trim();
   const bottomTabs = document.querySelectorAll('.mobile-bottom-tab');
   bottomTabs.forEach(tab => {
     const route = tab.dataset.route;

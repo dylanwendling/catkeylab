@@ -190,7 +190,7 @@ function finishTest() {
   if (desc) desc.innerHTML = `
     <div>Accuracy: <strong>${accuracy}%</strong> (${misses} misses) • Best: <strong>${bestScore} ms</strong></div>
     <div style="color:var(--accent-cyan); font-weight:700; margin-top:0.4rem; margin-bottom:0.75rem;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</div>
-    <a href="#leaderboards" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
+    <a href="/leaderboards/" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
   `;
   if (startBtn) startBtn.textContent = 'Try Again';
 

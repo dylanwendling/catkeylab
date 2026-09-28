@@ -24,9 +24,9 @@ export function renderMouseTest(container) {
         <h3 style="color:var(--accent-amber); font-size:1.25rem; font-weight:800; margin-bottom:0.5rem;">Desktop Computer Recommended</h3>
         <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1.25rem;">Mouse Button (MB1–MB5) testing requires a desktop computer with a physical mouse attached.</p>
         <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
-          <a href="#cps-test" class="btn btn-primary btn-sm">⚡ Try Mobile CPS Test</a>
-          <a href="#typing-test" class="btn btn-secondary btn-sm">⌨️ Try Mobile Typing Test</a>
-          <a href="#aim-trainer-test" class="btn btn-secondary btn-sm">🎯 Mobile Aim Trainer</a>
+          <a href="/cps-test/" class="btn btn-primary btn-sm">⚡ Try Mobile CPS Test</a>
+          <a href="/typing-test/" class="btn btn-secondary btn-sm">⌨️ Try Mobile Typing Test</a>
+          <a href="/aim-trainer-test/" class="btn btn-secondary btn-sm">🎯 Mobile Aim Trainer</a>
         </div>
       </div>
     ` : ''}

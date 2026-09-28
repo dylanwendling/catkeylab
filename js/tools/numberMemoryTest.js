@@ -206,7 +206,7 @@ function showGameOver(userInput) {
   document.getElementById('nm-level-score').innerHTML = `
     <div>Level ${achievedDigits} (${achievedDigits} digits) • Personal Best: ${bestScore}</div>
     <div style="color:var(--accent-cyan); font-size:1rem; font-weight:700; margin-top:0.4rem; margin-bottom:0.75rem;">🏆 Rank #${rankInfo ? rankInfo.rank : '-'} • ${rankInfo ? rankInfo.percentile : ''}</div>
-    <a href="#leaderboards" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
+    <a href="/leaderboards/" class="btn btn-secondary btn-sm" style="margin-bottom:0.75rem;">🏆 View Global Leaderboard</a>
   `;
 }
 

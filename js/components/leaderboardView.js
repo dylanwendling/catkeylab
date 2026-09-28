@@ -117,7 +117,8 @@ function bindEvents() {
       e.preventDefault();
       e.stopPropagation();
       const routeId = activeTestId.startsWith('cat-mini-golf-game') ? 'cat-mini-golf-game' : activeTestId;
-      window.location.hash = '#' + routeId;
+      history.pushState(null, '', '/' + routeId + '/');
+      window.dispatchEvent(new Event('popstate'));
       handleRoute();
       window.scrollTo({ top: 0, behavior: 'instant' });
     });

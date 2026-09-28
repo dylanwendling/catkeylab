@@ -73,7 +73,7 @@ export function renderCardMemoryGame(container) {
 
         <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
           <button id="cm-modal-retry" class="btn btn-primary btn-lg" style="flex:1; min-width:140px;">Play Again</button>
-          <a href="#leaderboards" class="btn btn-secondary btn-lg" style="flex:1; min-width:140px;">🏆 View Leaderboard</a>
+          <a href="/leaderboards/" class="btn btn-secondary btn-lg" style="flex:1; min-width:140px;">🏆 View Leaderboard</a>
         </div>
       </div>
     </div>
