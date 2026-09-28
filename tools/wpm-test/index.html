@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Typing Speed Challenge (WPM) ⌨️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾</title>
+  <meta name="description" content="Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical Tag -->
+  <link rel="canonical" href="https://catkeylab.com/tools/typing-test/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/tools/typing-test/">
+  <meta property="og:title" content="Typing Speed Challenge (WPM) ⌨️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta property="og:description" content="Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Typing Speed Challenge (WPM) ⌨️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta name="twitter:description" content="Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Typing Speed Challenge (WPM) - CatKeyLab",
+  "url": "https://catkeylab.com/tools/typing-test/",
+  "description": "Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.",
+  "operatingSystem": "All",
+  "applicationCategory": "BrowserApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://catkeylab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Human Benchmarks",
+      "item": "https://catkeylab.com/tools/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Typing Speed Challenge (WPM)",
+      "item": "https://catkeylab.com/tools/typing-test/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How is typing speed (WPM) calculated?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "WPM (Words Per Minute) is calculated as (Standardized Words Typed / Minutes Elapsed), where 1 standardized word equals 5 characters."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a good typing speed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Average typists score around 40 WPM. Office workers typically type 50\u201380 WPM. Professional typists and competitive speed typists often exceed 100 WPM."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does CatKeyLab store what I type?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. All typing data is processed locally in your browser. No keystrokes, text, or typing patterns are transmitted to any server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the Eye Mascot judge typing speed?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The mascot calculates your final WPM and accuracy percentage, reacting with expressions and funny judging dialogue based on your performance level."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I test my typing speed on a phone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, though mobile soft keyboards (like Gboard) produce different WPM results than physical keyboards due to auto-correction, swipe typing, and different key layouts."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body data-tool-key="typing-test">
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+    <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/tools/" itemprop="item"><span itemprop="name">Human Benchmarks</span></a>
+        <meta itemprop="position" content="2" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span style="color:var(--text-primary); font-weight:600;" itemprop="name">Typing Speed Challenge (WPM)</span>
+        <meta itemprop="position" content="3" />
+      </span>
+    </nav>
+    
+    </div>
+    <div id="main-content">
+      
+    <div class="container" style="padding-top:1.5rem;">
+      <div class="tool-page-layout">
+        <!-- Main Column (Tool) -->
+        <div class="tool-page-main">
+          <!-- Tool Title & Introduction -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>⌨️</span> <span>Typing Speed Challenge (WPM)</span>
+            </h1>
+            <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">Measure your typing speed in Words Per Minute (WPM) and accuracy with a clean, distraction-free test interface. Featuring synthesized mechanical keyboard sounds and live feedback as you type.</p>
+          </div>
+
+          <!-- Interactive Tool Widget -->
+          <div id="tool-render-box">
+            <div style="min-height:360px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-secondary); border:2px dashed var(--border-color); border-radius:var(--radius-lg); padding:2rem; text-align:center;">
+              <div style="font-size:3rem; margin-bottom:1rem;">⌨️</div>
+              <h2 style="font-size:1.5rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Typing Speed Challenge (WPM)</h2>
+              <p style="color:var(--text-secondary); max-width:480px; margin-bottom:1.5rem;">Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.</p>
+              <button class="btn btn-primary btn-lg" onclick="window.location.reload()">
+                <span>⚡ Launch Typing Speed Challenge (WPM)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sidebar Column (Informational Only - Ads safely separated below) -->
+        <div class="tool-page-sidebar">
+          <div class="tool-content-section">
+            
+        <div class="info-section">
+          <h2>How to Use Typing Speed Challenge (WPM)</h2>
+          <ol class="info-steps"><li>Select a test duration (15s, 30s, or 60s).</li><li>Start typing the displayed text: the timer begins with your first keystroke.</li><li>Correct characters are highlighted green; mistakes are highlighted red.</li><li>Your live WPM and accuracy update in real-time as you type.</li><li>After the timer ends, your final WPM, accuracy, and character counts are displayed.</li></ol>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>What This Test Measures</h2>
+          <p>This test tracks your typing speed (WPM: Words Per Minute) and accuracy percentage. WPM is calculated using the standard measurement where one &quot;word&quot; equals 5 characters, including spaces. Accuracy is the percentage of correct keystrokes out of total keystrokes.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Why Use This Test</h2>
+          <p>Knowing your typing speed is useful for job applications that require a minimum WPM, academic assessments, personal improvement tracking, or simply curiosity. Regular practice with typing tests can measurably improve your speed and accuracy over time.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>How to Interpret Your Results</h2>
+          <p>Under 30 WPM is considered slow. 30–50 WPM is average for casual typists. 50–80 WPM is above average and typical for office workers. 80–120 WPM is fast. 120+ WPM is professional or competitive level. Accuracy above 95% is considered good.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Tips for Accurate Results</h2>
+          <ul><li>Focus on accuracy first: speed comes naturally with correct technique.</li><li>Maintain proper finger positioning on the home row (ASDF / JKL;).</li><li>Do not look at the keyboard while typing.</li><li>Take the test multiple times and track your improvement over time.</li><li>Use the longer test durations (30s or 60s) for more accurate WPM measurements.</li></ul>
+        </div>
+        
+            
+            <div class="info-section">
+              <h3>Related Tools & Benchmarks</h3>
+              <div class="related-tools-grid"><a href="/tools/keyboard-test/" class="related-tool-link">Keyboard Tester</a> <a href="/tools/reaction-time-test/" class="related-tool-link">Reaction Time Test</a> <a href="/tools/cps-test/" class="related-tool-link">CPS Test (Clicks Per Second)</a></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Safe Ad Space BELOW the tool and guide with strict buffer margins -->
+      
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+
+      <!-- Full Width FAQ Section -->
+      
+        <div id="tool-faq-container" style="margin-top: 2rem;">
+          <h2 style="font-size:1.75rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Frequently Asked Questions</h2>
+          <div class="faq-list" style="max-width:900px; margin:0 auto;">
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How is typing speed (WPM) calculated?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">WPM (Words Per Minute) is calculated as (Standardized Words Typed / Minutes Elapsed), where 1 standardized word equals 5 characters.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">What is a good typing speed?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Average typists score around 40 WPM. Office workers typically type 50–80 WPM. Professional typists and competitive speed typists often exceed 100 WPM.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Does CatKeyLab store what I type?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">No. All typing data is processed locally in your browser. No keystrokes, text, or typing patterns are transmitted to any server.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How does the Eye Mascot judge typing speed?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">The mascot calculates your final WPM and accuracy percentage, reacting with expressions and funny judging dialogue based on your performance level.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Can I test my typing speed on a phone?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Yes, though mobile soft keyboards (like Gboard) produce different WPM results than physical keyboards due to auto-correction, swipe typing, and different key layouts.</p>
+              </div>
+            
+          </div>
+        </div>
+        
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

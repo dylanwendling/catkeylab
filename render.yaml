@@ -3,5 +3,5 @@ services:
   - type: web
     name: catkeylab
     runtime: static
-    buildCommand: "npm install && npm run build"
-    staticPublishPath: ./dist
+    buildCommand: "python build_pages.py"
+    staticPublishPath: ./

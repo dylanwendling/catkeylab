@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nibbles 2D Fishing Adventure 🎣 - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾</title>
+  <meta name="description" content="Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Cast your line, click &amp; drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical Tag -->
+  <link rel="canonical" href="https://catkeylab.com/games/fishing/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/games/fishing/">
+  <meta property="og:title" content="Nibbles 2D Fishing Adventure 🎣 - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta property="og:description" content="Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Cast your line, click &amp; drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nibbles 2D Fishing Adventure 🎣 - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta name="twitter:description" content="Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Cast your line, click &amp; drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Nibbles 2D Fishing Adventure - CatKeyLab",
+  "url": "https://catkeylab.com/games/fishing/",
+  "description": "Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat \ud83d\udc31! Cast your line, click & drag your lure underwater to attract hungry fish \ud83d\udc1f, and mash REEL to catch!",
+  "operatingSystem": "All",
+  "applicationCategory": "BrowserApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://catkeylab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Arcade Games",
+      "item": "https://catkeylab.com/games/mini-golf/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Nibbles 2D Fishing Adventure",
+      "item": "https://catkeylab.com/games/fishing/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I cast and steer the lure underwater?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Click CAST LURE to launch your line into the ocean, then click and drag (or touch drag) your lure anywhere underwater to attract nearby fish!"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the Reeling Mini-Game work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Once a fish bites (\"\u2757\ufe0f BITE! HOOKED!\"), repeatedly mash the REEL button or Spacebar to keep the tension needle inside the green catch zone and pull the fish up to Nibbles' boat!"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How many different fish species can I catch?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "There are 6 unique fish species: Silver Minnow (100 PTS), Orange Clownfish (250 PTS), Spiky Pufferfish (400 PTS), Golden Koi (750 PTS), Legendary Rainbow Fish (1500 PTS), and Brown Mudfish (50 PTS)!"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body data-tool-key="cat-fishing-game">
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+    <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/games/mini-golf/" itemprop="item"><span itemprop="name">Arcade Games</span></a>
+        <meta itemprop="position" content="2" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span style="color:var(--text-primary); font-weight:600;" itemprop="name">Nibbles 2D Fishing Adventure</span>
+        <meta itemprop="position" content="3" />
+      </span>
+    </nav>
+    
+    </div>
+    <div id="main-content">
+      
+    <div class="container" style="padding-top:1.5rem;">
+      <div class="tool-page-layout">
+        <!-- Main Column (Tool) -->
+        <div class="tool-page-main">
+          <!-- Tool Title & Introduction -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>🎣</span> <span>Nibbles 2D Fishing Adventure</span>
+            </h1>
+            <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">Join Nibbles the Cat on a 2D fishing adventure. Cast your lure into the ocean, attract fish by dragging it underwater, and complete a reeling mini-game to catch 6 different species of fish.</p>
+          </div>
+
+          <!-- Interactive Tool Widget -->
+          <div id="tool-render-box">
+            <div style="min-height:360px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-secondary); border:2px dashed var(--border-color); border-radius:var(--radius-lg); padding:2rem; text-align:center;">
+              <div style="font-size:3rem; margin-bottom:1rem;">🎣</div>
+              <h2 style="font-size:1.5rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Nibbles 2D Fishing Adventure</h2>
+              <p style="color:var(--text-secondary); max-width:480px; margin-bottom:1.5rem;">Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Cast your line, click &amp; drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!</p>
+              <button class="btn btn-primary btn-lg" onclick="window.location.reload()">
+                <span>⚡ Launch Nibbles 2D Fishing Adventure</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sidebar Column (Informational Only - Ads safely separated below) -->
+        <div class="tool-page-sidebar">
+          <div class="tool-content-section">
+            
+        <div class="info-section">
+          <h2>How to Use Nibbles 2D Fishing Adventure</h2>
+          <ol class="info-steps"><li>Click &quot;Cast Lure&quot; to throw your fishing line into the ocean.</li><li>Click and drag your lure underwater to attract nearby fish.</li><li>Wait for a fish to bite: you will see a &quot;BITE! HOOKED!&quot; indicator.</li><li>Rapidly press the &quot;Reel&quot; button or Spacebar to keep the tension in the green zone.</li><li>Successfully reel in the fish to earn points based on the species.</li></ol>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>What This Test Measures</h2>
+          <p>This game combines mouse coordination (lure steering), reaction time (responding to bites), and rapid clicking (reeling mini-game). It is primarily an entertainment game rather than a formal test.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Why Use This Test</h2>
+          <p>The fishing game provides an entertaining way to practice mouse dragging precision and rapid clicking. The reeling mini-game is also a fun coordination challenge.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>How to Interpret Your Results</h2>
+          <p>Points are scored based on the rarity and value of fish caught. Silver Minnow (100 pts), Orange Clownfish (250 pts), Spiky Pufferfish (400 pts), Golden Koi (750 pts), Legendary Rainbow Fish (1500 pts), and Brown Mudfish (50 pts).</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Tips for Accurate Results</h2>
+          <ul><li>Move your lure slowly and steadily to attract fish: erratic movement can scare them away.</li><li>During the reeling phase, maintain a steady clicking rhythm rather than mashing as fast as possible.</li><li>Look for rarer fish species in deeper water for higher point values.</li><li>Use Spacebar for the reel button if rapid mouse clicking is tiring.</li></ul>
+        </div>
+        
+            
+            <div class="info-section">
+              <h3>Related Tools & Benchmarks</h3>
+              <div class="related-tools-grid"><a href="/games/mini-golf/" class="related-tool-link">Nibbles Mini Golf (18 Holes)</a> <a href="/games/fruit-slicer/" class="related-tool-link">Fruit Slicer Arcade</a> <a href="/tools/cps-test/" class="related-tool-link">CPS Test (Clicks Per Second)</a></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Safe Ad Space BELOW the tool and guide with strict buffer margins -->
+      
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+
+      <!-- Full Width FAQ Section -->
+      
+        <div id="tool-faq-container" style="margin-top: 2rem;">
+          <h2 style="font-size:1.75rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Frequently Asked Questions</h2>
+          <div class="faq-list" style="max-width:900px; margin:0 auto;">
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How do I cast and steer the lure underwater?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Click CAST LURE to launch your line into the ocean, then click and drag (or touch drag) your lure anywhere underwater to attract nearby fish!</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How does the Reeling Mini-Game work?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Once a fish bites ("❗️ BITE! HOOKED!"), repeatedly mash the REEL button or Spacebar to keep the tension needle inside the green catch zone and pull the fish up to Nibbles' boat!</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How many different fish species can I catch?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">There are 6 unique fish species: Silver Minnow (100 PTS), Orange Clownfish (250 PTS), Spiky Pufferfish (400 PTS), Golden Koi (750 PTS), Legendary Rainbow Fish (1500 PTS), and Brown Mudfish (50 PTS)!</p>
+              </div>
+            
+          </div>
+        </div>
+        
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

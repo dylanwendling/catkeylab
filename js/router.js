@@ -10,6 +10,7 @@ import { renderLeaderboardView } from './components/leaderboardView.js';
 import { initYarnBall } from './components/yarnBall.js';
 import { renderDiagnosticWizard } from './components/diagnosticWizard.js';
 import { renderDailyChallengeTeaser, renderDailyChallengePage } from './components/dailyChallenge.js';
+import { resolveRoute, TOOL_ROUTES, STATIC_PAGES } from './data/routes.js';
 
 import { renderAutoClicker, cleanupAutoClicker } from './tools/autoClicker.js';
 import { renderCPSTest, cleanupCPSTest } from './tools/cpsTest.js';
@@ -32,6 +33,7 @@ import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryG
 import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGolfGame.js';
 import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingGame.js';
 import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlicerGame.js';
+import { NIBBLES_PHOTO_B64 } from './catPhoto.js';
 
 let currentCleanup = null;
 
@@ -52,16 +54,17 @@ function getToolPlayCounts() {
 }
 
 export function triggerRandomTool() {
-  const currentHash = window.location.pathname.replace(/^\/|\/$/g, '').trim() || '';
+  const resolvedCurrent = resolveRoute(window.location.pathname, window.location.hash);
+  const currentKey = resolvedCurrent.key || '';
   const allKeys = Object.keys(TOOL_METADATA);
   
   // Filter out current active tool so user always gets a different surprise tool
-  const availableKeys = allKeys.filter(key => key !== currentHash);
-  
+  const availableKeys = allKeys.filter(key => key !== currentKey);
   if (availableKeys.length === 0) return;
 
   const randomKey = availableKeys[Math.floor(Math.random() * availableKeys.length)];
-  history.pushState(null, '', `/${randomKey}/`);
+  const targetPath = TOOL_ROUTES[randomKey] ? TOOL_ROUTES[randomKey].path : `/tools/${randomKey}/`;
+  history.pushState(null, '', targetPath);
   handleRoute();
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
@@ -111,12 +114,14 @@ TOOL_METADATA['double-click-test'].renderFn = renderDoubleClickTest;
 TOOL_METADATA['double-click-test'].cleanupFn = cleanupDoubleClickTest;
 ;
 
-
 export function handleRoute() {
-  let hash = window.location.pathname.replace(/^\/|\/$/g, '').trim();
-  if (!hash && window.location.hash) {
-    hash = window.location.hash.replace('#', '').trim();
+  const resolved = resolveRoute(window.location.pathname, window.location.hash);
+
+  // If visitor arrived via legacy hash, rewrite URL bar to canonical path
+  if (window.location.hash) {
+    history.replaceState(null, '', resolved.canonicalPath);
   }
+
   const mainContainer = document.getElementById('main-content');
   const breadcrumbsContainer = document.getElementById('breadcrumbs-container');
 
@@ -127,39 +132,53 @@ export function handleRoute() {
   }
 
   // Highlight Active Nav Links
-  updateNavState(hash);
+  updateNavState(resolved.canonicalPath, resolved.key);
 
-  if (!hash || hash === '') {
+  if (resolved.type === 'home') {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
     updateSEOMetadata('CatKeyLab 🐾 - Free Online Keyboard, Mouse & Typing Tests', 'Free browser-based tools to test keyboards, mice, typing speed, clicking performance, reaction time, and memory. No downloads required.');
-  } else if (hash === 'tools') {
-    renderToolsDirectoryPage(mainContainer);
-    renderBreadcrumbs(breadcrumbsContainer, 'All Tools');
-    updateSEOMetadata('Mouse & Keyboard Tools Directory - CatKeyLab 🐾', 'Browse all free online mouse button testers, keyboard key testers, typing tests, clicking, and speed testing utilities.');
-  } else if (hash === 'leaderboards') {
-    renderLeaderboardView(mainContainer);
-    renderBreadcrumbs(breadcrumbsContainer, 'Anonymous Leaderboards 🏆');
-    updateSEOMetadata('Anonymous Leaderboards & High Scores - CatKeyLab 🐾', '100% private, anonymous high scores and rank percentiles across all human benchmark tests.');
-  } else if (hash === 'daily-challenge') {
-    renderDailyChallengePage(mainContainer);
-    renderBreadcrumbs(breadcrumbsContainer, 'Daily Challenge 📅');
-    updateSEOMetadata('Daily Challenge - CatKeyLab 🐾', 'Complete today\'s 5 daily benchmark challenges.');
-  } else if (TOOL_METADATA[hash]) {
-    trackToolUsage(hash);
-    const meta = TOOL_METADATA[hash];
-    renderToolPage(mainContainer, hash, meta);
-    renderBreadcrumbs(breadcrumbsContainer, t(meta.titleKey));
-    updateSEOMetadata(`${t(meta.titleKey)} - CatKeyLab 🐾 Hardware Tools`, meta.desc);
+  } else if (resolved.type === 'tool' || resolved.type === 'game') {
+    trackToolUsage(resolved.key);
+    const meta = TOOL_METADATA[resolved.key];
+    const categoryName = resolved.toolRoute ? resolved.toolRoute.categoryName : (resolved.type === 'game' ? 'Arcade Games' : 'Hardware & Benchmarks');
+    const categoryPath = resolved.type === 'game' ? '/games/mini-golf/' : '/tools/';
+
+    renderToolPage(mainContainer, resolved.key, meta);
+    renderBreadcrumbs(breadcrumbsContainer, t(meta.titleKey), categoryName, categoryPath);
+    updateSEOMetadata(`${t(meta.titleKey)} - CatKeyLab 🐾`, meta.desc);
     currentCleanup = meta.cleanupFn;
-  } else if (hash === 'about' || hash === 'privacy' || hash === 'terms' || hash === 'sitemap') {
-    renderLegalPage(mainContainer, hash);
-    renderBreadcrumbs(breadcrumbsContainer, hash === 'sitemap' ? 'Sitemap & Index' : hash.toUpperCase());
-    updateSEOMetadata(`${hash === 'sitemap' ? 'Sitemap & Index' : hash.toUpperCase()} - CatKeyLab 🐾`, 'CatKeyLab platform policies and index.');
-  } else if (hash === 'nibbles' || hash === 'meet-nibbles') {
-    renderMeetNibblesPage(mainContainer);
-    renderBreadcrumbs(breadcrumbsContainer, 'Meet Nibbles 🐱');
-    updateSEOMetadata('Meet Nibbles 🐱 - The Real Orange Cat Behind CatKeyLab', 'Meet Nibbles the Ginger Tabby Cat! Inspired by Dylan\'s real-life orange cat sitting in a box.');
+  } else if (resolved.type === 'page') {
+    if (resolved.key === 'tools') {
+      renderToolsDirectoryPage(mainContainer);
+      renderBreadcrumbs(breadcrumbsContainer, 'All Tools', 'Directory', '/tools/');
+      updateSEOMetadata('Mouse & Keyboard Tools Directory - CatKeyLab 🐾', 'Browse all free online mouse button testers, keyboard key testers, typing tests, clicking, and speed testing utilities.');
+    } else if (resolved.key === 'leaderboards') {
+      renderLeaderboardView(mainContainer);
+      renderBreadcrumbs(breadcrumbsContainer, 'Anonymous Leaderboards 🏆', 'Platform', '/leaderboards/');
+      updateSEOMetadata('Anonymous Leaderboards & High Scores - CatKeyLab 🐾', '100% private, anonymous high scores and rank percentiles across all human benchmark tests.');
+    } else if (resolved.key === 'daily-challenge') {
+      renderDailyChallengePage(mainContainer);
+      renderBreadcrumbs(breadcrumbsContainer, 'Daily Challenge 📅', 'Platform', '/daily-challenge/');
+      updateSEOMetadata('Daily Challenge - CatKeyLab 🐾', 'Complete today\'s 5 daily benchmark challenges.');
+    } else if (resolved.key === 'faq') {
+      renderFAQPage(mainContainer);
+      renderBreadcrumbs(breadcrumbsContainer, 'FAQ', 'Platform', '/faq/');
+      updateSEOMetadata('Frequently Asked Questions - CatKeyLab 🐾', 'Frequently asked questions about keyboard testing, mouse button testing, typing speed measurement, and reaction times.');
+    } else if (resolved.key === 'contact') {
+      renderContactPage(mainContainer);
+      renderBreadcrumbs(breadcrumbsContainer, 'Contact & Support', 'Platform', '/contact/');
+      updateSEOMetadata('Contact & Support - CatKeyLab 🐾', 'Contact Dylan and the CatKeyLab support team for questions, feedback, and hardware tool suggestions.');
+    } else if (resolved.key === 'nibbles' || resolved.key === 'meet-nibbles') {
+      renderMeetNibblesPage(mainContainer);
+      renderBreadcrumbs(breadcrumbsContainer, 'Meet Nibbles 🐱', 'Platform', '/meet-nibbles/');
+      updateSEOMetadata('Meet Nibbles 🐱 - The Real Orange Cat Behind CatKeyLab', 'Meet Nibbles the Ginger Tabby Cat! Inspired by Dylan\'s real-life orange cat sitting in a box.');
+    } else {
+      renderLegalPage(mainContainer, resolved.key);
+      const crumb = resolved.pageInfo ? resolved.pageInfo.crumb : resolved.key.toUpperCase();
+      renderBreadcrumbs(breadcrumbsContainer, crumb, 'Platform', `/${resolved.key}/`);
+      updateSEOMetadata(`${crumb} - CatKeyLab 🐾`, 'CatKeyLab platform policies and index.');
+    }
   } else {
     renderHomePage(mainContainer);
     renderBreadcrumbs(breadcrumbsContainer, null);
@@ -168,10 +187,15 @@ export function handleRoute() {
   window.scrollTo(0, 0);
 }
 
-function updateNavState(route) {
-  document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(link => {
-    const linkRoute = link.dataset.route;
-    if (linkRoute === route) {
+function updateNavState(canonicalPath, routeKey) {
+  document.querySelectorAll('.nav-link, .mobile-nav-link, .mobile-bottom-tab').forEach(link => {
+    const href = link.getAttribute('href') || '';
+    const route = link.dataset.route || '';
+    if (
+      (canonicalPath && href === canonicalPath) ||
+      (routeKey && route === routeKey) ||
+      (canonicalPath === '/' && (href === '/' || href === '#' || route === ''))
+    ) {
       link.classList.add('active');
     } else {
       link.classList.remove('active');
@@ -194,14 +218,14 @@ function renderHomePage(container) {
           CatKeyLab provides free browser-based tools for testing keyboards, mice, typing speed, clicking performance, reaction time, memory, and other computer-input functions. No downloads, no accounts: just open and test.
         </p>
         <div class="hero-ctas">
-          <a href="/typing-test/" class="btn btn-primary btn-lg">
+          <a href="/tools/typing-test/" class="btn btn-primary btn-lg">
             <span>⌨️⚡ Test Typing Speed (WPM)</span>
           </a>
-          <a href="/mouse-test/" class="btn btn-secondary btn-lg">
+          <a href="/tools/mouse-test/" class="btn btn-secondary btn-lg">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
             <span>🖱️ Test Mouse Buttons</span>
           </a>
-          <a href="/keyboard-test/" class="btn btn-secondary btn-lg">
+          <a href="/tools/keyboard-test/" class="btn btn-secondary btn-lg">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
             <span>🖥️ Test Keyboard Keys</span>
           </a>
@@ -282,6 +306,7 @@ function renderHomePage(container) {
             return sortedToolKeys.map(key => {
               const tool = TOOL_METADATA[key];
               const isPopular = topFourSet.has(key);
+              const targetPath = TOOL_ROUTES[key] ? TOOL_ROUTES[key].path : (/^cat-|^fruit-|^fish-|^card-/.test(key) ? `/games/${key}/` : `/tools/${key}/`);
 
               return `
                 <div class="tool-card ${isPopular ? 'featured-tool-card' : ''}" style="${isPopular ? 'border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));' : ''}">
@@ -294,7 +319,7 @@ function renderHomePage(container) {
                     <p class="tool-card-desc">${tool.desc}</p>
                   </div>
                   <div class="tool-card-footer">
-                    <a href="/${key}/" class="btn ${isPopular ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%;">
+                    <a href="${targetPath}" class="btn ${isPopular ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%;">
                       <span>${t('btnUseTool')} ${tool.icon}</span> →
                     </a>
                   </div>
@@ -314,16 +339,16 @@ function renderHomePage(container) {
         </div>
         <div class="info-section">
           <p>CatKeyLab is a free collection of browser-based tools designed to help you test, troubleshoot, and measure the performance of your computer input devices. If you want to verify that every key on your keyboard registers correctly, check that all your mouse buttons are working, measure your typing speed in words per minute, or test your clicking speed and reaction time, CatKeyLab provides focused tools for each task.</p>
-          <p>All tests run directly in your browser with no downloads, installations, or account creation required. Your keystrokes, clicks, and test results are processed locally on your device and are never transmitted to any server. CatKeyLab also includes cognitive benchmarks for <a href="/sequence-memory-test/">sequence memory</a>, <a href="/number-memory-test/">number memory</a>, <a href="/verbal-memory-test/">verbal memory</a>, <a href="/visual-memory-test/">visual memory</a>, and <a href="/reaction-time-test/">reaction time</a>: giving you everything you need to test your gear and your own skills.</p>
+          <p>All tests run directly in your browser with no downloads, installations, or account creation required. Your keystrokes, clicks, and test results are processed locally on your device and are never transmitted to any server. CatKeyLab also includes cognitive benchmarks for <a href="/tools/sequence-memory-test/">sequence memory</a>, <a href="/tools/number-memory-test/">number memory</a>, <a href="/tools/verbal-memory-test/">verbal memory</a>, <a href="/tools/visual-memory-test/">visual memory</a>, and <a href="/tools/reaction-time-test/">reaction time</a>: giving you everything you need to test your gear and your own skills.</p>
         </div>
 
         <div class="info-grid">
           <!-- How to Test Your Keyboard -->
           <div class="info-section">
             <h3>🖥️ How to Test Your Keyboard</h3>
-            <p>Use the <a href="/keyboard-test/">Keyboard Tester</a> to verify that each key on your physical keyboard is registering correctly:</p>
+            <p>Use the <a href="/tools/keyboard-test/">Keyboard Tester</a> to verify that each key on your physical keyboard is registering correctly:</p>
             <ol class="info-steps">
-              <li>Open the <a href="/keyboard-test/">Keyboard Tester</a> and click inside the test area.</li>
+              <li>Open the <a href="/tools/keyboard-test/">Keyboard Tester</a> and click inside the test area.</li>
               <li>Press each key on your physical keyboard one at a time.</li>
               <li>Confirm that each key highlights on the on-screen layout.</li>
               <li>Look for keys that fail to register or show incorrect key codes.</li>
@@ -335,15 +360,15 @@ function renderHomePage(container) {
           <!-- How to Test a Mouse -->
           <div class="info-section">
             <h3>🖱️ How to Test a Mouse</h3>
-            <p>Use the <a href="/mouse-test/">Mouse Button & Movement Tester</a> to check that your mouse buttons, scroll wheel, and cursor tracking are working properly:</p>
+            <p>Use the <a href="/tools/mouse-test/">Mouse Button & Movement Tester</a> to check that your mouse buttons, scroll wheel, and cursor tracking are working properly:</p>
             <ol class="info-steps">
-              <li>Open the <a href="/mouse-test/">Mouse Tester</a> and click inside the test area.</li>
+              <li>Open the <a href="/tools/mouse-test/">Mouse Tester</a> and click inside the test area.</li>
               <li>Press each mouse button: left, right, middle (scroll click), and side buttons if available.</li>
               <li>Scroll the wheel up and down to confirm scroll detection.</li>
               <li>Move the mouse to verify smooth cursor tracking.</li>
-              <li>Use the <a href="/double-click-test/">Double Click Tester</a> to check for unintended double-click chatter.</li>
+              <li>Use the <a href="/tools/double-click-test/">Double Click Tester</a> to check for unintended double-click chatter.</li>
             </ol>
-            <p>If your mouse is acting up, check for buttons that don\'t work, buttons that trigger without being pressed (indicating switch chatter), scroll wheel directions that do not detect, or jerky cursor movement. If a single click is registering as a double-click, your mouse switch may be worn and should be tested with the <a href="/double-click-test/">Double Click Tester</a>.</p>
+            <p>If your mouse is acting up, check for buttons that don't work, buttons that trigger without being pressed (indicating switch chatter), scroll wheel directions that do not detect, or jerky cursor movement. If a single click is registering as a double-click, your mouse switch may be worn and should be tested with the <a href="/tools/double-click-test/">Double Click Tester</a>.</p>
           </div>
         </div>
 
@@ -355,9 +380,9 @@ function renderHomePage(container) {
             <li><strong>New device verification</strong>: Confirm that every button and key works correctly out of the box before your return window closes.</li>
             <li><strong>Used or refurbished purchases</strong>: Test a used keyboard or mouse before committing to a purchase to detect worn switches or broken keys.</li>
             <li><strong>Troubleshooting input problems</strong>: If a key is not responding or a mouse button behaves inconsistently, testing helps isolate whether the issue is hardware or software.</li>
-            <li><strong>Double-click issues</strong>: Aging mouse switches can develop "chatter," causing accidental double-clicks. The <a href="/double-click-test/">Double Click Tester</a> measures click intervals to detect this.</li>
-            <li><strong>Performance measurement</strong>: Track your <a href="/typing-test/">typing speed</a>, <a href="/cps-test/">clicking speed</a>, and <a href="/reaction-time-test/">reaction time</a> to monitor improvement over time.</li>
-            <li><strong>Keyboard rollover verification</strong>: Gamers can test whether their keyboard supports pressing multiple keys simultaneously using the <a href="/keyboard-test/">Keyboard Tester</a>.</li>
+            <li><strong>Double-click issues</strong>: Aging mouse switches can develop "chatter," causing accidental double-clicks. The <a href="/tools/double-click-test/">Double Click Tester</a> measures click intervals to detect this.</li>
+            <li><strong>Performance measurement</strong>: Track your <a href="/tools/typing-test/">typing speed</a>, <a href="/tools/cps-test/">clicking speed</a>, and <a href="/tools/reaction-time-test/">reaction time</a> to monitor improvement over time.</li>
+            <li><strong>Keyboard rollover verification</strong>: Gamers can test whether their keyboard supports pressing multiple keys simultaneously using the <a href="/tools/keyboard-test/">Keyboard Tester</a>.</li>
           </ul>
         </div>
 
@@ -376,83 +401,83 @@ function renderHomePage(container) {
               <tbody style="color:var(--text-secondary);">
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Check whether keyboard keys work</td>
-                  <td style="padding:1rem;"><a href="/keyboard-test/" style="color:var(--accent-cyan); font-weight:600;">Keyboard Tester 🖥️</a></td>
+                  <td style="padding:1rem;"><a href="/tools/keyboard-test/" style="color:var(--accent-cyan); font-weight:600;">Keyboard Tester 🖥️</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Test mouse buttons and scroll wheel</td>
-                  <td style="padding:1rem;"><a href="/mouse-test/" style="color:var(--accent-cyan); font-weight:600;">Mouse Tester 🖱️</a></td>
+                  <td style="padding:1rem;"><a href="/tools/mouse-test/" style="color:var(--accent-cyan); font-weight:600;">Mouse Tester 🖱️</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Check for accidental double clicks (mouse chatter)</td>
-                  <td style="padding:1rem;"><a href="/double-click-test/" style="color:var(--accent-cyan); font-weight:600;">Double Click Tester 👆</a></td>
+                  <td style="padding:1rem;"><a href="/tools/double-click-test/" style="color:var(--accent-cyan); font-weight:600;">Double Click Tester 👆</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Measure raw clicking speed (burst & endurance)</td>
-                  <td style="padding:1rem;"><a href="/cps-test/" style="color:var(--accent-cyan); font-weight:600;">CPS Test ⚡</a></td>
+                  <td style="padding:1rem;"><a href="/tools/cps-test/" style="color:var(--accent-cyan); font-weight:600;">CPS Test ⚡</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Analyze clicking speed consistency and velocity</td>
-                  <td style="padding:1rem;"><a href="/click-speed-test/" style="color:var(--accent-cyan); font-weight:600;">Click Speed Test 🚀</a></td>
+                  <td style="padding:1rem;"><a href="/tools/click-speed-test/" style="color:var(--accent-cyan); font-weight:600;">Click Speed Test 🚀</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Measure typing speed (WPM) and accuracy</td>
-                  <td style="padding:1rem;"><a href="/typing-test/" style="color:var(--accent-cyan); font-weight:600;">Typing Speed Test ⌨️</a></td>
+                  <td style="padding:1rem;"><a href="/tools/typing-test/" style="color:var(--accent-cyan); font-weight:600;">Typing Speed Test ⌨️</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Measure visual reaction speed</td>
-                  <td style="padding:1rem;"><a href="/reaction-time-test/" style="color:var(--accent-cyan); font-weight:600;">Reaction Time Test ⏱️</a></td>
+                  <td style="padding:1rem;"><a href="/tools/reaction-time-test/" style="color:var(--accent-cyan); font-weight:600;">Reaction Time Test ⏱️</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Practice mouse aiming and target acquisition</td>
-                  <td style="padding:1rem;"><a href="/aim-trainer-test/" style="color:var(--accent-cyan); font-weight:600;">Aim Trainer 🎯</a></td>
+                  <td style="padding:1rem;"><a href="/tools/aim-trainer/" style="color:var(--accent-cyan); font-weight:600;">Aim Trainer 🎯</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Test short-term pattern memory</td>
-                  <td style="padding:1rem;"><a href="/sequence-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Sequence Memory Test 🧠</a></td>
+                  <td style="padding:1rem;"><a href="/tools/sequence-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Sequence Memory Test 🧠</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Test short-term digit span memory</td>
-                  <td style="padding:1rem;"><a href="/number-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Number Memory Test 🔢</a></td>
+                  <td style="padding:1rem;"><a href="/tools/number-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Number Memory Test 🔢</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Test verbal word recognition memory</td>
-                  <td style="padding:1rem;"><a href="/verbal-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Verbal Memory Test 💬</a></td>
+                  <td style="padding:1rem;"><a href="/tools/verbal-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Verbal Memory Test 💬</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Test spatial matrix pattern recall</td>
-                  <td style="padding:1rem;"><a href="/visual-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Visual Memory Test 🔳</a></td>
+                  <td style="padding:1rem;"><a href="/tools/visual-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Visual Memory Test 🔳</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Test rapid working memory (like chimpanzees)</td>
-                  <td style="padding:1rem;"><a href="/chimp-test/" style="color:var(--accent-cyan); font-weight:600;">Chimp Test 🐒</a></td>
+                  <td style="padding:1rem;"><a href="/tools/chimp-test/" style="color:var(--accent-cyan); font-weight:600;">Chimp Test 🐒</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Automate mouse clicking inside the browser</td>
-                  <td style="padding:1rem;"><a href="/auto-clicker/" style="color:var(--accent-cyan); font-weight:600;">Auto Clicker 🎯</a></td>
+                  <td style="padding:1rem;"><a href="/tools/auto-clicker/" style="color:var(--accent-cyan); font-weight:600;">Auto Clicker 🎯</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Count things manually (with target goals)</td>
-                  <td style="padding:1rem;"><a href="/click-counter/" style="color:var(--accent-cyan); font-weight:600;">Click Counter 🔢</a></td>
+                  <td style="padding:1rem;"><a href="/tools/click-counter/" style="color:var(--accent-cyan); font-weight:600;">Click Counter 🔢</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Play a physics 2D mini golf game</td>
-                  <td style="padding:1rem;"><a href="/cat-mini-golf-game/" style="color:var(--accent-cyan); font-weight:600;">Cat Mini Golf ⛳</a></td>
+                  <td style="padding:1rem;"><a href="/games/mini-golf/" style="color:var(--accent-cyan); font-weight:600;">Cat Mini Golf ⛳</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Catch fish in a rapid clicking mini-game</td>
-                  <td style="padding:1rem;"><a href="/cat-fishing-game/" style="color:var(--accent-cyan); font-weight:600;">Cat Fishing Game 🎣</a></td>
+                  <td style="padding:1rem;"><a href="/games/fishing/" style="color:var(--accent-cyan); font-weight:600;">Cat Fishing Game 🎣</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Slice flying fruit with your mouse or finger</td>
-                  <td style="padding:1rem;"><a href="/fruit-slicer-game/" style="color:var(--accent-cyan); font-weight:600;">Fruit Slicer 🍉</a></td>
+                  <td style="padding:1rem;"><a href="/games/fruit-slicer/" style="color:var(--accent-cyan); font-weight:600;">Fruit Slicer 🍉</a></td>
                 </tr>
                 <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Navigate Nibbles through a procedural maze</td>
-                  <td style="padding:1rem;"><a href="/fish-maze-game/" style="color:var(--accent-cyan); font-weight:600;">Fish Maze 🐟</a></td>
+                  <td style="padding:1rem;"><a href="/games/fish-maze/" style="color:var(--accent-cyan); font-weight:600;">Fish Maze 🐟</a></td>
                 </tr>
                 <tr>
                   <td style="padding:1rem;">Match 3D cat cards in a visual recognition game</td>
-                  <td style="padding:1rem;"><a href="/card-memory-game/" style="color:var(--accent-cyan); font-weight:600;">Card Memory Match 🎴</a></td>
+                  <td style="padding:1rem;"><a href="/games/card-memory/" style="color:var(--accent-cyan); font-weight:600;">Card Memory Match 🎴</a></td>
                 </tr>
               </tbody>
             </table>
@@ -469,16 +494,16 @@ function renderHomePage(container) {
         <div style="max-width:800px; margin:0 auto; line-height:1.7;">
           <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:1rem;">Everything You Need For Clicking & Hardware Diagnostics: Directly In Your Browser</h2>
           <p style="margin-bottom:1rem; color:var(--text-secondary);">
-            CatKeyLab is a free website where you can test your mouse and keyboard without installing anything. It provides diagnostic tools for <a href="/keyboard-test/" style="color:var(--accent-cyan);">keyboard keys</a>, <a href="/mouse-test/" style="color:var(--accent-cyan);">mouse buttons and scroll wheel</a>, <a href="/double-click-test/" style="color:var(--accent-cyan);">double-click behavior</a>, and <a href="/typing-test/" style="color:var(--accent-cyan);">typing speed</a>, along with performance benchmarks for <a href="/cps-test/" style="color:var(--accent-cyan);">clicking speed</a>, <a href="/reaction-time-test/" style="color:var(--accent-cyan);">reaction time</a>, and <a href="/aim-trainer-test/" style="color:var(--accent-cyan);">aim accuracy</a>.
+            CatKeyLab is a free website where you can test your mouse and keyboard without installing anything. It provides diagnostic tools for <a href="/tools/keyboard-test/" style="color:var(--accent-cyan);">keyboard keys</a>, <a href="/tools/mouse-test/" style="color:var(--accent-cyan);">mouse buttons and scroll wheel</a>, <a href="/tools/double-click-test/" style="color:var(--accent-cyan);">double-click behavior</a>, and <a href="/tools/typing-test/" style="color:var(--accent-cyan);">typing speed</a>, along with performance benchmarks for <a href="/tools/cps-test/" style="color:var(--accent-cyan);">clicking speed</a>, <a href="/tools/reaction-time-test/" style="color:var(--accent-cyan);">reaction time</a>, and <a href="/tools/aim-trainer/" style="color:var(--accent-cyan);">aim accuracy</a>.
           </p>
           <p style="margin-bottom:1rem; color:var(--text-secondary);">
             Everything runs right in your browser, so it works perfectly on Windows, macOS, Linux, ChromeOS, iOS, and Android with no installation or administrator permissions. All tests happen on your own device: we never record or send your keystrokes or clicks anywhere.
           </p>
           <p style="margin-bottom:1rem; color:var(--text-secondary);">
-            <strong>What you can find out:</strong> Whether keys and buttons register correctly, which key codes your keyboard sends, whether your mouse has double-click chatter, your typing speed and accuracy, your clicking rate, and your visual reaction time. <strong>What these tests can\'t fix:</strong> CatKeyLab cannot access hardware internals, diagnose electrical faults, or detect issues that do not produce observable browser-level events. If a key or button does not register in the tester, the problem could be the switch, wiring, driver, or OS-level configuration.
+            <strong>What you can find out:</strong> Whether keys and buttons register correctly, which key codes your keyboard sends, whether your mouse has double-click chatter, your typing speed and accuracy, your clicking rate, and your visual reaction time. <strong>What these tests can't fix:</strong> CatKeyLab cannot access hardware internals, diagnose electrical faults, or detect issues that do not produce observable browser-level events. If a key or button does not register in the tester, the problem could be the switch, wiring, driver, or OS-level configuration.
           </p>
           <p style="color:var(--text-secondary);">
-            If you\'re having issues, try the <a href="/keyboard-test/" style="color:var(--accent-cyan);">Keyboard Tester</a> or <a href="/mouse-test/" style="color:var(--accent-cyan);">Mouse Tester</a> to check whether your device is sending events to the browser. If a key or button is not detected, try a different USB port, check your device drivers, or test in another browser to determine whether the issue is hardware or software.
+            If you're having issues, try the <a href="/tools/keyboard-test/" style="color:var(--accent-cyan);">Keyboard Tester</a> or <a href="/tools/mouse-test/" style="color:var(--accent-cyan);">Mouse Tester</a> to check whether your device is sending events to the browser. If a key or button is not detected, try a different USB port, check your device drivers, or test in another browser to determine whether the issue is hardware or software.
           </p>
         </div>
       </div>
@@ -597,7 +622,7 @@ function renderToolsDirectoryPage(container) {
                 <p class="tool-card-desc">${tool.desc}</p>
               </div>
               <div class="tool-card-footer">
-                <a href="/${key}/" class="btn btn-primary btn-sm" style="width:100%;">
+                <a href="${TOOL_ROUTES[key] ? TOOL_ROUTES[key].path : (/^cat-|^fruit-|^fish-|^card-/.test(key) ? `/games/${key}/` : `/tools/${key}/`)}" class="btn btn-primary btn-sm" style="width:100%;">
                   <span data-i18n="btnUseTool">${t('btnUseTool')}</span> →
                 </a>
               </div>
@@ -652,6 +677,16 @@ function renderToolPage(container, toolKey, toolMeta) {
   const content = toolMeta.content || {};
   const toolTitle = t(toolMeta.titleKey);
 
+  // Check if #tool-render-box is already in the document (from SSG pre-render)
+  const existingBox = document.getElementById('tool-render-box');
+  const isPreRendered = existingBox && document.body.dataset.toolKey === toolKey;
+
+  if (isPreRendered) {
+    // Only mount interactive logic, don't blow away pre-rendered HTML
+    toolMeta.renderFn(existingBox);
+    return;
+  }
+
   // Build related tools HTML if available
   let relatedToolsHTML = '';
   if (content.relatedTools && content.relatedTools.length > 0) {
@@ -659,7 +694,8 @@ function renderToolPage(container, toolKey, toolMeta) {
       .filter(key => TOOL_METADATA[key])
       .map(key => {
         const related = TOOL_METADATA[key];
-        return `<a href="/${key}/" class="related-tool-link">${related.icon} ${t(related.titleKey)}</a>`;
+        const targetPath = TOOL_ROUTES[key] ? TOOL_ROUTES[key].path : (/^cat-|^fruit-|^fish-|^card-/.test(key) ? `/games/${key}/` : `/tools/${key}/`);
+        return `<a href="${targetPath}" class="related-tool-link">${related.icon} ${t(related.titleKey)}</a>`;
       }).join('');
     if (relatedLinks) {
       relatedToolsHTML = `
@@ -688,11 +724,8 @@ function renderToolPage(container, toolKey, toolMeta) {
           <div id="tool-render-box"></div>
         </div>
         
-        <!-- Sidebar Column (Info & Ads) -->
+        <!-- Sidebar Column (Informational Only - Ads safely separated below) -->
         <div class="tool-page-sidebar">
-          ${renderAdSpace('banner')}
-
-          <!-- Tool Informational Content -->
           <div class="tool-content-section">
             ${content.howTo ? `
               <div class="info-section">
@@ -738,14 +771,90 @@ function renderToolPage(container, toolKey, toolMeta) {
         </div>
       </div>
       
+      <!-- Safe Ad Space BELOW the tool and guide with strict buffer margins -->
+      <div class="safe-ad-container" style="margin: 3.5rem auto 1.5rem; max-width: 900px; text-align: center;">
+        ${renderAdSpace('banner')}
+      </div>
+
       <!-- Full Width FAQ Section -->
-      <div id="tool-faq-container" style="margin-top: 3.5rem;"></div>
+      <div id="tool-faq-container" style="margin-top: 2rem;"></div>
     </div>
   `;
 
+  document.body.dataset.toolKey = toolKey;
   const toolRenderBox = document.getElementById('tool-render-box');
   toolMeta.renderFn(toolRenderBox);
   renderFAQ(document.getElementById('tool-faq-container'), toolMeta.faqs);
+}
+
+function renderFAQPage(container) {
+  container.innerHTML = `
+    <div class="container section">
+      <div class="tool-wrapper" style="max-width:960px; margin:0 auto;">
+        <h1 style="font-size:2.2rem; font-weight:800; margin-bottom:0.75rem;">
+          ❓ Frequently Asked Questions
+        </h1>
+        <p class="hero-subtitle" style="margin-bottom:2rem; color:var(--text-secondary); font-size:1.1rem; line-height:1.7;">
+          Everything you need to know about testing keyboards, diagnosing mouse button issues, measuring typing speed, and understanding human cognitive benchmarks on CatKeyLab.
+        </p>
+
+        <div id="faq-page-accordion"></div>
+      </div>
+    </div>
+  `;
+
+  renderFAQ(document.getElementById('faq-page-accordion'), [
+    { q: 'How do I test if a keyboard key is broken or unresponsive?', a: 'Open the <a href="/tools/keyboard-test/">Keyboard Tester</a>, click inside the test area, and press each key on your keyboard. Every key that registers correctly will light up on the visual layout and record its keycode in the event log. If a key fails to highlight, it is not registering with the browser, which indicates a faulty switch, debris under the keycap, or a broken circuit board trace.' },
+    { q: 'What is keyboard ghosting and key rollover (NKRO)?', a: 'Keyboard ghosting occurs when pressing multiple keys simultaneously causes some keystrokes to fail or registers unpressed keys. "NKRO" (N-Key Rollover) means your keyboard can accurately register as many keys as you press at once without limitation. You can test your keyboard rollover capability using the <a href="/tools/keyboard-test/">Keyboard Tester</a> by holding down multiple keys simultaneously.' },
+    { q: 'How do I detect mouse double-clicking issues (switch chatter)?', a: 'Use our <a href="/tools/double-click-test/">Double Click Tester</a>. Click once firmly inside the test zone. If the tool registers two clicks with an interval under 40 milliseconds when you only clicked once, your mouse switch is "chattering": a common mechanical failure where worn micro-switch contacts bounce involuntarily.' },
+    { q: 'How is typing speed (WPM) calculated?', a: 'Words Per Minute (WPM) is standardized as <code>(Characters Typed ÷ 5) ÷ Minutes Elapsed</code>. Any 5 keystrokes (including spaces and punctuation) count as one standardized "word". Accuracy is calculated as the percentage of correct characters out of total characters typed. Test yours on the <a href="/tools/typing-test/">Typing Speed Test</a>.' },
+    { q: 'What is the average human visual reaction time?', a: 'The average visual reaction time for healthy adults is between 200ms and 250ms. Gamers and athletes often reach 150ms–190ms. Display latency, monitor refresh rate (60Hz vs 144Hz+), and mouse polling rate also affect measured times by several milliseconds. Measure yours with our <a href="/tools/reaction-time-test/">Reaction Time Test</a>.' },
+    { q: 'What is a good CPS (Clicks Per Second) score?', a: 'Standard regular clicking with one finger averages 6 to 8 CPS. Gamers practicing butterfly clicking or jitter clicking routinely achieve 10 to 14+ CPS. Specialized techniques like drag clicking on textured mouse switches can reach 20+ CPS. Test your click rate on the <a href="/tools/cps-test/">CPS Test</a>.' },
+    { q: 'Does CatKeyLab collect or transmit my keystrokes or mouse clicks?', a: 'No. CatKeyLab operates 100% client-side inside your browser sandbox. Your typing text, mouse coordinates, and test scores are processed locally on your device. We do not store, track, or transmit your private hardware logs.' },
+    { q: 'Do these tests work on mobile phones and tablets?', a: 'Yes! CatKeyLab features mobile-responsive touch controls, mobile soft keyboard buffers (for typing on iOS/Android virtual keyboards), and touch-friendly game controls for smartphones and tablets.' },
+    { q: 'Are the global leaderboards anonymous?', a: 'Yes! CatKeyLab automatically generates a fun, anonymous cat alias (like <em>Speedy Tabby #4820</em>) with zero account creation, email sign-up, or personal data collection.' }
+  ]);
+}
+
+function renderContactPage(container) {
+  container.innerHTML = `
+    <div class="container section">
+      <div class="tool-wrapper" style="max-width:850px; margin:0 auto;">
+        <h1 style="font-size:2.2rem; font-weight:800; margin-bottom:0.75rem;">
+          📬 Contact & Support
+        </h1>
+        <p class="hero-subtitle" style="margin-bottom:2rem; color:var(--text-secondary); font-size:1.1rem; line-height:1.7;">
+          Have questions, suggestions for new hardware testing tools, or feedback about CatKeyLab? We'd love to hear from you!
+        </p>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.5rem; margin-bottom:2.5rem;">
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+            <div style="font-size:2rem; margin-bottom:0.5rem;">💬</div>
+            <h3 style="color:var(--text-primary); margin-bottom:0.5rem;">Creator & Developer</h3>
+            <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:1rem;">CatKeyLab is designed and developed by Dylan. Discover games, interactive utilities, and creations on itch.io.</p>
+            <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+              <span>Visit Dylan on itch.io</span> ↗
+            </a>
+          </div>
+
+          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
+            <div style="font-size:2rem; margin-bottom:0.5rem;">✉️</div>
+            <h3 style="color:var(--text-primary); margin-bottom:0.5rem;">Email Support</h3>
+            <p style="color:var(--text-secondary); line-height:1.6; margin-bottom:1rem;">For business inquiries, bug reports, or feature requests, contact us directly via email.</p>
+            <a href="mailto:support@catkeylab.com" class="btn btn-secondary btn-sm">
+              <span>support@catkeylab.com</span>
+            </a>
+          </div>
+        </div>
+
+        <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg); line-height:1.8; color:var(--text-secondary);">
+          <h3 style="color:var(--text-primary); margin-bottom:0.75rem;">🐱 Project Mission & Open Source</h3>
+          <p>CatKeyLab was built to provide a clean, distraction-free, 100% private alternative to bloated desktop testing applications and ad-cluttered spam sites. Every tool is built with modern web standards (HTML5 Canvas, CSS3, ES2022+ JavaScript, Web Audio API) and licensed under the MIT License.</p>
+          <p style="margin-top:0.75rem;">Check out our <a href="/about/" style="color:var(--accent-cyan); font-weight:600;">About Page</a> to meet Nibbles the real cat, or review our <a href="/privacy/" style="color:var(--accent-cyan); font-weight:600;">Privacy Policy</a> for details on our client-side data guarantee.</p>
+        </div>
+      </div>
+    </div>
+  `;
 }
 
 function renderLegalPage(container, type) {
@@ -952,11 +1061,14 @@ function renderLegalPage(container, type) {
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
           <h3 style="color:var(--accent-rose); font-size:1.2rem; margin-bottom:1rem;">Platform & Information</h3>
           <ul style="line-height:2.2; display:flex; flex-direction:column; gap:0.25rem;">
-            <li><a href="/nibbles/" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles the Cat</a></li>
-            <li><a href="https://catkeylab.com/#about" style="color:var(--text-primary); font-weight:600;">About CatKeyLab</a></li>
-            <li><a href="https://catkeylab.com/#privacy" style="color:var(--text-primary); font-weight:600;">Privacy Policy</a></li>
-            <li><a href="https://catkeylab.com/#terms" style="color:var(--text-primary); font-weight:600;">Terms of Service</a></li>
-            <li><a href="https://catkeylab.com/#sitemap" style="color:var(--text-primary); font-weight:600;">Sitemap & Index</a></li>
+            <li><a href="/about/" style="color:var(--text-primary); font-weight:600;">About CatKeyLab & Creator Dylan</a></li>
+            <li><a href="/meet-nibbles/" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles in Real Life (The Real Cat)</a></li>
+            <li><a href="/faq/" style="color:var(--text-primary); font-weight:600;">Frequently Asked Questions</a></li>
+            <li><a href="/privacy/" style="color:var(--text-primary); font-weight:600;">Privacy Policy</a></li>
+            <li><a href="/terms/" style="color:var(--text-primary); font-weight:600;">Terms of Service</a></li>
+            <li><a href="/contact/" style="color:var(--text-primary); font-weight:600;">Contact & Support</a></li>
+            <li><a href="/leaderboards/" style="color:var(--text-primary); font-weight:600;">Anonymous Global Leaderboards</a></li>
+            <li><a href="/sitemap/" style="color:var(--text-primary); font-weight:600;">Sitemap & Index</a></li>
           </ul>
         </div>
       </div>
@@ -986,7 +1098,10 @@ function renderMeetNibblesPage(container) {
 
         <!-- Real Orange Cat Featured Hero Card -->
         <div style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2rem; flex-wrap:wrap; box-shadow:0 10px 30px rgba(0,0,0,0.35); margin-bottom:2rem;">
-          <img src="./assets/orange-cat.jpg" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="width:380px; max-width:100%; height:380px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
+          <img src="/assets/orange-cat.jpg" 
+               onerror="if(!this.dataset.failed){this.dataset.failed=1; this.src='${NIBBLES_PHOTO_B64}';}"
+               alt="Real Orange Cat in Box - Inspiration for Nibbles" 
+               style="width:380px; max-width:100%; height:380px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
           <div style="flex:1; min-width:260px;">
             <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-primary); margin-bottom:0.75rem;">
               Meet Nibbles in Real Life! 🐱

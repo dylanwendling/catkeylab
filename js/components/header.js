@@ -14,10 +14,8 @@ export function renderHeader(container) {
     <header class="site-header">
       <div class="container header-inner">
         <a href="/" class="logo" id="header-logo">
-          <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
-            🐱
-          </div>
-          <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
+          <div class="logo-icon">🐱</div>
+          <div class="logo-text">CatKey<span>Lab</span></div>
         </a>
 
         <!-- Desktop Navigation Links -->
@@ -27,7 +25,8 @@ export function renderHeader(container) {
           <!-- Benchmarks Dropdown -->
           <div class="dropdown" id="benchmarks-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>🧠 Benchmarks ▾</span>
+              <span>Benchmarks</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
               <a href="/tools/reaction-time-test/" class="dropdown-item">⏱️ Reaction Time Test</a>
@@ -44,7 +43,8 @@ export function renderHeader(container) {
           <!-- Hardware Dropdown -->
           <div class="dropdown" id="hardware-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>🖱️ Hardware ▾</span>
+              <span data-i18n="navHardware">Hardware</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
               <a href="/tools/keyboard-test/" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ Keyboard Key Tester</a>
@@ -64,7 +64,7 @@ export function renderHeader(container) {
               <a href="/tools/click-counter/" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
               <a href="/tools/auto-clicker/" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
-              <a href="/tools/" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
+              <a href="/tools/" class="dropdown-item"><span>📂</span> <strong>All Tools Directory</strong></a>
             </div>
           </div>
 
@@ -95,16 +95,17 @@ export function renderHeader(container) {
           <!-- Vertical Separator Divider -->
           <div class="header-divider"></div>
 
-          <!-- Language Selector Dropdown -->
+          <!-- Language Selector Dropdown (Globe Icon, No Windows Flag Bug) -->
           <div class="dropdown" id="lang-dropdown">
-            <button class="dropdown-btn" aria-haspopup="true">
-              <span>${currentLangObj.flag} ${currentLangObj.code.toUpperCase()}</span>
-              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <button class="dropdown-btn" aria-haspopup="true" style="padding:0 0.65rem;" title="Select Language">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>${currentLangObj.code.toUpperCase()}</span>
+              <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu dropdown-right">
               ${LANGUAGES.map(lang => `
                 <div class="dropdown-item ${lang.code === currentLangCode ? 'active' : ''}" data-lang="${lang.code}">
-                  <span>${lang.flag}</span>
+                  <span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">${lang.code.toUpperCase()}</span>
                   <span>${lang.name}</span>
                 </div>
               `).join('')}
@@ -112,22 +113,22 @@ export function renderHeader(container) {
           </div>
 
           <!-- Dark/Light Theme Toggle -->
-          <button id="theme-toggle-btn" class="btn btn-sm btn-secondary" aria-label="Toggle theme" style="padding:0.6rem;">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <button id="theme-toggle-btn" class="btn-icon-header" aria-label="Toggle theme" title="Toggle theme">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
             </svg>
           </button>
 
           <!-- Mobile Hamburger Toggle -->
           <button id="hamburger-btn" class="hamburger-btn" aria-label="Open menu">
-            <svg width="26" height="26" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
           </button>
         </div>
       </div>
 
-      <!-- Mobile Navigation Drawer (100% Mobile Benchmarks) -->
+      <!-- Mobile Navigation Drawer -->
       <div id="mobile-drawer" class="mobile-drawer">
         <a href="/" class="mobile-nav-link" data-route="">
           <span data-i18n="navHome">${t('navHome')}</span>
@@ -211,11 +212,13 @@ function bindHeaderEvents() {
   const dropdowns = document.querySelectorAll('.dropdown');
   dropdowns.forEach(dd => {
     const btn = dd.querySelector('.dropdown-btn');
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      dropdowns.forEach(other => { if (other !== dd) other.classList.remove('open'); });
-      dd.classList.toggle('open');
-    });
+    if (btn) {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdowns.forEach(other => { if (other !== dd) other.classList.remove('open'); });
+        dd.classList.toggle('open');
+      });
+    }
   });
 
   const drawer = document.getElementById('mobile-drawer');
@@ -276,7 +279,13 @@ function bindHeaderEvents() {
   const bottomTabs = document.querySelectorAll('.mobile-bottom-tab');
   bottomTabs.forEach(tab => {
     const route = tab.dataset.route;
-    if (route === currentHash || (currentHash === '' && route === '')) {
+    const href = tab.getAttribute('href') || '';
+    if (
+      (href && (href === currentPath || (currentPath.startsWith(href) && href !== '/'))) ||
+      (route && currentPath.includes(route)) ||
+      (route === currentHash && currentHash !== '') ||
+      (currentPath === '/' && (route === '' || href === '/'))
+    ) {
       tab.classList.add('active');
     } else {
       tab.classList.remove('active');

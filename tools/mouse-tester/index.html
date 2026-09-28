@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>鼠标按键与移动测试 🖱️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾</title>
+  <meta name="description" content="Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical Tag -->
+  <link rel="canonical" href="https://catkeylab.com/tools/mouse-test/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/tools/mouse-test/">
+  <meta property="og:title" content="鼠标按键与移动测试 🖱️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta property="og:description" content="Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="鼠标按键与移动测试 🖱️ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta name="twitter:description" content="Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "\u9f20\u6807\u6309\u952e\u4e0e\u79fb\u52a8\u6d4b\u8bd5 - CatKeyLab",
+  "url": "https://catkeylab.com/tools/mouse-test/",
+  "description": "Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.",
+  "operatingSystem": "All",
+  "applicationCategory": "BrowserApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://catkeylab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Hardware Tests",
+      "item": "https://catkeylab.com/tools/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "\u9f20\u6807\u6309\u952e\u4e0e\u79fb\u52a8\u6d4b\u8bd5",
+      "item": "https://catkeylab.com/tools/mouse-test/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Which mouse buttons can I test?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can test Left Click (MB1), Right Click (MB2), Middle Click (MB3/Wheel), Side Button 4 (Back), Side Button 5 (Forward), and Scroll Wheel direction."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How to check if my mouse right click or side buttons work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Click anywhere inside our interactive mouse visualizer. The corresponding mouse button will glow cyan in real time if functioning properly."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can this tool detect mouse hardware damage?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This tool can confirm whether button presses are registering in the browser. If a button does not register at all, the switch may be faulty. However, the tool cannot diagnose internal hardware issues like degraded switches or sensor problems: only whether button events reach the browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Why won't my side buttons register?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Some browsers and operating systems intercept MB4 and MB5 for back/forward navigation. Try testing in a different browser, or check your mouse driver software for button remapping settings."
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body data-tool-key="mouse-test">
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+    <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/tools/" itemprop="item"><span itemprop="name">Hardware Tests</span></a>
+        <meta itemprop="position" content="2" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span style="color:var(--text-primary); font-weight:600;" itemprop="name">鼠标按键与移动测试</span>
+        <meta itemprop="position" content="3" />
+      </span>
+    </nav>
+    
+    </div>
+    <div id="main-content">
+      
+    <div class="container" style="padding-top:1.5rem;">
+      <div class="tool-page-layout">
+        <!-- Main Column (Tool) -->
+        <div class="tool-page-main">
+          <!-- Tool Title & Introduction -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>🖱️</span> <span>鼠标按键与移动测试</span>
+            </h1>
+            <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">Test all of your mouse buttons and scroll wheel directly in your browser. The interactive visualizer shows real-time feedback when you press any mouse button, scroll the wheel, or move the cursor within the test area.</p>
+          </div>
+
+          <!-- Interactive Tool Widget -->
+          <div id="tool-render-box">
+            <div style="min-height:360px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-secondary); border:2px dashed var(--border-color); border-radius:var(--radius-lg); padding:2rem; text-align:center;">
+              <div style="font-size:3rem; margin-bottom:1rem;">🖱️</div>
+              <h2 style="font-size:1.5rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">鼠标按键与移动测试</h2>
+              <p style="color:var(--text-secondary); max-width:480px; margin-bottom:1.5rem;">Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.</p>
+              <button class="btn btn-primary btn-lg" onclick="window.location.reload()">
+                <span>⚡ Launch 鼠标按键与移动测试</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sidebar Column (Informational Only - Ads safely separated below) -->
+        <div class="tool-page-sidebar">
+          <div class="tool-content-section">
+            
+        <div class="info-section">
+          <h2>How to Use 鼠标按键与移动测试</h2>
+          <ol class="info-steps"><li>Click anywhere inside the mouse visualizer test area.</li><li>The corresponding button (Left, Right, Middle, Side Back, Side Forward) will highlight when pressed.</li><li>Test the scroll wheel by scrolling up and down inside the test area.</li><li>Move your mouse to verify smooth cursor tracking.</li><li>Check that all buttons register correctly and release properly.</li></ol>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>What This Test Measures</h2>
+          <p>This tool detects and displays which mouse buttons are being activated using standard browser mouse events. It shows button identity (MB1 through MB5), scroll wheel direction, and cursor position within the test area.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Why Use This Test</h2>
+          <p>Use this tool to verify that all mouse buttons work correctly on a new mouse, troubleshoot an unresponsive button, check side buttons on a gaming mouse, or confirm scroll wheel functionality. It is especially useful when testing a used or refurbished mouse before purchase.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>How to Interpret Your Results</h2>
+          <p>Each mouse button should highlight immediately when pressed and release when you let go. If a button does not highlight at all, it may not be registering. If a button highlights without being pressed, the switch may have a hardware fault. Scroll wheel should register both up and down directions smoothly.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Tips for Accurate Results</h2>
+          <ul><li>Right-click inside the test area: the tool prevents the context menu so you can test MB2 freely.</li><li>If side buttons (MB4/MB5) do not register, your browser or operating system may be intercepting those buttons for navigation.</li><li>Test each button individually to isolate any issues.</li><li>Compare behavior across different browsers if a button seems unresponsive.</li></ul>
+        </div>
+        
+            
+            <div class="info-section">
+              <h3>Related Tools & Benchmarks</h3>
+              <div class="related-tools-grid"><a href="/tools/double-click-test/" class="related-tool-link">Double Click Tester</a> <a href="/tools/keyboard-test/" class="related-tool-link">Keyboard Tester</a> <a href="/tools/click-speed-test/" class="related-tool-link">Click Speed Test</a> <a href="/tools/cps-test/" class="related-tool-link">CPS Test (Clicks Per Second)</a></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Safe Ad Space BELOW the tool and guide with strict buffer margins -->
+      
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+
+      <!-- Full Width FAQ Section -->
+      
+        <div id="tool-faq-container" style="margin-top: 2rem;">
+          <h2 style="font-size:1.75rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Frequently Asked Questions</h2>
+          <div class="faq-list" style="max-width:900px; margin:0 auto;">
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Which mouse buttons can I test?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">You can test Left Click (MB1), Right Click (MB2), Middle Click (MB3/Wheel), Side Button 4 (Back), Side Button 5 (Forward), and Scroll Wheel direction.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How to check if my mouse right click or side buttons work?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Click anywhere inside our interactive mouse visualizer. The corresponding mouse button will glow cyan in real time if functioning properly.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Can this tool detect mouse hardware damage?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">This tool can confirm whether button presses are registering in the browser. If a button does not register at all, the switch may be faulty. However, the tool cannot diagnose internal hardware issues like degraded switches or sensor problems: only whether button events reach the browser.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">Why won&#x27;t my side buttons register?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Some browsers and operating systems intercept MB4 and MB5 for back/forward navigation. Try testing in a different browser, or check your mouse driver software for button remapping settings.</p>
+              </div>
+            
+          </div>
+        </div>
+        
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

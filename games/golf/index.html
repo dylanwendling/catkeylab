@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nibbles Ultimate 2D Mini Golf ⛳ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾</title>
+  <meta name="description" content="HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!">
+  
+  <!-- Favicon Icons -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
+  <meta name="theme-color" content="#10b981">
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
+
+  <!-- Canonical Tag -->
+  <link rel="canonical" href="https://catkeylab.com/games/mini-golf/">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://catkeylab.com/games/mini-golf/">
+  <meta property="og:title" content="Nibbles Ultimate 2D Mini Golf ⛳ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta property="og:description" content="HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Nibbles Ultimate 2D Mini Golf ⛳ - Free Online Hardware Test &amp; Benchmark | CatKeyLab 🐾">
+  <meta name="twitter:description" content="HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!">
+
+  <!-- Google Fonts & Stylesheets -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Nibbles Ultimate 2D Mini Golf - CatKeyLab",
+  "url": "https://catkeylab.com/games/mini-golf/",
+  "description": "HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!",
+  "operatingSystem": "All",
+  "applicationCategory": "BrowserApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://catkeylab.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Arcade Games",
+      "item": "https://catkeylab.com/games/mini-golf/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Nibbles Ultimate 2D Mini Golf",
+      "item": "https://catkeylab.com/games/mini-golf/"
+    }
+  ]
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How do I aim and shoot the golf ball?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Click or touch and drag backward on the golf ball to adjust your shot angle and power meter, then release! You can drag anywhere across the screen."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I choose course length?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the course selector buttons on the control bar to choose between 3 Holes (Quick), 9 Holes (Front Nine), or full 18 Holes (Championship)."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What do the course hazards & features do?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Sand traps slow down your ball with heavy drag, water hazards add +1 stroke penalty and reset the tee, ice patches slide smoothly, portals warp your ball, and rotating windmill blades deflect shots!"
+      }
+    }
+  ]
+}
+  </script>
+</head>
+<body data-tool-key="cat-mini-golf-game">
+  <!-- Sylva 3D Hero Background -->
+  <canvas id="sylva-canvas"></canvas>
+
+  <!-- Site Header Container -->
+  <div id="app-header"></div>
+
+  <!-- Main App Body -->
+  <main id="main-app">
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+    <nav class="breadcrumbs" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+        <meta itemprop="position" content="1" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <a href="/games/mini-golf/" itemprop="item"><span itemprop="name">Arcade Games</span></a>
+        <meta itemprop="position" content="2" />
+      </span>
+      <span class="separator">/</span>
+      <span itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+        <span style="color:var(--text-primary); font-weight:600;" itemprop="name">Nibbles Ultimate 2D Mini Golf</span>
+        <meta itemprop="position" content="3" />
+      </span>
+    </nav>
+    
+    </div>
+    <div id="main-content">
+      
+    <div class="container" style="padding-top:1.5rem;">
+      <div class="tool-page-layout">
+        <!-- Main Column (Tool) -->
+        <div class="tool-page-main">
+          <!-- Tool Title & Introduction -->
+          <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:2rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem;">
+              <span>⛳</span> <span>Nibbles Ultimate 2D Mini Golf</span>
+            </h1>
+            <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">A full-featured 2D mini golf game with physics simulation, 18 unique holes, and interactive course hazards. Choose between 3, 9, or 18 hole rounds and try to finish under par.</p>
+          </div>
+
+          <!-- Interactive Tool Widget -->
+          <div id="tool-render-box">
+            <div style="min-height:360px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:var(--bg-secondary); border:2px dashed var(--border-color); border-radius:var(--radius-lg); padding:2rem; text-align:center;">
+              <div style="font-size:3rem; margin-bottom:1rem;">⛳</div>
+              <h2 style="font-size:1.5rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">Nibbles Ultimate 2D Mini Golf</h2>
+              <p style="color:var(--text-secondary); max-width:480px; margin-bottom:1.5rem;">HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!</p>
+              <button class="btn btn-primary btn-lg" onclick="window.location.reload()">
+                <span>⚡ Launch Nibbles Ultimate 2D Mini Golf</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Sidebar Column (Informational Only - Ads safely separated below) -->
+        <div class="tool-page-sidebar">
+          <div class="tool-content-section">
+            
+        <div class="info-section">
+          <h2>How to Use Nibbles Ultimate 2D Mini Golf</h2>
+          <ol class="info-steps"><li>Select your course length: 3 holes (Quick), 9 holes (Front Nine), or 18 holes (Championship).</li><li>Click or touch the golf ball and drag backward to aim your shot.</li><li>The drag direction sets the angle and the drag distance sets the power.</li><li>Release to take your shot.</li><li>Navigate around hazards and reach the hole in as few strokes as possible.</li></ol>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>What This Test Measures</h2>
+          <p>While primarily a game, mini golf tests hand-eye coordination, spatial planning, and your ability to judge angles and power. Course hazards add strategic decision-making to each shot.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Why Use This Test</h2>
+          <p>This is an entertaining casual game that also exercises mouse or touch precision. The physics engine simulates realistic ball movement, bouncing, friction, and wind effects.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>How to Interpret Your Results</h2>
+          <p>Each hole has a par score. Finishing under par across the course indicates strong spatial judgment and power control. Your total stroke count is tracked across all holes.</p>
+        </div>
+        
+            
+        <div class="info-section">
+          <h2>Tips for Accurate Results</h2>
+          <ul><li>Start with short, controlled shots to learn how the physics and bouncing work.</li><li>Account for wind direction shown on the wind indicator.</li><li>Use wall bounces strategically to navigate around obstacles.</li><li>Avoid sand traps: they slow the ball significantly with heavy drag.</li></ul>
+        </div>
+        
+            
+            <div class="info-section">
+              <h3>Related Tools & Benchmarks</h3>
+              <div class="related-tools-grid"><a href="/tools/aim-trainer/" class="related-tool-link">Aim Trainer</a> <a href="/games/fish-maze/" class="related-tool-link">Nibbles Fish Maze</a> <a href="/games/fishing/" class="related-tool-link">Cat Fishing Game</a></div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      
+      <!-- Safe Ad Space BELOW the tool and guide with strict buffer margins -->
+      
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+
+      <!-- Full Width FAQ Section -->
+      
+        <div id="tool-faq-container" style="margin-top: 2rem;">
+          <h2 style="font-size:1.75rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Frequently Asked Questions</h2>
+          <div class="faq-list" style="max-width:900px; margin:0 auto;">
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How do I aim and shoot the golf ball?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Click or touch and drag backward on the golf ball to adjust your shot angle and power meter, then release! You can drag anywhere across the screen.</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">How do I choose course length?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Use the course selector buttons on the control bar to choose between 3 Holes (Quick), 9 Holes (Front Nine), or full 18 Holes (Championship).</p>
+              </div>
+            
+              <div class="faq-item" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1.25rem; margin-bottom:1rem;">
+                <h3 style="font-size:1.1rem; color:var(--text-primary); margin-bottom:0.5rem;">What do the course hazards &amp; features do?</h3>
+                <p style="color:var(--text-secondary); line-height:1.6;">Sand traps slow down your ball with heavy drag, water hazards add +1 stroke penalty and reset the tee, ice patches slide smoothly, portals warp your ball, and rotating windmill blades deflect shots!</p>
+              </div>
+            
+          </div>
+        </div>
+        
+    </div>
+    
+    </div>
+  </main>
+
+  <!-- Interactive Mascot Widget -->
+  <div id="eye-mascot-container"></div>
+
+  <!-- Site Footer Container -->
+  <div id="app-footer"></div>
+
+  <!-- Three.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Entry Script -->
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

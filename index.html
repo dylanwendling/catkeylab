@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CatKeyLab 🐾 - Free Online Keyboard, Mouse & Typing Tests</title>
+  <title>CatKeyLab 🐾 - Free Online Keyboard, Mouse &amp; Typing Tests</title>
   <meta name="description" content="Free browser-based tools to test keyboards, mice, typing speed, clicking performance, reaction time, and memory. No downloads or installation required. Works on all devices.">
   
   <!-- Favicon Icons -->
-  <link rel="icon" type="image/svg+xml" href="./favicon.svg">
-  <link rel="alternate icon" type="image/svg+xml" href="./assets/favicon.svg">
-  <link rel="apple-touch-icon" href="./favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="apple-touch-icon" href="/favicon.svg">
   <meta name="theme-color" content="#10b981">
 
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8935268300975005" crossorigin="anonymous"></script>
 
-  <!-- Canonical & hreflang tags -->
+  <!-- Canonical & hreflang Tags -->
   <link rel="canonical" href="https://catkeylab.com/">
   <link rel="alternate" hreflang="x-default" href="https://catkeylab.com/">
   <link rel="alternate" hreflang="en" href="https://catkeylab.com/?lang=en">
@@ -35,76 +35,934 @@
   <!-- Open Graph / Social Media -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://catkeylab.com/">
-  <meta property="og:title" content="CatKeyLab 🐾 - Free Online Keyboard, Mouse & Typing Tests">
-  <meta property="og:description" content="Free browser-based tools to test keyboards, mice, typing speed, clicking performance, reaction time, and memory.">
+  <meta property="og:title" content="CatKeyLab 🐾 - Free Online Keyboard, Mouse &amp; Typing Tests">
+  <meta property="og:description" content="Free browser-based tools to test keyboards, mice, typing speed, clicking performance, reaction time, and memory. No downloads or installation required. Works on all devices.">
 
   <!-- Twitter Cards -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CatKeyLab 🐾 - Free Online Keyboard, Mouse & Typing Tests">
-  <meta name="twitter:description" content="Free browser-based tools to test keyboards, mice, typing speed, clicking performance, reaction time, and memory.">
+  <meta name="twitter:title" content="CatKeyLab 🐾 - Free Online Keyboard, Mouse &amp; Typing Tests">
+  <meta name="twitter:description" content="Free browser-based tools to test keyboards, mice, typing speed, clicking performance, reaction time, and memory. No downloads or installation required. Works on all devices.">
 
   <!-- Google Fonts & Stylesheets -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   
-  <link rel="stylesheet" href="./css/main.css">
-  <link rel="stylesheet" href="./css/components.css">
-  <link rel="stylesheet" href="./css/mascot.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/mascot.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CatKeyLab",
+  "url": "https://catkeylab.com/",
+  "description": "Free browser-based tools to test keyboards, mice, typing speed, clicking performance, reaction time, and memory. No downloads or installation required. Works on all devices.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://catkeylab.com/tools/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "CatKeyLab",
+  "url": "https://catkeylab.com/",
+  "logo": "https://catkeylab.com/assets/favicon.svg"
+}
+  </script>
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is CatKeyLab completely free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, 100% free with no subscriptions, accounts, or software downloads required."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does CatKeyLab record my keystrokes or mouse clicks?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. All input events are processed entirely inside your local browser sandbox and are never transmitted to any external server."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I test if my mouse is double-clicking accidentally?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Use the Double Click Tester. It measures millisecond intervals between consecutive clicks; switches releasing bounce signals below 80ms are flagged as switch chatter."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is a good typing speed (WPM)?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The global average typing speed is roughly 40 WPM. Speeds between 60-80 WPM are considered fast, and 90+ WPM places you in the top 5% of typists."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the average human reaction time?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "The median human reaction time for visual stimuli is approximately 250 milliseconds. Dedicated gamers typically score between 180ms and 220ms."
+      }
+    }
+  ]
+}
+  </script>
 </head>
 <body>
   <!-- Sylva 3D Hero Background -->
   <canvas id="sylva-canvas"></canvas>
 
   <!-- Site Header Container -->
-  <div id="app-header"></div>
+  <div id="app-header">
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="/" class="logo" id="header-logo">
+          <div class="logo-icon">🐱</div>
+          <div class="logo-text">CatKey<span>Lab</span></div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="nav-desktop">
+          <a href="/" class="nav-link" data-route="">Home</a>
+          
+          <!-- Benchmarks Dropdown -->
+          <div class="dropdown" id="benchmarks-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>Benchmarks</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/reaction-time-test/" class="dropdown-item"><span>⏱️</span> <span>Reaction Time Test</span></a>
+              <a href="/tools/sequence-memory-test/" class="dropdown-item"><span>🧠</span> <span>Sequence Memory Test</span></a>
+              <a href="/tools/aim-trainer/" class="dropdown-item"><span>🎯</span> <span>Aim Trainer</span></a>
+              <a href="/tools/number-memory-test/" class="dropdown-item"><span>🔢</span> <span>Number Memory Test</span></a>
+              <a href="/tools/verbal-memory-test/" class="dropdown-item"><span>💬</span> <span>Verbal Memory Test</span></a>
+              <a href="/tools/chimp-test/" class="dropdown-item"><span>🐒</span> <span>Chimp Test</span></a>
+              <a href="/tools/visual-memory-test/" class="dropdown-item"><span>🔳</span> <span>Visual Memory Test</span></a>
+              <a href="/tools/typing-test/" class="dropdown-item"><span>⌨️</span> <span>WPM Typing Test</span></a>
+            </div>
+          </div>
+
+          <!-- Hardware Dropdown -->
+          <div class="dropdown" id="hardware-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>Hardware</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/keyboard-test/" class="dropdown-item"><span>⌨️</span> <span>Keyboard Key Tester</span></a>
+              <a href="/tools/mouse-test/" class="dropdown-item"><span>🖱️</span> <span>Mouse Hardware Tester</span></a>
+              <a href="/tools/double-click-test/" class="dropdown-item"><span>⚡</span> <span>Double Click Tester</span></a>
+            </div>
+          </div>
+
+          <!-- Speed & Tools Dropdown -->
+          <div class="dropdown" id="tools-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>Speed & Tools</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/tools/cps-test/" class="dropdown-item"><span>⚡</span> <span>CPS Speed Test</span></a>
+              <a href="/tools/click-speed-test/" class="dropdown-item"><span>🚀</span> <span>Click Speed Test</span></a>
+              <a href="/tools/click-counter/" class="dropdown-item"><span>🔢</span> <span>Digital Click Counter</span></a>
+              <a href="/tools/auto-clicker/" class="dropdown-item"><span>🤖</span> <span>Online Auto Clicker</span></a>
+              <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
+              <a href="/tools/" class="dropdown-item"><span>📂</span> <strong>All Tools Directory</strong></a>
+            </div>
+          </div>
+
+          <!-- Games Dropdown -->
+          <div class="dropdown" id="games-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true">
+              <span>Games</span>
+              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu">
+              <a href="/games/mini-golf/" class="dropdown-item"><span>⛳</span> <span>Nibbles Mini Golf (18H)</span></a>
+              <a href="/games/fishing/" class="dropdown-item"><span>🎣</span> <span>Cat Fishing Game</span></a>
+              <a href="/games/fruit-slicer/" class="dropdown-item"><span>🍉</span> <span>Fruit Slicer Arcade</span></a>
+              <a href="/games/fish-maze/" class="dropdown-item"><span>🐟</span> <span>Nibbles Fish Maze</span></a>
+              <a href="/games/card-memory/" class="dropdown-item"><span>🎴</span> <span>Card Memory Match</span></a>
+            </div>
+          </div>
+
+          <a href="/about/" class="nav-link" data-route="about">About</a>
+          <a href="/faq/" class="nav-link" data-route="faq">FAQ</a>
+        </nav>
+
+        <div class="header-actions">
+          <!-- Surprise Me Discovery Button -->
+          <button id="nav-surprise-btn" class="btn btn-sm btn-surprise" style="padding:0.45rem 0.9rem;">
+            <span>🎲 Surprise Me!</span>
+          </button>
+
+          <!-- Vertical Separator Divider -->
+          <div class="header-divider"></div>
+
+          <!-- Language Selector Dropdown (Globe Icon, No Windows Flag Bug) -->
+          <div class="dropdown" id="lang-dropdown">
+            <button class="dropdown-btn" aria-haspopup="true" style="padding:0 0.65rem;" title="Select Language">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>EN</span>
+              <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="dropdown-menu dropdown-right">
+              <div class="dropdown-item active" data-lang="en"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">EN</span><span>English</span></div>
+              <div class="dropdown-item" data-lang="es"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">ES</span><span>Español</span></div>
+              <div class="dropdown-item" data-lang="fr"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">FR</span><span>Français</span></div>
+              <div class="dropdown-item" data-lang="de"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">DE</span><span>Deutsch</span></div>
+              <div class="dropdown-item" data-lang="pt"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">PT</span><span>Português</span></div>
+              <div class="dropdown-item" data-lang="it"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">IT</span><span>Italiano</span></div>
+              <div class="dropdown-item" data-lang="nl"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">NL</span><span>Nederlands</span></div>
+              <div class="dropdown-item" data-lang="pl"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">PL</span><span>Polski</span></div>
+              <div class="dropdown-item" data-lang="tr"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">TR</span><span>Türkçe</span></div>
+              <div class="dropdown-item" data-lang="ru"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">RU</span><span>Русский</span></div>
+              <div class="dropdown-item" data-lang="ja"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">JA</span><span>日本語</span></div>
+              <div class="dropdown-item" data-lang="ko"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">KO</span><span>한국어</span></div>
+              <div class="dropdown-item" data-lang="zh"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">ZH</span><span>简体中文</span></div>
+            </div>
+          </div>
+
+          <!-- Dark/Light Theme Toggle -->
+          <button id="theme-toggle-btn" class="btn-icon-header" aria-label="Toggle theme" title="Toggle theme">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+
+          <!-- Mobile Hamburger Toggle -->
+          <button id="hamburger-btn" class="hamburger-btn" aria-label="Open menu">
+            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+  </div>
 
   <!-- Main App Body -->
   <main id="main-app">
-    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;"></div>
+    <div class="container" id="breadcrumbs-container" style="padding-top:1rem;">
+      
+    </div>
     <div id="main-content">
-      <div class="seo-fallback" style="display: none;">
-        <h1>CatKeyLab 🐾 - Free Online Keyboard, Mouse & Typing Tests</h1>
-        <p>CatKeyLab is a free, high-performance web application built for testing mouse hardware, keyboard switches, WPM typing speed, click velocity, and reaction latency directly inside your web browser. Operating 100% client-side, it requires zero downloads, plugins, or accounts. All tests run locally to guarantee privacy and speed.</p>
-        
-        <h2>Which CatKeyLab Tool Should I Use?</h2>
-        <ul>
-          <li><strong>Check whether keyboard keys work</strong>: Use the <a href="/keyboard-test/">Keyboard Tester</a></li>
-          <li><strong>Test mouse buttons and scroll wheel</strong>: Use the <a href="/mouse-test/">Mouse Tester</a></li>
-          <li><strong>Check for accidental double clicks (mouse chatter)</strong>: Use the <a href="/double-click-test/">Double Click Tester</a></li>
-          <li><strong>Measure raw clicking speed (burst & endurance)</strong>: Use the <a href="/cps-test/">CPS Test</a></li>
-          <li><strong>Analyze clicking speed consistency and velocity</strong>: Use the <a href="/click-speed-test/">Click Speed Test</a></li>
-          <li><strong>Measure typing speed (WPM) and accuracy</strong>: Use the <a href="/typing-test/">Typing Speed Test</a></li>
-          <li><strong>Measure visual reaction speed</strong>: Use the <a href="/reaction-time-test/">Reaction Time Test</a></li>
-          <li><strong>Practice mouse aiming and target acquisition</strong>: Use the <a href="/aim-trainer-test/">Aim Trainer</a></li>
-          <li><strong>Test short-term pattern memory</strong>: Use the <a href="/sequence-memory-test/">Sequence Memory Test</a></li>
-          <li><strong>Test short-term digit span memory</strong>: Use the <a href="/number-memory-test/">Number Memory Test</a></li>
-          <li><strong>Test verbal word recognition memory</strong>: Use the <a href="/verbal-memory-test/">Verbal Memory Test</a></li>
-          <li><strong>Test spatial matrix pattern recall</strong>: Use the <a href="/visual-memory-test/">Visual Memory Test</a></li>
-          <li><strong>Test rapid working memory (like chimpanzees)</strong>: Use the <a href="/chimp-test/">Chimp Test</a></li>
-          <li><strong>Automate mouse clicking inside the browser</strong>: Use the <a href="/auto-clicker/">Auto Clicker</a></li>
-          <li><strong>Count things manually (with target goals)</strong>: Use the <a href="/click-counter/">Click Counter</a></li>
-          <li><strong>Play a physics 2D mini golf game</strong>: Use the <a href="/cat-mini-golf-game/">Cat Mini Golf</a></li>
-          <li><strong>Catch fish in a rapid clicking mini-game</strong>: Use the <a href="/cat-fishing-game/">Cat Fishing Game</a></li>
-          <li><strong>Slice flying fruit with your mouse or finger</strong>: Use the <a href="/fruit-slicer-game/">Fruit Slicer</a></li>
-          <li><strong>Navigate Nibbles through a procedural maze</strong>: Use the <a href="/fish-maze-game/">Fish Maze</a></li>
-          <li><strong>Match 3D cat cards in a visual recognition game</strong>: Use the <a href="/card-memory-game/">Card Memory Match</a></li>
-        </ul>
-        <p>We provide a reliable platform for gamers, typists, and professionals to evaluate their hardware performance and cognitive benchmarks. Check out our <a href="/about/">About</a>, <a href="/privacy/">Privacy Policy</a>, and <a href="/terms/">Terms of Service</a> for more information on our anonymous global leaderboards and data practices.</p>
+      
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge" style="background:linear-gradient(90deg, rgba(16,185,129,0.18), rgba(249,115,22,0.18)); border-color:rgba(16,185,129,0.35); color:var(--accent-emerald);">
+          🐾 CatKeyLab • Free Browser-Based Input Testing & Benchmarks
+        </div>
+        <h1 class="hero-title">
+          <span>Free Online Keyboard, Mouse &amp; <span style="white-space: nowrap;">Typing Tests 🐾</span></span>
+        </h1>
+        <p class="hero-subtitle">
+          CatKeyLab provides free browser-based tools for testing keyboards, mice, typing speed, clicking performance, reaction time, memory, and other computer-input functions. No downloads, no accounts: just open and test.
+        </p>
+        <div class="hero-ctas">
+          <a href="/tools/typing-test/" class="btn btn-primary btn-lg">
+            <span>⌨️⚡ Test Typing Speed (WPM)</span>
+          </a>
+          <a href="/tools/mouse-test/" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
+            <span>🖱️ Test Mouse Buttons</span>
+          </a>
+          <a href="/tools/keyboard-test/" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
+            <span>🖥️ Test Keyboard Keys</span>
+          </a>
+          <button id="hero-surprise-btn" class="btn btn-surprise btn-lg">
+            <span>🎲 Surprise Me!</span>
+          </button>
+        </div>
+
+        <!-- Hero Quick Test Interactive Card -->
+        <div class="hero-quick-test-card" id="hero-quick-test-zone">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+            <div style="font-weight:700; font-size:1.1rem; color:var(--accent-emerald); display:flex; align-items:center; gap:0.5rem;">
+              <span class="status-dot" style="background:var(--accent-emerald);"></span>
+              <span>⚡ Instant Mouse & Keyboard Quick Inspector</span>
+            </div>
+            <span style="font-size:0.8rem; color:var(--text-muted);">Click anywhere or press any key right now to inspect live</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap:1rem; text-align:center;">
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+              <div id="hero-mouse-btn" style="font-size:1.3rem; font-weight:800; color:var(--accent-cyan);">Click Here</div>
+              <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; margin-top:0.2rem;">Last Mouse Event</div>
+            </div>
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+              <div id="hero-key-btn" style="font-size:1.3rem; font-weight:800; color:var(--accent-emerald);">Press Any Key</div>
+              <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; margin-top:0.2rem;">Last Keyboard Key</div>
+            </div>
+            <div style="background:var(--bg-primary); padding:1rem; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+              <div id="hero-count-val" style="font-size:1.3rem; font-weight:800; color:var(--accent-primary);">0</div>
+              <div style="font-size:0.75rem; color:var(--text-secondary); text-transform:uppercase; margin-top:0.2rem;">Total Inputs Registered</div>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
+
+    <section class="section" style="padding-top:2.5rem;">
+      <div class="container">
+        <div id="diagnostic-wizard-container"></div>
+        <div id="daily-challenge-container"></div>
+      </div>
+    </section>
+
+    <!-- Embedded Anonymous Leaderboards Section -->
+    <section class="section" style="padding-top:0;">
+      <div id="home-leaderboard-container"></div>
+    </section>
+
+    <!-- Featured Tools Grid -->
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Online Hardware Testers & Speed Utilities</h2>
+          <p class="section-subtitle">Promoted browser tools for checking typing speed (WPM), mouse buttons, keyboard rollover, and click performance.</p>
+        </div>
+
+        <div class="grid grid-cols-4">
+          
+            <div class="tool-card featured-tool-card" style="border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">⏱️</div>
+                  <span class="tool-card-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;">🔥 TOP SEARCHED</span>
+                </div>
+                <h3 class="tool-card-title">Reaction Time Test</h3>
+                <p class="tool-card-desc">Check your reaction time. Wait for the signal to turn green and click as fast as you can.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/reaction-time-test/" class="btn btn-primary btn-sm" style="width:100%;">
+                  <span>Launch Tool ⏱️</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card featured-tool-card" style="border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">⌨️</div>
+                  <span class="tool-card-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;">🔥 TOP SEARCHED</span>
+                </div>
+                <h3 class="tool-card-title">Typing Speed Test (WPM)</h3>
+                <p class="tool-card-desc">Distraction-free, Monkeytype-inspired typing speed test. Test your WPM and accuracy live with mechanical sounds and Eye Mascot judging.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/typing-test/" class="btn btn-primary btn-sm" style="width:100%;">
+                  <span>Launch Tool ⌨️</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card featured-tool-card" style="border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🖱️</div>
+                  <span class="tool-card-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;">🔥 TOP SEARCHED</span>
+                </div>
+                <h3 class="tool-card-title">Mouse Tester</h3>
+                <p class="tool-card-desc">Interactive online mouse button and scroll wheel tester. Test Left, Right, Middle, Side Back/Forward buttons and cursor tracking.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/mouse-test/" class="btn btn-primary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🖱️</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card featured-tool-card" style="border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card));">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🖥️</div>
+                  <span class="tool-card-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;">🔥 TOP SEARCHED</span>
+                </div>
+                <h3 class="tool-card-title">Keyboard Tester</h3>
+                <p class="tool-card-desc">Interactive visual keyboard key tester. Press any key to see real-time highlight feedback, event keycode logging, and modifier status.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/keyboard-test/" class="btn btn-primary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🖥️</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🧠</div>
+                  <span class="tool-card-badge" style="">HUMAN BENCHMARKS</span>
+                </div>
+                <h3 class="tool-card-title">Sequence Memory Test</h3>
+                <p class="tool-card-desc">Remember an increasingly long pattern of button presses with Simon Says interactive tones.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/sequence-memory-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🧠</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🎯</div>
+                  <span class="tool-card-badge" style="">HUMAN BENCHMARKS</span>
+                </div>
+                <h3 class="tool-card-title">Aim Trainer</h3>
+                <p class="tool-card-desc">How quickly can you hit 30 targets? Test your mouse precision and reflex speed.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/aim-trainer/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🎯</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🔢</div>
+                  <span class="tool-card-badge" style="">HUMAN BENCHMARKS</span>
+                </div>
+                <h3 class="tool-card-title">Number Memory Test</h3>
+                <p class="tool-card-desc">Remember the longest number sequence you can. The number length increases every level.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/number-memory-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🔢</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">💬</div>
+                  <span class="tool-card-badge" style="">HUMAN BENCHMARKS</span>
+                </div>
+                <h3 class="tool-card-title">Verbal Memory Test</h3>
+                <p class="tool-card-desc">Keep as many words in short term memory as possible. Identify whether each word is SEEN or NEW.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/verbal-memory-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 💬</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🐒</div>
+                  <span class="tool-card-badge" style="">HUMAN BENCHMARKS</span>
+                </div>
+                <h3 class="tool-card-title">Chimp Test</h3>
+                <p class="tool-card-desc">Are you smarter than a chimpanzee? Memorize number locations before they turn into blank tiles.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/chimp-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🐒</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🔳</div>
+                  <span class="tool-card-badge" style="">HUMAN BENCHMARKS</span>
+                </div>
+                <h3 class="tool-card-title">Visual Memory Test</h3>
+                <p class="tool-card-desc">Remember an increasingly large board of squares as the grid expands.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/visual-memory-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🔳</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">👆</div>
+                  <span class="tool-card-badge" style="">HARDWARE TESTS</span>
+                </div>
+                <h3 class="tool-card-title">Double Click Tester</h3>
+                <p class="tool-card-desc">Test your double-clicking speed and detect faulty mouse switch hardware chatter with millisecond precision.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/double-click-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 👆</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">⚡</div>
+                  <span class="tool-card-badge" style="">SPEED TESTS</span>
+                </div>
+                <h3 class="tool-card-title">CPS Test (Clicks Per Second)</h3>
+                <p class="tool-card-desc">Test your Clicks Per Second (CPS) with our free online CPS calculator. Select 1s, 5s, 10s, 30s, or 60s tests and track your personal best.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/cps-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool ⚡</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🚀</div>
+                  <span class="tool-card-badge" style="">SPEED TESTS</span>
+                </div>
+                <h3 class="tool-card-title">Click Speed Test</h3>
+                <p class="tool-card-desc">Measure your click velocity, burst speed, and clicking consistency with real-time analytics and dynamic speed gauges.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/click-speed-test/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🚀</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🔢</div>
+                  <span class="tool-card-badge" style="">SPEED TESTS</span>
+                </div>
+                <h3 class="tool-card-title">Digital Click Counter</h3>
+                <p class="tool-card-desc">Online digital click counter with audio sound effects, touch vibration, keyboard shortcuts (Spacebar), and target goal tracking.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/click-counter/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🔢</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🎯</div>
+                  <span class="tool-card-badge" style="">SPEED TESTS</span>
+                </div>
+                <h3 class="tool-card-title">Online Auto Clicker</h3>
+                <p class="tool-card-desc">Free online auto clicker running directly in your browser. Set click intervals, target counts, and hotkeys with zero software downloads.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/tools/auto-clicker/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🎯</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">⛳</div>
+                  <span class="tool-card-badge" style="">ARCADE GAMES</span>
+                </div>
+                <h3 class="tool-card-title">Nibbles Mini Golf (18 Holes)</h3>
+                <p class="tool-card-desc">HTML5 Canvas 2D Physics Mini Golf with 18 holes, dynamic weather, wind, strategic sand traps, water hazards, kinetic windmills, and portals!</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/games/mini-golf/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool ⛳</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🎣</div>
+                  <span class="tool-card-badge" style="">ARCADE GAMES</span>
+                </div>
+                <h3 class="tool-card-title">Cat Fishing Game</h3>
+                <p class="tool-card-desc">Interactive 2D Cartoon Fishing Adventure with Nibbles the Cat 🐱! Cast your line, click &amp; drag your lure underwater to attract hungry fish 🐟, and mash REEL to catch!</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/games/fishing/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🎣</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🍉</div>
+                  <span class="tool-card-badge" style="">ARCADE GAMES</span>
+                </div>
+                <h3 class="tool-card-title">Fruit Slicer Arcade</h3>
+                <p class="tool-card-desc">Juicy 2D Fruit Slicer Arcade with Nibbles 🐱! Drag or swipe your blade to slice flying fruits ⚔️, trigger multi-slice combo multipliers, and defend your 3 lives!</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/games/fruit-slicer/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🍉</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🐟</div>
+                  <span class="tool-card-badge" style="">ARCADE GAMES</span>
+                </div>
+                <h3 class="tool-card-title">Nibbles Fish Maze</h3>
+                <p class="tool-card-desc">Help Nibbles 🐱 navigate through a dynamic maze to find and eat the delicious Fish 🐟!</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/games/fish-maze/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🐟</span> →
+                </a>
+              </div>
+            </div>
+            <div class="tool-card " style="">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2rem;">🎴</div>
+                  <span class="tool-card-badge" style="">ARCADE GAMES</span>
+                </div>
+                <h3 class="tool-card-title">Card Memory Match (3D)</h3>
+                <p class="tool-card-desc">Flip 3D cat-themed cards to find all 8 matching pairs in the fewest turns possible.</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="/games/card-memory/" class="btn btn-secondary btn-sm" style="width:100%;">
+                  <span>Launch Tool 🎴</span> →
+                </a>
+              </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Informational Section: Free Online Keyboard & Mouse Testing Tools -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Free Online Keyboard & Mouse Testing Tools</h2>
+        </div>
+        <div class="info-section">
+          <p>CatKeyLab is a free collection of browser-based tools designed to help you test, troubleshoot, and measure the performance of your computer input devices. If you want to verify that every key on your keyboard registers correctly, check that all your mouse buttons are working, measure your typing speed in words per minute, or test your clicking speed and reaction time, CatKeyLab provides focused tools for each task.</p>
+          <p>All tests run directly in your browser with no downloads, installations, or account creation required. Your keystrokes, clicks, and test results are processed locally on your device and are never transmitted to any server. CatKeyLab also includes cognitive benchmarks for <a href="/tools/sequence-memory-test/">sequence memory</a>, <a href="/tools/number-memory-test/">number memory</a>, <a href="/tools/verbal-memory-test/">verbal memory</a>, <a href="/tools/visual-memory-test/">visual memory</a>, and <a href="/tools/reaction-time-test/">reaction time</a>: giving you everything you need to test your gear and your own skills.</p>
+        </div>
+
+        <div class="info-grid">
+          <!-- How to Test Your Keyboard -->
+          <div class="info-section">
+            <h3>🖥️ How to Test Your Keyboard</h3>
+            <p>Use the <a href="/tools/keyboard-test/">Keyboard Tester</a> to verify that each key on your physical keyboard is registering correctly:</p>
+            <ol class="info-steps">
+              <li>Open the <a href="/tools/keyboard-test/">Keyboard Tester</a> and click inside the test area.</li>
+              <li>Press each key on your physical keyboard one at a time.</li>
+              <li>Confirm that each key highlights on the on-screen layout.</li>
+              <li>Look for keys that fail to register or show incorrect key codes.</li>
+              <li>Test modifier combinations (Shift, Ctrl, Alt) and try pressing multiple keys simultaneously to check rollover.</li>
+            </ol>
+            <p>People usually test keyboards when checking a new purchase, evaluating a used keyboard before buying, troubleshooting an unresponsive or stuck key, verifying a laptop keyboard, or confirming that a mechanical keyboard's switches are all functioning after cleaning or modification.</p>
+          </div>
+
+          <!-- How to Test a Mouse -->
+          <div class="info-section">
+            <h3>🖱️ How to Test a Mouse</h3>
+            <p>Use the <a href="/tools/mouse-test/">Mouse Button & Movement Tester</a> to check that your mouse buttons, scroll wheel, and cursor tracking are working properly:</p>
+            <ol class="info-steps">
+              <li>Open the <a href="/tools/mouse-test/">Mouse Tester</a> and click inside the test area.</li>
+              <li>Press each mouse button: left, right, middle (scroll click), and side buttons if available.</li>
+              <li>Scroll the wheel up and down to confirm scroll detection.</li>
+              <li>Move the mouse to verify smooth cursor tracking.</li>
+              <li>Use the <a href="/tools/double-click-test/">Double Click Tester</a> to check for unintended double-click chatter.</li>
+            </ol>
+            <p>If your mouse is acting up, check for buttons that don't work, buttons that trigger without being pressed (indicating switch chatter), scroll wheel directions that do not detect, or jerky cursor movement. If a single click is registering as a double-click, your mouse switch may be worn and should be tested with the <a href="/tools/double-click-test/">Double Click Tester</a>.</p>
+          </div>
+        </div>
+
+        <!-- Why Test Your Keyboard or Mouse? -->
+        <div class="info-section">
+          <h3>Why Test Your Keyboard or Mouse?</h3>
+          <p>Testing your devices can save you a lot of headaches:</p>
+          <ul>
+            <li><strong>New device verification</strong>: Confirm that every button and key works correctly out of the box before your return window closes.</li>
+            <li><strong>Used or refurbished purchases</strong>: Test a used keyboard or mouse before committing to a purchase to detect worn switches or broken keys.</li>
+            <li><strong>Troubleshooting input problems</strong>: If a key is not responding or a mouse button behaves inconsistently, testing helps isolate whether the issue is hardware or software.</li>
+            <li><strong>Double-click issues</strong>: Aging mouse switches can develop "chatter," causing accidental double-clicks. The <a href="/tools/double-click-test/">Double Click Tester</a> measures click intervals to detect this.</li>
+            <li><strong>Performance measurement</strong>: Track your <a href="/tools/typing-test/">typing speed</a>, <a href="/tools/cps-test/">clicking speed</a>, and <a href="/tools/reaction-time-test/">reaction time</a> to monitor improvement over time.</li>
+            <li><strong>Keyboard rollover verification</strong>: Gamers can test whether their keyboard supports pressing multiple keys simultaneously using the <a href="/tools/keyboard-test/">Keyboard Tester</a>.</li>
+          </ul>
+        </div>
+
+        <!-- Which Test Do I Need? -->
+        <div class="info-section" style="margin-top:2.5rem;">
+          <h3>🧭 Which CatKeyLab Tool Should I Use?</h3>
+          <p>Find the right testing tool or game for your needs:</p>
+          <div style="overflow-x:auto; margin-top:1rem; border:1px solid var(--border-color); border-radius:var(--radius-md);">
+            <table style="width:100%; border-collapse: collapse; text-align:left; background:var(--bg-secondary);">
+              <thead>
+                <tr style="border-bottom:2px solid var(--border-color);">
+                  <th style="padding:1rem; color:var(--text-primary);">If you want to...</th>
+                  <th style="padding:1rem; color:var(--text-primary);">Use</th>
+                </tr>
+              </thead>
+              <tbody style="color:var(--text-secondary);">
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Check whether keyboard keys work</td>
+                  <td style="padding:1rem;"><a href="/tools/keyboard-test/" style="color:var(--accent-cyan); font-weight:600;">Keyboard Tester 🖥️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test mouse buttons and scroll wheel</td>
+                  <td style="padding:1rem;"><a href="/tools/mouse-test/" style="color:var(--accent-cyan); font-weight:600;">Mouse Tester 🖱️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Check for accidental double clicks (mouse chatter)</td>
+                  <td style="padding:1rem;"><a href="/tools/double-click-test/" style="color:var(--accent-cyan); font-weight:600;">Double Click Tester 👆</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Measure raw clicking speed (burst & endurance)</td>
+                  <td style="padding:1rem;"><a href="/tools/cps-test/" style="color:var(--accent-cyan); font-weight:600;">CPS Test ⚡</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Analyze clicking speed consistency and velocity</td>
+                  <td style="padding:1rem;"><a href="/tools/click-speed-test/" style="color:var(--accent-cyan); font-weight:600;">Click Speed Test 🚀</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Measure typing speed (WPM) and accuracy</td>
+                  <td style="padding:1rem;"><a href="/tools/typing-test/" style="color:var(--accent-cyan); font-weight:600;">Typing Speed Test ⌨️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Measure visual reaction speed</td>
+                  <td style="padding:1rem;"><a href="/tools/reaction-time-test/" style="color:var(--accent-cyan); font-weight:600;">Reaction Time Test ⏱️</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Practice mouse aiming and target acquisition</td>
+                  <td style="padding:1rem;"><a href="/tools/aim-trainer/" style="color:var(--accent-cyan); font-weight:600;">Aim Trainer 🎯</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test short-term pattern memory</td>
+                  <td style="padding:1rem;"><a href="/tools/sequence-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Sequence Memory Test 🧠</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test short-term digit span memory</td>
+                  <td style="padding:1rem;"><a href="/tools/number-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Number Memory Test 🔢</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test verbal word recognition memory</td>
+                  <td style="padding:1rem;"><a href="/tools/verbal-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Verbal Memory Test 💬</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test spatial matrix pattern recall</td>
+                  <td style="padding:1rem;"><a href="/tools/visual-memory-test/" style="color:var(--accent-cyan); font-weight:600;">Visual Memory Test 🔳</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Test rapid working memory (like chimpanzees)</td>
+                  <td style="padding:1rem;"><a href="/tools/chimp-test/" style="color:var(--accent-cyan); font-weight:600;">Chimp Test 🐒</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Automate mouse clicking inside the browser</td>
+                  <td style="padding:1rem;"><a href="/tools/auto-clicker/" style="color:var(--accent-cyan); font-weight:600;">Auto Clicker 🎯</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Count things manually (with target goals)</td>
+                  <td style="padding:1rem;"><a href="/tools/click-counter/" style="color:var(--accent-cyan); font-weight:600;">Click Counter 🔢</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Play a physics 2D mini golf game</td>
+                  <td style="padding:1rem;"><a href="/games/mini-golf/" style="color:var(--accent-cyan); font-weight:600;">Cat Mini Golf ⛳</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Catch fish in a rapid clicking mini-game</td>
+                  <td style="padding:1rem;"><a href="/games/fishing/" style="color:var(--accent-cyan); font-weight:600;">Cat Fishing Game 🎣</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Slice flying fruit with your mouse or finger</td>
+                  <td style="padding:1rem;"><a href="/games/fruit-slicer/" style="color:var(--accent-cyan); font-weight:600;">Fruit Slicer 🍉</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Navigate Nibbles through a procedural maze</td>
+                  <td style="padding:1rem;"><a href="/games/fish-maze/" style="color:var(--accent-cyan); font-weight:600;">Fish Maze 🐟</a></td>
+                </tr>
+                <tr>
+                  <td style="padding:1rem;">Match 3D cat cards in a visual recognition game</td>
+                  <td style="padding:1rem;"><a href="/games/card-memory/" style="color:var(--accent-cyan); font-weight:600;">Card Memory Match 🎴</a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+      <div class="safe-ad-container" style="margin: 3.5rem auto 2rem; max-width: 900px; text-align: center;">
+        <div class="ad-slot ad-banner" style="min-height: 250px; background: rgba(0,0,0,0.15); border: 1px dashed rgba(255,255,255,0.1); border-radius: var(--radius-md); padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <span class="ad-label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.75rem;">Advertisement</span>
+          <ins class="adsbygoogle"
+               style="display:block; width:100%;"
+               data-ad-client="ca-pub-8935268300975005"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </div>
+      </div>
+    
+
+    <!-- Expanded Diagnostics & Value Section -->
+    <section class="section" style="background:var(--bg-secondary); border-top:1px solid var(--border-color); border-bottom:1px solid var(--border-color);">
+      <div class="container">
+        <div style="max-width:800px; margin:0 auto; line-height:1.7;">
+          <h2 style="font-size:1.8rem; font-weight:800; margin-bottom:1rem;">Everything You Need For Clicking & Hardware Diagnostics: Directly In Your Browser</h2>
+          <p style="margin-bottom:1rem; color:var(--text-secondary);">
+            CatKeyLab is a free website where you can test your mouse and keyboard without installing anything. It provides diagnostic tools for <a href="/tools/keyboard-test/" style="color:var(--accent-cyan);">keyboard keys</a>, <a href="/tools/mouse-test/" style="color:var(--accent-cyan);">mouse buttons and scroll wheel</a>, <a href="/tools/double-click-test/" style="color:var(--accent-cyan);">double-click behavior</a>, and <a href="/tools/typing-test/" style="color:var(--accent-cyan);">typing speed</a>, along with performance benchmarks for <a href="/tools/cps-test/" style="color:var(--accent-cyan);">clicking speed</a>, <a href="/tools/reaction-time-test/" style="color:var(--accent-cyan);">reaction time</a>, and <a href="/tools/aim-trainer/" style="color:var(--accent-cyan);">aim accuracy</a>.
+          </p>
+          <p style="margin-bottom:1rem; color:var(--text-secondary);">
+            Everything runs right in your browser, so it works perfectly on Windows, macOS, Linux, ChromeOS, iOS, and Android with no installation or administrator permissions. All tests happen on your own device: we never record or send your keystrokes or clicks anywhere.
+          </p>
+          <p style="margin-bottom:1rem; color:var(--text-secondary);">
+            <strong>What you can find out:</strong> Whether keys and buttons register correctly, which key codes your keyboard sends, whether your mouse has double-click chatter, your typing speed and accuracy, your clicking rate, and your visual reaction time. <strong>What these tests can't fix:</strong> CatKeyLab cannot access hardware internals, diagnose electrical faults, or detect issues that do not produce observable browser-level events. If a key or button does not register in the tester, the problem could be the switch, wiring, driver, or OS-level configuration.
+          </p>
+          <p style="color:var(--text-secondary);">
+            If you're having issues, try the <a href="/tools/keyboard-test/" style="color:var(--accent-cyan);">Keyboard Tester</a> or <a href="/tools/mouse-test/" style="color:var(--accent-cyan);">Mouse Tester</a> to check whether your device is sending events to the browser. If a key or button is not detected, try a different USB port, check your device drivers, or test in another browser to determine whether the issue is hardware or software.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section">
+      <div class="container">
+        <div class="tool-wrapper" style="max-width:850px; margin:0 auto;">
+          <h2 style="font-size:2rem; font-weight:800; margin-bottom:1.5rem; text-align:center;">Frequently Asked Questions (FAQ)</h2>
+          <div style="display:flex; flex-direction:column; gap:1.25rem;">
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+              <h3 style="font-size:1.15rem; color:var(--accent-cyan); margin-bottom:0.5rem;">Is CatKeyLab completely free to use?</h3>
+              <p style="color:var(--text-secondary); line-height:1.6;">Yes, 100% free with no subscriptions, accounts, or software downloads required.</p>
+            </div>
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+              <h3 style="font-size:1.15rem; color:var(--accent-cyan); margin-bottom:0.5rem;">Does CatKeyLab record my keystrokes or mouse clicks?</h3>
+              <p style="color:var(--text-secondary); line-height:1.6;">No. All input events are processed entirely inside your local browser sandbox and are never transmitted to any external server.</p>
+            </div>
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+              <h3 style="font-size:1.15rem; color:var(--accent-cyan); margin-bottom:0.5rem;">How do I test if my mouse is double-clicking accidentally?</h3>
+              <p style="color:var(--text-secondary); line-height:1.6;">Use the Double Click Tester. It measures millisecond intervals between consecutive clicks; switches releasing bounce signals below 80ms are flagged as switch chatter.</p>
+            </div>
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+              <h3 style="font-size:1.15rem; color:var(--accent-cyan); margin-bottom:0.5rem;">What is a good typing speed (WPM)?</h3>
+              <p style="color:var(--text-secondary); line-height:1.6;">The global average typing speed is roughly 40 WPM. Speeds between 60-80 WPM are considered fast, and 90+ WPM places you in the top 5% of typists.</p>
+            </div>
+            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.25rem; border-radius:var(--radius-md);">
+              <h3 style="font-size:1.15rem; color:var(--accent-cyan); margin-bottom:0.5rem;">What is the average human reaction time?</h3>
+              <p style="color:var(--text-secondary); line-height:1.6;">The median human reaction time for visual stimuli is approximately 250 milliseconds. Dedicated gamers typically score between 180ms and 220ms.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
     </div>
   </main>
 
-  <!-- Interactive Eye Mascot Widget -->
+  <!-- Interactive Mascot Widget -->
   <div id="eye-mascot-container"></div>
 
   <!-- Site Footer Container -->
-  <div id="app-footer"></div>
+  <div id="app-footer">
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div class="footer-brand">
+          <div class="logo">
+            <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:1.1rem; box-shadow:0 0 10px rgba(16,185,129,0.3);">
+              🐱
+            </div>
+            <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
+          </div>
+          <p class="footer-desc">
+            Free, private, high-performance browser-based hardware testing suite and human benchmark tests.
+            No downloads or installation required.
+          </p>
+          <div class="footer-badges" style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-top:0.75rem;">
+            <span class="badge" style="background:rgba(16,185,129,0.1); color:var(--accent-emerald); border:1px solid rgba(16,185,129,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">100% Client-Side</span>
+            <span class="badge" style="background:rgba(6,182,212,0.1); color:var(--accent-cyan); border:1px solid rgba(6,182,212,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">No Log Tracking</span>
+            <span class="badge" style="background:rgba(249,115,22,0.1); color:var(--accent-primary); border:1px solid rgba(249,115,22,0.2); font-size:0.75rem; padding:0.2rem 0.5rem; border-radius:4px;">MIT License</span>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🧠 Cognitive Benchmarks</div>
+          <ul class="footer-links">
+            <li><a href="/tools/reaction-time-test/">Reaction Time Test</a></li>
+            <li><a href="/tools/sequence-memory-test/">Sequence Memory Test</a></li>
+            <li><a href="/tools/aim-trainer/">Aim Trainer</a></li>
+            <li><a href="/tools/number-memory-test/">Number Memory Test</a></li>
+            <li><a href="/tools/verbal-memory-test/">Verbal Memory Test</a></li>
+            <li><a href="/tools/chimp-test/">Chimp Test</a></li>
+            <li><a href="/tools/visual-memory-test/">Visual Memory Test</a></li>
+            <li><a href="/tools/typing-test/">Typing Speed Test (WPM)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🖱️ Hardware & Speed Tests</div>
+          <ul class="footer-links">
+            <li><a href="/tools/keyboard-test/">Keyboard Key Tester</a></li>
+            <li><a href="/tools/mouse-test/">Mouse Hardware Tester</a></li>
+            <li><a href="/tools/double-click-test/">Double Click Tester</a></li>
+            <li><a href="/tools/cps-test/">CPS Speed Test</a></li>
+            <li><a href="/tools/click-speed-test/">Click Speed Test</a></li>
+            <li><a href="/tools/click-counter/">Click Counter</a></li>
+            <li><a href="/tools/auto-clicker/">Online Auto Clicker</a></li>
+            <li><a href="/games/mini-golf/">Cat Mini Golf</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-title">🐾 Platform & Trust</div>
+          <ul class="footer-links">
+            <li><a href="/about/">About CatKeyLab & Dylan</a></li>
+            <li><a href="/meet-nibbles/">🐱 Meet Nibbles in Real Life</a></li>
+            <li><a href="/faq/">Frequently Asked Questions</a></li>
+            <li><a href="/leaderboards/">Anonymous Global Leaderboards</a></li>
+            <li><a href="/privacy/">Privacy Policy</a></li>
+            <li><a href="/terms/">Terms of Service</a></li>
+            <li><a href="/contact/">Contact & Feedback</a></li>
+            <li><a href="/sitemap/">Sitemap & Tools Directory</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="container footer-bottom-inner" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+          <div class="copyright">
+            © 2026 CatKeyLab. Open source under the MIT License. Built with ❤️ for keyboard & hardware enthusiasts.
+          </div>
+          <div style="font-size:0.8rem; color:var(--text-muted);">
+            Inspired by Nibbles 🐱 the Ginger Tabby Cat.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
 
   <!-- Three.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <!-- Entry Script -->
-  <script type="module" src="./js/app.js"></script>
+  <script type="module" src="/js/app.js"></script>
 </body>
 </html>
