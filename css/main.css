@@ -309,34 +309,6 @@ img, svg {
   gap: 0.5rem;
 }
 
-.btn-random-test {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  height: 36px;
-  padding: 0 0.85rem;
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--accent-emerald);
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.25);
-  border-radius: 8px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.15s ease;
-  white-space: nowrap;
-}
-
-.btn-random-test:hover {
-  background: rgba(16, 185, 129, 0.16);
-  border-color: rgba(16, 185, 129, 0.45);
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.2);
-  transform: translateY(-1px);
-}
-
-.btn-random-test:active {
-  transform: translateY(0);
-}
 
 .header-divider {
   width: 1px;
@@ -679,6 +651,7 @@ main {
   border: 1px solid #d29922;
   box-shadow: 0 3px 0 #855b08;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .btn-surprise:hover {

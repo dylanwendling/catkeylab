@@ -89,10 +89,9 @@ export function renderHeader(container) {
         </nav>
 
         <div class="header-actions">
-          <!-- Random Test / Surprise Action Button -->
-          <button id="nav-surprise-btn" class="btn-random-test" title="Launch a random tool">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 8h.01M8 8h.01M8 16h.01M16 16h.01M12 12h.01"></path></svg>
-            <span>Surprise Me!</span>
+          <!-- Surprise Me Discovery Button -->
+          <button id="nav-surprise-btn" class="btn btn-sm btn-surprise" style="padding:0.45rem 0.9rem;">
+            <span>🎲 Surprise Me!</span>
           </button>
 
           <!-- Vertical Separator Divider -->
