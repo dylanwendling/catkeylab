@@ -18,9 +18,6 @@ if hasattr(sys.stderr, 'reconfigure'):
 
 BASE_URL = "https://catkeylab.com"
 
-NIBBLES_B64_FILE = os.path.join(os.path.dirname(__file__), 'assets', 'cat_b64.txt')
-NIBBLES_B64 = open(NIBBLES_B64_FILE, 'r', encoding='utf-8').read().strip() if os.path.exists(NIBBLES_B64_FILE) else ''
-
 # 1. Tool Canonical Route Configuration
 TOOL_ROUTES = {
     # Human Benchmarks & Cognitive Tests (tools/)
@@ -210,8 +207,10 @@ STATIC_HEADER_HTML = """
     <header class="site-header">
       <div class="container header-inner">
         <a href="/" class="logo" id="header-logo">
-          <div class="logo-icon">🐱</div>
-          <div class="logo-text">CatKey<span>Lab</span></div>
+          <div class="logo-icon" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-radius:50%; width:36px; height:36px; display:flex; align-items:center; justify-content:center; font-size:1.2rem; box-shadow:0 0 12px rgba(16,185,129,0.4);">
+            🐱
+          </div>
+          <div class="logo-text">CatKey<span style="color:var(--accent-emerald);">Lab</span> 🐾</div>
         </a>
 
         <!-- Desktop Navigation Links -->
@@ -221,116 +220,64 @@ STATIC_HEADER_HTML = """
           <!-- Benchmarks Dropdown -->
           <div class="dropdown" id="benchmarks-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Benchmarks</span>
-              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <span>🧠 Benchmarks ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/reaction-time-test/" class="dropdown-item"><span>⏱️</span> <span>Reaction Time Test</span></a>
-              <a href="/tools/sequence-memory-test/" class="dropdown-item"><span>🧠</span> <span>Sequence Memory Test</span></a>
-              <a href="/tools/aim-trainer/" class="dropdown-item"><span>🎯</span> <span>Aim Trainer</span></a>
-              <a href="/tools/number-memory-test/" class="dropdown-item"><span>🔢</span> <span>Number Memory Test</span></a>
-              <a href="/tools/verbal-memory-test/" class="dropdown-item"><span>💬</span> <span>Verbal Memory Test</span></a>
-              <a href="/tools/chimp-test/" class="dropdown-item"><span>🐒</span> <span>Chimp Test</span></a>
-              <a href="/tools/visual-memory-test/" class="dropdown-item"><span>🔳</span> <span>Visual Memory Test</span></a>
-              <a href="/tools/typing-test/" class="dropdown-item"><span>⌨️</span> <span>WPM Typing Test</span></a>
+              <a href="/tools/reaction-time-test/" class="dropdown-item">⏱️ Reaction Time Test</a>
+              <a href="/tools/sequence-memory-test/" class="dropdown-item">🧠 Sequence Memory Test</a>
+              <a href="/tools/aim-trainer/" class="dropdown-item">🎯 Aim Trainer</a>
+              <a href="/tools/number-memory-test/" class="dropdown-item">🔢 Number Memory Test</a>
+              <a href="/tools/verbal-memory-test/" class="dropdown-item">💬 Verbal Memory Test</a>
+              <a href="/tools/chimp-test/" class="dropdown-item">🐒 Chimp Test</a>
+              <a href="/tools/visual-memory-test/" class="dropdown-item">🔳 Visual Memory Test</a>
+              <a href="/tools/typing-test/" class="dropdown-item">⌨️ WPM Typing Test</a>
             </div>
           </div>
 
           <!-- Hardware Dropdown -->
           <div class="dropdown" id="hardware-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Hardware</span>
-              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <span>🖱️ Hardware ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/keyboard-test/" class="dropdown-item"><span>⌨️</span> <span>Keyboard Key Tester</span></a>
-              <a href="/tools/mouse-test/" class="dropdown-item"><span>🖱️</span> <span>Mouse Hardware Tester</span></a>
-              <a href="/tools/double-click-test/" class="dropdown-item"><span>⚡</span> <span>Double Click Tester</span></a>
+              <a href="/tools/keyboard-test/" class="dropdown-item">⌨️ Keyboard Key Tester</a>
+              <a href="/tools/mouse-test/" class="dropdown-item">🖱️ Mouse Hardware Tester</a>
+              <a href="/tools/double-click-test/" class="dropdown-item">⚡ Double Click Tester</a>
             </div>
           </div>
 
           <!-- Speed & Tools Dropdown -->
           <div class="dropdown" id="tools-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Speed & Tools</span>
-              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <span>⚡ Speed & Utilities ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/cps-test/" class="dropdown-item"><span>⚡</span> <span>CPS Speed Test</span></a>
-              <a href="/tools/click-speed-test/" class="dropdown-item"><span>🚀</span> <span>Click Speed Test</span></a>
-              <a href="/tools/click-counter/" class="dropdown-item"><span>🔢</span> <span>Digital Click Counter</span></a>
-              <a href="/tools/auto-clicker/" class="dropdown-item"><span>🤖</span> <span>Online Auto Clicker</span></a>
+              <a href="/tools/cps-test/" class="dropdown-item">⚡ CPS Speed Test</a>
+              <a href="/tools/click-speed-test/" class="dropdown-item">🚀 Click Speed Test</a>
+              <a href="/tools/click-counter/" class="dropdown-item">🔢 Digital Click Counter</a>
+              <a href="/tools/auto-clicker/" class="dropdown-item">🤖 Online Auto Clicker</a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
-              <a href="/tools/" class="dropdown-item"><span>📂</span> <strong>All Tools Directory</strong></a>
+              <a href="/tools/" class="dropdown-item"><strong>📂 All Tools Directory</strong></a>
             </div>
           </div>
 
           <!-- Games Dropdown -->
           <div class="dropdown" id="games-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Games</span>
-              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <span>🎮 Games ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="/games/mini-golf/" class="dropdown-item"><span>⛳</span> <span>Nibbles Mini Golf (18H)</span></a>
-              <a href="/games/fishing/" class="dropdown-item"><span>🎣</span> <span>Cat Fishing Game</span></a>
-              <a href="/games/fruit-slicer/" class="dropdown-item"><span>🍉</span> <span>Fruit Slicer Arcade</span></a>
-              <a href="/games/fish-maze/" class="dropdown-item"><span>🐟</span> <span>Nibbles Fish Maze</span></a>
-              <a href="/games/card-memory/" class="dropdown-item"><span>🎴</span> <span>Card Memory Match</span></a>
+              <a href="/games/mini-golf/" class="dropdown-item">⛳ Nibbles Mini Golf (18H)</a>
+              <a href="/games/fishing/" class="dropdown-item">🎣 Cat Fishing Game</a>
+              <a href="/games/fruit-slicer/" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
+              <a href="/games/fish-maze/" class="dropdown-item">🐟 Nibbles Fish Maze</a>
+              <a href="/games/card-memory/" class="dropdown-item">🎴 Card Memory Match</a>
             </div>
           </div>
 
           <a href="/about/" class="nav-link" data-route="about">About</a>
           <a href="/faq/" class="nav-link" data-route="faq">FAQ</a>
         </nav>
-
-        <div class="header-actions">
-          <!-- Surprise Me Discovery Button -->
-          <button id="nav-surprise-btn" class="btn btn-sm btn-surprise" style="padding:0.45rem 0.9rem;">
-            <span>🎲 Surprise Me!</span>
-          </button>
-
-          <!-- Vertical Separator Divider -->
-          <div class="header-divider"></div>
-
-          <!-- Language Selector Dropdown (Globe Icon, No Windows Flag Bug) -->
-          <div class="dropdown" id="lang-dropdown">
-            <button class="dropdown-btn" aria-haspopup="true" style="padding:0 0.65rem;" title="Select Language">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.8;"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-              <span>EN</span>
-              <svg class="chevron-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-            </button>
-            <div class="dropdown-menu dropdown-right">
-              <div class="dropdown-item active" data-lang="en"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">EN</span><span>English</span></div>
-              <div class="dropdown-item" data-lang="es"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">ES</span><span>Español</span></div>
-              <div class="dropdown-item" data-lang="fr"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">FR</span><span>Français</span></div>
-              <div class="dropdown-item" data-lang="de"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">DE</span><span>Deutsch</span></div>
-              <div class="dropdown-item" data-lang="pt"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">PT</span><span>Português</span></div>
-              <div class="dropdown-item" data-lang="it"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">IT</span><span>Italiano</span></div>
-              <div class="dropdown-item" data-lang="nl"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">NL</span><span>Nederlands</span></div>
-              <div class="dropdown-item" data-lang="pl"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">PL</span><span>Polski</span></div>
-              <div class="dropdown-item" data-lang="tr"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">TR</span><span>Türkçe</span></div>
-              <div class="dropdown-item" data-lang="ru"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">RU</span><span>Русский</span></div>
-              <div class="dropdown-item" data-lang="ja"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">JA</span><span>日本語</span></div>
-              <div class="dropdown-item" data-lang="ko"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">KO</span><span>한국어</span></div>
-              <div class="dropdown-item" data-lang="zh"><span style="font-size:0.82rem; font-weight:700; color:var(--accent-emerald); width:24px;">ZH</span><span>简体中文</span></div>
-            </div>
-          </div>
-
-          <!-- Dark/Light Theme Toggle -->
-          <button id="theme-toggle-btn" class="btn-icon-header" aria-label="Toggle theme" title="Toggle theme">
-            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-            </svg>
-          </button>
-
-          <!-- Mobile Hamburger Toggle -->
-          <button id="hamburger-btn" class="hamburger-btn" aria-label="Open menu">
-            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-          </button>
-        </div>
       </div>
     </header>
 """
@@ -388,7 +335,6 @@ STATIC_FOOTER_HTML = """
           <div class="footer-title">🐾 Platform & Trust</div>
           <ul class="footer-links">
             <li><a href="/about/">About CatKeyLab & Dylan</a></li>
-            <li><a href="/meet-nibbles/">🐱 Meet Nibbles in Real Life</a></li>
             <li><a href="/faq/">Frequently Asked Questions</a></li>
             <li><a href="/leaderboards/">Anonymous Global Leaderboards</a></li>
             <li><a href="/privacy/">Privacy Policy</a></li>
@@ -1185,7 +1131,7 @@ def main():
 
     # 2. Rich Pre-rendered Platform Pages
     # About Page
-    about_body = f"""
+    about_body = """
     <div class="container section">
       <div class="tool-wrapper" style="max-width:960px; margin:0 auto;">
         <h1 style="font-size:2.2rem; font-weight:800; margin-bottom:0.5rem;">About CatKeyLab 🐾</h1>
@@ -1199,7 +1145,7 @@ def main():
             <div>
               <h3 style="color:var(--text-primary); font-size:1.3rem; margin-bottom:0.25rem;">🎮 Created by Dylan</h3>
               <p style="color:var(--text-secondary);">CatKeyLab is crafted by Dylan. Check out games, utilities, and interactive creations on itch.io!</p>
-              <p style="margin-top:0.5rem;"><a href="/meet-nibbles/" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles the Cat & See His Real-Life Photo →</a></p>
+              <p style="margin-top:0.5rem;"><a href="/about/" style="color:var(--accent-emerald); font-weight:700;">🐱 Meet Nibbles the Cat & See His Real-Life Photo →</a></p>
             </div>
             <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="background:linear-gradient(135deg, #f97316, #ea580c); border:none; font-weight:700;">
               <span>Visit Dylan on itch.io</span> ↗
@@ -1208,20 +1154,14 @@ def main():
 
           <!-- Featured Cat Card -->
           <div style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2rem; flex-wrap:wrap; box-shadow:0 10px 30px rgba(0,0,0,0.35); margin-bottom:1rem;">
-            <img src="/assets/orange-cat.jpg" 
-                 onerror="if(!this.dataset.failed){{this.dataset.failed=1; this.src='{NIBBLES_B64}';}}" 
-                 alt="Real Orange Cat in Box - Inspiration for Nibbles" 
-                 style="width:340px; max-width:100%; height:340px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
+            <img src="/assets/orange-cat.jpg" alt="Real Orange Cat in Box - Inspiration for Nibbles" style="width:340px; max-width:100%; height:340px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 12px 30px rgba(249,115,22,0.45); flex-shrink:0; margin:0 auto;" />
             <div style="flex:1; min-width:260px;">
               <h2 style="font-size:1.8rem; font-weight:800; color:var(--text-primary); margin-bottom:0.75rem;">
                 Meet Nibbles in Real Life! 🐱
               </h2>
-              <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem; margin-bottom:1rem;">
+              <p style="color:var(--text-secondary); line-height:1.7; font-size:1.05rem;">
                 This adorable orange cat sitting in a cardboard box is the real-life inspiration behind <strong>Nibbles</strong>! Created by <strong>Dylan</strong>, Nibbles lives on CatKeyLab to keep you company while you test hardware, practice typing, and play companion arcade games!
               </p>
-              <a href="/meet-nibbles/" class="btn btn-primary btn-sm" style="background:linear-gradient(135deg, #f97316, #ea580c); border:none; font-weight:700;">
-                <span>🐱 View Nibbles Companion Guide & Story</span> →
-              </a>
             </div>
           </div>
 
@@ -1239,89 +1179,6 @@ def main():
       </div>
     </div>
     """
-
-    # Meet Nibbles Page
-    meet_nibbles_body = f"""
-    <div class="container section">
-      <div class="tool-wrapper" style="max-width:960px; margin:0 auto;">
-        <h1 style="font-size:2.4rem; font-weight:800; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.6rem;">
-          <span>🐱 Meet Nibbles the Cat</span>
-        </h1>
-        <p class="hero-subtitle" style="margin-bottom:2rem; color:var(--accent-emerald); font-weight:600; font-size:1.15rem;">
-          The Real-Life Orange Cat Inspiration & Interactive Mascot Companion 🐾
-        </p>
-
-        <!-- Real Orange Cat Featured Hero Card -->
-        <div style="background:linear-gradient(135deg, rgba(249,115,22,0.16), rgba(16,185,129,0.16)); border:2px solid #f97316; padding:2.25rem; border-radius:var(--radius-lg); display:flex; align-items:center; gap:2.5rem; flex-wrap:wrap; box-shadow:0 12px 35px rgba(0,0,0,0.4); margin-bottom:2.5rem;">
-          <img src="/assets/orange-cat.jpg" 
-               onerror="if(!this.dataset.failed){{this.dataset.failed=1; this.src='{NIBBLES_B64}';}}" 
-               alt="Real Orange Cat in Box - Inspiration for Nibbles" 
-               style="width:360px; max-width:100%; height:360px; object-fit:cover; border-radius:var(--radius-lg); border:4px solid #fb923c; box-shadow:0 14px 32px rgba(249,115,22,0.5); flex-shrink:0; margin:0 auto;" />
-          <div style="flex:1; min-width:280px;">
-            <div style="display:inline-block; background:rgba(249,115,22,0.25); color:#f97316; font-size:0.85rem; font-weight:800; padding:0.35rem 0.85rem; border-radius:var(--radius-full); text-transform:uppercase; margin-bottom:0.85rem; letter-spacing:0.05em;">
-              🐾 Real Life Inspiration
-            </div>
-            <h2 style="font-size:2rem; font-weight:800; color:var(--text-primary); margin-bottom:0.85rem; line-height:1.25;">
-              Meet Nibbles in Real Life! 🐱
-            </h2>
-            <p style="color:var(--text-secondary); line-height:1.75; font-size:1.05rem; margin-bottom:1.5rem;">
-              This adorable orange cat sitting inside a cozy cardboard box is the real-life inspiration behind <strong>Nibbles</strong>! Created by <strong>Dylan</strong>, Nibbles lives right here on CatKeyLab to keep you company while you test hardware switches, diagnose mouse chatter, practice fast typing, and play companion arcade games!
-            </p>
-            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-              <a href="https://snowyorca.itch.io/" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex; align-items:center; gap:0.5rem; background:linear-gradient(135deg, #f97316, #ea580c); border:none; box-shadow:0 4px 14px rgba(249,115,22,0.4); font-weight:700;">
-                <span>🎮 Discover Dylan's Creations on itch.io</span> ↗
-              </a>
-              <a href="/games/mini-golf/" class="btn btn-secondary" style="font-weight:600;">
-                <span>⛳ Play Mini Golf with Nibbles</span> →
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- Interactive Companion Features Grid -->
-        <h2 style="font-size:1.6rem; font-weight:800; color:var(--text-primary); margin-bottom:1.25rem;">
-          ✨ What Can Nibbles Do on CatKeyLab?
-        </h2>
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-bottom:2.5rem;">
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">👀</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-emerald); margin-bottom:0.5rem;">Pupil & Cursor Tracking</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Nibbles' emerald eyes dynamically follow your mouse cursor across the screen in real-time as you navigate tools.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">🐾</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-cyan); margin-bottom:0.5rem;">Swatting Paws & Petting</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Move your cursor close to Nibbles to see his white paws reach out to swat! Click Nibbles directly to pet him and hear him purr.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">⌨️</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-amber); margin-bottom:0.5rem;">Typing Speed Judging</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">During typing speed tests, Nibbles watches your accuracy. Type fast to make him purr happily, or watch him squint at typos!</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">🧶</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-rose); margin-bottom:0.5rem;">Throwable Physics Yarn Ball</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Click the yarn toggle to drop a bouncy physics yarn ball that bounces off screen edges with drag-and-throw momentum.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">🥣</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-cyan); margin-bottom:0.5rem;">Interactive Fish Feeding</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Click the cat food bowl in the mascot widget to toss fresh fish 🐟 to Nibbles and watch him celebrate.</p>
-          </div>
-
-          <div style="background:var(--bg-secondary); border:1px solid var(--border-color); padding:1.5rem; border-radius:var(--radius-lg);">
-            <div style="font-size:2rem; margin-bottom:0.5rem;">⛳</div>
-            <h3 style="font-size:1.2rem; color:var(--accent-emerald); margin-bottom:0.5rem;">Companion Arcade Games</h3>
-            <p style="color:var(--text-secondary); line-height:1.6;">Join Nibbles in 5 companion mini-games: Mini Golf, Cat Fishing, Fruit Slicer, Fish Maze, and 3D Card Memory.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    """ + render_ad_slot()
 
     # FAQ Page
     faq_body = """
@@ -1541,7 +1398,6 @@ def main():
           <h2 style="font-size:1.4rem; color:var(--text-primary); margin-top:2rem; margin-bottom:1rem;">📄 Platform Policies & Information</h2>
           <ul style="line-height:2.2; margin-left:1.5rem;">
             <li><a href="/about/" style="color:var(--accent-cyan); font-weight:600;">About CatKeyLab & Creator Dylan</a></li>
-            <li><a href="/meet-nibbles/" style="color:var(--accent-cyan); font-weight:600;">Meet Nibbles in Real Life 🐱 (The Real Orange Cat)</a></li>
             <li><a href="/faq/" style="color:var(--accent-cyan); font-weight:600;">Frequently Asked Questions</a></li>
             <li><a href="/privacy/" style="color:var(--accent-cyan); font-weight:600;">Privacy Policy</a></li>
             <li><a href="/terms/" style="color:var(--accent-cyan); font-weight:600;">Terms of Service</a></li>
@@ -1560,20 +1416,6 @@ def main():
             'desc': 'Learn about CatKeyLab, created by Dylan. 100% free, client-side, browser-native hardware testers, Human Benchmarks, and Nibbles the real orange cat companion.',
             'crumb': 'About',
             'body': about_body
-        },
-        'meet-nibbles': {
-            'path': '/meet-nibbles/',
-            'title': 'Meet Nibbles 🐱 - The Real Orange Cat Behind CatKeyLab',
-            'desc': 'Meet Nibbles the real-life orange cat sitting in a box! The adorable companion behind CatKeyLab hardware testing tools and arcade games by Dylan.',
-            'crumb': 'Meet Nibbles 🐱',
-            'body': meet_nibbles_body
-        },
-        'nibbles': {
-            'path': '/nibbles/',
-            'title': 'Meet Nibbles 🐱 - The Real Orange Cat Behind CatKeyLab',
-            'desc': 'Meet Nibbles the real-life orange cat sitting in a box! The adorable companion behind CatKeyLab hardware testing tools and arcade games by Dylan.',
-            'crumb': 'Meet Nibbles 🐱',
-            'body': meet_nibbles_body
         },
         'faq': {
             'path': '/faq/',
@@ -1645,12 +1487,6 @@ def main():
             f.write(html)
         generated_paths.append(p_info['path'])
         print(f"✅ Generated platform page: {out_file} ({p_info['path']})")
-
-    # Safeguard: Copy cat image into local subdirectories for direct file:// and static server browsing
-    import shutil
-    for sub in ['about', 'meet-nibbles', 'nibbles']:
-        os.makedirs(f"{sub}/assets", exist_ok=True)
-        shutil.copyfile('assets/orange-cat.jpg', f"{sub}/assets/orange-cat.jpg")
 
     # 3. Generate Pre-rendered Root Home Page (index.html)
     generate_home_page(tool_metadata)

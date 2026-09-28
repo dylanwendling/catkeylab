@@ -29,14 +29,14 @@ export function renderHeader(container) {
               <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/reaction-time-test/" class="dropdown-item"><span>⏱️</span> <span>Reaction Time Test</span></a>
-              <a href="/tools/sequence-memory-test/" class="dropdown-item"><span>🧠</span> <span>Sequence Memory Test</span></a>
-              <a href="/tools/aim-trainer/" class="dropdown-item"><span>🎯</span> <span>Aim Trainer</span></a>
-              <a href="/tools/number-memory-test/" class="dropdown-item"><span>🔢</span> <span>Number Memory Test</span></a>
-              <a href="/tools/verbal-memory-test/" class="dropdown-item"><span>💬</span> <span>Verbal Memory Test</span></a>
-              <a href="/tools/chimp-test/" class="dropdown-item"><span>🐒</span> <span>Chimp Test</span></a>
-              <a href="/tools/visual-memory-test/" class="dropdown-item"><span>🔳</span> <span>Visual Memory Test</span></a>
-              <a href="/tools/typing-test/" class="dropdown-item"><span>⌨️</span> <span>WPM Typing Test</span></a>
+              <a href="/tools/reaction-time-test/" class="dropdown-item">⏱️ Reaction Time Test</a>
+              <a href="/tools/sequence-memory-test/" class="dropdown-item">🧠 Sequence Memory Test</a>
+              <a href="/tools/aim-trainer/" class="dropdown-item">🎯 Aim Trainer</a>
+              <a href="/tools/number-memory-test/" class="dropdown-item">🔢 Number Memory Test</a>
+              <a href="/tools/verbal-memory-test/" class="dropdown-item">💬 Verbal Memory Test</a>
+              <a href="/tools/chimp-test/" class="dropdown-item">🐒 Chimp Test</a>
+              <a href="/tools/visual-memory-test/" class="dropdown-item">🔳 Visual Memory Test</a>
+              <a href="/tools/typing-test/" class="dropdown-item">⌨️ WPM Typing Test</a>
             </div>
           </div>
 
@@ -47,23 +47,22 @@ export function renderHeader(container) {
               <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/keyboard-test/" class="dropdown-item" data-i18n="navKeyboardTest"><span>⌨️</span> <span>Keyboard Key Tester</span></a>
-              <a href="/tools/mouse-test/" class="dropdown-item" data-i18n="navMouseTest"><span>🖱️</span> <span>Mouse Hardware Tester</span></a>
-              <a href="/tools/double-click-test/" class="dropdown-item" data-i18n="navDoubleClickTest"><span>⚡</span> <span>Double Click Tester</span></a>
+              <a href="/tools/keyboard-test/" class="dropdown-item" data-i18n="navKeyboardTest">⌨️ Keyboard Key Tester</a>
+              <a href="/tools/mouse-test/" class="dropdown-item" data-i18n="navMouseTest">🖱️ Mouse Hardware Tester</a>
+              <a href="/tools/double-click-test/" class="dropdown-item" data-i18n="navDoubleClickTest">⚡ Double Click Tester</a>
             </div>
           </div>
 
           <!-- Speed & Tools Dropdown -->
           <div class="dropdown" id="tools-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Speed & Tools</span>
-              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <span>⚡ Speed & Utilities ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="/tools/cps-test/" class="dropdown-item" data-i18n="navCPSTest"><span>⚡</span> <span>CPS Speed Test</span></a>
-              <a href="/tools/click-speed-test/" class="dropdown-item" data-i18n="navClickSpeedTest"><span>🚀</span> <span>Click Speed Test</span></a>
-              <a href="/tools/click-counter/" class="dropdown-item" data-i18n="navClickCounter"><span>🔢</span> <span>Digital Click Counter</span></a>
-              <a href="/tools/auto-clicker/" class="dropdown-item" data-i18n="navAutoClicker"><span>🤖</span> <span>Online Auto Clicker</span></a>
+              <a href="/tools/cps-test/" class="dropdown-item" data-i18n="navCPSTest">⚡ CPS Speed Test</a>
+              <a href="/tools/click-speed-test/" class="dropdown-item" data-i18n="navClickSpeedTest">🚀 Click Speed Test</a>
+              <a href="/tools/click-counter/" class="dropdown-item" data-i18n="navClickCounter">🔢 Digital Click Counter</a>
+              <a href="/tools/auto-clicker/" class="dropdown-item" data-i18n="navAutoClicker">🤖 Online Auto Clicker</a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
               <a href="/tools/" class="dropdown-item"><span>📂</span> <strong>All Tools Directory</strong></a>
             </div>
@@ -72,15 +71,14 @@ export function renderHeader(container) {
           <!-- Games Dropdown -->
           <div class="dropdown" id="games-dropdown">
             <button class="dropdown-btn" aria-haspopup="true">
-              <span>Games</span>
-              <svg class="chevron-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              <span>🎮 Games ▾</span>
             </button>
             <div class="dropdown-menu">
-              <a href="/games/mini-golf/" class="dropdown-item"><span>⛳</span> <span>Nibbles Mini Golf (18H)</span></a>
-              <a href="/games/fishing/" class="dropdown-item"><span>🎣</span> <span>Cat Fishing Game</span></a>
-              <a href="/games/fruit-slicer/" class="dropdown-item"><span>🍉</span> <span>Fruit Slicer Arcade</span></a>
-              <a href="/games/fish-maze/" class="dropdown-item"><span>🐟</span> <span>Nibbles Fish Maze</span></a>
-              <a href="/games/card-memory/" class="dropdown-item"><span>🎴</span> <span>Card Memory Match</span></a>
+              <a href="/games/mini-golf/" class="dropdown-item">⛳ Nibbles Mini Golf (18H)</a>
+              <a href="/games/fishing/" class="dropdown-item">🎣 Cat Fishing Game</a>
+              <a href="/games/fruit-slicer/" class="dropdown-item">🍉 Fruit Slicer Arcade</a>
+              <a href="/games/fish-maze/" class="dropdown-item">🐟 Nibbles Fish Maze</a>
+              <a href="/games/card-memory/" class="dropdown-item">🎴 Card Memory Match</a>
             </div>
           </div>
 
@@ -276,8 +274,7 @@ function bindHeaderEvents() {
     });
   }
 
-  // Active Tab Highlight Tracker (Canonical URL + Hash)
-  const currentPath = window.location.pathname;
+  // Active Bottom Bar Highlight Tracker
   const currentHash = window.location.hash.replace('#', '').trim();
   const bottomTabs = document.querySelectorAll('.mobile-bottom-tab');
   bottomTabs.forEach(tab => {
