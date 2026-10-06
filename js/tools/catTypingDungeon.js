@@ -256,25 +256,59 @@ function generateMap(totalNodes = 10) {
 
   // Final row: boss
   rows.push([{ type:'boss', id:'boss', row:totalNodes, col:0, cleared:false }]);
+  
+  // Post-process: if a rest node spawned in the first 3 rows, push it back to the later rows and replace it
+  let earlyRestNode = null;
+  for (let r = 0; r <= 3; r++) {
+    if (r >= totalNodes) break;
+    for (let c = 0; c < 3; c++) {
+      if (rows[r][c].type === 'rest') earlyRestNode = rows[r][c];
+    }
+  }
+  
+  if (earlyRestNode) {
+    let swapNode = null;
+    for (let r = totalNodes - 1; r >= Math.floor(totalNodes / 2); r--) {
+      for (let c = 0; c < 3; c++) {
+        if (rows[r] && rows[r][c] && rows[r][c].type === 'battle') {
+          swapNode = rows[r][c];
+          break;
+        }
+      }
+      if (swapNode) break;
+    }
+    if (swapNode) {
+      earlyRestNode.type = 'battle';
+      swapNode.type = 'rest';
+    }
+  }
+
   return rows;
 }
 
 function pickNodeType(tracker, row, total) {
-  // Last 2 rows before boss: no shops
-  if (row >= total - 2) {
-    const noShop = ['battle','battle','elite','battle','chest'];
-    return pick(noShop);
-  }
-  // Prevent 3+ consecutive shops or chests
   const shopCount = tracker.shop || 0;
   const chestCount = tracker.chest || 0;
   const eliteCount = tracker.elite || 0;
   const restCount = tracker.rest || 0;
 
   const pool = [...NODE_TYPES];
-  if (shopCount >= 2)  pool.splice(pool.indexOf('shop'), 1);
-  if (chestCount >= 2) pool.splice(pool.indexOf('chest'), 1);
-  if (eliteCount >= 2) pool.splice(pool.indexOf('elite'), 1);
+  
+  // No shops in the last 2 rows before the boss, and prevent 3+ consecutive
+  if (shopCount >= 2 || row >= total - 2) {
+    const sIdx = pool.indexOf('shop');
+    if (sIdx > -1) pool.splice(sIdx, 1);
+  }
+  
+  if (chestCount >= 2) {
+    const cIdx = pool.indexOf('chest');
+    if (cIdx > -1) pool.splice(cIdx, 1);
+  }
+  
+  if (eliteCount >= 2) {
+    const eIdx = pool.indexOf('elite');
+    if (eIdx > -1) pool.splice(eIdx, 1);
+  }
   
   // Rest node: maximum 1 per run
   if (restCount >= 1) {
