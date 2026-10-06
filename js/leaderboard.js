@@ -28,7 +28,8 @@ const INITIAL_LEADERBOARDS = {
   'fruit-slicer-game': [],
   'cat-mini-golf-game-3': [],
   'cat-mini-golf-game-9': [],
-  'cat-mini-golf-game-18': []
+  'cat-mini-golf-game-18': [],
+  'cat-typing-dungeon': []
 };
 
 // Get or Create Anonymous Identity

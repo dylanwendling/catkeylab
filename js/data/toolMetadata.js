@@ -628,5 +628,37 @@ export const TOOL_METADATA = {
       { q: 'Can mouse chatter be fixed?', a: 'Some users fix chatter by adjusting the Windows double-click speed setting or using debounce software. However, chatter is usually a hardware issue caused by a worn micro-switch and may ultimately require mouse replacement or switch soldering repair.' },
       { q: 'Is chatter only a problem with old mice?', a: 'Chatter most commonly occurs with aged micro-switches, but it can also appear on new mice with defective switches. Even high-end gaming mice can develop chatter over time.' }
     ]
+  },
+  'cat-typing-dungeon': {
+    titleKey: 'catTypingDungeonTitle',
+    desc: 'A mobile-first typing roguelite dungeon crawler. TYPE → ATTACK → COMBO → REWARD.',
+    icon: '⚔️',
+    category: 'games',
+    content: {
+      intro: 'Enter the Cat Typing Dungeon! Use your typing skills to defeat enemies, explore branching paths, gather powerful passives, and conquer the boss in this fast-paced roguelite.',
+      howTo: [
+        'Select a cat to start your run.',
+        'Choose paths on the map to navigate through the dungeon.',
+        'During combat, type the displayed words before the timer runs out.',
+        'Chain successful words to build a combo and trigger passive effects.',
+        'Visit shops and chests to unlock powerful run-changing passive upgrades.',
+        'Defeat the boss at the end of the dungeon to win!'
+      ],
+      whatItMeasures: 'The game exercises a combination of rapid reading, hand-eye coordination, typing speed, typing accuracy, and working memory as you balance reading enemy mechanics with executing keystrokes under time pressure.',
+      whyUseIt: 'Unlike traditional typing tests, this is an actual game. It builds typing speed and accuracy under chaotic, gamified pressure. It makes typing practice addicting.',
+      interpretResults: 'Defeating the boss signifies a successful run. Your final score is determined by enemies defeated, words typed, accuracy, gold gathered, and max combo achieved.',
+      tips: [
+        'Prioritize accuracy over raw speed: breaking a combo and taking a hit from a missed word is punishing.',
+        'Read the enemy mechanic before typing: some enemies steal gold, obscure words, or require armor breaking.',
+        'Synergize your passives. For example, a combo-healing passive works great with a cat class that starts with bonus combo.',
+        'Try Endless Mode after a victory for an ever-increasing challenge!'
+      ],
+      relatedTools: ['typing-test', 'aim-trainer-test']
+    },
+    faqs: [
+      { q: 'How does the typing combat work?', a: 'Every enemy displays a word. You must type the word correctly before the timer bar drains. A successful word triggers an attack. A failed word breaks your combo and gives the enemy an opening.' },
+      { q: 'Can I play this on a mobile phone?', a: 'Yes! The game is explicitly designed to be mobile-first. Tap the input box and use your phone\'s native keyboard to type the words.' },
+      { q: 'What do the passives do?', a: 'Passives are upgrades you get from shops and chests. They modify the game rules — giving you more time, bonus damage, healing, or special abilities like ignoring a mistake.' }
+    ]
   }
 };

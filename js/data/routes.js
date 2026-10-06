@@ -151,6 +151,13 @@ export const TOOL_ROUTES = {
     categoryName: 'Arcade Games',
     displayName: 'Card Memory Match (3D)',
     aliases: ['card-memory', 'card-memory-game', 'cat-card-memory']
+  },
+  'cat-typing-dungeon': {
+    path: '/games/typing-dungeon/',
+    category: 'games',
+    categoryName: 'Arcade Games',
+    displayName: 'Cat Typing Dungeon',
+    aliases: ['typing-dungeon', 'cat-typing-dungeon', 'cat-typing-dungeon-game']
   }
 };
 
