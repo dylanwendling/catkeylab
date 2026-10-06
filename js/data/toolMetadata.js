@@ -630,12 +630,12 @@ export const TOOL_METADATA = {
     ]
   },
   'cat-typing-dungeon': {
-    titleKey: 'catTypingDungeonTitle',
-    desc: 'A mobile-first typing roguelite dungeon crawler. TYPE → ATTACK → COMBO → REWARD.',
+    titleKey: 'Cat Typing Dungeon',
+    desc: 'A mobile typing game where you fight through a dungeon by typing words as fast as you can to build combos and earn rewards.',
     icon: '⚔️',
     category: 'games',
     content: {
-      intro: 'Enter the Cat Typing Dungeon! Use your typing skills to defeat enemies, explore branching paths, gather powerful passives, and conquer the boss in this fast-paced roguelite.',
+      intro: 'Type fast to defeat monsters and explore the Cat Typing Dungeon. Choose your path, grab upgrades along the way, and try to take down the final boss.',
       howTo: [
         'Select a cat to start your run.',
         'Choose paths on the map to navigate through the dungeon.',
@@ -658,7 +658,7 @@ export const TOOL_METADATA = {
     faqs: [
       { q: 'How does the typing combat work?', a: 'Every enemy displays a word. You must type the word correctly before the timer bar drains. A successful word triggers an attack. A failed word breaks your combo and gives the enemy an opening.' },
       { q: 'Can I play this on a mobile phone?', a: 'Yes! The game is explicitly designed to be mobile-first. Tap the input box and use your phone\'s native keyboard to type the words.' },
-      { q: 'What do the passives do?', a: 'Passives are upgrades you get from shops and chests. They modify the game rules — giving you more time, bonus damage, healing, or special abilities like ignoring a mistake.' }
+      { q: 'What do the passives do?', a: 'Passives are upgrades you get from shops and chests. They modify the game rules - giving you more time, bonus damage, healing, or special abilities like ignoring a mistake.' }
     ]
   }
 };

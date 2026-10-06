@@ -24,7 +24,8 @@ const TEST_TABS = [
   { id: 'fruit-slicer-game', label: '🍉 Fruit Slicer' },
   { id: 'cat-mini-golf-game-3', label: '⛳ Mini Golf (3 Holes)' },
   { id: 'cat-mini-golf-game-9', label: '⛳ Mini Golf (9 Holes)' },
-  { id: 'cat-mini-golf-game-18', label: '🏆 Mini Golf (18 Holes)' }
+  { id: 'cat-mini-golf-game-18', label: '🏆 Mini Golf (18 Holes)' },
+  { id: 'cat-typing-dungeon', label: '⚔️ Cat Typing Dungeon' }
 ];
 
 export function renderLeaderboardView(container) {

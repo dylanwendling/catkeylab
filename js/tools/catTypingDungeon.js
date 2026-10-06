@@ -109,46 +109,46 @@ const BOSSES = [
   {
     id:'dragon', name:'Ancient Dragon', emoji:'🐉', maxHp:220, gold:[60,90],
     phases:[
-      { hp:220, label:'Phase 1 — Scales & Claws', timerMult:1.0, mechanic:'normal', msg:'The dragon circles overhead...' },
-      { hp:160, label:'Phase 2 — Dragon Fury',    timerMult:0.8, mechanic:'fast',   msg:'🔥 THE DRAGON IS ENRAGED!' },
-      { hp:100, label:'Phase 3 — Ancient Words',  timerMult:0.85,mechanic:'long',   msg:'⚡ THE DRAGON SPEAKS ANCIENT WORDS!' },
-      { hp:50,  label:'Phase 4 — Death Roll',     timerMult:0.7, mechanic:'burst',  msg:'💀 DESPERATE FINAL ATTACK!' },
+      { hp:220, label:'The dragon reveals its scales and claws.', timerMult:1.0, mechanic:'normal', msg:'The dragon circles overhead...' },
+      { hp:160, label:'The dragon bursts into a furious rage.',    timerMult:0.8, mechanic:'fast',   msg:'🔥 THE DRAGON IS ENRAGED!' },
+      { hp:100, label:'The dragon begins speaking ancient incantations.',  timerMult:0.85,mechanic:'long',   msg:'⚡ THE DRAGON SPEAKS ANCIENT WORDS!' },
+      { hp:50,  label:'The dragon enters a desperate death roll.',     timerMult:0.7, mechanic:'burst',  msg:'💀 DESPERATE FINAL ATTACK!' },
     ],
     atk:18,
   },
   {
     id:'ratking', name:'Rat King', emoji:'👑🐀', maxHp:180, gold:[55,80],
     phases:[
-      { hp:180, label:'Phase 1 — The Throne',   timerMult:0.85, mechanic:'summon', msg:'The Rat King summons his minions!' },
-      { hp:100, label:'Phase 2 — Rat Tide',     timerMult:0.75, mechanic:'swarm',  msg:'🐀🐀 A RAT TIDE APPROACHES!' },
-      { hp:40,  label:'Phase 3 — Frenzied King',timerMult:0.65, mechanic:'fast',   msg:'👑 THE RAT KING IS DESPERATE!' },
+      { hp:180, label:'The Rat King commands from his throne.',   timerMult:0.85, mechanic:'summon', msg:'The Rat King summons his minions!' },
+      { hp:100, label:'A tide of rats swarms the dungeon.',     timerMult:0.75, mechanic:'swarm',  msg:'🐀🐀 A RAT TIDE APPROACHES!' },
+      { hp:40,  label:'The Rat King enters a frenzied panic.',timerMult:0.65, mechanic:'fast',   msg:'👑 THE RAT KING IS DESPERATE!' },
     ],
     atk:15,
   },
   {
     id:'overlord', name:'Dungeon Overlord', emoji:'🧙', maxHp:200, gold:[58,85],
     phases:[
-      { hp:200, label:'Phase 1 — Arcane Mastery', timerMult:0.9, mechanic:'curse',  msg:'The Overlord weaves dark magic!' },
-      { hp:120, label:'Phase 2 — Hex Storm',      timerMult:0.8, mechanic:'disrupt',msg:'⚡ HEX STORM UNLEASHED!' },
-      { hp:55,  label:'Phase 3 — Soul Drain',     timerMult:0.7, mechanic:'drain',  msg:'👻 SOUL DRAIN ACTIVATED!' },
+      { hp:200, label:'The Overlord demonstrates arcane mastery.', timerMult:0.9, mechanic:'curse',  msg:'The Overlord weaves dark magic!' },
+      { hp:120, label:'A violent hex storm surrounds the Overlord.',      timerMult:0.8, mechanic:'disrupt',msg:'⚡ HEX STORM UNLEASHED!' },
+      { hp:55,  label:'The Overlord attempts to drain your soul.',     timerMult:0.7, mechanic:'drain',  msg:'👻 SOUL DRAIN ACTIVATED!' },
     ],
     atk:17,
   },
   {
     id:'souleater', name:'Soul Eater', emoji:'👻', maxHp:160, gold:[52,78],
     phases:[
-      { hp:160, label:'Phase 1 — Haunting',    timerMult:0.85, mechanic:'fade',  msg:'Words blur as the Soul Eater haunts you...' },
-      { hp:80,  label:'Phase 2 — Possession',  timerMult:0.75, mechanic:'curse', msg:'👻 POSSESSION! YOUR FINGERS FEEL HEAVY!' },
-      { hp:30,  label:'Phase 3 — Final Scream',timerMult:0.6,  mechanic:'fast',  msg:'🩸 FINAL SCREAM!' },
+      { hp:160, label:'A haunting presence fills the room.',    timerMult:0.85, mechanic:'fade',  msg:'Words blur as the Soul Eater haunts you...' },
+      { hp:80,  label:'The Soul Eater tries to possess you.',  timerMult:0.75, mechanic:'curse', msg:'👻 POSSESSION! YOUR FINGERS FEEL HEAVY!' },
+      { hp:30,  label:'The Soul Eater unleashes a final scream.',timerMult:0.6,  mechanic:'fast',  msg:'🩸 FINAL SCREAM!' },
     ],
     atk:16,
   },
   {
     id:'golem', name:'Ancient Golem', emoji:'🗿', maxHp:280, gold:[65,95],
     phases:[
-      { hp:280, label:'Phase 1 — Stone Wall',  timerMult:1.2,  mechanic:'armor', msg:'The Golem stands impenetrable...', armor:8 },
-      { hp:180, label:'Phase 2 — Crumbling',   timerMult:1.0,  mechanic:'accuracy',msg:'💥 THE GOLEM STARTS TO CRACK!' },
-      { hp:80,  label:'Phase 3 — Stone Rage',  timerMult:0.8,  mechanic:'fast',  msg:'🪨 STONE RAGE!' },
+      { hp:280, label:'The Golem stands like an impenetrable stone wall.',  timerMult:1.2,  mechanic:'armor', msg:'The Golem stands impenetrable...', armor:8 },
+      { hp:180, label:'The Golem\'s exterior begins to crumble.',   timerMult:1.0,  mechanic:'accuracy',msg:'💥 THE GOLEM STARTS TO CRACK!' },
+      { hp:80,  label:'The Golem enters a blind stone rage.',  timerMult:0.8,  mechanic:'fast',  msg:'🪨 STONE RAGE!' },
     ],
     atk:20,
   },
@@ -415,7 +415,7 @@ function renderCatSelect() {
       <div class="ctd-catselect">
         <div class="ctd-title-badge">🐱 CAT TYPING DUNGEON</div>
         <h1 class="ctd-main-title">Choose Your Cat</h1>
-        <p class="ctd-subtitle">Each cat has a unique playstyle. Pick wisely — the dungeon awaits.</p>
+        <p class="ctd-subtitle">Each cat has a unique playstyle. Pick wisely - the dungeon awaits.</p>
         <div class="ctd-cat-grid">
           ${CAT_CLASSES.map(cls => `
             <button class="ctd-cat-card" data-cat="${cls.id}" style="--cat-color:${cls.color}">
@@ -562,7 +562,7 @@ function advanceMap() {
   // Advance to next row
   G.currentRow++;
   if (G.currentRow >= G.mapRows.length) {
-    // Shouldn't happen — boss should have been last
+    // Shouldn't happen - boss should have been last
     triggerVictory();
   } else {
     renderMap();
@@ -583,7 +583,7 @@ function startCombat(enemyId, isElite = false) {
   G.enemy = { ...def, id: enemyId };
   G.enemyHp = Math.round(def.maxHp * floorMult * eliteMult);
   G.enemyMaxHp = G.enemyHp;
-  G.enemyArmor = (def.armor || 0) * G.armorBreak; // Note: armorBreak means it needs more hits actually.. wait let me re-read. armorBreak makes armor break faster — so armor starts lower or breaks in fewer words
+  G.enemyArmor = (def.armor || 0) * G.armorBreak; // Note: armorBreak means it needs more hits actually.. wait let me re-read. armorBreak makes armor break faster - so armor starts lower or breaks in fewer words
   G.enemyArmor = def.armor || 0;
   G.enemyArmorMax = def.armor || 0;
   G.firePenalty = 0;
@@ -2926,7 +2926,7 @@ function renderCatSelect_v2() {
       <div class="ctd-catselect">
         <div class="ctd-title-badge">🐱 CAT TYPING DUNGEON</div>
         <h1 class="ctd-main-title">Choose Your Cat</h1>
-        <p class="ctd-subtitle">Each cat has a unique playstyle. Pick wisely — the dungeon awaits.</p>
+        <p class="ctd-subtitle">Each cat has a unique playstyle. Pick wisely - the dungeon awaits.</p>
         <div class="ctd-cat-grid">
           ${CAT_CLASSES.map(cls => `
             <button class="ctd-cat-card" data-cat="${cls.id}" style="--cat-color:${cls.color}">
@@ -3299,6 +3299,7 @@ function onMistake_v2() {
 
 function onTypingInput_final(e) {
   if (!G || !G.wordActive) return;
+  G.timerStarted = true;
   const input = e.target;
   const val = input.value.toLowerCase().replace(/[^a-z]/g, '');
   const word = G.currentWord;
@@ -3326,7 +3327,7 @@ function onTypingInput_final(e) {
 // FINAL renderCombat_v3: wire final input handler + timerTick_v2
 // ============================================================
 function timerTick_v2() {
-  if (!G || !G.wordActive || G.battlePaused) return;
+  if (!G || !G.wordActive || G.battlePaused || !G.timerStarted) return;
 
   const e = G.enemy;
   let drainRate = 0.1;
@@ -3418,6 +3419,7 @@ function startNextWord_v2() {
   const input = document.getElementById('ctd-input');
   if (input) { input.value = ''; input.focus(); }
 
+  G.timerStarted = false;
   clearTimers();
   _timerInterval = setInterval(timerTick_v2, 100);
 }
