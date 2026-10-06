@@ -415,7 +415,7 @@ function renderCatSelect() {
       <div class="ctd-catselect">
         <div class="ctd-title-badge">🐱 CAT TYPING DUNGEON</div>
         <h1 class="ctd-main-title">Choose Your Cat</h1>
-        <p class="ctd-subtitle">Each cat has a unique playstyle. Pick wisely - the dungeon awaits.</p>
+        <p class="ctd-subtitle">Every cat has different starting stats. Pick one that fits your playstyle.</p>
         <div class="ctd-cat-grid">
           ${CAT_CLASSES.map(cls => `
             <button class="ctd-cat-card" data-cat="${cls.id}" style="--cat-color:${cls.color}">
@@ -1578,7 +1578,7 @@ function triggerVictory() {
     <div class="ctd-wrapper ctd-victory">
       <div class="ctd-victory-emoji">🏆</div>
       <div class="ctd-victory-title">VICTORY!</div>
-      <div class="ctd-victory-sub">You conquered the dungeon!</div>
+      <div class="ctd-victory-sub">Dungeon cleared! You defeated the final boss.</div>
       <div class="ctd-stats-grid">
         <div class="ctd-stat-card"><span>⚔️ Enemies</span><span>${G.enemiesDefeated}</span></div>
         <div class="ctd-stat-card"><span>⌨️ Words</span><span>${G.wordsTyped}</span></div>
@@ -1634,7 +1634,7 @@ function renderGameOver() {
     <div class="ctd-wrapper ctd-gameover">
       <div class="ctd-go-emoji">💀</div>
       <div class="ctd-go-title">DEFEATED</div>
-      <div class="ctd-go-sub">The dungeon claimed you...</div>
+      <div class="ctd-go-sub">Your run ended here. Better luck next time.</div>
       <div class="ctd-stats-grid">
         <div class="ctd-stat-card"><span>⚔️ Enemies</span><span>${G.enemiesDefeated}</span></div>
         <div class="ctd-stat-card"><span>⌨️ Words</span><span>${G.wordsTyped}</span></div>
@@ -2869,7 +2869,7 @@ function triggerVictory_v2() {
     <div class="ctd-wrapper ctd-victory">
       <div class="ctd-victory-emoji">🏆</div>
       <div class="ctd-victory-title">VICTORY!</div>
-      <div class="ctd-victory-sub">You conquered the dungeon!</div>
+      <div class="ctd-victory-sub">Dungeon cleared! You defeated the final boss.</div>
       <div class="ctd-stats-grid">
         <div class="ctd-stat-card"><span>⚔️ Enemies</span><span>${G.enemiesDefeated}</span></div>
         <div class="ctd-stat-card"><span>⌨️ Words</span><span>${G.wordsTyped}</span></div>
@@ -2926,7 +2926,7 @@ function renderCatSelect_v2() {
       <div class="ctd-catselect">
         <div class="ctd-title-badge">🐱 CAT TYPING DUNGEON</div>
         <h1 class="ctd-main-title">Choose Your Cat</h1>
-        <p class="ctd-subtitle">Each cat has a unique playstyle. Pick wisely - the dungeon awaits.</p>
+        <p class="ctd-subtitle">Every cat has different starting stats. Pick one that fits your playstyle.</p>
         <div class="ctd-cat-grid">
           ${CAT_CLASSES.map(cls => `
             <button class="ctd-cat-card" data-cat="${cls.id}" style="--cat-color:${cls.color}">
@@ -3220,7 +3220,7 @@ function renderGameOver_v2() {
     <div class="ctd-wrapper ctd-gameover">
       <div class="ctd-go-emoji">💀</div>
       <div class="ctd-go-title">DEFEATED</div>
-      <div class="ctd-go-sub">The dungeon claimed you...</div>
+      <div class="ctd-go-sub">Your run ended here. Better luck next time.</div>
       <div class="ctd-stats-grid">
         <div class="ctd-stat-card"><span>⚔️ Enemies</span><span>${G.enemiesDefeated}</span></div>
         <div class="ctd-stat-card"><span>⌨️ Words</span><span>${G.wordsTyped}</span></div>
