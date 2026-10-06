@@ -5,6 +5,7 @@
 import { t } from '../i18n.js';
 import { getAnonProfile, randomizeAnonHandle, cycleAnonAvatar, getLeaderboard, setLeaderboardUpdateCallback, fetchGlobalLeaderboards } from '../leaderboard.js';
 import { handleRoute } from '../router.js';
+import { TOOL_ROUTES } from '../data/routes.js';
 
 let activeTestId = 'reaction-time-test';
 
@@ -118,7 +119,8 @@ function bindEvents() {
       e.preventDefault();
       e.stopPropagation();
       const routeId = activeTestId.startsWith('cat-mini-golf-game') ? 'cat-mini-golf-game' : activeTestId;
-      window.location.hash = '#' + routeId;
+      const targetPath = TOOL_ROUTES[routeId] ? TOOL_ROUTES[routeId].path : `/tools/${routeId}/`;
+      history.pushState(null, '', targetPath);
       handleRoute();
       window.scrollTo({ top: 0, behavior: 'instant' });
     });

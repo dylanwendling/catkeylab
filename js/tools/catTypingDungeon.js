@@ -548,11 +548,23 @@ function selectMapNode(node) {
 }
 
 function pickNormalEnemy() {
-  return pick(NORMAL_POOL);
+  let pool = NORMAL_POOL;
+  if (G && G.lastNormalEnemy) {
+    pool = NORMAL_POOL.filter(e => e !== G.lastNormalEnemy);
+  }
+  const choice = pick(pool);
+  if (G) G.lastNormalEnemy = choice;
+  return choice;
 }
 
 function pickEliteEnemy() {
-  return pick(ELITE_POOL);
+  let pool = ELITE_POOL;
+  if (G && G.lastEliteEnemy) {
+    pool = ELITE_POOL.filter(e => e !== G.lastEliteEnemy);
+  }
+  const choice = pick(pool);
+  if (G) G.lastEliteEnemy = choice;
+  return choice;
 }
 
 function advanceMap() {
@@ -2656,7 +2668,12 @@ function startBoss_v2() {
   G.screen = 'boss';
   clearTimers();
 
-  const boss = pick(BOSSES);
+  let bossPool = BOSSES;
+  if (G && G.lastBoss) {
+    bossPool = BOSSES.filter(b => b.id !== G.lastBoss);
+  }
+  const boss = pick(bossPool);
+  if (G) G.lastBoss = boss.id;
   G.boss = { ...boss };
   G.bossPhaseIdx = 0;
   G.bossHp = boss.maxHp;
@@ -2870,7 +2887,7 @@ function triggerVictory_v2() {
     localStorage.setItem('ctd_high_score', score);
     G.highScore = score;
   }
-  submitScore('cat-typing-dungeon', score);
+  submitScore('cat-typing-dungeon', score, `${score} pts`);
 
   _container.innerHTML = `
     <div class="ctd-wrapper ctd-victory">
@@ -3229,7 +3246,7 @@ function onPlayerDeath_v2() {
   G.runScore = score;
   if (score > G.highScore) { localStorage.setItem('ctd_high_score', score); G.highScore = score; }
   
-  submitScore('cat-typing-dungeon', score);
+  submitScore('cat-typing-dungeon', score, `${score} pts`);
 
   setTimeout(() => renderGameOver_v2(), 500);
 }

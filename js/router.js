@@ -6,7 +6,7 @@ import { t, getCurrentLang } from './i18n.js';
 import { renderBreadcrumbs } from './components/breadcrumbs.js';
 import { renderFAQ } from './components/faq.js';
 import { renderAdSpace } from './components/adSpaces.js';
-import { renderLeaderboardView } from './components/leaderboardView.js';
+import { renderLeaderboardView } from './components/leaderboardView.js?v=2';
 import { initYarnBall } from './components/yarnBall.js';
 import { renderDiagnosticWizard } from './components/diagnosticWizard.js';
 import { renderDailyChallengeTeaser, renderDailyChallengePage } from './components/dailyChallenge.js';
@@ -33,7 +33,7 @@ import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryG
 import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGolfGame.js';
 import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingGame.js';
 import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlicerGame.js';
-import { renderCatTypingDungeon_MAIN as renderCatTypingDungeon, cleanupCatTypingDungeon } from './tools/catTypingDungeon.js?v=8';
+import { renderCatTypingDungeon_MAIN as renderCatTypingDungeon, cleanupCatTypingDungeon } from './tools/catTypingDungeon.js?v=10';
 
 let currentCleanup = null;
 
