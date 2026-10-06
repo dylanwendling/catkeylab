@@ -75,7 +75,7 @@ const ENEMIES = {
   spider:  { name:'Spider',         emoji:'🕷️', maxHp:28,  atk:7,  gold:[6,11],  mechanic:'random',     timerMult:1.0, wordCount:1 },
   snake:   { name:'Snake',          emoji:'🐍', maxHp:32,  atk:8,  gold:[7,13],  mechanic:'fade',       timerMult:1.1, wordCount:1 },
   skeleton:{ name:'Skeleton',       emoji:'💀', maxHp:40,  atk:9,  gold:[8,14],  mechanic:'armor',      timerMult:1.0, wordCount:1, armor:3 },
-  zombie:  { name:'Zombie',         emoji:'🧟', maxHp:35,  atk:6,  gold:[10,18], mechanic:'endurance',  timerMult:1.2, wordCount:1 },
+  zombie:  { name:'Zombie',         emoji:'🧟', maxHp:35,  atk:6,  gold:[10,18], mechanic:'blind',  timerMult:1.2, wordCount:1 },
   crow:    { name:'Crow',           emoji:'🐦', maxHp:24,  atk:7,  gold:[9,15],  mechanic:'goldthief',  timerMult:0.9, wordCount:1 },
   frog:    { name:'Frog',           emoji:'🐸', maxHp:30,  atk:7,  gold:[6,12],  mechanic:'distract',   timerMult:1.0, wordCount:1 },
   bee:     { name:'Bee Swarm',      emoji:'🐝', maxHp:40,  atk:8,  gold:[9,16],  mechanic:'swarm',      timerMult:0.85,wordCount:4 },
@@ -85,9 +85,9 @@ const ENEMIES = {
   ice:     { name:'Ice Elemental',  emoji:'🧊', maxHp:42,  atk:10, gold:[12,20], mechanic:'slowtime',   timerMult:1.0, wordCount:1 },
   fire:    { name:'Fire Elemental', emoji:'🔥', maxHp:46,  atk:12, gold:[13,21], mechanic:'punishment', timerMult:1.0, wordCount:1 },
   storm:   { name:'Storm Elemental',emoji:'⚡', maxHp:38,  atk:11, gold:[12,20], mechanic:'disrupt',    timerMult:1.0, wordCount:1 },
-  evileye: { name:'Evil Eye',       emoji:'👁️', maxHp:20,  atk:16, gold:[10,18], mechanic:'accuracy',   timerMult:0.95,wordCount:1 },
+  evileye: { name:'Evil Eye',       emoji:'👁️', maxHp:20,  atk:16, gold:[10,18], mechanic:'hypnosis',   timerMult:0.95,wordCount:1 },
   ink:     { name:'Ink Monster',    emoji:'🐙', maxHp:36,  atk:9,  gold:[10,17], mechanic:'ink',        timerMult:1.1, wordCount:1 },
-  troll:   { name:'Troll',          emoji:'🧌', maxHp:45,  atk:11, gold:[13,22], mechanic:'longwords',  timerMult:1.4, wordCount:1 },
+  troll:   { name:'Troll',          emoji:'🧌', maxHp:45,  atk:11, gold:[13,22], mechanic:'trickster',  timerMult:1.4, wordCount:1 },
   fairy:   { name:'Corrupted Fairy',emoji:'🧚', maxHp:25,  atk:9,  gold:[8,14],  mechanic:'curse',      timerMult:0.95,wordCount:1 },
   // Elites
   ratking: { name:'Rat King',       emoji:'👑🐀',maxHp:70, atk:10, gold:[25,40], mechanic:'elite_summon',timerMult:0.8,wordCount:1, isElite:true },
@@ -758,7 +758,6 @@ function updateWordDisplay() {
 
   const word = G.currentWord;
   const typed = G.typedSoFar;
-  typedEl.textContent = typed;
   let remaining = word.slice(typed.length);
   if (G.enemy && G.enemy.mechanic === 'ink') {
     if (remaining.length > 2) {
@@ -767,27 +766,36 @@ function updateWordDisplay() {
       remaining = remaining[0] + '*';
     }
   }
+  if (G.enemy && G.enemy.mechanic === 'hypnosis') {
+    typedEl.textContent = '*'.repeat(typed.length);
+  } else {
+    typedEl.textContent = typed;
+  }
   remainEl.textContent = remaining;
 
   if (subEl) {
     const e = G.enemy;
     let sub = '';
+    if (e && e.mechanic === 'fast')     sub = '🐀 Scamper: The word nervously shakes!';
+    if (e && e.mechanic === 'tank')     sub = '🐌 Jiggle: The slime bounces around!';
+    if (e && (e.mechanic === 'swift' || e.mechanic === 'elite_swift'))    sub = '🦇 Fly: The word swoops up and down!';
+    if (e && e.mechanic === 'random')   sub = '🕷️ Skitter: The spider teleports wildly!';
     if (e && e.mechanic === 'fade')     sub = '🐍 Fade: Word slowly disappears!';
-    if (e && e.mechanic === 'swarm')    sub = `🐝 Swarm: ${G.swarmCurrentIndex + 1}/${G.swarmTargets.length} words left!`;
-    if (e && e.mechanic === 'armor' && G.enemyArmor > 0) sub = `🛡️ Break armor first! (${G.enemyArmor} hits)`;
-    if (e && e.mechanic === 'punishment') sub = G.firePenalty > 0 ? `🔥 Fury ×${G.firePenalty + 1} (Typos add fury!)` : '🔥 Fury: Typos increase attack damage!';
-    if (e && e.mechanic === 'elite_armor' && G.enemyArmor > 0) sub = `🛡️ Perfect words break the shield! (${G.enemyArmor} left)`;
-    if (e && (e.mechanic === 'curse' || e.mechanic === 'elite_curse')) sub = '🧚 Curse: Typos shred 15% of your timer!';
-    if (e && e.mechanic === 'accuracy') sub = '🪨 Strict: Typos instantly deal heavy damage!';
-    if (e && e.mechanic === 'drain') sub = '👻 Soul Drain: Passively losing 1 HP over time!';
+    if (e && (e.mechanic === 'armor' || e.mechanic === 'elite_armor')) sub = `💀 Rattle: Word shakes! Break armor! (${G.enemyArmor})`;
+    if (e && e.mechanic === 'blind') sub = '🧟 Blind: The timer bar is completely hidden!';
     if (e && e.mechanic === 'goldthief') sub = '🐦 Thief: Typos steal your gold!';
+    if (e && e.mechanic === 'swarm')    sub = `🐝 Swarm: ${G.swarmCurrentIndex + 1}/${G.swarmTargets.length} words left!`;
+    if (e && e.mechanic === 'accuracy') sub = '🪨 Petrify: Typos freeze your keyboard!';
     if (e && e.mechanic === 'lifesteal') sub = '🧛 Vampiric: Typos heal the enemy!';
-    if (e && e.mechanic === 'enrage') sub = '🐺 Enrage: Timer gets faster as HP drops!';
-    if (e && e.mechanic === 'slowtime') sub = '🧊 Time Warp: The timer speed is fluctuating!';
-    if (e && e.mechanic === 'random') sub = '🕷️ Surprise: Timer can suddenly halve!';
-    if (e && e.mechanic === 'disrupt') sub = '⚡ Disrupt: Random flashes and severe delays!';
-    if (e && e.mechanic === 'ink') sub = '🐙 Ink: The word is completely obscured!';
-    if (e && e.mechanic === 'longwords') sub = '🧌 Heavy: Only long words appear!';
+    if (e && e.mechanic === 'enrage')   sub = '🐺 Howl: Shakes the screen when below 50% HP!';
+    if (e && e.mechanic === 'slowtime') sub = '🧊 Freeze: The word slowly freezes over!';
+    if (e && e.mechanic === 'punishment') sub = G.firePenalty > 0 ? `🔥 Burn ×${G.firePenalty + 1} (Typos fan the flames!)` : '🔥 Burn: Typos start a fire!';
+    if (e && e.mechanic === 'disrupt') sub = '⚡ Flash: Lightning blinds the word!';
+    if (e && e.mechanic === 'hypnosis') sub = '👁️ Hypnosis: You cannot see what you type!';
+    if (e && e.mechanic === 'ink') sub = '🐙 Ink: The word is obscured!';
+    if (e && e.mechanic === 'trickster') sub = '🧌 Trickster: The word might randomly change!';
+    if (e && (e.mechanic === 'curse' || e.mechanic === 'elite_curse')) sub = '🧚 Curse: Typos shred 15% of your timer!';
+    if (e && e.mechanic === 'drain') sub = '👻 Soul Drain: Passively losing 1 HP over time!';
     if (e && (e.mechanic === 'burst' || e.mechanic === 'elite_burst')) sub = '💥 Burst: Enemy can randomly attack early!';
     
     subEl.textContent = sub;
@@ -809,6 +817,14 @@ function updateTimerDisplay() {
   const valEl = document.getElementById('ctd-timer-val');
   const barEl = document.getElementById('ctd-timer-bar');
   if (!valEl || !barEl) return;
+
+  if (G.enemy && G.enemy.mechanic === 'blind') {
+    valEl.textContent = '??.??s';
+    barEl.style.width = '100%';
+    barEl.style.background = '#374151'; // gray
+    valEl.style.color = '#374151';
+    return;
+  }
 
   const pct = Math.max(0, G.wordTimeLeft / G.wordTimeMax * 100);
   valEl.textContent = G.wordTimeLeft.toFixed(2) + 's';
@@ -3201,10 +3217,6 @@ function onWordCompleted_final(perfect) {
 function scheduleNextWord_v2() {
   let delay = 220;
   if (G.enemy && G.enemy.mechanic === 'disrupt' && Math.random() < 0.25) delay = 600;
-  if (G.enemy && G.enemy.mechanic === 'disrupt' && Math.random() < 0.18) {
-    const wArea = document.getElementById('ctd-word-area');
-    if (wArea) { wArea.style.filter = 'hue-rotate(180deg)'; setTimeout(() => { if(wArea) wArea.style.filter = ''; }, 350); }
-  }
   setTimeout(() => {
     if (G && (G.screen === 'combat' || G.screen === 'boss')) {
       updateCombatHUD();
@@ -3321,6 +3333,7 @@ function onMistake_v2() {
       const stolen = Math.min(G.gold, Math.floor(Math.random() * 5) + 2);
       G.gold = Math.max(0, G.gold - stolen);
       floatText(`🐦 -${stolen}🪙!`, '#f59e0b', 'top');
+      floatText('🪶', '#1f2937', 'center');
     }
     if (e.mechanic === 'lifesteal') {
       const heal = Math.round(G.enemyMaxHp * 0.04);
@@ -3330,20 +3343,24 @@ function onMistake_v2() {
     }
     if (e.mechanic === 'punishment') {
       G.firePenalty = Math.min(5, G.firePenalty + 1);
-      floatText(`🔥 Fury ×${G.firePenalty + 1}!`, '#ef4444', 'top');
+      floatText(`🔥 Burn ×${G.firePenalty + 1}!`, '#ef4444', 'top');
+      const wArea = document.getElementById('ctd-word-area');
+      if (wArea) wArea.style.boxShadow = `0px ${G.firePenalty * 4}px ${G.firePenalty * 10}px #ef4444`;
     }
     if (e.mechanic === 'curse' || e.mechanic === 'elite_curse') {
       G.wordTimeLeft = Math.max(0.1, G.wordTimeLeft - (G.wordTimeMax * 0.15));
       floatText('Curse! -15% Time!', '#a855f7', 'top');
     }
     if (e.mechanic === 'accuracy') {
-      let atk = e.atk || 10;
-      const floorScale = 1 + (G.floor - 1) * 0.12 + (G.endlessMode ? (G.endlessFloor||0) * 0.05 : 0);
-      atk = Math.round((atk * floorScale) * 0.75); // 75% of normal attack per typo
-      G.hp = Math.max(0, G.hp - atk);
-      floatText(`💢 -${atk} HP`, '#ef4444', 'center');
+      G.battlePaused = true;
+      const input = document.getElementById('ctd-input');
+      if (input) { input.disabled = true; input.style.background = '#d1d5db'; }
+      floatText('🪨 Petrified!', '#6b7280', 'center');
       sfxHit();
-      if (G.hp <= 0) { onPlayerDeath_v2(); return; }
+      setTimeout(() => {
+        G.battlePaused = false;
+        if (input) { input.disabled = false; input.style.background = ''; input.focus(); }
+      }, 700);
     }
     if ((e.mechanic === 'elite_burst' || (G.boss && G.bossPhase && G.bossPhase.mechanic === 'burst')) && Math.random() < 0.35) {
       triggerEnemyAttack_v2();
@@ -3400,15 +3417,67 @@ function timerTick_v2() {
     const t = Date.now() / 1000;
     const osc = Math.sin(t * 1.5) * 0.5 + 0.5;
     drainRate = 0.1 * (0.5 + osc * 1.5);
+    const wArea = document.getElementById('ctd-word-area');
+    if (wArea) {
+      wArea.style.color = '#38bdf8';
+      wArea.style.opacity = Math.max(0.3, osc);
+    }
   }
 
   G.wordTimeLeft = Math.max(0, G.wordTimeLeft - drainRate);
+
+  const wArea = document.getElementById('ctd-word-area');
+  const emojiEl = document.getElementById('ctd-enemy-emoji');
+
+  if (e && e.mechanic === 'fast' && wArea) {
+    wArea.style.transform = `translateX(${Math.random() * 6 - 3}px)`;
+  }
+  if (e && e.mechanic === 'tank' && emojiEl) {
+    emojiEl.style.transform = `scaleY(${1 + Math.sin(Date.now() / 150) * 0.2}) scaleX(${1 + Math.cos(Date.now() / 150) * 0.2})`;
+  }
+  if (e && (e.mechanic === 'swift' || e.mechanic === 'elite_swift') && wArea) {
+    wArea.style.transform = `translateY(${Math.sin(Date.now() / 200) * 12}px)`;
+  }
+  if (e && e.mechanic === 'random' && emojiEl && Math.random() < 0.15) {
+    emojiEl.style.transform = `translate(${Math.random() * 120 - 60}px, ${Math.random() * 80 - 40}px)`;
+  }
+  if (e && (e.mechanic === 'armor' || e.mechanic === 'elite_armor')) {
+    const wDisplay = document.getElementById('ctd-word-display');
+    if (wDisplay) wDisplay.style.letterSpacing = `${Math.random() * 6}px`;
+  }
+  if (e && e.mechanic === 'enrage') {
+    const hpFrac = G.enemyHp / G.enemyMaxHp;
+    if (hpFrac < 0.5) {
+      const wrapper = document.querySelector('.ctd-combat-wrapper');
+      if (wrapper) wrapper.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+    }
+  }
+  if (e && e.mechanic === 'trickster' && Math.random() < 0.015 && G.typedSoFar.length >= 1) {
+    const oldWord = G.currentWord;
+    let newWord = pick(WORDS.hard);
+    while(newWord === oldWord) newWord = pick(WORDS.hard);
+    G.currentWord = newWord;
+    G.typedSoFar = '';
+    const input = document.getElementById('ctd-input');
+    if (input) input.value = '';
+    updateWordDisplay();
+    floatText('🧌 Swapped!', '#10b981', 'top');
+    sfxError();
+  }
 
   if (e && e.mechanic === 'drain' && Math.random() < 0.05) {
     G.hp = Math.max(0, G.hp - 1);
     floatText('👻 -1 HP', '#ef4444', 'center');
     updateCombatHUD();
     if (G.hp <= 0) { onPlayerDeath_v2(); return; }
+  }
+
+  if (e && e.mechanic === 'disrupt' && Math.random() < 0.05) {
+    const wArea = document.getElementById('ctd-word-area');
+    if (wArea) {
+      wArea.style.opacity = '0';
+      setTimeout(() => { if (wArea) wArea.style.opacity = '1'; }, 150 + Math.random() * 200);
+    }
   }
 
   if (e && e.mechanic === 'fade') {
@@ -3450,14 +3519,13 @@ function startNextWord_v2() {
     } else {
       word = G.swarmTargets[G.swarmCurrentIndex];
     }
-  } else if (e.mechanic === 'longwords') {
+  } else if (e.mechanic === 'trickster') {
     word = pick(WORDS.hard);
   } else {
     word = getWordForEnemy(e.id, G.floor);
   }
 
   let timerMult = e.timerMult || 1.0;
-  if (e.mechanic === 'random' && Math.random() < 0.25) timerMult *= 0.5;
   if (e.mechanic === 'enrage') {
     const hpFrac = G.enemyHp / G.enemyMaxHp;
     timerMult = Math.max(0.45, timerMult - (1 - hpFrac) * 0.45);
@@ -3488,7 +3556,23 @@ function startNextWord_v2() {
 
   // Word display reset
   const wDisplay = document.getElementById('ctd-word-display');
-  if (wDisplay) wDisplay.style.opacity = '1';
+  if (wDisplay) {
+    wDisplay.style.opacity = '1';
+    wDisplay.style.letterSpacing = 'normal';
+  }
+  const wArea = document.getElementById('ctd-word-area');
+  if (wArea) {
+    wArea.style.transform = 'none';
+    wArea.style.color = '';
+    wArea.style.opacity = '1';
+    wArea.style.boxShadow = 'none';
+  }
+  const emojiEl = document.getElementById('ctd-enemy-emoji');
+  if (emojiEl && (!e || e.mechanic !== 'distract')) {
+    emojiEl.style.transform = 'none';
+  }
+  const wrapper = document.querySelector('.ctd-combat-wrapper');
+  if (wrapper) wrapper.style.transform = 'none';
 
   updateWordDisplay();
   updateTimerDisplay();
