@@ -245,7 +245,7 @@ function generateMap(totalNodes = 10) {
   }
 
   // Final row: boss
-  rows.push([{ type:'boss', id:'boss', row:totalNodes, col:1, cleared:false }]);
+  rows.push([{ type:'boss', id:'boss', row:totalNodes, col:0, cleared:false }]);
   return rows;
 }
 
@@ -2724,6 +2724,7 @@ function renderMap_v2() {
         <span class="ctd-hud-hp">❤️ ${G.hp}/${G.maxHp}</span>
         <span class="ctd-hud-mid">🗺️ ${G.endlessMode ? `Endless Fl.${G.endlessFloor}` : `Floor ${G.floor}`} — ${G.runNodes}/${G.totalNodes}</span>
         <span class="ctd-hud-gold">🪙 ${G.gold}</span>
+        <button id="ctd-hud-restart" class="ctd-btn-secondary" style="padding:4px 8px; font-size:0.8rem; margin-left:auto;">Restart</button>
       </div>
 
       <div class="ctd-map">
@@ -2772,6 +2773,18 @@ function renderMap_v2() {
       selectMapNode_v2(node);
     });
   });
+
+  const restartBtn = document.getElementById('ctd-hud-restart');
+  if (restartBtn) {
+    addListener(restartBtn, 'click', () => {
+      if (confirm('Abandon this run?')) {
+        removeAllListeners();
+        clearTimers();
+        G = null;
+        renderCatSelect_v2();
+      }
+    });
+  }
 }
 
 // ============================================================
@@ -3397,6 +3410,7 @@ function renderCombat_final() {
         <span class="ctd-hud-hp ${G.hp <= G.maxHp * 0.3 ? 'ctd-hp-danger' : ''}">❤️ ${G.hp}/${G.maxHp}</span>
         <span class="ctd-hud-combo ${G.combo >= 10 ? 'ctd-combo-fire' : ''}">COMBO ×${G.combo}</span>
         <span class="ctd-hud-gold">🪙 ${G.gold}</span>
+        <button id="ctd-hud-restart" class="ctd-btn-secondary" style="padding:4px 8px; font-size:0.8rem; margin-left:auto;">Restart</button>
       </div>
       <div class="ctd-player-hp-bar">
         <div class="ctd-player-hp-fill" style="width:${playerHpPct}%; background:${playerHpPct > 50 ? '#10b981' : playerHpPct > 25 ? '#f59e0b' : '#ef4444'}"></div>
@@ -3457,6 +3471,18 @@ function renderCombat_final() {
 
   // Frog distraction
   if (e.mechanic === 'distract') startFrogDistraction();
+
+  const restartBtn = document.getElementById('ctd-hud-restart');
+  if (restartBtn) {
+    addListener(restartBtn, 'click', () => {
+      if (confirm('Abandon this run?')) {
+        removeAllListeners();
+        clearTimers();
+        G = null;
+        renderCatSelect_v2();
+      }
+    });
+  }
 }
 
 // ============================================================
