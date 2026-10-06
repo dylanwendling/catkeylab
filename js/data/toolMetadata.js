@@ -640,6 +640,7 @@ export const TOOL_METADATA = {
         'Select a cat to start your run.',
         'Choose paths on the map to navigate through the dungeon.',
         'During combat, type the displayed words before the timer runs out.',
+        'Beware of Elite enemies and Bosses! They use visual distraction mechanics (like shrinking the word, throwing fake decoy words at you, or shaking the screen) to break your focus.',
         'Chain successful words to build a combo and trigger passive effects.',
         'Visit shops and chests to unlock powerful run-changing passive upgrades.',
         'Defeat the boss at the end of the dungeon to win!'
@@ -650,6 +651,7 @@ export const TOOL_METADATA = {
       tips: [
         'Prioritize accuracy over raw speed: breaking a combo and taking a hit from a missed word is punishing.',
         'Read the enemy mechanic before typing: some enemies steal gold, obscure words, or require armor breaking.',
+        'Pay close attention to Boss phases. Each phase introduces a harder visual distraction mechanic.',
         'Synergize your passives. For example, a combo-healing passive works great with a cat class that starts with bonus combo.',
         'Try Endless Mode after a victory for an ever-increasing challenge!'
       ],
@@ -657,6 +659,7 @@ export const TOOL_METADATA = {
     },
     faqs: [
       { q: 'How does the typing combat work?', a: 'Every enemy displays a word. You must type the word correctly before the timer bar drains. A successful word triggers an attack. A failed word breaks your combo and gives the enemy an opening.' },
+      { q: 'What do Elites and Bosses do?', a: 'Elites and Bosses use advanced visual mechanics to distract you. For example, the Dungeon Overlord can show mirror decoy words, the Vampire Bat swoops the word across the screen, and the Ancient Golem causes screen-shaking earthquakes!' },
       { q: 'Can I play this on a mobile phone?', a: 'Yes! The game is explicitly designed to be mobile-first. Tap the input box and use your phone\'s native keyboard to type the words.' },
       { q: 'What do the passives do?', a: 'Passives are upgrades you get from shops and chests. They modify the game rules - giving you more time, bonus damage, healing, or special abilities like ignoring a mistake.' }
     ]

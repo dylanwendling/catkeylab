@@ -90,12 +90,17 @@ const ENEMIES = {
   troll:   { name:'Troll',          emoji:'🧌', maxHp:45,  atk:11, gold:[13,22], mechanic:'trickster',  timerMult:1.4, wordCount:1 },
   fairy:   { name:'Corrupted Fairy',emoji:'🧚', maxHp:25,  atk:9,  gold:[8,14],  mechanic:'curse',      timerMult:0.95,wordCount:1 },
   // Elites
-  ratking: { name:'Rat King',       emoji:'👑🐀',maxHp:70, atk:10, gold:[25,40], mechanic:'elite_summon',timerMult:0.8,wordCount:1, isElite:true },
-  vampbat: { name:'Vampire Bat',    emoji:'🦇👑',maxHp:30, atk:14, gold:[28,42], mechanic:'elite_swift', timerMult:0.55,wordCount:1,isElite:true },
-  guardian:{ name:'Ancient Guardian',emoji:'🗿',maxHp:110,atk:12, gold:[30,45], mechanic:'elite_armor', timerMult:1.1, wordCount:1, isElite:true, armor:6 },
-  wizard:  { name:'Archwizard',     emoji:'🧙', maxHp:65, atk:13, gold:[28,44], mechanic:'elite_curse', timerMult:0.9, wordCount:1, isElite:true },
-  minidragon:{ name:'Mini Dragon',  emoji:'🐲', maxHp:85, atk:15, gold:[32,50], mechanic:'elite_burst', timerMult:0.95,wordCount:1, isElite:true },
-  mimic:   { name:'MIMIC!',         emoji:'🎁🦷',maxHp:60,atk:14, gold:[35,55], mechanic:'mimic',      timerMult:0.85,wordCount:1, isElite:true },
+  // ratking: Flickering Decoy - word flickers between real word and a fake decoy word visually
+  ratking: { name:'Rat King',       emoji:'👑🐀',maxHp:70, atk:10, gold:[25,40], mechanic:'elite_flicker',timerMult:0.8,wordCount:1, isElite:true },
+  // vampbat: Swoop - the whole word-area swoops off screen and back like a diving bat
+  vampbat: { name:'Vampire Bat',    emoji:'🦇👑',maxHp:30, atk:14, gold:[28,42], mechanic:'elite_swoop',  timerMult:0.55,wordCount:1,isElite:true },
+  // guardian: Scramble - letters in remaining word shuffle visually on each typo
+  guardian:{ name:'Ancient Guardian',emoji:'🗿',maxHp:110,atk:12, gold:[30,45], mechanic:'elite_scramble',timerMult:1.1, wordCount:1, isElite:true, armor:6 },
+  // wizard: Rewind - typos ERASE a correctly typed letter (goes backward)
+  wizard:  { name:'Archwizard',     emoji:'🧙', maxHp:65, atk:13, gold:[28,44], mechanic:'elite_rewind',  timerMult:0.9, wordCount:1, isElite:true },
+  // minidragon: Firescorch - letters randomly become uppercase visually (must type lowercase but see uppercase)
+  minidragon:{ name:'Mini Dragon',  emoji:'🐲', maxHp:85, atk:15, gold:[32,50], mechanic:'elite_scorch',  timerMult:0.95,wordCount:1, isElite:true },
+  mimic:   { name:'MIMIC!',         emoji:'🎁🦷',maxHp:60,atk:14, gold:[35,55], mechanic:'mimic',         timerMult:0.85,wordCount:1, isElite:true },
 };
 
 // Normal encounter pool (weighted)
@@ -107,48 +112,53 @@ const ELITE_POOL  = ['ratking','vampbat','guardian','wizard','minidragon'];
 // ============================================================
 const BOSSES = [
   {
+    // DRAGON: smoke obscures, word sweeps across, letters scatter, then ALL at once
     id:'dragon', name:'Ancient Dragon', emoji:'🐉', maxHp:220, gold:[60,90],
     phases:[
-      { hp:220, label:'The dragon reveals its scales and claws.', timerMult:1.0, mechanic:'normal', msg:'The dragon circles overhead...' },
-      { hp:160, label:'The dragon bursts into a furious rage.',    timerMult:0.8, mechanic:'fast',   msg:'🔥 THE DRAGON IS ENRAGED!' },
-      { hp:100, label:'The dragon begins speaking ancient incantations.',  timerMult:0.85,mechanic:'long',   msg:'⚡ THE DRAGON SPEAKS ANCIENT WORDS!' },
-      { hp:50,  label:'The dragon enters a desperate death roll.',     timerMult:0.7, mechanic:'burst',  msg:'💀 DESPERATE FINAL ATTACK!' },
+      { hp:220, label:'Smoke fills the cave. You can barely see...', timerMult:1.0, mechanic:'boss_smoke',   msg:'🐉 SMOKE FILLS THE CAVE!' },
+      { hp:150, label:'The dragon swoops in, word flying everywhere!', timerMult:0.85, mechanic:'boss_fly',  msg:'🐉 THE DRAGON IS DIVING!' },
+      { hp:80,  label:'FIRE! Letters scatter as flames melt them!',   timerMult:0.8, mechanic:'boss_scatter', msg:'🔥 LETTERS ARE SCATTERING!' },
+      { hp:30,  label:'DEATH THROES! All chaos at once!',              timerMult:0.7, mechanic:'boss_chaos',  msg:'💀 FINAL CHAOS!' },
     ],
     atk:18,
   },
   {
+    // RAT KING: rats steal a typed letter, infestation grows, then pure speed
     id:'ratking', name:'Rat King', emoji:'👑🐀', maxHp:180, gold:[55,80],
     phases:[
-      { hp:180, label:'The Rat King commands from his throne.',   timerMult:0.85, mechanic:'summon', msg:'The Rat King summons his minions!' },
-      { hp:100, label:'A tide of rats swarms the dungeon.',     timerMult:0.75, mechanic:'swarm',  msg:'🐀🐀 A RAT TIDE APPROACHES!' },
-      { hp:40,  label:'The Rat King enters a frenzied panic.',timerMult:0.65, mechanic:'fast',   msg:'👑 THE RAT KING IS DESPERATE!' },
+      { hp:180, label:'Rats nibble at your progress - they steal letters!', timerMult:0.9, mechanic:'boss_ratsteal', msg:'🐀 RATS ARE NIBBLING YOUR LETTERS!' },
+      { hp:100, label:'A flood of rats! Type 6 words in a row!',             timerMult:0.8, mechanic:'swarm',       msg:'🐀🐀 RAT FLOOD!' },
+      { hp:35,  label:'The Rat King panics - he flickers the word madly!',  timerMult:0.65, mechanic:'elite_flicker', msg:'👑 THE RAT KING IS DESPERATE!' },
     ],
     atk:15,
   },
   {
+    // OVERLORD: mirror decoys, then full word scramble, then word written backwards
     id:'overlord', name:'Dungeon Overlord', emoji:'🧙', maxHp:200, gold:[58,85],
     phases:[
-      { hp:200, label:'The Overlord demonstrates arcane mastery.', timerMult:0.9, mechanic:'curse',  msg:'The Overlord weaves dark magic!' },
-      { hp:120, label:'A violent hex storm surrounds the Overlord.',      timerMult:0.8, mechanic:'disrupt',msg:'⚡ HEX STORM UNLEASHED!' },
-      { hp:55,  label:'The Overlord attempts to drain your soul.',     timerMult:0.7, mechanic:'drain',  msg:'👻 SOUL DRAIN ACTIVATED!' },
+      { hp:200, label:'Mirror images! Pick the real word!',  timerMult:0.95, mechanic:'boss_mirror',  msg:'🧙 WHICH WORD IS REAL?!' },
+      { hp:120, label:'Illusion! The word is scrambled!',    timerMult:0.85, mechanic:'boss_anagram', msg:'✨ WORDS REARRANGED BY MAGIC!' },
+      { hp:50,  label:'Dark magic reverses everything!',     timerMult:0.75, mechanic:'elite_rewind', msg:'🖤 YOUR PROGRESS IS REVERSED!' },
     ],
     atk:17,
   },
   {
+    // SOUL EATER: ghost hides typed letters, then possesses the word (moves it), then possession cascade
     id:'souleater', name:'Soul Eater', emoji:'👻', maxHp:160, gold:[52,78],
     phases:[
-      { hp:160, label:'A haunting presence fills the room.',    timerMult:0.85, mechanic:'fade',  msg:'Words blur as the Soul Eater haunts you...' },
-      { hp:80,  label:'The Soul Eater tries to possess you.',  timerMult:0.75, mechanic:'curse', msg:'👻 POSSESSION! YOUR FINGERS FEEL HEAVY!' },
-      { hp:30,  label:'The Soul Eater unleashes a final scream.',timerMult:0.6,  mechanic:'fast',  msg:'🩸 FINAL SCREAM!' },
+      { hp:160, label:'Your typed letters are consumed by the ghost!', timerMult:0.9, mechanic:'hypnosis',     msg:'👻 THE GHOST BLINDS YOUR FINGERS!' },
+      { hp:80,  label:'The soul floats the word around the screen!',   timerMult:0.8, mechanic:'boss_haunt',   msg:'👻 THE WORD IS HAUNTED!' },
+      { hp:25,  label:'Full possession! The word fights back!',         timerMult:0.65, mechanic:'boss_possess', msg:'🩸 YOUR MIND IS POSSESSED!' },
     ],
     atk:16,
   },
   {
+    // GOLEM: boulders (word area shrinks on typo), then earthquake (big shake), then petrify cascade
     id:'golem', name:'Ancient Golem', emoji:'🗿', maxHp:280, gold:[65,95],
     phases:[
-      { hp:280, label:'The Golem stands like an impenetrable stone wall.',  timerMult:1.2,  mechanic:'armor', msg:'The Golem stands impenetrable...', armor:8 },
-      { hp:180, label:'The Golem\'s exterior begins to crumble.',   timerMult:1.0,  mechanic:'accuracy',msg:'💥 THE GOLEM STARTS TO CRACK!' },
-      { hp:80,  label:'The Golem enters a blind stone rage.',  timerMult:0.8,  mechanic:'fast',  msg:'🪨 STONE RAGE!' },
+      { hp:280, label:'Boulders crush the word - it shrinks on typos!', timerMult:1.2, mechanic:'boss_boulder', msg:'🪨 BOULDERS INCOMING!', armor:6 },
+      { hp:170, label:'EARTHQUAKE! The whole arena shakes violently!',   timerMult:1.0, mechanic:'boss_quake',   msg:'🌍 EARTHQUAKE!' },
+      { hp:70,  label:'Petrifying gaze! Typos freeze you longer!',       timerMult:0.85, mechanic:'boss_petrify', msg:'🗿 STONE GAZE ACTIVATED!' },
     ],
     atk:20,
   },
@@ -776,27 +786,49 @@ function updateWordDisplay() {
   if (subEl) {
     const e = G.enemy;
     let sub = '';
-    if (e && e.mechanic === 'fast')     sub = '🐀 Scamper: The word nervously shakes!';
-    if (e && e.mechanic === 'tank')     sub = '🐌 Jiggle: The slime bounces around!';
-    if (e && (e.mechanic === 'swift' || e.mechanic === 'elite_swift'))    sub = '🦇 Fly: The word swoops up and down!';
-    if (e && e.mechanic === 'random')   sub = '🕷️ Skitter: The spider teleports wildly!';
-    if (e && e.mechanic === 'fade')     sub = '🐍 Fade: Word slowly disappears!';
+    if (e && e.mechanic === 'fast')          sub = '🐀 Scamper: The word nervously shakes!';
+    if (e && e.mechanic === 'tank')          sub = '🐌 Jiggle: The slime bounces around!';
+    if (e && e.mechanic === 'swift')         sub = '🦇 Fly: The word swoops up and down!';
+    if (e && e.mechanic === 'random')        sub = '🕷️ Skitter: The spider teleports wildly!';
+    if (e && e.mechanic === 'fade')          sub = '🐍 Fade: Word slowly disappears!';
     if (e && (e.mechanic === 'armor' || e.mechanic === 'elite_armor')) sub = `💀 Rattle: Word shakes! Break armor! (${G.enemyArmor})`;
-    if (e && e.mechanic === 'blind') sub = '🧟 Blind: The timer bar is completely hidden!';
-    if (e && e.mechanic === 'goldthief') sub = '🐦 Thief: Typos steal your gold!';
-    if (e && e.mechanic === 'swarm')    sub = `🐝 Swarm: ${G.swarmCurrentIndex + 1}/${G.swarmTargets.length} words left!`;
-    if (e && e.mechanic === 'accuracy') sub = '🪨 Petrify: Typos freeze your keyboard!';
-    if (e && e.mechanic === 'lifesteal') sub = '🧛 Vampiric: Typos heal the enemy!';
-    if (e && e.mechanic === 'enrage')   sub = '🐺 Howl: Shakes the screen when below 50% HP!';
-    if (e && e.mechanic === 'slowtime') sub = '🧊 Freeze: The word slowly freezes over!';
-    if (e && e.mechanic === 'punishment') sub = G.firePenalty > 0 ? `🔥 Burn ×${G.firePenalty + 1} (Typos fan the flames!)` : '🔥 Burn: Typos start a fire!';
-    if (e && e.mechanic === 'disrupt') sub = '⚡ Flash: Lightning blinds the word!';
-    if (e && e.mechanic === 'hypnosis') sub = '👁️ Hypnosis: You cannot see what you type!';
-    if (e && e.mechanic === 'ink') sub = '🐙 Ink: The word is obscured!';
-    if (e && e.mechanic === 'trickster') sub = '🧌 Trickster: The word might randomly change!';
+    if (e && e.mechanic === 'blind')         sub = '🧟 Blind: The timer bar is completely hidden!';
+    if (e && e.mechanic === 'goldthief')     sub = '🐦 Thief: Typos steal your gold!';
+    if (e && e.mechanic === 'swarm')         sub = `🐝 Swarm: ${G.swarmCurrentIndex + 1}/${G.swarmTargets.length} words left!`;
+    if (e && e.mechanic === 'accuracy')      sub = '🪨 Petrify: Typos freeze your keyboard!';
+    if (e && e.mechanic === 'lifesteal')     sub = '🧛 Vampiric: Typos heal the enemy!';
+    if (e && e.mechanic === 'enrage')        sub = '🐺 Howl: Shakes the screen when below 50% HP!';
+    if (e && e.mechanic === 'slowtime')      sub = '🧊 Freeze: The word pulses and freezes!';
+    if (e && e.mechanic === 'punishment')    sub = G.firePenalty > 0 ? `🔥 Burn x${G.firePenalty + 1} (Typos fan the flames!)` : '🔥 Burn: Typos start a fire!';
+    if (e && e.mechanic === 'disrupt')       sub = '⚡ Flash: Lightning blinds the word!';
+    if (e && e.mechanic === 'hypnosis')      sub = '👁️ Hypnosis: You cannot see what you type!';
+    if (e && e.mechanic === 'ink')           sub = '🐙 Ink: The middle letters are blotted out!';
+    if (e && e.mechanic === 'trickster')     sub = '🧌 Trickster: The word randomly changes mid-type!';
     if (e && (e.mechanic === 'curse' || e.mechanic === 'elite_curse')) sub = '🧚 Curse: Typos shred 15% of your timer!';
-    if (e && e.mechanic === 'drain') sub = '👻 Soul Drain: Passively losing 1 HP over time!';
+    if (e && e.mechanic === 'drain')         sub = '👻 Soul Drain: Passively losing 1 HP over time!';
     if (e && (e.mechanic === 'burst' || e.mechanic === 'elite_burst')) sub = '💥 Burst: Enemy can randomly attack early!';
+    // Elite mechanics
+    if (e && e.mechanic === 'elite_flicker') sub = '👑 Flicker: The word randomly flashes to a FAKE word!';
+    if (e && e.mechanic === 'elite_swoop')   sub = '🦇 Swoop: The word dives off screen and back!';
+    if (e && e.mechanic === 'elite_scramble') sub = '🗿 Scramble: Typos shuffle the remaining letters!';
+    if (e && e.mechanic === 'elite_rewind')  sub = '🧙 Rewind: Typos ERASE a correctly typed letter!';
+    if (e && e.mechanic === 'elite_scorch')  sub = '🐲 Scorch: Letters show as UPPERCASE (type lowercase)!';
+    if (e && e.mechanic === 'elite_summon')  sub = '🐀 Minions: Summons a wave of tiny fast words!';
+    if (e && e.mechanic === 'summon')        sub = '👑 Minions: The boss summons tiny fast words!';
+    if (e && e.mechanic === 'long')          sub = '🐉 Incantations: Only the longest words appear!';
+    // Boss mechanics
+    if (e && e.mechanic === 'boss_smoke')    sub = '🐉 Smoke: The word randomly vanishes in a cloud!';
+    if (e && e.mechanic === 'boss_fly')      sub = '🐉 Swoop: The word sweeps across the screen!';
+    if (e && e.mechanic === 'boss_scatter')  sub = '🔥 Scatter: Letters jump to random positions!';
+    if (e && e.mechanic === 'boss_chaos')    sub = '💀 CHAOS: ALL effects at once!';
+    if (e && e.mechanic === 'boss_ratsteal') sub = '🐀 Steal: Rats nibble a typed letter every few seconds!';
+    if (e && e.mechanic === 'boss_mirror')   sub = '🧙 Mirror: Two fake words hide alongside the real one!';
+    if (e && e.mechanic === 'boss_anagram')  sub = '🧙 Anagram: The word is scrambled! Figure it out!';
+    if (e && e.mechanic === 'boss_haunt')    sub = '👻 Haunt: The word floats around the screen!';
+    if (e && e.mechanic === 'boss_possess')  sub = '🩸 Possess: Word moves AND your letters vanish!';
+    if (e && e.mechanic === 'boss_boulder')  sub = '🪨 Boulder: Typos squish the word area!';
+    if (e && e.mechanic === 'boss_quake')    sub = '🌍 Quake: The whole screen shakes violently!';
+    if (e && e.mechanic === 'boss_petrify')  sub = '🗿 Petrify: Typos freeze you for longer and longer!';
     
     subEl.textContent = sub;
   }
@@ -2613,7 +2645,7 @@ function dispatchRenderCombat() {
 // ============================================================
 let _frogRaf = null;
 function startFrogDistraction() {
-  if (_frogInterval) { clearInterval(_frogInterval); _frogInterval = null; }
+  if (typeof _frogInterval !== 'undefined' && _frogInterval) { clearInterval(_frogInterval); _frogInterval = null; }
   if (_frogRaf) { cancelAnimationFrame(_frogRaf); _frogRaf = null; }
   
   let x = 0;
@@ -3182,7 +3214,7 @@ function onWordCompleted_final(perfect) {
   const e = G.enemy;
   if (!e) return;
 
-  if (e.mechanic === 'swarm') {
+  if (e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') {
     G.swarmCurrentIndex++;
     if (G.swarmCurrentIndex < G.swarmTargets.length) {
       showAttackFeedback(dmg, isCrit, perfect, false);
@@ -3366,6 +3398,65 @@ function onMistake_v2() {
       triggerEnemyAttack_v2();
       return;
     }
+    // elite_rewind: ERASES a correctly typed letter on typo
+    if (e.mechanic === 'elite_rewind' && G.typedSoFar.length > 0) {
+      G.typedSoFar = G.typedSoFar.slice(0, -1);
+      const inp2 = document.getElementById('ctd-input');
+      if (inp2) inp2.value = G.typedSoFar;
+      updateWordDisplay();
+      floatText('\ud83e\uddd9 REWOUND!', '#a855f7', 'top');
+    }
+    // elite_scramble: shuffles the remaining visible letters on typo
+    if (e.mechanic === 'elite_scramble') {
+      const remainEl = document.getElementById('ctd-word-remain');
+      if (remainEl) {
+        const remaining = G.currentWord.slice(G.typedSoFar.length).split('');
+        for (let i = remaining.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+        }
+        remainEl.textContent = remaining.join('');
+        remainEl.style.color = '#6b7280';
+        setTimeout(() => { if(remainEl) { remainEl.textContent = G.currentWord.slice(G.typedSoFar.length); remainEl.style.color = ''; } }, 800);
+        floatText('\ud83d\uddff Scrambled!', '#6b7280', 'top');
+      }
+    }
+    // boss_boulder: squish the word box a little more on each typo
+    if (e.mechanic === 'boss_boulder') {
+      G.boulderSquish = Math.max(0.3, (G.boulderSquish || 1) - 0.12);
+      const wArea = document.getElementById('ctd-word-area');
+      if (wArea) wArea.style.transform = `scaleY(${G.boulderSquish})`;
+      floatText('\ud83e\udea8 CRUSHED!', '#6b7280', 'top');
+    }
+    // boss_petrify: escalating freeze duration
+    if (e.mechanic === 'boss_petrify') {
+      G.petrifyStacks = (G.petrifyStacks || 0) + 1;
+      const freezeMs = Math.min(2500, 500 + G.petrifyStacks * 300);
+      G.battlePaused = true;
+      const input = document.getElementById('ctd-input');
+      if (input) { input.disabled = true; input.style.background = '#374151'; }
+      floatText(`\ud83d\uddff Petrified ${G.petrifyStacks}x! (${(freezeMs/1000).toFixed(1)}s)`, '#6b7280', 'center');
+      sfxHit();
+      setTimeout(() => {
+        G.battlePaused = false;
+        if (input) { input.disabled = false; input.style.background = ''; input.focus(); }
+      }, freezeMs);
+    }
+    // boss_anagram: on typo, re-scramble the display
+    if (e.mechanic === 'boss_anagram') {
+      const remainEl = document.getElementById('ctd-word-remain');
+      if (remainEl) {
+        const remaining = G.currentWord.slice(G.typedSoFar.length).split('');
+        for (let i = remaining.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [remaining[i], remaining[j]] = [remaining[j], remaining[i]];
+        }
+        remainEl.textContent = remaining.join('');
+        remainEl.style.color = '#a855f7';
+        floatText('\u2728 RE-SCRAMBLED!', '#a855f7', 'top');
+        setTimeout(() => { if(remainEl) { remainEl.textContent = G.currentWord.slice(G.typedSoFar.length); remainEl.style.color = ''; } }, 1000);
+      }
+    }
   }
 
   const input = document.getElementById('ctd-input');
@@ -3429,28 +3520,84 @@ function timerTick_v2() {
   const wArea = document.getElementById('ctd-word-area');
   const emojiEl = document.getElementById('ctd-enemy-emoji');
 
+  // RAT: fast - word shakes wildly with jitter + rotation
   if (e && e.mechanic === 'fast' && wArea) {
-    wArea.style.transform = `translateX(${Math.random() * 6 - 3}px)`;
+    const jx = Math.random() * 14 - 7;
+    const jy = Math.random() * 8 - 4;
+    const rot = Math.random() * 3 - 1.5;
+    wArea.style.transform = `translate(${jx}px, ${jy}px) rotate(${rot}deg)`;
   }
-  if (e && e.mechanic === 'tank' && emojiEl) {
-    emojiEl.style.transform = `scaleY(${1 + Math.sin(Date.now() / 150) * 0.2}) scaleX(${1 + Math.cos(Date.now() / 150) * 0.2})`;
+  // SLIME: tank - word area slowly breathes/jiggles (not emoji)
+  if (e && e.mechanic === 'tank' && wArea) {
+    const s = Date.now() / 200;
+    wArea.style.transform = `scaleX(${1 + Math.sin(s) * 0.06}) scaleY(${1 + Math.cos(s) * 0.08})`;
   }
-  if (e && (e.mechanic === 'swift' || e.mechanic === 'elite_swift') && wArea) {
-    wArea.style.transform = `translateY(${Math.sin(Date.now() / 200) * 12}px)`;
+  // BAT: swift - word swoops in wide arcs up/down and side
+  if (e && e.mechanic === 'swift' && wArea) {
+    const t = Date.now() / 200;
+    wArea.style.transform = `translateY(${Math.sin(t) * 28}px) translateX(${Math.sin(t * 0.6) * 15}px)`;
   }
-  if (e && e.mechanic === 'random' && emojiEl && Math.random() < 0.15) {
-    emojiEl.style.transform = `translate(${Math.random() * 120 - 60}px, ${Math.random() * 80 - 40}px)`;
+  // SPIDER: random - teleports word area to random spot every few ticks
+  if (e && e.mechanic === 'random' && wArea && Math.random() < 0.12) {
+    const tx = Math.random() * 80 - 40;
+    const ty = Math.random() * 40 - 20;
+    wArea.style.transform = `translate(${tx}px, ${ty}px)`;
   }
+  // SKELETON: armor - rattles letter spacing on the word
   if (e && (e.mechanic === 'armor' || e.mechanic === 'elite_armor')) {
     const wDisplay = document.getElementById('ctd-word-display');
-    if (wDisplay) wDisplay.style.letterSpacing = `${Math.random() * 6}px`;
+    if (wDisplay) wDisplay.style.letterSpacing = `${Math.random() * 8 - 1}px`;
   }
+  // ZOMBIE: blind - hide timer bar entirely
+  const timerBar = document.querySelector('.ctd-timer-bar-wrap');
+  const timerVal = document.getElementById('ctd-timer-val');
+  if (e && e.mechanic === 'blind') {
+    if (timerBar) timerBar.style.visibility = 'hidden';
+    if (timerVal) timerVal.style.visibility = 'hidden';
+  } else {
+    if (timerBar) timerBar.style.visibility = '';
+    if (timerVal) timerVal.style.visibility = '';
+  }
+  // CROW: goldthief - crow swoops across screen visually
+  if (e && e.mechanic === 'goldthief' && emojiEl && Math.random() < 0.06) {
+    const angle = Math.random() * 360;
+    emojiEl.style.transform = `translate(${Math.cos(angle) * 60}px, ${Math.sin(angle) * 30}px) rotate(${angle}deg) scale(1.5)`;
+    setTimeout(() => { if (emojiEl) emojiEl.style.transform = 'none'; }, 400);
+  }
+  // WEREWOLF: enrage - screen shake intensifies as HP drops
   if (e && e.mechanic === 'enrage') {
     const hpFrac = G.enemyHp / G.enemyMaxHp;
     if (hpFrac < 0.5) {
+      const intensity = (0.5 - hpFrac) * 20; // 0 at 50% HP, 10px at 0% HP
       const wrapper = document.querySelector('.ctd-combat-wrapper');
-      if (wrapper) wrapper.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+      if (wrapper) wrapper.style.transform = `translate(${(Math.random() * 2 - 1) * intensity}px, ${(Math.random() * 2 - 1) * intensity * 0.5}px)`;
+      // Also flash red tint at very low HP
+      if (hpFrac < 0.25 && wArea && Math.random() < 0.1) {
+        wArea.style.boxShadow = '0 0 20px #ef4444';
+        setTimeout(() => { if (wArea) wArea.style.boxShadow = ''; }, 200);
+      }
     }
+  }
+  // VAMPIRE: lifesteal - blood drip visual effect per tick
+  if (e && e.mechanic === 'lifesteal' && Math.random() < 0.04) {
+    const floatEl = document.getElementById('ctd-float-layer');
+    if (floatEl) {
+      const drop = document.createElement('div');
+      drop.textContent = '🩸';
+      drop.style.cssText = `position:absolute;top:${Math.random() * 60}%;left:${Math.random() * 80 + 10}%;font-size:1.2rem;animation:ctd-float-up 1s ease-out forwards;pointer-events:none;`;
+      floatEl.appendChild(drop);
+      setTimeout(() => drop.remove(), 1000);
+    }
+  }
+  // EVIL EYE: hypnosis - pulsing purple overlay on word area
+  if (e && e.mechanic === 'hypnosis' && wArea) {
+    const pulse = 0.4 + Math.abs(Math.sin(Date.now() / 600)) * 0.6;
+    wArea.style.boxShadow = `0 0 ${pulse * 25}px rgba(168,85,247,${pulse * 0.6})`;
+  }
+  // CORRUPTED FAIRY: curse - sparkling purple shimmer on word
+  if (e && e.mechanic === 'curse' && wArea && Math.random() < 0.07) {
+    wArea.style.filter = 'hue-rotate(180deg) brightness(1.3)';
+    setTimeout(() => { if (wArea) wArea.style.filter = ''; }, 150);
   }
   if (e && e.mechanic === 'trickster' && Math.random() < 0.015 && G.typedSoFar.length >= 1) {
     const oldWord = G.currentWord;
@@ -3484,6 +3631,134 @@ function timerTick_v2() {
     G.wordFadeProgress = Math.min(1, 1 - (G.wordTimeLeft / G.wordTimeMax));
   }
 
+  // ---- ELITE MECHANICS ----
+
+  // elite_flicker: the display flickers between real word and fake decoy
+  if (e && e.mechanic === 'elite_flicker' && Math.random() < 0.08) {
+    const remainEl = document.getElementById('ctd-word-remain');
+    const typedEl = document.getElementById('ctd-word-typed');
+    if (remainEl && typedEl) {
+      const fakeWord = pick(WORDS.medium);
+      const orig = remainEl.textContent;
+      const origTyped = typedEl.textContent;
+      remainEl.textContent = fakeWord;
+      typedEl.textContent = '??';
+      remainEl.style.color = '#ef4444';
+      setTimeout(() => {
+        if (remainEl) { remainEl.textContent = orig; remainEl.style.color = ''; }
+        if (typedEl) { typedEl.textContent = origTyped; }
+      }, 350 + Math.random() * 250);
+    }
+  }
+
+  // elite_swoop: word area swoops off screen then comes back
+  if (e && e.mechanic === 'elite_swoop') {
+    const wArea = document.getElementById('ctd-word-area');
+    const t = Date.now() / 600;
+    if (wArea) wArea.style.transform = `translateX(${Math.sin(t) * 60}px) translateY(${Math.cos(t * 0.7) * 20}px)`;
+  }
+
+  // elite_scorch: make letters visually appear uppercase (but player must type lowercase)
+  if (e && e.mechanic === 'elite_scorch') {
+    const remainEl = document.getElementById('ctd-word-remain');
+    if (remainEl && Math.random() < 0.1) {
+      const curr = remainEl.textContent;
+      // random case chaos
+      remainEl.textContent = curr.split('').map(c => Math.random() < 0.6 ? c.toUpperCase() : c).join('');
+      remainEl.style.color = '#f97316';
+      setTimeout(() => { if (remainEl) { remainEl.style.color = ''; } }, 200);
+    }
+  }
+
+  // ---- BOSS MECHANICS ----
+
+  // boss_smoke: word randomly vanishes in a puff
+  if (e && e.mechanic === 'boss_smoke' && Math.random() < 0.06) {
+    const wArea = document.getElementById('ctd-word-area');
+    if (wArea) {
+      wArea.style.filter = 'blur(8px)';
+      wArea.style.opacity = '0.1';
+      setTimeout(() => { if (wArea) { wArea.style.filter = ''; wArea.style.opacity = '1'; } }, 400 + Math.random() * 300);
+    }
+  }
+
+  // boss_fly: word sweeps horizontally across screen like a diving dragon
+  if (e && e.mechanic === 'boss_fly') {
+    const wArea = document.getElementById('ctd-word-area');
+    const t = Date.now() / 500;
+    if (wArea) wArea.style.transform = `translateX(${Math.sin(t) * 70}px) translateY(${Math.sin(t * 1.3) * 15}px)`;
+  }
+
+  // boss_scatter: letters shift to weird positions via letter-spacing jitter
+  if (e && e.mechanic === 'boss_scatter') {
+    const wDisplay = document.getElementById('ctd-word-display');
+    if (wDisplay) {
+      wDisplay.style.letterSpacing = `${Math.random() * 12 - 2}px`;
+      wDisplay.style.transform = `skewX(${Math.random() * 10 - 5}deg)`;
+    }
+  }
+
+  // boss_chaos: ALL effects at once - smoke + fly + scatter + shake
+  if (e && e.mechanic === 'boss_chaos') {
+    const wArea = document.getElementById('ctd-word-area');
+    const wDisplay = document.getElementById('ctd-word-display');
+    const wrapper = document.querySelector('.ctd-combat-wrapper');
+    const t = Date.now() / 400;
+    if (wArea) {
+      wArea.style.transform = `translateX(${Math.sin(t) * 50}px) translateY(${Math.cos(t * 1.2) * 20}px)`;
+      if (Math.random() < 0.06) { wArea.style.opacity = '0.05'; setTimeout(() => { if(wArea) wArea.style.opacity = '1'; }, 200); }
+    }
+    if (wDisplay) wDisplay.style.letterSpacing = `${Math.random() * 8}px`;
+    if (wrapper) wrapper.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+  }
+
+  // boss_ratsteal: randomly nibbles off last typed character
+  if (e && e.mechanic === 'boss_ratsteal' && Math.random() < 0.025 && G.typedSoFar.length > 0) {
+    G.typedSoFar = G.typedSoFar.slice(0, -1);
+    const input = document.getElementById('ctd-input');
+    if (input) input.value = G.typedSoFar;
+    updateWordDisplay();
+    floatText('🐀 A rat stole a letter!', '#f59e0b', 'top');
+    sfxError();
+  }
+
+  // boss_haunt: word floats around screen gently - more erratic than boss_fly
+  if (e && e.mechanic === 'boss_haunt') {
+    const wArea = document.getElementById('ctd-word-area');
+    const t = Date.now() / 700;
+    if (wArea) {
+      wArea.style.transform = `translateX(${Math.sin(t * 1.1) * 55}px) translateY(${Math.sin(t * 0.9) * 30}px)`;
+      wArea.style.opacity = `${0.5 + Math.abs(Math.sin(t * 0.5)) * 0.5}`;
+    }
+  }
+
+  // boss_possess: word floats AND typed chars hidden (like hypnosis+haunt)
+  if (e && e.mechanic === 'boss_possess') {
+    const wArea = document.getElementById('ctd-word-area');
+    const t = Date.now() / 500;
+    if (wArea) wArea.style.transform = `translateX(${Math.sin(t * 1.3) * 65}px) translateY(${Math.cos(t) * 25}px)`;
+    // hide typed chars
+    const typedEl = document.getElementById('ctd-word-typed');
+    if (typedEl && G.typedSoFar.length > 0) typedEl.textContent = '🩸'.repeat(G.typedSoFar.length);
+  }
+
+  // boss_quake: violent constant screen shake
+  if (e && e.mechanic === 'boss_quake') {
+    const wrapper = document.querySelector('.ctd-combat-wrapper');
+    if (wrapper) wrapper.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 2 - 1}deg)`;
+  }
+
+  // boss_boulder: progressively squishes word area (set squish on each tick, reset on word complete)
+  if (e && e.mechanic === 'boss_boulder') {
+    const wArea = document.getElementById('ctd-word-area');
+    if (wArea && G.boulderSquish) {
+      wArea.style.transform = `scaleY(${G.boulderSquish})`;
+    }
+  }
+
+  // boss_petrify: handled in onMistake, just track petrify stacks in timerTick
+  // (nothing per-tick needed here)
+
   updateTimerDisplay();
   updateWordFade();
 
@@ -3502,7 +3777,7 @@ function startNextWord_v2() {
   G.wordFadeProgress = 0;
   G.typedSoFar = '';
 
-  if (e.mechanic === 'swarm' && G.swarmTargets.length === 0) {
+  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length === 0) {
     const count = 4 + Math.floor(Math.random() * 3);
     G.swarmTargets = Array.from({length: count}, () => getWordForEnemy('bee', G.floor));
     G.swarmCurrentIndex = 0;
@@ -3511,7 +3786,7 @@ function startNextWord_v2() {
   }
 
   let word;
-  if (e.mechanic === 'swarm') {
+  if (e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') {
     if (G.swarmCurrentIndex >= G.swarmTargets.length) {
       G.swarmTargets = [];
       G.swarmCurrentIndex = 0;
@@ -3521,6 +3796,8 @@ function startNextWord_v2() {
     }
   } else if (e.mechanic === 'trickster') {
     word = pick(WORDS.hard);
+  } else if (e.mechanic === 'long') {
+    word = pick(WORDS.veryhard);
   } else {
     word = getWordForEnemy(e.id, G.floor);
   }
@@ -3559,6 +3836,8 @@ function startNextWord_v2() {
   if (wDisplay) {
     wDisplay.style.opacity = '1';
     wDisplay.style.letterSpacing = 'normal';
+    wDisplay.style.transform = 'none';
+    wDisplay.style.filter = '';
   }
   const wArea = document.getElementById('ctd-word-area');
   if (wArea) {
@@ -3566,7 +3845,10 @@ function startNextWord_v2() {
     wArea.style.color = '';
     wArea.style.opacity = '1';
     wArea.style.boxShadow = 'none';
+    wArea.style.filter = '';
   }
+  // Reset boss-specific per-word state
+  G.boulderSquish = 1.0;
   const emojiEl = document.getElementById('ctd-enemy-emoji');
   if (emojiEl && (!e || e.mechanic !== 'distract')) {
     emojiEl.style.transform = 'none';
@@ -3574,11 +3856,50 @@ function startNextWord_v2() {
   const wrapper = document.querySelector('.ctd-combat-wrapper');
   if (wrapper) wrapper.style.transform = 'none';
 
-  updateWordDisplay();
-  updateTimerDisplay();
+  // boss_anagram: show scrambled display on word start
+  if (e.mechanic === 'boss_anagram') {
+    const remainEl = document.getElementById('ctd-word-remain');
+    if (remainEl) {
+      const letters = word.split('');
+      for (let i = letters.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [letters[i], letters[j]] = [letters[j], letters[i]];
+      }
+      remainEl.textContent = letters.join('');
+      remainEl.style.color = '#a855f7';
+      // Restore correct display after 1.2s
+      setTimeout(() => {
+        if (remainEl && G.currentWord === word) {
+          remainEl.textContent = word.slice(G.typedSoFar.length);
+          remainEl.style.color = '';
+        }
+      }, 1200);
+    }
+  }
+
+  // boss_mirror: show 2 fake decoy words around the real word
+  const mirrorBar = document.getElementById('ctd-mirror-bar');
+  if (mirrorBar) mirrorBar.remove(); // clear old
+  if (e.mechanic === 'boss_mirror') {
+    const fake1 = pick(WORDS.medium);
+    const fake2 = pick(WORDS.medium);
+    const wArea = document.getElementById('ctd-word-area');
+    if (wArea) {
+      const bar = document.createElement('div');
+      bar.id = 'ctd-mirror-bar';
+      bar.style.cssText = 'display:flex; gap:1rem; justify-content:center; margin-bottom:0.4rem; opacity:0.55;';
+      bar.innerHTML = `<span style="color:#a855f7;font-size:1.1rem;text-decoration:line-through">${fake1}</span>
+                       <span style="color:#a855f7;font-size:1.1rem;text-decoration:line-through">${fake2}</span>`;
+      wArea.insertBefore(bar, wArea.querySelector('.ctd-word-display'));
+      floatText('\ud83e\uddd9 Mirror Images!', '#a855f7', 'top');
+    }
+  }
 
   const input = document.getElementById('ctd-input');
   if (input) { input.value = ''; input.focus(); }
+
+  updateWordDisplay();
+  updateTimerDisplay();
 
   G.timerStarted = false;
   clearTimers();
@@ -3596,7 +3917,7 @@ function renderCombat_final() {
   const bossPhaseBadge = (G.boss && G.bossPhase) ? `<div class="ctd-elite-badge" style="background:rgba(239,68,68,0.2);border-color:#ef4444;color:#f87171;">${G.bossPhase.label}</div>` : '';
 
   let swarmHTML = '';
-  if (e.mechanic === 'swarm' && G.swarmTargets.length > 0) {
+  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length > 0) {
     swarmHTML = `<div class="ctd-swarm-targets">
       ${G.swarmTargets.map((w,i) => `<span class="ctd-swarm-word ${i < G.swarmCurrentIndex ? 'done' : i === G.swarmCurrentIndex ? 'active' : ''}">${w}</span>`).join('')}
     </div>`;
