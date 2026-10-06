@@ -235,9 +235,9 @@ const CAT_CLASSES = [
 // ============================================================
 // MAP GENERATOR
 // ============================================================
-const NODE_TYPES = ['battle','battle','battle','battle','shop','chest','elite','battle'];
-const NODE_ICONS = { battle:'⚔️', shop:'🛒', chest:'🎁', elite:'🗡️', boss:'👑' };
-const NODE_COLORS = { battle:'#ef4444', shop:'#10b981', chest:'#f59e0b', elite:'#a855f7', boss:'#ff6b35' };
+const NODE_TYPES = ['battle','battle','battle','battle','shop','chest','elite','battle','rest'];
+const NODE_ICONS = { battle:'⚔️', shop:'🛒', chest:'🎁', elite:'🗡️', boss:'👑', rest:'🏕️' };
+const NODE_COLORS = { battle:'#ef4444', shop:'#10b981', chest:'#f59e0b', elite:'#a855f7', boss:'#ff6b35', rest:'#3b82f6' };
 
 function generateMap(totalNodes = 10) {
   // Generate a branching map: each row has 3 choices, converging to boss
@@ -269,11 +269,18 @@ function pickNodeType(tracker, row, total) {
   const shopCount = tracker.shop || 0;
   const chestCount = tracker.chest || 0;
   const eliteCount = tracker.elite || 0;
+  const restCount = tracker.rest || 0;
 
   const pool = [...NODE_TYPES];
   if (shopCount >= 2)  pool.splice(pool.indexOf('shop'), 1);
   if (chestCount >= 2) pool.splice(pool.indexOf('chest'), 1);
   if (eliteCount >= 2) pool.splice(pool.indexOf('elite'), 1);
+  
+  // Rest node: maximum 1 per run
+  if (restCount >= 1) {
+    const rIdx = pool.indexOf('rest');
+    if (rIdx > -1) pool.splice(rIdx, 1);
+  }
 
   return pick(pool.length ? pool : ['battle']);
 }
@@ -2811,10 +2818,52 @@ function selectMapNode_v2(node) {
       sfxChest();
       renderChest();
     }
+  } else if (node.type === 'rest') {
+    sfxShop();
+    renderRest();
   } else if (node.type === 'boss') {
     sfxBoss();
     startBoss_v2();
   }
+}
+
+function renderRest() {
+  G.screen = 'rest';
+  
+  _container.innerHTML = `
+    <div class="ctd-wrapper" style="text-align:center;">
+      <div class="ctd-hud">
+        <span class="ctd-hud-hp">❤️ ${G.hp}/${G.maxHp}</span>
+        <span class="ctd-hud-mid">🏕️ Safe Camp</span>
+        <span class="ctd-hud-gold">🪙 ${G.gold}</span>
+      </div>
+      <div style="font-size:4rem; margin-top:2rem;">🏕️</div>
+      <h2 style="font-size:2rem;margin-bottom:1rem;color:#3b82f6;">Safe Camp</h2>
+      <p style="color:#9ca3af;margin-bottom:3rem;font-size:1.1rem;padding:0 1rem;">You found a rare moment of peace in the dungeon. What will you do?</p>
+      
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;max-width:400px;margin:0 auto;">
+        <button class="ctd-btn-primary" id="rest-heal-btn" style="background:#10b981;border-color:#059669;width:100%;font-size:1.2rem;padding:1rem;">
+          💖 Heal 100 HP
+        </button>
+        <button class="ctd-btn-primary" id="rest-power-btn" style="background:#a855f7;border-color:#7e22ce;width:100%;font-size:1.2rem;padding:1rem;">
+          🎁 Gain a Random Passive
+        </button>
+      </div>
+    </div>
+  `;
+
+  addListener(document.getElementById('rest-heal-btn'), 'click', () => {
+    G.hp = Math.min(G.maxHp, G.hp + 100);
+    sfxVictory();
+    advanceMap_v2();
+  });
+
+  addListener(document.getElementById('rest-power-btn'), 'click', () => {
+    const items = drawPassives(1, []);
+    applyPassive(items[0]);
+    sfxVictory();
+    advanceMap_v2();
+  });
 }
 
 function renderMimicReveal_v2() {
