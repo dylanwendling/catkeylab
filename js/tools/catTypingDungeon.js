@@ -772,11 +772,24 @@ function updateWordDisplay() {
   if (subEl) {
     const e = G.enemy;
     let sub = '';
-    if (e && e.mechanic === 'fade')     sub = '🐍 Word is fading...';
-    if (e && e.mechanic === 'swarm')    sub = `🐝 ${G.swarmCurrentIndex + 1}/${G.swarmTargets.length}`;
+    if (e && e.mechanic === 'fade')     sub = '🐍 Fade: Word slowly disappears!';
+    if (e && e.mechanic === 'swarm')    sub = `🐝 Swarm: ${G.swarmCurrentIndex + 1}/${G.swarmTargets.length} words left!`;
     if (e && e.mechanic === 'armor' && G.enemyArmor > 0) sub = `🛡️ Break armor first! (${G.enemyArmor} hits)`;
-    if (e && e.mechanic === 'punishment' && G.firePenalty > 0) sub = `🔥 Fury ×${G.firePenalty + 1}`;
+    if (e && e.mechanic === 'punishment') sub = G.firePenalty > 0 ? `🔥 Fury ×${G.firePenalty + 1} (Typos add fury!)` : '🔥 Fury: Typos increase attack damage!';
     if (e && e.mechanic === 'elite_armor' && G.enemyArmor > 0) sub = `🛡️ Perfect words break the shield! (${G.enemyArmor} left)`;
+    if (e && (e.mechanic === 'curse' || e.mechanic === 'elite_curse')) sub = '🧚 Curse: Typos shred 15% of your timer!';
+    if (e && e.mechanic === 'accuracy') sub = '🪨 Strict: Typos instantly deal heavy damage!';
+    if (e && e.mechanic === 'drain') sub = '👻 Soul Drain: Passively losing 1 HP over time!';
+    if (e && e.mechanic === 'goldthief') sub = '🐦 Thief: Typos steal your gold!';
+    if (e && e.mechanic === 'lifesteal') sub = '🧛 Vampiric: Typos heal the enemy!';
+    if (e && e.mechanic === 'enrage') sub = '🐺 Enrage: Timer gets faster as HP drops!';
+    if (e && e.mechanic === 'slowtime') sub = '🧊 Time Warp: The timer speed is fluctuating!';
+    if (e && e.mechanic === 'random') sub = '🕷️ Surprise: Timer can suddenly halve!';
+    if (e && e.mechanic === 'disrupt') sub = '⚡ Disrupt: Random flashes and severe delays!';
+    if (e && e.mechanic === 'ink') sub = '🐙 Ink: The word is completely obscured!';
+    if (e && e.mechanic === 'longwords') sub = '🧌 Heavy: Only long words appear!';
+    if (e && (e.mechanic === 'burst' || e.mechanic === 'elite_burst')) sub = '💥 Burst: Enemy can randomly attack early!';
+    
     subEl.textContent = sub;
   }
 }
