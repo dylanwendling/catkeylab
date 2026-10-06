@@ -3131,10 +3131,52 @@ function onEnemyDefeated_v2() {
   setTimeout(() => {
     if (e.id === 'mimic') {
       renderChest();
+    } else if (e.isElite) {
+      renderEliteReward();
     } else {
       advanceMap_v2();
     }
   }, 1200);
+}
+
+function renderEliteReward() {
+  G.screen = 'elite_reward';
+  sfxChest();
+  
+  _container.innerHTML = `
+    <div class="ctd-wrapper" style="text-align:center;">
+      <div class="ctd-hud">
+        <span class="ctd-hud-hp">❤️ ${G.hp}/${G.maxHp}</span>
+        <span class="ctd-hud-mid">🗡️ Elite Defeated!</span>
+        <span class="ctd-hud-gold">🪙 ${G.gold}</span>
+      </div>
+      <div style="font-size:4rem; margin-top:2rem;">🎁</div>
+      <h2 style="font-size:2rem;margin-bottom:1rem;color:#a855f7;">Elite Reward</h2>
+      <p style="color:#9ca3af;margin-bottom:3rem;font-size:1.1rem;padding:0 1rem;">You defeated a powerful foe. Choose your reward:</p>
+      
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;max-width:400px;margin:0 auto;">
+        <button class="ctd-btn-primary" id="elite-gold-btn" style="background:#f59e0b;border-color:#d97706;width:100%;font-size:1.2rem;padding:1rem;">
+          🪙 Gain 100 Gold
+        </button>
+        <button class="ctd-btn-primary" id="elite-power-btn" style="background:#a855f7;border-color:#7e22ce;width:100%;font-size:1.2rem;padding:1rem;">
+          ✨ Gain a Random Passive
+        </button>
+      </div>
+    </div>
+  `;
+
+  addListener(document.getElementById('elite-gold-btn'), 'click', () => {
+    G.gold += 100;
+    sfxVictory();
+    advanceMap_v2();
+  });
+
+  addListener(document.getElementById('elite-power-btn'), 'click', () => {
+    const items = drawPassives(1, []);
+    applyPassive(items[0]);
+    sfxVictory();
+    advanceMap_v2();
+  });
 }
 
 function onBossDefeated_v2() {
