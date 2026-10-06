@@ -75,7 +75,7 @@ const ENEMIES = {
   spider:  { name:'Spider',         emoji:'🕷️', maxHp:28,  atk:7,  gold:[6,11],  mechanic:'random',     timerMult:1.0, wordCount:1 },
   snake:   { name:'Snake',          emoji:'🐍', maxHp:32,  atk:8,  gold:[7,13],  mechanic:'fade',       timerMult:1.1, wordCount:1 },
   skeleton:{ name:'Skeleton',       emoji:'💀', maxHp:40,  atk:9,  gold:[8,14],  mechanic:'armor',      timerMult:1.0, wordCount:1, armor:3 },
-  zombie:  { name:'Zombie',         emoji:'🧟', maxHp:55,  atk:6,  gold:[10,18], mechanic:'endurance',  timerMult:1.2, wordCount:1 },
+  zombie:  { name:'Zombie',         emoji:'🧟', maxHp:35,  atk:6,  gold:[10,18], mechanic:'endurance',  timerMult:1.2, wordCount:1 },
   crow:    { name:'Crow',           emoji:'🐦', maxHp:24,  atk:7,  gold:[9,15],  mechanic:'goldthief',  timerMult:0.9, wordCount:1 },
   frog:    { name:'Frog',           emoji:'🐸', maxHp:30,  atk:7,  gold:[6,12],  mechanic:'distract',   timerMult:1.0, wordCount:1 },
   bee:     { name:'Bee Swarm',      emoji:'🐝', maxHp:40,  atk:8,  gold:[9,16],  mechanic:'swarm',      timerMult:0.85,wordCount:4 },
@@ -87,7 +87,7 @@ const ENEMIES = {
   storm:   { name:'Storm Elemental',emoji:'⚡', maxHp:38,  atk:11, gold:[12,20], mechanic:'disrupt',    timerMult:1.0, wordCount:1 },
   evileye: { name:'Evil Eye',       emoji:'👁️', maxHp:20,  atk:16, gold:[10,18], mechanic:'accuracy',   timerMult:0.95,wordCount:1 },
   ink:     { name:'Ink Monster',    emoji:'🐙', maxHp:36,  atk:9,  gold:[10,17], mechanic:'ink',        timerMult:1.1, wordCount:1 },
-  troll:   { name:'Troll',          emoji:'🧌', maxHp:70,  atk:11, gold:[13,22], mechanic:'longwords',  timerMult:1.4, wordCount:1 },
+  troll:   { name:'Troll',          emoji:'🧌', maxHp:45,  atk:11, gold:[13,22], mechanic:'longwords',  timerMult:1.4, wordCount:1 },
   fairy:   { name:'Corrupted Fairy',emoji:'🧚', maxHp:25,  atk:9,  gold:[8,14],  mechanic:'curse',      timerMult:0.95,wordCount:1 },
   // Elites
   ratking: { name:'Rat King',       emoji:'👑🐀',maxHp:70, atk:10, gold:[25,40], mechanic:'elite_summon',timerMult:0.8,wordCount:1, isElite:true },
@@ -747,7 +747,15 @@ function updateWordDisplay() {
   const word = G.currentWord;
   const typed = G.typedSoFar;
   typedEl.textContent = typed;
-  remainEl.textContent = word.slice(typed.length);
+  let remaining = word.slice(typed.length);
+  if (G.enemy && G.enemy.mechanic === 'ink') {
+    if (remaining.length > 2) {
+      remaining = remaining[0] + '*'.repeat(remaining.length - 2) + remaining[remaining.length - 1];
+    } else if (remaining.length === 2) {
+      remaining = remaining[0] + '*';
+    }
+  }
+  remainEl.textContent = remaining;
 
   if (subEl) {
     const e = G.enemy;
@@ -2562,17 +2570,51 @@ function dispatchRenderCombat() {
 // ============================================================
 // FROG DISTRACTION MECHANIC
 // ============================================================
-let _frogInterval = null;
+let _frogRaf = null;
 function startFrogDistraction() {
-  if (_frogInterval) clearInterval(_frogInterval);
-  _frogInterval = setInterval(() => {
+  if (_frogInterval) { clearInterval(_frogInterval); _frogInterval = null; }
+  if (_frogRaf) { cancelAnimationFrame(_frogRaf); _frogRaf = null; }
+  
+  let x = 0;
+  let y = 0;
+  let vx = (Math.random() > 0.5 ? 2.5 : -2.5) * (1 + Math.random() * 0.5);
+  let vy = (Math.random() > 0.5 ? 2.5 : -2.5) * (1 + Math.random() * 0.5);
+
+  function step() {
     const emojiEl = document.getElementById('ctd-enemy-emoji');
-    if (!emojiEl || G.screen !== 'combat') { clearInterval(_frogInterval); return; }
-    const x = Math.random() * 60 - 30;
-    const y = Math.random() * 20 - 10;
+    const wrapper = document.querySelector('.ctd-combat-wrapper');
+    if (!emojiEl || !wrapper || (G.screen !== 'combat' && G.screen !== 'boss')) {
+      _frogRaf = null;
+      return;
+    }
+    
+    const wRect = wrapper.getBoundingClientRect();
+    const eRect = emojiEl.getBoundingClientRect();
+    
+    const utLeft = eRect.left - x;
+    const utRight = eRect.right - x;
+    const utTop = eRect.top - y;
+    const utBottom = eRect.bottom - y;
+    
+    const padding = 10;
+    
+    const minX = wRect.left + padding - utLeft;
+    const maxX = wRect.right - padding - utRight;
+    const minY = wRect.top + padding - utTop;
+    const maxY = wRect.bottom - padding - utBottom;
+    
+    x += vx;
+    y += vy;
+    
+    if (x <= minX) { x = minX; vx = Math.abs(vx); }
+    if (x >= maxX) { x = maxX; vx = -Math.abs(vx); }
+    if (y <= minY) { y = minY; vy = Math.abs(vy); }
+    if (y >= maxY) { y = maxY; vy = -Math.abs(vy); }
+    
     emojiEl.style.transform = `translate(${x}px, ${y}px)`;
-    setTimeout(() => { if (emojiEl) emojiEl.style.transform = ''; }, 400);
-  }, 800);
+    _frogRaf = requestAnimationFrame(step);
+  }
+  _frogRaf = requestAnimationFrame(step);
 }
 
 // ============================================================
@@ -2960,7 +3002,11 @@ function onEnemyDefeated_v2() {
   }
 
   setTimeout(() => {
-    advanceMap_v2();
+    if (e.id === 'mimic') {
+      renderChest();
+    } else {
+      advanceMap_v2();
+    }
   }, 1200);
 }
 
@@ -2992,21 +3038,25 @@ function applyDamageToEnemy_v2(dmg) {
   G.totalDmgDealt += dmg;
   if (G.enemyHp <= 0) {
     onEnemyDefeated_v2();
+    return true;
   }
+  return false;
 }
 
 function applyDamageToBoss_v2(dmg) {
   G.enemyHp = Math.max(0, G.enemyHp - dmg);
   G.bossHp = G.enemyHp;
   G.totalDmgDealt += dmg;
-  checkBossPhase_v2();
+  const transitioned = checkBossPhase_v2();
   if (G.enemyHp <= 0) {
     onBossDefeated_v2();
+    return true;
   }
+  return transitioned;
 }
 
 function checkBossPhase_v2() {
-  if (!G.boss) return;
+  if (!G.boss) return false;
   const boss = G.boss;
   const phases = boss.phases;
 
@@ -3026,16 +3076,17 @@ function checkBossPhase_v2() {
           startNextWord();
         }
       });
-      return;
+      return true;
     }
   }
+  return false;
 }
 
 function dealDamageToCurrentEnemy_v2(dmg) {
   if (G.boss && G.enemy && G.enemy.isBoss) {
-    applyDamageToBoss_v2(dmg);
+    return applyDamageToBoss_v2(dmg);
   } else {
-    applyDamageToEnemy_v2(dmg);
+    return applyDamageToEnemy_v2(dmg);
   }
 }
 
@@ -3089,9 +3140,11 @@ function onWordCompleted_final(perfect) {
     G.swarmCurrentIndex++;
     if (G.swarmCurrentIndex < G.swarmTargets.length) {
       showAttackFeedback(dmg, isCrit, perfect, false);
-      dealDamageToCurrentEnemy_v2(dmg);
+      const interrupted = dealDamageToCurrentEnemy_v2(dmg);
       updateCombatHUD();
-      setTimeout(() => { if (G && G.screen === 'combat') startNextWord(); }, 180);
+      if (!interrupted) {
+        setTimeout(() => { if (G && (G.screen === 'combat' || G.screen === 'boss')) startNextWord(); }, 180);
+      }
       return;
     } else {
       G.swarmTargets = [];
@@ -3110,9 +3163,9 @@ function onWordCompleted_final(perfect) {
   }
 
   showAttackFeedback(dmg, isCrit, perfect, true);
-  dealDamageToCurrentEnemy_v2(dmg);
+  const interrupted = dealDamageToCurrentEnemy_v2(dmg);
   updateCombatHUD();
-  scheduleNextWord_v2();
+  if (!interrupted) scheduleNextWord_v2();
 }
 
 function scheduleNextWord_v2() {
@@ -3249,6 +3302,19 @@ function onMistake_v2() {
       G.firePenalty = Math.min(5, G.firePenalty + 1);
       floatText(`🔥 Fury ×${G.firePenalty + 1}!`, '#ef4444', 'top');
     }
+    if (e.mechanic === 'curse' || e.mechanic === 'elite_curse') {
+      G.wordTimeLeft = Math.max(0.1, G.wordTimeLeft - (G.wordTimeMax * 0.15));
+      floatText('Curse! -15% Time!', '#a855f7', 'top');
+    }
+    if (e.mechanic === 'accuracy') {
+      let atk = e.atk || 10;
+      const floorScale = 1 + (G.floor - 1) * 0.12 + (G.endlessMode ? (G.endlessFloor||0) * 0.05 : 0);
+      atk = Math.round((atk * floorScale) * 0.75); // 75% of normal attack per typo
+      G.hp = Math.max(0, G.hp - atk);
+      floatText(`💢 -${atk} HP`, '#ef4444', 'center');
+      sfxHit();
+      if (G.hp <= 0) { onPlayerDeath_v2(); return; }
+    }
     if ((e.mechanic === 'elite_burst' || (G.boss && G.bossPhase && G.bossPhase.mechanic === 'burst')) && Math.random() < 0.35) {
       triggerEnemyAttack_v2();
       return;
@@ -3307,6 +3373,13 @@ function timerTick_v2() {
   }
 
   G.wordTimeLeft = Math.max(0, G.wordTimeLeft - drainRate);
+
+  if (e && e.mechanic === 'drain' && Math.random() < 0.05) {
+    G.hp = Math.max(0, G.hp - 1);
+    floatText('👻 -1 HP', '#ef4444', 'center');
+    updateCombatHUD();
+    if (G.hp <= 0) { onPlayerDeath_v2(); return; }
+  }
 
   if (e && e.mechanic === 'fade') {
     G.wordFadeProgress = Math.min(1, 1 - (G.wordTimeLeft / G.wordTimeMax));
