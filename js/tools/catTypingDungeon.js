@@ -1300,7 +1300,7 @@ function renderShop() {
   const leaveBtn = document.getElementById('ctd-shop-leave');
   if (leaveBtn) {
     addListener(leaveBtn, 'click', () => {
-      advanceMap();
+      advanceMap_v2();
     });
   }
 }
@@ -1354,7 +1354,7 @@ function renderChest() {
       const idx = parseInt(btn.dataset.idx);
       applyPassive(items[idx]);
       sfxVictory();
-      advanceMap();
+      advanceMap_v2();
     });
   });
 }
@@ -2583,7 +2583,7 @@ function startFrogDistraction() {
 
 function startCombat_v2(enemyId, isElite = false) {
   const def = ENEMIES[enemyId];
-  if (!def) { advanceMap(); return; }
+  if (!def) { advanceMap_v2(); return; }
 
   const floorMult = 1 + (G.floor - 1) * 0.15 + (G.endlessMode ? G.endlessFloor * 0.08 : 0);
   const eliteMult = isElite ? 1.5 : 1.0;
