@@ -698,64 +698,10 @@ function renderCombat() {
 }
 
 function startNextWord() {
-  if (!G.enemy) return;
-
-  const e = G.enemy;
-  G.wordFadeProgress = 0;
-  G.typedSoFar = '';
-
-  // Handle swarm mechanic
-  if (e.mechanic === 'swarm' && G.swarmTargets.length === 0) {
-    const count = 4 + Math.floor(Math.random() * 3);
-    G.swarmTargets = Array.from({length: count}, () => getWordForEnemy('bee', G.floor));
-    G.swarmCurrentIndex = 0;
+  if (typeof startNextWord_v2 === 'function') {
+    return startNextWord_v2();
   }
-
-  let word;
-  if (e.mechanic === 'swarm') {
-    word = G.swarmTargets[G.swarmCurrentIndex];
-  } else if (e.mechanic === 'longwords' || e.id === 'troll') {
-    word = pick(WORDS.hard);
-  } else {
-    word = getWordForEnemy(e.id, G.floor);
-  }
-
-  // Spider random timer shock
-  let timerMult = e.timerMult;
-  if (e.mechanic === 'random' && Math.random() < 0.25) timerMult *= 0.5;
-
-  // Werewolf enrage: faster as HP drops
-  if (e.mechanic === 'enrage') {
-    const hpFrac = G.enemyHp / G.enemyMaxHp;
-    timerMult = Math.max(0.5, timerMult - (1 - hpFrac) * 0.4);
-  }
-
-  // Ice elemental slow-then-fast
-  if (e.mechanic === 'slowtime') {
-    timerMult = 1.4; // starts slow, we'll vary it
-  }
-
-  // Endless difficulty scaling
-  const endlessScale = G.endlessMode ? Math.max(0.6, 1 - G.endlessFloor * 0.02) : 1;
-
-  const baseTime = 1.2 + word.length * 0.28;
-  const time = (baseTime * timerMult + (G.timerBonus || 0)) * (G.timerSpeedMult || 1) * endlessScale;
-  G.currentWord = word;
-  G.wordTimeMax = Math.max(0.8, time);
-  G.wordTimeLeft = G.wordTimeMax;
-  G.wordActive = true;
-  G.typedSoFar = '';
-
-  updateWordDisplay();
-  updateTimerDisplay();
-
-  // Clear input
-  const input = document.getElementById('ctd-input');
-  if (input) { input.value = ''; input.focus(); }
-
-  // Start timer countdown
-  clearTimers();
-  _timerInterval = setInterval(timerTick, 100);
+  // Fallback shouldn't be reached in the final file, but just in case
 }
 
 function timerTick() {
@@ -2606,7 +2552,11 @@ function renderCombat_v2() {
 
 function dispatchRenderCombat() {
   injectStyles();
-  renderCombat_v2();
+  if (typeof renderCombat_final === 'function') {
+    renderCombat_final();
+  } else {
+    renderCombat_v2();
+  }
 }
 
 // ============================================================
