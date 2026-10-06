@@ -159,7 +159,7 @@ const BOSSES = [
 // ============================================================
 const PASSIVES = [
   { id:'extra_breath',   name:'Extra Breath',    icon:'⌛', desc:'+0.6s per word timer',        rarity:'common',    effect:(s)=>{ s.timerBonus=(s.timerBonus||0)+0.6; }},
-  { id:'slow_time',      name:'Slow Time',        icon:'🐢', desc:'Timer drains 12% slower',     rarity:'common',    effect:(s)=>{ s.timerSpeedMult=(s.timerSpeedMult||1)*0.88; }},
+  { id:'slow_time',      name:'Slow Time',        icon:'🐢', desc:'Timer drains 12% slower',     rarity:'common',    effect:(s)=>{ s.timerSpeedMult=(s.timerSpeedMult||1)*1.14; }},
   { id:'quick_fingers',  name:'Quick Fingers',    icon:'⚡', desc:'+0.2s on each successful word',rarity:'uncommon',  effect:(s)=>{ s.onHitTimeBonus=(s.onHitTimeBonus||0)+0.2; }},
   { id:'momentum',       name:'Momentum',         icon:'🔥', desc:'Every 5 combo: +12% dmg',     rarity:'uncommon',  effect:(s)=>{ s.momentumStacks=(s.momentumStacks||0)+1; }},
   { id:'precision',      name:'Precision',        icon:'🎯', desc:'Perfect words deal +25% dmg', rarity:'uncommon',  effect:(s)=>{ s.perfectBonus=(s.perfectBonus||0)+0.25; }},
@@ -2602,6 +2602,7 @@ function startCombat_v2(enemyId, isElite = false) {
   G.swarmCurrentIndex = 0;
   G.consecutiveWords = 0;
   G.boss = null;
+  G.battleTimeBonus = 0;
 
   G.screen = 'combat';
   injectStyles();
@@ -2642,6 +2643,7 @@ function startBoss_v2() {
   G.bombRunUsed = false;
   G.swarmTargets = [];
   G.swarmCurrentIndex = 0;
+  G.battleTimeBonus = 0;
 
   renderBossIntro_v2(boss);
 }
@@ -3071,7 +3073,10 @@ function onWordCompleted_final(perfect) {
     sfxAttack();
   }
 
-  if (G.onHitTimeBonus) G.wordTimeLeft = Math.min(G.wordTimeMax, G.wordTimeLeft + G.onHitTimeBonus);
+  if (G.onHitTimeBonus) {
+    G.battleTimeBonus = (G.battleTimeBonus || 0) + G.onHitTimeBonus;
+  }
+  
   if (G.lifestealPct) {
     const heal = Math.max(1, Math.round(dmg * G.lifestealPct));
     G.hp = Math.min(G.maxHp, G.hp + heal);
@@ -3365,7 +3370,13 @@ function startNextWord_v2() {
   const endlessScale = G.endlessMode ? Math.max(0.55, 1 - (G.endlessFloor||0) * 0.025) : 1;
 
   const baseTime = 1.2 + word.length * 0.28;
-  const time = (baseTime * timerMult + (G.timerBonus || 0)) * (G.timerSpeedMult || 1) * endlessScale;
+  
+  let comboBonus = 0;
+  if (G.comboTimerBonus && G.combo >= 10) {
+    comboBonus = 0.15 * G.comboTimerBonus;
+  }
+  
+  const time = (baseTime * timerMult + (G.timerBonus || 0) + (G.battleTimeBonus || 0)) * (G.timerSpeedMult || 1) * (1 + comboBonus) * endlessScale;
   G.currentWord = word;
   G.wordTimeMax = Math.max(0.8, time);
   G.wordTimeLeft = G.wordTimeMax;
