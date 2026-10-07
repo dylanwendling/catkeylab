@@ -868,7 +868,7 @@ function updateWordDisplay() {
     if (e && e.mechanic === 'drain')         sub = '👻 Soul Drain: Passively losing 1 HP over time!';
     if (e && (e.mechanic === 'burst' || e.mechanic === 'elite_burst')) sub = '💥 Burst: Enemy can randomly attack early!';
     // Elite mechanics
-    if (e && e.mechanic === 'elite_flicker') sub = '👑 Flicker: The word randomly flashes to a FAKE word!';
+    if (e && e.mechanic === 'elite_flicker') sub = '👑 Flicker: The screen violently flickers to distract you!';
     if (e && e.mechanic === 'elite_swoop')   sub = '🦇 Swoop: The word dives off screen and back!';
     if (e && e.mechanic === 'elite_scramble') sub = '🗿 Scramble: Typos shuffle the remaining letters!';
     if (e && e.mechanic === 'elite_rewind')  sub = '🧙 Rewind: Typos ERASE a correctly typed letter!';
@@ -3445,6 +3445,19 @@ function onWordCompleted_final(perfect) {
         G.swarmCurrentIndex++;
       }
       
+      for (let i = 0; i < G.swarmTargets.length; i++) {
+        if (i < G.swarmCurrentIndex) {
+          const el = document.getElementById(`ctd-swarm-enemy-${i}`);
+          if (el) el.style.display = 'none';
+        } else if (i === G.swarmCurrentIndex) {
+          const hpEl2 = document.getElementById(`ctd-swarm-hp-${i}`);
+          if (hpEl2) {
+             const pct = Math.max(0, Math.round((G.swarmTargets[i].hp / G.swarmTargets[i].maxHp) * 100));
+             hpEl2.style.width = pct + '%';
+          }
+        }
+      }
+      
       if (G.swarmCurrentIndex >= G.swarmTargets.length) {
         G.swarmTargets = [];
         G.swarmCurrentIndex = 0;
@@ -4685,15 +4698,14 @@ function renderCombat_final() {
     let beesHTML = '';
     for (let i = 0; i < totalBees; i++) {
       const isDead = i < G.swarmCurrentIndex;
-      const opacity = isDead ? 0.15 : 1;
-      const filter = isDead ? 'grayscale(1) blur(2px)' : 'none';
+      const display = isDead ? 'none' : 'flex';
       const hpPctLocal = isDead ? 0 : (i === G.swarmCurrentIndex ? Math.max(0, Math.round((G.swarmTargets[i].hp / G.swarmTargets[i].maxHp) * 100)) : 100);
       
       beesHTML += `
-        <div class="ctd-mini-enemy" style="opacity:${opacity}; filter:${filter}; display:flex; flex-direction:column; align-items:center; transition:all 0.3s; margin: 0 8px;">
+        <div id="ctd-swarm-enemy-${i}" class="ctd-mini-enemy" style="display:${display}; flex-direction:column; align-items:center; transition:all 0.3s; margin: 0 8px;">
           <div style="font-size:3.5rem; margin-bottom:8px;">${swarmEmoji}</div>
           <div style="width:45px; height:8px; background:#374151; border-radius:4px; overflow:hidden; border:1px solid #1f2937; box-shadow:0 0 5px rgba(0,0,0,0.5);">
-            <div style="width:${hpPctLocal}%; height:100%; background:#ef4444; transition:width 0.2s;"></div>
+            <div id="ctd-swarm-hp-${i}" style="width:${hpPctLocal}%; height:100%; background:#ef4444; transition:width 0.2s;"></div>
           </div>
         </div>
       `;
