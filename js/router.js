@@ -33,7 +33,7 @@ import { renderCardMemoryGame, cleanupCardMemoryGame } from './tools/cardMemoryG
 import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGolfGame.js';
 import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingGame.js';
 import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlicerGame.js';
-import { renderCatTypingDungeon_MAIN as renderCatTypingDungeon, cleanupCatTypingDungeon } from './tools/catTypingDungeon.js?v=31';
+import { renderCatTypingDungeon_MAIN as renderCatTypingDungeon, cleanupCatTypingDungeon } from './tools/catTypingDungeon.js?v=32';
 
 let currentCleanup = null;
 

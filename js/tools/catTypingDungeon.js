@@ -857,7 +857,7 @@ function updateWordDisplay() {
     if (e && e.mechanic === 'elite_swoop')   sub = '🦇 Swoop: The word dives off screen and back!';
     if (e && e.mechanic === 'elite_scramble') sub = '🗿 Scramble: Typos shuffle the remaining letters!';
     if (e && e.mechanic === 'elite_rewind')  sub = '🧙 Rewind: Typos ERASE a correctly typed letter!';
-    if (e && e.mechanic === 'elite_scorch')  sub = '🐲 Scorch: Letters show as UPPERCASE (type lowercase)!';
+    if (e && e.mechanic === 'elite_scorch')  sub = '🐲 Scorch: Some letters burn UPPERCASE (requires Shift)!';
     if (e && e.mechanic === 'elite_summon')  sub = '🐀 Minions: Summons a wave of tiny fast words!';
     if (e && e.mechanic === 'summon')        sub = '👑 Minions: The boss summons tiny fast words!';
     if (e && e.mechanic === 'long')          sub = '🐉 Incantations: Only the longest words appear!';
@@ -3667,7 +3667,11 @@ function onTypingInput_final(e) {
   if (!G || !G.wordActive) return;
   G.timerStarted = true;
   const input = e.target;
-  const val = input.value.toLowerCase().replace(/[^a-z]/g, '');
+  let rawVal = input.value;
+  if (!(G.enemy && G.enemy.mechanic === 'elite_scorch')) {
+    rawVal = rawVal.toLowerCase();
+  }
+  const val = rawVal.replace(/[^a-zA-Z]/g, '');
   const word = G.currentWord;
   const trimmed = val.slice(0, word.length);
   input.value = trimmed;
@@ -4229,8 +4233,6 @@ function timerTick_v2() {
       emojiEl.style.fontSize = `4.5rem`;
     }
     if (remainEl && Math.random() < 0.12) {
-      const curr = remainEl.textContent;
-      remainEl.textContent = curr.split('').map(c => Math.random() < 0.6 ? c.toUpperCase() : c).join('');
       remainEl.style.color = '#f97316';
       remainEl.style.textShadow = '0 0 8px #f97316, 0 0 20px #ef4444';
       setTimeout(() => { if (remainEl) { remainEl.style.color = ''; remainEl.style.textShadow = ''; } }, 180);
@@ -4523,6 +4525,11 @@ function startNextWord_v2() {
     word = pick(WORDS.veryhard);
   } else {
     word = getWordForEnemy(e.id, G.floor);
+  }
+
+  if (e.mechanic === 'elite_scorch') {
+    // Enforce case sensitivity by capitalizing random letters in the real word
+    word = word.split('').map(c => Math.random() < 0.35 ? c.toUpperCase() : c).join('');
   }
 
   let timerMult = e.timerMult || 1.0;
