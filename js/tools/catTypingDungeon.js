@@ -136,7 +136,7 @@ const BOSSES = [
     // OVERLORD: mirror decoys, then full word scramble, then word written backwards
     id:'overlord', name:'Dungeon Overlord', emoji:'🧙', maxHp:200, gold:[58,85],
     phases:[
-      { hp:200, label:'Mirror images! Pick the real word!',  timerMult:0.95, mechanic:'boss_mirror',  msg:'🧙 WHICH WORD IS REAL?!' },
+      { hp:200, label:'Fading Memory! The word vanishes quickly!',  timerMult:0.95, mechanic:'boss_mirror',  msg:'🌫️ FADING FAST!' },
       { hp:120, label:'Illusion! The word is scrambled!',    timerMult:0.85, mechanic:'boss_anagram', msg:'✨ WORDS REARRANGED BY MAGIC!' },
       { hp:50,  label:'Dark magic reverses everything!',     timerMult:0.75, mechanic:'elite_rewind', msg:'🖤 YOUR PROGRESS IS REVERSED!' },
     ],
@@ -867,7 +867,7 @@ function updateWordDisplay() {
     if (e && e.mechanic === 'boss_scatter')  sub = '🔥 Scatter: Letters jump to random positions!';
     if (e && e.mechanic === 'boss_chaos')    sub = '💀 CHAOS: ALL effects at once!';
     if (e && e.mechanic === 'boss_ratsteal') sub = '🐀 Steal: Rats nibble a typed letter every few seconds!';
-    if (e && e.mechanic === 'boss_mirror')   sub = '🧙 Mirror: Two fake words hide alongside the real one!';
+    if (e && e.mechanic === 'boss_mirror')   sub = '🌫️ Fading Memory: The word vanishes very quickly!';
     if (e && e.mechanic === 'boss_anagram')  sub = '🧙 Anagram: The word is scrambled! Figure it out!';
     if (e && e.mechanic === 'boss_haunt')    sub = '👻 Haunt: The word floats around the screen!';
     if (e && e.mechanic === 'boss_possess')  sub = '🩸 Possess: Word moves AND your letters vanish!';
@@ -4142,11 +4142,10 @@ function timerTick_v2() {
     if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(245,158,11,0.4)`, 30);
     if (Math.random() < 0.08) {
       if (remainEl && typedEl) {
-        const fakeWord = pick(WORDS.medium);
         const orig = remainEl.textContent;
         const origTyped = typedEl.textContent;
-        remainEl.textContent = fakeWord;
-        typedEl.textContent = '??';
+        remainEl.textContent = '*'.repeat(orig.length);
+        typedEl.textContent = '*'.repeat(origTyped.length);
         remainEl.style.color = '#ef4444';
         remainEl.style.textShadow = '0 0 8px #ef4444';
         if (wArea) { wArea.style.borderColor = '#ef4444'; wArea.style.boxShadow = '0 0 20px rgba(239,68,68,0.5)'; }
@@ -4359,7 +4358,7 @@ function timerTick_v2() {
     if (Math.random() < 0.1) spawnParticle(floatLayer, pick(['🐀','👑','🦷']), Math.random()*80+5, Math.random()*85+5, '#f59e0b', '0.9rem', 0.9);
   }
 
-  // OVERLORD BOSS PHASE 1: boss_mirror - mirror doubles, phantom copies
+  // OVERLORD BOSS PHASE 1: boss_mirror - fast fade out
   if (e && e.mechanic === 'boss_mirror') {
     const mirrorT = Math.abs(Math.sin(t * 1.2));
     if (emojiEl) {
@@ -4370,9 +4369,13 @@ function timerTick_v2() {
       wArea.style.boxShadow = `${Math.sin(t)*15}px 0 ${20+mirrorT*20}px rgba(168,85,247,0.4), ${-Math.sin(t)*15}px 0 ${20+mirrorT*20}px rgba(99,102,241,0.4)`;
       wArea.style.borderColor = `rgba(168,85,247,${0.4+mirrorT*0.6})`;
     }
+    if (wDisplay) {
+      const timePct = G.wordTimeMax ? G.wordTimeLeft / G.wordTimeMax : 1;
+      // Fades out entirely when timer is at 60%
+      wDisplay.style.opacity = Math.max(0, (timePct - 0.6) * 2.5);
+    }
     if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(168,85,247,${0.2+mirrorT*0.4})`, 30);
-    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['🪞','✦','👥','◈']), Math.random()*70+5, Math.random()*80+10, '#a855f7', '1.1rem', 1.1);
-    if (mirrorT > 0.85 && Math.random() < 0.1) flashBackground(wrapper, 'rgba(168,85,247,0.1)', 150);
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['🌫️','✦','👁️','◈']), Math.random()*70+5, Math.random()*80+10, '#a855f7', '1.1rem', 1.1);
   }
 
   // OVERLORD BOSS PHASE 2: boss_anagram - words swirl and scramble in place
@@ -4597,23 +4600,9 @@ function startNextWord_v2() {
     }
   }
 
-  // boss_mirror: show 2 fake decoy words around the real word
+  // boss_mirror: removed mirror words, now uses fast fade mechanic
   const mirrorBar = document.getElementById('ctd-mirror-bar');
-  if (mirrorBar) mirrorBar.remove(); // clear old
-  if (e.mechanic === 'boss_mirror') {
-    const fake1 = pick(WORDS.medium);
-    const fake2 = pick(WORDS.medium);
-    const wArea = document.getElementById('ctd-word-area');
-    if (wArea) {
-      const bar = document.createElement('div');
-      bar.id = 'ctd-mirror-bar';
-      bar.style.cssText = 'display:flex; gap:1rem; justify-content:center; margin-bottom:0.4rem; opacity:0.55;';
-      bar.innerHTML = `<span style="color:#a855f7;font-size:1.1rem;text-decoration:line-through">${fake1}</span>
-                       <span style="color:#a855f7;font-size:1.1rem;text-decoration:line-through">${fake2}</span>`;
-      wArea.insertBefore(bar, wArea.querySelector('.ctd-word-display'));
-      floatText('\ud83e\uddd9 Mirror Images!', '#a855f7', 'top');
-    }
-  }
+  if (mirrorBar) mirrorBar.remove(); // clear old just in case
 
   const input = document.getElementById('ctd-input');
   if (input) { input.value = ''; input.focus(); }
