@@ -192,7 +192,7 @@ const PASSIVES = [
   { id:'sharpened',      name:'Sharpened Claws',     icon:'⚔️', desc:'+20% base damage',         rarity:'uncommon',  effect:(s)=>{ s.dmgMult=(s.dmgMult||1)*1.20; }},
   { id:'cursed_paw',     name:'Cursed Paw',          icon:'🖤', desc:'+35% dmg, -8 max HP',      rarity:'epic',      effect:(s)=>{ s.dmgMult=(s.dmgMult||1)*1.35; s.maxHp=Math.max(10,s.maxHp-8); s.hp=Math.min(s.maxHp,s.hp); }},
   { id:'mimic_ward',     name:'Mimic Ward',           icon:'🔮', desc:'Mimics never appear',      rarity:'rare',      effect:(s)=>{ s.mimicWard=true; }},
-  { id:'combo_timer',    name:'Combo Rush',           icon:'🏃', desc:'10+ combo: timer +15% faster',rarity:'epic',  effect:(s)=>{ s.comboTimerBonus=(s.comboTimerBonus||0)+1; }},
+  { id:'combo_timer',    name:'Combo Rush',           icon:'🏃', desc:'10+ combo: timer 15% slower',rarity:'epic',  effect:(s)=>{ s.comboTimerBonus=(s.comboTimerBonus||0)+1; }},
   { id:'armor_break',    name:'Armor Breaker',        icon:'🔨', desc:'Armor breaks 2x faster',   rarity:'uncommon',  effect:(s)=>{ s.armorBreak=(s.armorBreak||1)*2; }},
   { id:'final_push',     name:'Final Push',           icon:'🌟', desc:'Last 3 nodes: +40% dmg',   rarity:'epic',      effect:(s)=>{ s.finalPush=(s.finalPush||0)+1; }},
   { id:'shop_cat',       name:'Shrewd Haggler',       icon:'🛒', desc:'Shop prices -25%',         rarity:'rare',      effect:(s)=>{ s.shopDiscount=(s.shopDiscount||0)+0.25; }},
