@@ -4142,18 +4142,18 @@ function timerTick_v2() {
     if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(245,158,11,0.4)`, 30);
     if (Math.random() < 0.08) {
       if (remainEl && typedEl) {
-        const orig = remainEl.textContent;
-        const origTyped = typedEl.textContent;
-        remainEl.textContent = '*'.repeat(orig.length);
-        typedEl.textContent = '*'.repeat(origTyped.length);
+        const remainLen = G.currentWord.length - G.typedSoFar.length;
+        const typedLen = G.typedSoFar.length;
+        remainEl.textContent = '*'.repeat(Math.max(0, remainLen));
+        typedEl.textContent = '*'.repeat(typedLen);
         remainEl.style.color = '#ef4444';
         remainEl.style.textShadow = '0 0 8px #ef4444';
         if (wArea) { wArea.style.borderColor = '#ef4444'; wArea.style.boxShadow = '0 0 20px rgba(239,68,68,0.5)'; }
         flashBackground(wrapper, 'rgba(239,68,68,0.12)', 350);
         setTimeout(() => {
-          if (remainEl) { remainEl.textContent = orig; remainEl.style.color = ''; remainEl.style.textShadow = ''; }
-          if (typedEl) typedEl.textContent = origTyped;
+          if (remainEl) { remainEl.style.color = ''; remainEl.style.textShadow = ''; }
           if (wArea) { wArea.style.borderColor = ''; wArea.style.boxShadow = ''; }
+          updateWordDisplay();
         }, 350 + Math.random() * 300);
       }
     }
