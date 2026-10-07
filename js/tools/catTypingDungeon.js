@@ -2825,6 +2825,7 @@ function startCombat_v2(enemyId, isElite = false) {
   G.mistakeThisBattle = false;
   G.swarmTargets = [];
   G.swarmCurrentIndex = 0;
+  G.swarmSpawned = false;
   G.consecutiveWords = 0;
   G.boss = null;
   G.battleTimeBonus = 0;
@@ -2873,6 +2874,7 @@ function startBoss_v2() {
   G.bombRunUsed = false;
   G.swarmTargets = [];
   G.swarmCurrentIndex = 0;
+  G.swarmSpawned = false;
   G.battleTimeBonus = 0;
 
   renderBossIntro_v2(boss);
@@ -3338,6 +3340,7 @@ function checkBossPhase_v2() {
       G.bossPhase = phases[i];
       G.enemy.mechanic = phases[i].mechanic;
       G.enemyArmor = phases[i].armor || 0;
+      G.swarmSpawned = false;
 
       clearTimers();
       G.wordActive = false;
@@ -3408,19 +3411,27 @@ function onWordCompleted_final(perfect) {
   const e = G.enemy;
   if (!e) return;
 
-  if (e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') {
-    G.swarmCurrentIndex++;
+  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length > 0) {
     if (G.swarmCurrentIndex < G.swarmTargets.length) {
+      const target = G.swarmTargets[G.swarmCurrentIndex];
+      target.hp -= dmg;
       showAttackFeedback(dmg, isCrit, perfect, false);
-      const interrupted = dealDamageToCurrentEnemy_v2(dmg);
-      updateCombatHUD();
-      if (!interrupted) {
+      
+      if (target.hp <= 0) {
+        G.swarmCurrentIndex++;
+      }
+      
+      if (G.swarmCurrentIndex >= G.swarmTargets.length) {
+        G.swarmTargets = [];
+        G.swarmCurrentIndex = 0;
+        floatText('HOARD CLEARED!', '#3b82f6', 'big');
+        updateCombatHUD();
+        setTimeout(() => { if (G && (G.screen === 'combat' || G.screen === 'boss')) startNextWord(); }, 180);
+      } else {
+        updateCombatHUD();
         setTimeout(() => { if (G && (G.screen === 'combat' || G.screen === 'boss')) startNextWord(); }, 180);
       }
       return;
-    } else {
-      G.swarmTargets = [];
-      G.swarmCurrentIndex = 0;
     }
   }
 
@@ -4504,22 +4515,24 @@ function startNextWord_v2() {
   G.wordFadeProgress = 0;
   G.typedSoFar = '';
 
-  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length === 0) {
+  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && !G.swarmSpawned) {
     const count = 4 + Math.floor(Math.random() * 3);
-    G.swarmTargets = Array.from({length: count}, () => getWordForEnemy('bee', G.floor));
+    const minionHp = Math.max(1, Math.round(G.enemyMaxHp / count));
+    G.swarmTargets = Array.from({length: count}, () => ({ hp: minionHp, maxHp: minionHp }));
     G.swarmCurrentIndex = 0;
+    G.swarmSpawned = true;
     // Re-render swarm display
     dispatchRenderCombat();
   }
 
   let word;
-  if (e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') {
+  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length > 0) {
     if (G.swarmCurrentIndex >= G.swarmTargets.length) {
       G.swarmTargets = [];
       G.swarmCurrentIndex = 0;
       word = getWordForEnemy(e.id, G.floor);
     } else {
-      word = G.swarmTargets[G.swarmCurrentIndex];
+      word = getWordForEnemy('bee', G.floor);
     }
   } else if (e.mechanic === 'trickster') {
     word = pick(WORDS.hard);
@@ -4635,25 +4648,25 @@ function renderCombat_final() {
   const bossPhaseBadge = (G.boss && G.bossPhase) ? `<div class="ctd-elite-badge" style="background:rgba(239,68,68,0.2);border-color:#ef4444;color:#f87171;">${G.bossPhase.label}</div>` : '';
 
   let swarmHTML = '';
-  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length > 0) {
-    swarmHTML = `<div class="ctd-swarm-targets">
-      ${G.swarmTargets.map((w,i) => `<span class="ctd-swarm-word ${i < G.swarmCurrentIndex ? 'done' : i === G.swarmCurrentIndex ? 'active' : ''}">${w}</span>`).join('')}
-    </div>`;
-  }
 
   let enemyAreaHTML = '';
   if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length > 0) {
     const totalBees = G.swarmTargets.length;
+    let swarmEmoji = e.emoji;
+    let swarmName = e.name;
+    if (e.id === 'ratking') { swarmEmoji = '🐀'; swarmName = 'Rat'; }
+    else if (e.id === 'bee') { swarmEmoji = '🐝'; swarmName = 'Bee'; }
+    
     let beesHTML = '';
     for (let i = 0; i < totalBees; i++) {
       const isDead = i < G.swarmCurrentIndex;
       const opacity = isDead ? 0.15 : 1;
       const filter = isDead ? 'grayscale(1) blur(2px)' : 'none';
-      const hpPctLocal = isDead ? 0 : 100;
+      const hpPctLocal = isDead ? 0 : (i === G.swarmCurrentIndex ? Math.max(0, Math.round((G.swarmTargets[i].hp / G.swarmTargets[i].maxHp) * 100)) : 100);
       
       beesHTML += `
         <div class="ctd-mini-enemy" style="opacity:${opacity}; filter:${filter}; display:flex; flex-direction:column; align-items:center; transition:all 0.3s; margin: 0 8px;">
-          <div style="font-size:3.5rem; margin-bottom:8px;">${e.emoji}</div>
+          <div style="font-size:3.5rem; margin-bottom:8px;">${swarmEmoji}</div>
           <div style="width:45px; height:8px; background:#374151; border-radius:4px; overflow:hidden; border:1px solid #1f2937; box-shadow:0 0 5px rgba(0,0,0,0.5);">
             <div style="width:${hpPctLocal}%; height:100%; background:#ef4444; transition:width 0.2s;"></div>
           </div>
@@ -4664,7 +4677,7 @@ function renderCombat_final() {
     enemyAreaHTML = `
       <div class="ctd-enemy-area" style="background:transparent; box-shadow:none; border:none; padding:1rem 0;">
         ${eliteBadge}${bossPhaseBadge}
-        <div class="ctd-enemy-name" style="margin-bottom:1.5rem; font-size:1.8rem;">${e.name} Swarm</div>
+        <div class="ctd-enemy-name" style="margin-bottom:1.5rem; font-size:1.8rem;">${swarmName} Swarm</div>
         <div id="ctd-enemy-emoji" style="display:flex; justify-content:center; flex-wrap:wrap;">
           ${beesHTML}
         </div>
