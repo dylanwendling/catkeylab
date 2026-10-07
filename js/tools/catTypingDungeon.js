@@ -142,8 +142,7 @@ const BOSSES = [
     id:'ratking', name:'Rat King', emoji:'👑🐀', maxHp:180, gold:[55,80],
     phases:[
       { hp:180, label:'Rats nibble at your progress - they steal letters!', timerMult:0.9, mechanic:'boss_ratsteal', msg:'🐀 RATS ARE NIBBLING YOUR LETTERS!' },
-      { hp:100, label:'A flood of rats! Type 6 words in a row!',             timerMult:0.8, mechanic:'swarm',       msg:'🐀🐀 RAT FLOOD!' },
-      { hp:35,  label:'The Rat King panics - he flickers the word madly!',  timerMult:0.65, mechanic:'elite_flicker', msg:'👑 THE RAT KING IS DESPERATE!' },
+      { hp:100, label:'A flood of rats! Type 6 words in a row!',             timerMult:0.8, mechanic:'swarm',       msg:'🐀🐀 RAT FLOOD!' }
     ],
     atk:15,
   },
@@ -3501,6 +3500,7 @@ function onWordCompleted_final(perfect) {
         } else {
           dmg = G.enemyHp;
         }
+        G.hideNextFeedback = true;
       } else {
         updateCombatHUD();
         setTimeout(() => { if (G && (G.screen === 'combat' || G.screen === 'boss')) startNextWord(); }, 180);
@@ -3519,7 +3519,11 @@ function onWordCompleted_final(perfect) {
     return;
   }
 
-  showAttackFeedback(dmg, isCrit, perfect, true);
+  if (!G.hideNextFeedback) {
+    showAttackFeedback(dmg, isCrit, perfect, true);
+  }
+  G.hideNextFeedback = false;
+  
   const interrupted = dealDamageToCurrentEnemy_v2(dmg);
   updateCombatHUD();
   if (!interrupted) scheduleNextWord_v2();
