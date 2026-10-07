@@ -220,16 +220,16 @@ function drawPassives(count = 3, exclude = []) {
 // STARTING CAT CLASSES
 // ============================================================
 const CAT_CLASSES = [
-  { id:'speed',    name:'Speed Cat',    emoji:'⚡🐱', desc:'+10% word timer, -8% damage', color:'#f59e0b',
-    apply: (s) => { s.timerBonus=(s.timerBonus||0)+0.5; s.dmgMult=(s.dmgMult||1)*0.92; } },
-  { id:'warrior',  name:'Warrior Cat',  emoji:'⚔️🐱', desc:'+20% damage, -0.4s timer',   color:'#ef4444',
-    apply: (s) => { s.dmgMult=(s.dmgMult||1)*1.20; s.timerBonus=(s.timerBonus||0)-0.4; } },
-  { id:'lucky',    name:'Lucky Cat',    emoji:'🍀🐱', desc:'Better shop & chest rolls',   color:'#10b981',
-    apply: (s) => { s.luckyRolls=true; } },
-  { id:'typist',   name:'Typist Cat',   emoji:'⌨️🐱', desc:'Start with 5 combo',         color:'#a855f7',
-    apply: (s) => { s.startingCombo=(s.startingCombo||0)+5; } },
-  { id:'tank',     name:'Tank Cat',     emoji:'🛡️🐱', desc:'+30 max HP, -10% dmg',       color:'#3b82f6',
-    apply: (s) => { s.maxHp+=30; s.hp=Math.min(s.maxHp,s.hp+30); s.dmgMult=(s.dmgMult||1)*0.90; } },
+  { id:'speed',    name:'Flash Paws',    emoji:'⚡🐱', role:'SPEEDRUNNER', desc:'+1.5s timer bonus, perfects give +0.1s. -15% damage.', color:'#f59e0b',
+    apply: (s) => { s.timerBonus=(s.timerBonus||0)+1.5; s.onHitTimeBonus=(s.onHitTimeBonus||0)+0.1; s.dmgMult=(s.dmgMult||1)*0.85; } },
+  { id:'warrior',  name:'Battle Claw',   emoji:'⚔️🐱', role:'GLASS CANNON', desc:'+40% damage, +5% crit chance. -0.4s timer.',   color:'#ef4444',
+    apply: (s) => { s.dmgMult=(s.dmgMult||1)*1.40; s.critChance=(s.critChance||0.08)+0.05; s.timerBonus=(s.timerBonus||0)-0.4; } },
+  { id:'lucky',    name:'Fortune Paws',  emoji:'🍀🐱', role:'LOOT GOBLIN', desc:'+25% gold, +50 starting gold, 1 free passive. -40 max HP.',   color:'#10b981',
+    apply: (s) => { s.goldMult=(s.goldMult||1)*1.25; s.gold=50; s.passives.push(drawPassives(1)[0]); s.maxHp-=40; s.hp=Math.min(s.maxHp,s.hp); } },
+  { id:'typist',   name:'The Perfectionist', emoji:'⌨️🐱', role:'COMBO GOD', desc:'Starts with 10 combo & Momentum passive. Perfects deal +15% dmg. -1.0s timer.',         color:'#a855f7',
+    apply: (s) => { s.startingCombo=10; s.perfectBonus=(s.perfectBonus||0)+0.15; s.passives.push(PASSIVES.find(p=>p.id==='momentum')); s.timerBonus=(s.timerBonus||0)-1.0; } },
+  { id:'tank',     name:'Iron Fur',      emoji:'🛡️🐱', role:'JUGGERNAUT', desc:'+75 max HP, built-in Second Chance. -15% damage.',       color:'#3b82f6',
+    apply: (s) => { s.maxHp+=75; s.hp=Math.min(s.maxHp,s.hp+75); s.dmgMult=(s.dmgMult||1)*0.85; s.secondChance=(s.secondChance||0)+1; } },
 ];
 
 // ============================================================
@@ -475,6 +475,7 @@ function renderCatSelect() {
             <button class="ctd-cat-card" data-cat="${cls.id}" style="--cat-color:${cls.color}">
               <div class="ctd-cat-emoji">${cls.emoji}</div>
               <div class="ctd-cat-name">${cls.name}</div>
+              <div class="ctd-cat-role" style="font-size:0.75rem; font-weight:800; letter-spacing:1px; color:${cls.color}; opacity:0.9; margin-bottom:0.5rem;">${cls.role}</div>
               <div class="ctd-cat-desc">${cls.desc}</div>
             </button>
           `).join('')}
