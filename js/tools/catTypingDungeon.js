@@ -3216,7 +3216,7 @@ function renderCatSelect_v2() {
           </div>
         </div>
         <div class="ctd-dev-menu" style="margin-top:30px; padding-top:20px; border-top:1px solid #374151; text-align:center;">
-          <select id="ctd-dev-enemy-select" class="ctd-btn-secondary" style="margin-right:10px;">
+          <select id="ctd-dev-enemy-select" class="ctd-btn-secondary" style="margin-right:10px; background-color: #111827;">
             <option value="">-- Dev: Test Fight --</option>
             <optgroup label="Normal / Elites">
               ${Object.keys(ENEMIES).map(id => `<option value="${id}">${ENEMIES[id].name}</option>`).join('')}
@@ -3496,13 +3496,16 @@ function onWordCompleted_final(perfect) {
         G.swarmTargets = [];
         G.swarmCurrentIndex = 0;
         floatText('HOARD CLEARED!', '#3b82f6', 'big');
-        updateCombatHUD();
-        setTimeout(() => { if (G && (G.screen === 'combat' || G.screen === 'boss')) startNextWord(); }, 180);
+        if (G.screen === 'boss') {
+          dmg = G.bossPhase.hp || G.bossHp;
+        } else {
+          dmg = G.enemyHp;
+        }
       } else {
         updateCombatHUD();
         setTimeout(() => { if (G && (G.screen === 'combat' || G.screen === 'boss')) startNextWord(); }, 180);
+        return;
       }
-      return;
     }
   }
 
