@@ -267,17 +267,20 @@ function generateMap(totalNodes = 10) {
   }
   
   if (earlyRestNode) {
-    let swapNode = null;
-    for (let r = totalNodes - 1; r >= Math.floor(totalNodes / 2); r--) {
+    // Collect ALL eligible battle nodes in the back half of the map,
+    // then pick one at random so the rest node doesn't always land in
+    // the same position (previously always column 0 of the last row).
+    const candidates = [];
+    for (let r = Math.floor(totalNodes / 2); r < totalNodes; r++) {
+      if (!rows[r]) continue;
       for (let c = 0; c < 3; c++) {
-        if (rows[r] && rows[r][c] && rows[r][c].type === 'battle') {
-          swapNode = rows[r][c];
-          break;
+        if (rows[r][c] && rows[r][c].type === 'battle') {
+          candidates.push(rows[r][c]);
         }
       }
-      if (swapNode) break;
     }
-    if (swapNode) {
+    if (candidates.length > 0) {
+      const swapNode = candidates[Math.floor(Math.random() * candidates.length)];
       earlyRestNode.type = 'battle';
       swapNode.type = 'rest';
     }
@@ -2399,49 +2402,114 @@ function injectStyles() {
 
 /* ANIMATIONS */
 @keyframes ctd-float-up {
-  0%   { opacity: 1; transform: translate(-50%, -50%); }
-  100% { opacity: 0; transform: translate(-50%, -200%); }
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  70%  { opacity: 0.8; }
+  100% { opacity: 0; transform: translate(-50%, -280%) scale(0.7); }
 }
 @keyframes ctd-enemy-hit {
-  0%   { transform: scale(1) translateX(0); }
-  25%  { transform: scale(1.2) translateX(-6px); filter: brightness(2); }
-  75%  { transform: scale(0.9) translateX(6px); }
+  0%   { transform: scale(1) translateX(0); filter: brightness(1); }
+  20%  { transform: scale(1.35) translateX(-8px) rotate(-5deg); filter: brightness(3) saturate(3); }
+  50%  { transform: scale(0.85) translateX(8px) rotate(3deg); filter: brightness(0.8) contrast(2); }
+  80%  { transform: scale(1.1) translateX(-3px); filter: brightness(1.5); }
   100% { transform: scale(1) translateX(0); filter: brightness(1); }
 }
 @keyframes ctd-enemy-defeated {
-  0%   { transform: scale(1); opacity: 1; }
-  50%  { transform: scale(1.4); opacity: 0.5; }
-  100% { transform: scale(0); opacity: 0; }
+  0%   { transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
+  30%  { transform: scale(1.6) rotate(-15deg); opacity: 0.8; filter: brightness(3) saturate(5); }
+  60%  { transform: scale(0.6) rotate(25deg); opacity: 0.4; filter: brightness(0.5); }
+  100% { transform: scale(0) rotate(180deg); opacity: 0; }
 }
 @keyframes ctd-danger-pulse {
-  0%   { opacity: 1; }
-  50%  { opacity: 0.5; }
-  100% { opacity: 1; }
+  0%   { opacity: 1; text-shadow: 0 0 0 transparent; }
+  50%  { opacity: 0.4; text-shadow: 0 0 12px #ef4444; }
+  100% { opacity: 1; text-shadow: 0 0 0 transparent; }
 }
 @keyframes ctd-shake-anim {
-  0%   { transform: rotate(-5deg); }
-  50%  { transform: rotate(5deg); }
-  100% { transform: rotate(-5deg); }
+  0%   { transform: translate(-3px, 1px) rotate(-2deg); }
+  20%  { transform: translate(4px, -2px) rotate(2deg); }
+  40%  { transform: translate(-5px, 2px) rotate(-3deg); }
+  60%  { transform: translate(5px, -1px) rotate(2deg); }
+  80%  { transform: translate(-3px, 1px) rotate(-1deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
 }
 @keyframes ctd-bounce {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-8px); }
+  from { transform: translateY(0) scale(1); }
+  to   { transform: translateY(-10px) scale(1.05); }
 }
 @keyframes ctd-boss-enter {
-  from { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-  to   { transform: scale(1) rotate(0); opacity: 1; }
+  0%   { transform: scale(0) rotate(-20deg) translateY(50px); opacity: 0; filter: brightness(5); }
+  60%  { transform: scale(1.2) rotate(5deg) translateY(-10px); opacity: 1; filter: brightness(2); }
+  80%  { transform: scale(0.9) rotate(-3deg); filter: brightness(1); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; filter: brightness(1); }
 }
 @keyframes ctd-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
 }
 @keyframes ctd-combo-flash {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.25); color: #f97316; }
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.4) rotate(-5deg); color: #f97316; text-shadow: 0 0 15px #f97316; }
+  60%  { transform: scale(1.2) rotate(3deg); }
+  100% { transform: scale(1); }
 }
-.ctd-combo-pulse { animation: ctd-combo-flash 0.3s ease; }
-.ctd-hp-shake { animation: ctd-shake-anim 0.35s ease; }
-.ctd-shake { animation: ctd-shake-anim 0.25s ease; }
+@keyframes ctd-crackle {
+  0%, 100% { filter: brightness(1); }
+  50%  { filter: brightness(2) saturate(3) hue-rotate(30deg); }
+}
+@keyframes ctd-ripple {
+  0%   { transform: translate(-50%,-50%) scale(0); opacity: 1; }
+  100% { transform: translate(-50%,-50%) scale(4); opacity: 0; }
+}
+@keyframes ctd-glitch {
+  0%, 100% { clip-path: none; transform: none; }
+  20%  { clip-path: inset(30% 0 50% 0); transform: translateX(-8px); }
+  40%  { clip-path: inset(60% 0 20% 0); transform: translateX(8px); }
+  60%  { clip-path: inset(0 0 80% 0); transform: translateX(-4px); }
+}
+@keyframes ctd-particle-spin {
+  from { transform: rotate(0deg) translateX(30px) rotate(0deg); opacity: 1; }
+  to   { transform: rotate(360deg) translateX(30px) rotate(-360deg); opacity: 0; }
+}
+@keyframes ctd-boss-phase-flash {
+  0%   { background: rgba(239,68,68,0); }
+  50%  { background: rgba(239,68,68,0.25); }
+  100% { background: rgba(239,68,68,0); }
+}
+.ctd-combo-pulse { animation: ctd-combo-flash 0.35s ease; }
+.ctd-hp-shake { animation: ctd-shake-anim 0.4s ease; }
+.ctd-shake { animation: ctd-shake-anim 0.3s ease; }
+.ctd-crackle { animation: ctd-crackle 0.2s ease; }
+
+/* Enhanced enemy area */
+.ctd-enemy-area {
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.ctd-enemy-emoji {
+  transition: filter 0.1s ease, font-size 0.2s ease;
+  will-change: transform, filter;
+}
+.ctd-word-area {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  will-change: transform, opacity;
+}
+.ctd-word-display {
+  will-change: transform, filter;
+}
+
+/* Boss intro enhanced */
+.ctd-boss-intro {
+  animation: ctd-boss-phase-flash 1.5s ease infinite;
+}
+.ctd-boss-emoji { font-size: 5.5rem; }
+.ctd-boss-name {
+  animation: ctd-danger-pulse 1s ease infinite;
+  letter-spacing: 0.05em;
+}
+
+/* Elite badge pop */
+.ctd-elite-badge {
+  animation: ctd-bounce 0.6s ease infinite alternate;
+}
 
 /* Mobile responsive */
 @media (max-width: 400px) {
@@ -3623,266 +3691,792 @@ function onTypingInput_final(e) {
 // ============================================================
 // FINAL renderCombat_v3: wire final input handler + timerTick_v2
 // ============================================================
+// ENEMY VISUAL EFFECTS HELPERS
+// ============================================================
+function spawnParticle(floatLayer, text, top, left, color, size = '1.2rem', dur = 1.0) {
+  if (!floatLayer) return;
+  const el = document.createElement('div');
+  el.textContent = text;
+  el.style.cssText = `position:absolute;top:${top}%;left:${left}%;font-size:${size};color:${color};animation:ctd-float-up ${dur}s ease-out forwards;pointer-events:none;z-index:60;`;
+  floatLayer.appendChild(el);
+  setTimeout(() => el.remove(), dur * 1000);
+}
+
+function flashBackground(wrapper, color, dur = 120) {
+  if (!wrapper) return;
+  const prev = wrapper.style.backgroundColor;
+  wrapper.style.backgroundColor = color;
+  setTimeout(() => { if (wrapper) wrapper.style.backgroundColor = prev || ''; }, dur);
+}
+
+function pulseEnemyGlow(enemyArea, color, size = 30) {
+  if (!enemyArea) return;
+  enemyArea.style.boxShadow = `0 0 ${size}px ${color}, inset 0 0 ${size/2}px ${color}40`;
+  enemyArea.style.borderColor = color;
+}
+
+function clearEnemyGlow(enemyArea) {
+  if (!enemyArea) return;
+  enemyArea.style.boxShadow = '';
+  enemyArea.style.borderColor = '';
+}
+
 function timerTick_v2() {
   if (!G || !G.wordActive || G.battlePaused || !G.timerStarted) return;
 
   const e = G.enemy;
   let drainRate = 0.1;
+  const t = Date.now() / 1000;
 
+  const wArea = document.getElementById('ctd-word-area');
+  const wDisplay = document.getElementById('ctd-word-display');
+  const emojiEl = document.getElementById('ctd-enemy-emoji');
+  const enemyArea = document.querySelector('.ctd-enemy-area');
+  const wrapper = document.querySelector('.ctd-combat-wrapper');
+  const floatLayer = document.getElementById('ctd-float-layer');
+  const timerBar = document.querySelector('.ctd-timer-bar-wrap');
+  const timerVal = document.getElementById('ctd-timer-val');
+  const remainEl = document.getElementById('ctd-word-remain');
+  const typedEl = document.getElementById('ctd-word-typed');
+
+  // ================================================================
+  // ICE ELEMENTAL: slowtime - oscillating drain, whole screen freezes
+  // ================================================================
   if (e && e.mechanic === 'slowtime') {
-    const t = Date.now() / 1000;
     const osc = Math.sin(t * 1.5) * 0.5 + 0.5;
     drainRate = 0.1 * (0.5 + osc * 1.5);
-    const wArea = document.getElementById('ctd-word-area');
     if (wArea) {
-      wArea.style.color = '#38bdf8';
-      wArea.style.opacity = Math.max(0.3, osc);
+      wArea.style.borderColor = `rgba(56,189,248,${0.3 + osc * 0.7})`;
+      wArea.style.boxShadow = `0 0 ${osc * 40}px rgba(56,189,248,0.4), inset 0 0 ${osc * 20}px rgba(56,189,248,0.15)`;
     }
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1 + osc * 0.25}) rotate(${Math.sin(t * 0.8) * 15}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${osc * 20}px #38bdf8) brightness(${1 + osc * 0.4})`;
+    }
+    if (wrapper && Math.random() < 0.04) {
+      wrapper.style.filter = `hue-rotate(${180 + osc * 60}deg) saturate(1.5)`;
+      setTimeout(() => { if (wrapper) wrapper.style.filter = ''; }, 200);
+    }
+    // Ice crystal particles
+    if (Math.random() < 0.08) spawnParticle(floatLayer, pick(['❄️','🧊','✦','⬡']), Math.random()*80+10, Math.random()*80+10, '#38bdf8', '1rem', 1.2);
   }
 
   G.wordTimeLeft = Math.max(0, G.wordTimeLeft - drainRate);
 
-  const wArea = document.getElementById('ctd-word-area');
-  const emojiEl = document.getElementById('ctd-enemy-emoji');
+  // ================================================================
+  // RAT: fast - FRANTIC shaking + tiny rats scurrying on screen
+  // ================================================================
+  if (e && e.mechanic === 'fast') {
+    const jx = Math.random() * 18 - 9;
+    const jy = Math.random() * 10 - 5;
+    const rot = Math.random() * 5 - 2.5;
+    if (wArea) wArea.style.transform = `translate(${jx}px, ${jy}px) rotate(${rot}deg)`;
+    if (emojiEl) emojiEl.style.transform = `translate(${Math.random()*12-6}px, ${Math.random()*8-4}px) rotate(${Math.random()*20-10}deg) scale(${0.8 + Math.random()*0.6})`;
+    // Scurrying rat particles
+    if (Math.random() < 0.06) spawnParticle(floatLayer, '🐀', Math.random()*70+10, Math.random()*80+5, '#f59e0b', '0.9rem', 0.7);
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(245,158,11,${0.2 + Math.random()*0.3})`, 20);
+  }
 
-  // RAT: fast - word shakes wildly with jitter + rotation
-  if (e && e.mechanic === 'fast' && wArea) {
-    const jx = Math.random() * 14 - 7;
-    const jy = Math.random() * 8 - 4;
-    const rot = Math.random() * 3 - 1.5;
-    wArea.style.transform = `translate(${jx}px, ${jy}px) rotate(${rot}deg)`;
+  // ================================================================
+  // SLIME: tank - oozing, dripping, blobby pulsation
+  // ================================================================
+  if (e && e.mechanic === 'tank') {
+    const s = t * 1.8;
+    const blobX = 1 + Math.sin(s) * 0.08;
+    const blobY = 1 + Math.cos(s) * 0.12;
+    if (wArea) wArea.style.transform = `scaleX(${blobX}) scaleY(${blobY})`;
+    if (emojiEl) {
+      emojiEl.style.transform = `scaleX(${1 + Math.sin(s * 0.7) * 0.3}) scaleY(${1 + Math.cos(s * 1.1) * 0.25})`;
+      emojiEl.style.filter = `drop-shadow(0 ${8 + Math.sin(s)*4}px 12px rgba(16,185,129,0.6)) hue-rotate(${Math.sin(s)*20}deg)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(16,185,129,${0.15 + Math.abs(Math.sin(s))*0.25})`, 25);
+    // Drip particles
+    if (Math.random() < 0.04) spawnParticle(floatLayer, pick(['💧','🟢','•']), 60+Math.random()*20, 30+Math.random()*40, '#10b981', '1rem', 1.3);
   }
-  // SLIME: tank - word area slowly breathes/jiggles (not emoji)
-  if (e && e.mechanic === 'tank' && wArea) {
-    const s = Date.now() / 200;
-    wArea.style.transform = `scaleX(${1 + Math.sin(s) * 0.06}) scaleY(${1 + Math.cos(s) * 0.08})`;
+
+  // ================================================================
+  // BAT: swift - dramatic swooping + echolocation rings
+  // ================================================================
+  if (e && e.mechanic === 'swift') {
+    const swT = t * 3.2;
+    const swoopX = Math.sin(swT) * 55;
+    const swoopY = Math.sin(swT * 0.7) * 30 - 15;
+    if (wArea) wArea.style.transform = `translateX(${swoopX}px) translateY(${swoopY}px) rotate(${Math.sin(swT) * 5}deg)`;
+    if (emojiEl) {
+      emojiEl.style.transform = `translateX(${Math.sin(swT * 0.5) * 40}px) translateY(${Math.cos(swT * 0.8) * 25}px) scaleX(${Math.sin(swT) > 0 ? 1 : -1})`;
+      emojiEl.style.filter = `drop-shadow(0 0 15px rgba(147,51,234,0.8))`;
+      emojiEl.style.fontSize = `${3.5 + Math.abs(Math.sin(swT)) * 1.5}rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(147,51,234,${0.2 + Math.abs(Math.sin(swT))*0.3})`, 20);
+    // Echolocation ripple
+    if (Math.random() < 0.05) spawnParticle(floatLayer, pick(['◉','○','◎']), 20+Math.random()*50, 30+Math.random()*40, '#9333ea', '1.4rem', 0.8);
   }
-  // BAT: swift - word swoops in wide arcs up/down and side
-  if (e && e.mechanic === 'swift' && wArea) {
-    const t = Date.now() / 200;
-    wArea.style.transform = `translateY(${Math.sin(t) * 28}px) translateX(${Math.sin(t * 0.6) * 15}px)`;
+
+  // ================================================================
+  // SPIDER: random - web threads shoot across screen + teleport
+  // ================================================================
+  if (e && e.mechanic === 'random') {
+    if (wArea && Math.random() < 0.1) {
+      const tx = Math.random() * 90 - 45;
+      const ty = Math.random() * 50 - 25;
+      wArea.style.transform = `translate(${tx}px, ${ty}px) rotate(${Math.random()*6-3}deg)`;
+      wArea.style.boxShadow = '0 0 0 3px rgba(100,100,100,0.4)';
+      setTimeout(() => { if (wArea) wArea.style.boxShadow = ''; }, 80);
+    }
+    if (emojiEl && Math.random() < 0.07) {
+      emojiEl.style.transform = `translate(${Math.random()*30-15}px, ${Math.random()*20-10}px) rotate(${Math.random()*360}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 10px rgba(150,100,50,0.8))`;
+    }
+    // Web thread particles
+    if (Math.random() < 0.04) spawnParticle(floatLayer, pick(['🕸️','╮','∙']), Math.random()*80+5, Math.random()*90+5, '#8b5e3c', '1rem', 1.0);
+    if (enemyArea && Math.random() < 0.05) {
+      enemyArea.style.filter = 'invert(0.1) sepia(0.5)';
+      setTimeout(() => { if(enemyArea) enemyArea.style.filter = ''; }, 100);
+    }
   }
-  // SPIDER: random - teleports word area to random spot every few ticks
-  if (e && e.mechanic === 'random' && wArea && Math.random() < 0.12) {
-    const tx = Math.random() * 80 - 40;
-    const ty = Math.random() * 40 - 20;
-    wArea.style.transform = `translate(${tx}px, ${ty}px)`;
+
+  // ================================================================
+  // SNAKE: fade - opacity fades + sinuous slithering glow
+  // ================================================================
+  if (e && e.mechanic === 'fade') {
+    G.wordFadeProgress = Math.min(1, 1 - (G.wordTimeLeft / G.wordTimeMax));
+    const fadeAmt = Math.max(0.1, 1 - G.wordFadeProgress * 0.92);
+    if (wDisplay) wDisplay.style.opacity = fadeAmt;
+    if (emojiEl) {
+      const slither = Math.sin(t * 3) * 15;
+      emojiEl.style.transform = `translateX(${slither}px) rotate(${Math.sin(t * 2) * 10}deg) scale(${1 + Math.abs(Math.sin(t*2))*0.2})`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${10 + G.wordFadeProgress * 20}px rgba(34,197,94,0.7))`;
+    }
+    if (wArea && G.wordFadeProgress > 0.4) {
+      const greenAmt = G.wordFadeProgress * 0.5;
+      wArea.style.borderColor = `rgba(34,197,94,${greenAmt})`;
+      wArea.style.boxShadow = `0 0 ${G.wordFadeProgress * 30}px rgba(34,197,94,0.3)`;
+    }
   }
-  // SKELETON: armor - rattles letter spacing on the word
+
+  // ================================================================
+  // SKELETON: armor - bone rattle effect + armor flicker
+  // ================================================================
   if (e && (e.mechanic === 'armor' || e.mechanic === 'elite_armor')) {
-    const wDisplay = document.getElementById('ctd-word-display');
-    if (wDisplay) wDisplay.style.letterSpacing = `${Math.random() * 8 - 1}px`;
+    if (wDisplay) {
+      const rattle = Math.random() * 10 - 3;
+      wDisplay.style.letterSpacing = `${rattle}px`;
+      wDisplay.style.textShadow = `${Math.random()*4-2}px ${Math.random()*4-2}px 0 rgba(168,85,247,0.5)`;
+    }
+    if (emojiEl && Math.random() < 0.08) {
+      emojiEl.style.filter = `brightness(${1.5 + Math.random()}) contrast(2) drop-shadow(0 0 10px #a855f7)`;
+      setTimeout(() => { if(emojiEl) emojiEl.style.filter = ''; }, 150);
+    }
+    if (G.enemyArmor > 0 && enemyArea) {
+      pulseEnemyGlow(enemyArea, `rgba(168,85,247,${0.1 + (G.enemyArmor/G.enemyArmorMax)*0.4})`, 20);
+    }
+    // Bone particle
+    if (Math.random() < 0.03) spawnParticle(floatLayer, pick(['🦴','💀','✦']), 20+Math.random()*60, 20+Math.random()*60, '#a855f7', '1rem', 0.9);
   }
-  // ZOMBIE: blind - hide timer bar entirely
-  const timerBar = document.querySelector('.ctd-timer-bar-wrap');
-  const timerVal = document.getElementById('ctd-timer-val');
+
+  // ================================================================
+  // ZOMBIE: blind - rotting flesh tint + hidden timer + eerie flicker
+  // ================================================================
   if (e && e.mechanic === 'blind') {
     if (timerBar) timerBar.style.visibility = 'hidden';
     if (timerVal) timerVal.style.visibility = 'hidden';
+    if (emojiEl) {
+      emojiEl.style.filter = `hue-rotate(${Math.sin(t*2)*30}deg) drop-shadow(0 0 12px rgba(34,197,94,0.6)) brightness(${0.7 + Math.abs(Math.sin(t*1.5))*0.5})`;
+      emojiEl.style.transform = `translateX(${Math.sin(t*0.8)*5}px) translateY(${Math.sin(t*1.2)*3}px)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(34,197,94,${0.15 + Math.abs(Math.sin(t*1.3))*0.2})`, 20);
+    // Brain particle
+    if (Math.random() < 0.03) spawnParticle(floatLayer, pick(['🧠','💀','🫀']), 30+Math.random()*50, 20+Math.random()*60, '#22c55e', '0.9rem', 1.2);
   } else {
     if (timerBar) timerBar.style.visibility = '';
     if (timerVal) timerVal.style.visibility = '';
   }
-  // CROW: goldthief - crow swoops across screen visually
-  if (e && e.mechanic === 'goldthief' && emojiEl && Math.random() < 0.06) {
-    const angle = Math.random() * 360;
-    emojiEl.style.transform = `translate(${Math.cos(angle) * 60}px, ${Math.sin(angle) * 30}px) rotate(${angle}deg) scale(1.5)`;
-    setTimeout(() => { if (emojiEl) emojiEl.style.transform = 'none'; }, 400);
-  }
-  // WEREWOLF: enrage - screen shake intensifies as HP drops
-  if (e && e.mechanic === 'enrage') {
-    const hpFrac = G.enemyHp / G.enemyMaxHp;
-    if (hpFrac < 0.5) {
-      const intensity = (0.5 - hpFrac) * 20; // 0 at 50% HP, 10px at 0% HP
-      const wrapper = document.querySelector('.ctd-combat-wrapper');
-      if (wrapper) wrapper.style.transform = `translate(${(Math.random() * 2 - 1) * intensity}px, ${(Math.random() * 2 - 1) * intensity * 0.5}px)`;
-      // Also flash red tint at very low HP
-      if (hpFrac < 0.25 && wArea && Math.random() < 0.1) {
-        wArea.style.boxShadow = '0 0 20px #ef4444';
-        setTimeout(() => { if (wArea) wArea.style.boxShadow = ''; }, 200);
-      }
+
+  // ================================================================
+  // CROW: goldthief - dramatic swooping thief + gold coin rain
+  // ================================================================
+  if (e && e.mechanic === 'goldthief') {
+    const crowT = t * 2;
+    if (emojiEl) {
+      emojiEl.style.transform = `translateX(${Math.sin(crowT) * 50}px) translateY(${Math.sin(crowT*1.3)*25}px) rotate(${Math.sin(crowT)*25}deg) scaleX(${Math.sin(crowT)>0?1:-1})`;
+      emojiEl.style.filter = `drop-shadow(0 0 15px rgba(245,158,11,0.8)) brightness(1.3)`;
+      emojiEl.style.fontSize = `${3.5 + Math.abs(Math.sin(crowT))}rem`;
     }
-  }
-  // VAMPIRE: lifesteal - blood drip visual effect per tick
-  if (e && e.mechanic === 'lifesteal' && Math.random() < 0.04) {
-    const floatEl = document.getElementById('ctd-float-layer');
-    if (floatEl) {
-      const drop = document.createElement('div');
-      drop.textContent = '🩸';
-      drop.style.cssText = `position:absolute;top:${Math.random() * 60}%;left:${Math.random() * 80 + 10}%;font-size:1.2rem;animation:ctd-float-up 1s ease-out forwards;pointer-events:none;`;
-      floatEl.appendChild(drop);
-      setTimeout(() => drop.remove(), 1000);
-    }
-  }
-  // EVIL EYE: hypnosis - pulsing purple overlay on word area
-  if (e && e.mechanic === 'hypnosis' && wArea) {
-    const pulse = 0.4 + Math.abs(Math.sin(Date.now() / 600)) * 0.6;
-    wArea.style.boxShadow = `0 0 ${pulse * 25}px rgba(168,85,247,${pulse * 0.6})`;
-  }
-  // CORRUPTED FAIRY: curse - sparkling purple shimmer on word
-  if (e && e.mechanic === 'curse' && wArea && Math.random() < 0.07) {
-    wArea.style.filter = 'hue-rotate(180deg) brightness(1.3)';
-    setTimeout(() => { if (wArea) wArea.style.filter = ''; }, 150);
-  }
-  if (e && e.mechanic === 'trickster' && Math.random() < 0.015 && G.typedSoFar.length >= 1) {
-    const oldWord = G.currentWord;
-    let newWord = pick(WORDS.hard);
-    while(newWord === oldWord) newWord = pick(WORDS.hard);
-    G.currentWord = newWord;
-    G.typedSoFar = '';
-    const input = document.getElementById('ctd-input');
-    if (input) input.value = '';
-    updateWordDisplay();
-    floatText('🧌 Swapped!', '#10b981', 'top');
-    sfxError();
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(245,158,11,${0.2 + Math.abs(Math.sin(crowT))*0.3})`, 25);
+    // Gold coin particles
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['🪙','💰','✦']), Math.random()*60+10, Math.random()*80+10, '#f59e0b', '1rem', 1.1);
+    // Brief flash on swoop peak
+    if (Math.abs(Math.sin(crowT)) > 0.9 && Math.random() < 0.15) flashBackground(wrapper, 'rgba(245,158,11,0.08)', 100);
   }
 
+  // ================================================================
+  // FROG: distract - handled by frogDistraction RAF, but add jumping particles
+  // ================================================================
+  if (e && e.mechanic === 'distract') {
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(34,197,94,${0.15 + Math.abs(Math.sin(t*2))*0.2})`, 20);
+    if (Math.random() < 0.04) spawnParticle(floatLayer, pick(['🐸','💦','🫧']), Math.random()*70+10, Math.random()*80+10, '#22c55e', '0.9rem', 0.9);
+  }
+
+  // ================================================================
+  // BEE SWARM: swarm - entire screen buzzes + bee particles everywhere
+  // ================================================================
+  if (e && e.mechanic === 'swarm') {
+    const buzz = Math.sin(t * 30) * 2;
+    if (wArea) wArea.style.transform = `translate(${buzz}px, ${buzz*0.5}px)`;
+    if (emojiEl) {
+      emojiEl.style.transform = `translate(${Math.random()*6-3}px, ${Math.random()*4-2}px) scale(${0.9+Math.random()*0.4}) rotate(${Math.random()*20-10}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 10px rgba(245,158,11,0.8)) brightness(1.4)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(245,158,11,${0.2 + Math.random()*0.3})`, 25);
+    // Bee particle storm
+    if (Math.random() < 0.15) spawnParticle(floatLayer, '🐝', Math.random()*80+5, Math.random()*90+5, '#f59e0b', '0.8rem', 0.7);
+    if (Math.random() < 0.04) flashBackground(wrapper, 'rgba(245,158,11,0.06)', 80);
+  }
+
+  // ================================================================
+  // GOLEM: accuracy - stone grinding, dust clouds, earth tremors
+  // ================================================================
+  if (e && e.mechanic === 'accuracy') {
+    if (emojiEl) {
+      const grind = Math.sin(t * 4) * 3;
+      emojiEl.style.transform = `translateX(${grind}px) scale(${1.1 + Math.abs(Math.sin(t*1.5))*0.15})`;
+      emojiEl.style.filter = `drop-shadow(0 ${5+Math.abs(Math.sin(t*2))*10}px 15px rgba(120,80,40,0.8)) brightness(0.85) contrast(1.3)`;
+      emojiEl.style.fontSize = `4.5rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(120,80,40,${0.2 + Math.abs(Math.sin(t*2))*0.3})`, 30);
+    // Dust / stone particle
+    if (Math.random() < 0.07) spawnParticle(floatLayer, pick(['🪨','💨','✦']), 40+Math.random()*40, 20+Math.random()*60, '#78503c', '1rem', 1.2);
+    if (Math.random() < 0.03) {
+      if (wrapper) wrapper.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`;
+      setTimeout(() => { if(wrapper) wrapper.style.transform = 'none'; }, 80);
+    }
+  }
+
+  // ================================================================
+  // VAMPIRE: lifesteal - blood moon aura, bats, dripping blood
+  // ================================================================
+  if (e && e.mechanic === 'lifesteal') {
+    const vamp = Math.abs(Math.sin(t * 1.2));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1 + vamp*0.2}) translateY(${-vamp*5}px) rotate(${Math.sin(t*0.5)*8}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${15+vamp*20}px rgba(220,38,38,0.9)) brightness(${0.8+vamp*0.4})`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(220,38,38,${0.2 + vamp*0.4})`, 35);
+    // Blood drips
+    if (Math.random() < 0.08) spawnParticle(floatLayer, pick(['🩸','🦇','✦']), Math.random()*60+5, Math.random()*80+10, '#dc2626', '1.1rem', 1.2);
+    if (Math.random() < 0.04) flashBackground(wrapper, 'rgba(220,38,38,0.06)', 150);
+  }
+
+  // ================================================================
+  // WEREWOLF: enrage - moon-powered rage, claw marks, howl screen shake
+  // ================================================================
+  if (e && e.mechanic === 'enrage') {
+    const hpFrac = G.enemyHp / G.enemyMaxHp;
+    const rage = Math.max(0, 1 - hpFrac);
+    if (emojiEl) {
+      const growl = Math.sin(t * 4) * rage * 8;
+      emojiEl.style.transform = `translateX(${growl}px) scale(${1 + rage * 0.4}) rotate(${Math.sin(t*2)*rage*10}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${10+rage*30}px rgba(239,68,68,${rage})) brightness(${1 + rage * 0.5}) saturate(${1 + rage * 2})`;
+      emojiEl.style.fontSize = `${3.5 + rage * 2}rem`;
+    }
+    if (wrapper && hpFrac < 0.5) {
+      const intensity = (0.5 - hpFrac) * 22;
+      wrapper.style.transform = `translate(${(Math.random()*2-1)*intensity}px, ${(Math.random()*2-1)*intensity*0.5}px)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(239,68,68,${0.15 + rage*0.5})`, 20 + rage*20);
+    if (hpFrac < 0.4 && Math.random() < 0.08) spawnParticle(floatLayer, pick(['💢','🌙','🩸']), Math.random()*70+10, Math.random()*80+10, '#ef4444', '1.1rem', 0.8);
+    if (hpFrac < 0.25 && Math.random() < 0.06) flashBackground(wrapper, 'rgba(239,68,68,0.1)', 120);
+  }
+
+  // ================================================================
+  // FIRE ELEMENTAL: punishment - inferno screen, flame particles, heat distortion
+  // ================================================================
+  if (e && e.mechanic === 'punishment') {
+    const flame = 0.4 + Math.abs(Math.sin(t * 3)) * 0.6;
+    const penalty = G.firePenalty || 0;
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.1 + flame*0.3 + penalty*0.05}) translateY(${-flame*8}px) rotate(${Math.sin(t*4)*5}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${20+flame*20+penalty*8}px rgba(249,115,22,1)) brightness(${1.2+flame*0.5}) saturate(2)`;
+      emojiEl.style.fontSize = `${3.5 + penalty * 0.4 + flame * 0.5}rem`;
+    }
+    if (wArea) {
+      wArea.style.borderColor = `rgba(249,115,22,${0.3 + penalty*0.14})`;
+      wArea.style.boxShadow = `0 0 ${15 + penalty*10}px rgba(249,115,22,${0.3+penalty*0.12})`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(249,115,22,${0.2 + penalty*0.12 + flame*0.2})`, 25+penalty*5);
+    // Fire particles
+    if (Math.random() < 0.1 + penalty * 0.03) spawnParticle(floatLayer, pick(['🔥','✦','🌋','💥']), Math.random()*70+5, Math.random()*80+10, '#f97316', '1.1rem', 0.8);
+    if (penalty >= 3 && Math.random() < 0.05) flashBackground(wrapper, `rgba(249,115,22,0.08)`, 100);
+  }
+
+  // ================================================================
+  // STORM ELEMENTAL: disrupt - lightning strikes, flashes, static
+  // ================================================================
+  if (e && e.mechanic === 'disrupt') {
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${0.85 + Math.abs(Math.sin(t*5))*0.35}) rotate(${Math.sin(t*7)*15}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${10+Math.abs(Math.sin(t*4))*30}px rgba(250,204,21,1)) brightness(${1+Math.abs(Math.sin(t*3))*0.8})`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(250,204,21,${0.2 + Math.abs(Math.sin(t*3))*0.4})`, 25);
+    // Lightning flash + hide word
+    if (Math.random() < 0.05) {
+      if (wArea) { wArea.style.opacity = '0'; setTimeout(() => { if(wArea) wArea.style.opacity='1'; }, 100+Math.random()*200); }
+      flashBackground(wrapper, 'rgba(250,204,21,0.12)', 80);
+    }
+    if (Math.random() < 0.07) spawnParticle(floatLayer, pick(['⚡','✦','◈','⬟']), Math.random()*80+5, Math.random()*80+10, '#facc15', '1.2rem', 0.6);
+    // Static on screen
+    if (Math.random() < 0.04) {
+      if (wrapper) { wrapper.style.filter = 'contrast(1.5) brightness(1.3)'; setTimeout(() => { if(wrapper) wrapper.style.filter = ''; }, 60); }
+    }
+  }
+
+  // ================================================================
+  // EVIL EYE: hypnosis - spiraling eye, pulsating void, mind control
+  // ================================================================
+  if (e && e.mechanic === 'hypnosis') {
+    const pulse = 0.4 + Math.abs(Math.sin(t * 1.5)) * 0.6;
+    const spiral = t * 90 % 360;
+    if (wArea) {
+      wArea.style.boxShadow = `0 0 ${pulse * 40}px rgba(168,85,247,${pulse * 0.7}), 0 0 ${pulse*80}px rgba(168,85,247,0.2)`;
+      wArea.style.borderColor = `rgba(168,85,247,${pulse})`;
+    }
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1 + pulse*0.4}) rotate(${Math.sin(t*0.5)*15}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${20+pulse*25}px rgba(168,85,247,1)) brightness(${1+pulse*0.5})`;
+      emojiEl.style.fontSize = `${3.5 + pulse}rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(168,85,247,${0.2 + pulse*0.5})`, 30+pulse*20);
+    // Eye particles
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['👁️','◎','∞','✦']), Math.random()*70+5, Math.random()*80+10, '#a855f7', '1rem', 1.2);
+    if (Math.random() < 0.03) flashBackground(wrapper, `rgba(168,85,247,0.08)`, 200);
+  }
+
+  // ================================================================
+  // INK MONSTER: ink - ink splatter, screen gets blotted
+  // ================================================================
+  if (e && e.mechanic === 'ink') {
+    const ink = Math.abs(Math.sin(t * 1.8));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1 + ink*0.3}) rotate(${Math.sin(t)*20}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${10+ink*20}px rgba(15,23,42,0.9)) brightness(${0.6 + ink*0.5}) saturate(0.5)`;
+    }
+    if (wArea) {
+      wArea.style.boxShadow = `0 0 ${10+ink*20}px rgba(0,0,0,0.6)`;
+      wArea.style.borderColor = `rgba(15,23,42,${0.5+ink*0.5})`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(15,23,42,${0.3 + ink*0.4})`, 20);
+    // Ink splatter
+    if (Math.random() < 0.05) spawnParticle(floatLayer, pick(['🖤','✦','●','◉']), Math.random()*70+10, Math.random()*80+10, '#0f172a', '1.1rem', 1.1);
+  }
+
+  // ================================================================
+  // TROLL: trickster - chaotic visual glitch + word swap
+  // ================================================================
+  if (e && e.mechanic === 'trickster') {
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${0.8 + Math.random()*0.6}) rotate(${Math.random()*30-15}deg) translateX(${Math.random()*20-10}px)`;
+      if (Math.random() < 0.05) {
+        emojiEl.style.filter = `hue-rotate(${Math.random()*360}deg) brightness(1.5)`;
+        setTimeout(() => { if(emojiEl) emojiEl.style.filter = ''; }, 200);
+      }
+    }
+    if (wArea && Math.random() < 0.04) {
+      wArea.style.transform = `skewX(${Math.random()*10-5}deg) skewY(${Math.random()*5-2.5}deg)`;
+      setTimeout(() => { if(wArea) wArea.style.transform = 'none'; }, 150);
+    }
+    if (enemyArea && Math.random() < 0.04) pulseEnemyGlow(enemyArea, `rgba(34,197,94,${Math.random()*0.5})`, 20);
+    if (Math.random() < 0.015 && G.typedSoFar.length >= 1) {
+      const oldWord = G.currentWord;
+      let newWord = pick(WORDS.hard);
+      while(newWord === oldWord) newWord = pick(WORDS.hard);
+      G.currentWord = newWord;
+      G.typedSoFar = '';
+      const input = document.getElementById('ctd-input');
+      if (input) input.value = '';
+      updateWordDisplay();
+      floatText('🧌 SWAPPED!', '#10b981', 'big');
+      flashBackground(wrapper, 'rgba(34,197,94,0.15)', 300);
+      sfxError();
+    }
+    if (Math.random() < 0.04) spawnParticle(floatLayer, pick(['🧌','💚','✦','❓']), Math.random()*70+10, Math.random()*80+10, '#22c55e', '1rem', 0.9);
+  }
+
+  // ================================================================
+  // CORRUPTED FAIRY: curse - glitter storm, cursed shimmer
+  // ================================================================
+  if (e && e.mechanic === 'curse') {
+    const fairyT = Math.abs(Math.sin(t * 2.5));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${0.8+fairyT*0.5}) rotate(${Math.sin(t*3)*30}deg) translateY(${Math.sin(t*2)*10}px)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${10+fairyT*20}px rgba(232,121,249,0.9)) hue-rotate(${t*90%360}deg) brightness(${1+fairyT*0.5})`;
+    }
+    if (wArea && Math.random() < 0.07) {
+      wArea.style.filter = `hue-rotate(${90+Math.random()*180}deg) brightness(1.4)`;
+      setTimeout(() => { if (wArea) wArea.style.filter = ''; }, 120);
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(232,121,249,${0.15+fairyT*0.4})`, 20);
+    // Glitter particles
+    if (Math.random() < 0.12) spawnParticle(floatLayer, pick(['✨','🌟','⭐','💜','🌸']), Math.random()*80+5, Math.random()*85+5, '#e879f9', '0.9rem', 0.9);
+  }
+
+  // Drain (ghost mechanic referenced elsewhere)
   if (e && e.mechanic === 'drain' && Math.random() < 0.05) {
     G.hp = Math.max(0, G.hp - 1);
     floatText('👻 -1 HP', '#ef4444', 'center');
     updateCombatHUD();
     if (G.hp <= 0) { onPlayerDeath_v2(); return; }
+    spawnParticle(floatLayer, '👻', 30+Math.random()*40, 30+Math.random()*40, '#6b7280', '1.2rem', 1.0);
   }
 
-  if (e && e.mechanic === 'disrupt' && Math.random() < 0.05) {
-    const wArea = document.getElementById('ctd-word-area');
-    if (wArea) {
-      wArea.style.opacity = '0';
-      setTimeout(() => { if (wArea) wArea.style.opacity = '1'; }, 150 + Math.random() * 200);
-    }
-  }
-
-  if (e && e.mechanic === 'fade') {
-    G.wordFadeProgress = Math.min(1, 1 - (G.wordTimeLeft / G.wordTimeMax));
-  }
-
+  // ================================================================
   // ---- ELITE MECHANICS ----
+  // ================================================================
 
-  // elite_flicker: the display flickers between real word and fake decoy
-  if (e && e.mechanic === 'elite_flicker' && Math.random() < 0.08) {
-    const remainEl = document.getElementById('ctd-word-remain');
-    const typedEl = document.getElementById('ctd-word-typed');
-    if (remainEl && typedEl) {
-      const fakeWord = pick(WORDS.medium);
-      const orig = remainEl.textContent;
-      const origTyped = typedEl.textContent;
-      remainEl.textContent = fakeWord;
-      typedEl.textContent = '??';
-      remainEl.style.color = '#ef4444';
-      setTimeout(() => {
-        if (remainEl) { remainEl.textContent = orig; remainEl.style.color = ''; }
-        if (typedEl) { typedEl.textContent = origTyped; }
-      }, 350 + Math.random() * 250);
+  // RAT KING: elite_flicker - the whole screen flickers like a CRT malfunction
+  if (e && e.mechanic === 'elite_flicker') {
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.2+Math.abs(Math.sin(t*3))*0.3}) rotate(${Math.sin(t*2)*10}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 20px rgba(245,158,11,0.9)) brightness(1.5) saturate(2)`;
     }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(245,158,11,0.4)`, 30);
+    if (Math.random() < 0.08) {
+      if (remainEl && typedEl) {
+        const fakeWord = pick(WORDS.medium);
+        const orig = remainEl.textContent;
+        const origTyped = typedEl.textContent;
+        remainEl.textContent = fakeWord;
+        typedEl.textContent = '??';
+        remainEl.style.color = '#ef4444';
+        remainEl.style.textShadow = '0 0 8px #ef4444';
+        if (wArea) { wArea.style.borderColor = '#ef4444'; wArea.style.boxShadow = '0 0 20px rgba(239,68,68,0.5)'; }
+        flashBackground(wrapper, 'rgba(239,68,68,0.12)', 350);
+        setTimeout(() => {
+          if (remainEl) { remainEl.textContent = orig; remainEl.style.color = ''; remainEl.style.textShadow = ''; }
+          if (typedEl) typedEl.textContent = origTyped;
+          if (wArea) { wArea.style.borderColor = ''; wArea.style.boxShadow = ''; }
+        }, 350 + Math.random() * 300);
+      }
+    }
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['👑','🐀','⚡']), Math.random()*70+5, Math.random()*80+10, '#f59e0b', '1.1rem', 0.8);
   }
 
-  // elite_swoop: word area swoops off screen then comes back
+  // VAMPIRE BAT: elite_swoop - dramatic arcing dive across the WHOLE screen
   if (e && e.mechanic === 'elite_swoop') {
-    const wArea = document.getElementById('ctd-word-area');
-    const t = Date.now() / 600;
-    if (wArea) wArea.style.transform = `translateX(${Math.sin(t) * 60}px) translateY(${Math.cos(t * 0.7) * 20}px)`;
+    const st = t * 2;
+    const swoopX = Math.sin(st) * 80;
+    const swoopY = Math.sin(st * 0.7 + 1) * 40;
+    if (wArea) {
+      wArea.style.transform = `translateX(${swoopX}px) translateY(${swoopY}px) rotate(${Math.sin(st)*8}deg)`;
+      wArea.style.boxShadow = `0 0 20px rgba(147,51,234,0.5), 0 0 40px rgba(147,51,234,0.2)`;
+      wArea.style.borderColor = `rgba(147,51,234,${0.5 + Math.abs(Math.sin(st))*0.5})`;
+    }
+    if (emojiEl) {
+      emojiEl.style.transform = `translateX(${-swoopX*0.5}px) translateY(${-swoopY*0.5}px) scaleX(${Math.sin(st)>0?1:-1}) scale(${1.2+Math.abs(Math.sin(st))*0.5})`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${15+Math.abs(Math.sin(st))*25}px rgba(147,51,234,1)) brightness(1.5)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(147,51,234,${0.3+Math.abs(Math.sin(st))*0.5})`, 30);
+    if (Math.random() < 0.08) spawnParticle(floatLayer, pick(['🦇','✦','◉']), Math.random()*70+5, Math.random()*80+10, '#9333ea', '1rem', 0.8);
+    if (Math.abs(Math.sin(st)) > 0.85) flashBackground(wrapper, 'rgba(147,51,234,0.1)', 150);
   }
 
-  // elite_scorch: make letters visually appear uppercase (but player must type lowercase)
+  // ANCIENT GUARDIAN: elite_scramble - temple trembles, ancient energy
+  if (e && e.mechanic === 'elite_scramble') {
+    const rumble = Math.abs(Math.sin(t * 2));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.3 + rumble*0.2}) translateX(${Math.sin(t*3)*3}px)`;
+      emojiEl.style.filter = `drop-shadow(0 ${5+rumble*15}px 20px rgba(120,80,40,0.9)) brightness(0.7) contrast(1.5) sepia(0.5)`;
+      emojiEl.style.fontSize = `5rem`;
+    }
+    if (wrapper && Math.random() < 0.04) {
+      const shake = rumble * 5;
+      wrapper.style.transform = `translate(${Math.random()*shake-shake/2}px, ${Math.random()*shake-shake/2}px)`;
+      setTimeout(() => { if(wrapper) wrapper.style.transform = 'none'; }, 80);
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(120,80,40,${0.2+rumble*0.4})`, 30);
+    if (G.enemyArmor > 0 && wArea) {
+      wArea.style.boxShadow = `0 0 ${15+rumble*15}px rgba(168,85,247,${0.3+rumble*0.3})`;
+    }
+    if (Math.random() < 0.04) spawnParticle(floatLayer, pick(['🗿','🪨','💥','⚡']), Math.random()*70+5, Math.random()*80+10, '#78503c', '1.1rem', 1.1);
+  }
+
+  // ARCHWIZARD: elite_rewind - magical time reversal, clock particles, purple storm
+  if (e && e.mechanic === 'elite_rewind') {
+    const magicT = Math.abs(Math.sin(t * 2));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1+magicT*0.3}) rotate(${Math.sin(t*1.5)*20}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${15+magicT*25}px rgba(168,85,247,1)) hue-rotate(${t*60%360}deg) brightness(1.3)`;
+      emojiEl.style.fontSize = `4rem`;
+    }
+    if (wArea) {
+      wArea.style.borderColor = `rgba(168,85,247,${0.4+magicT*0.6})`;
+      wArea.style.boxShadow = `0 0 ${20+magicT*30}px rgba(168,85,247,0.4)`;
+      if (Math.random() < 0.04) {
+        wArea.style.transform = `scaleX(-1)`;
+        setTimeout(() => { if(wArea) wArea.style.transform = ''; }, 80);
+      }
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(168,85,247,${0.25+magicT*0.5})`, 30);
+    if (Math.random() < 0.08) spawnParticle(floatLayer, pick(['🔮','⏪','✦','🌀']), Math.random()*70+5, Math.random()*80+10, '#a855f7', '1rem', 1.0);
+    if (Math.random() < 0.04) flashBackground(wrapper, 'rgba(168,85,247,0.1)', 200);
+  }
+
+  // MINI DRAGON: elite_scorch - fire breath, burning letters, inferno aura
   if (e && e.mechanic === 'elite_scorch') {
-    const remainEl = document.getElementById('ctd-word-remain');
-    if (remainEl && Math.random() < 0.1) {
+    const fireT = Math.abs(Math.sin(t * 3));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.1+fireT*0.4}) rotate(${Math.sin(t*2)*12}deg) translateY(${-fireT*8}px)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${20+fireT*30}px rgba(249,115,22,1)) drop-shadow(0 0 ${10+fireT*15}px rgba(220,38,38,0.8)) brightness(${1.2+fireT*0.6}) saturate(2)`;
+      emojiEl.style.fontSize = `4.5rem`;
+    }
+    if (remainEl && Math.random() < 0.12) {
       const curr = remainEl.textContent;
-      // random case chaos
       remainEl.textContent = curr.split('').map(c => Math.random() < 0.6 ? c.toUpperCase() : c).join('');
       remainEl.style.color = '#f97316';
-      setTimeout(() => { if (remainEl) { remainEl.style.color = ''; } }, 200);
+      remainEl.style.textShadow = '0 0 8px #f97316, 0 0 20px #ef4444';
+      setTimeout(() => { if (remainEl) { remainEl.style.color = ''; remainEl.style.textShadow = ''; } }, 180);
+    }
+    if (wArea) {
+      wArea.style.borderColor = `rgba(249,115,22,${0.4+fireT*0.6})`;
+      wArea.style.boxShadow = `0 0 ${20+fireT*30}px rgba(249,115,22,0.4)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(249,115,22,${0.3+fireT*0.5})`, 35);
+    if (Math.random() < 0.12) spawnParticle(floatLayer, pick(['🔥','💥','✦','🌋']), Math.random()*70+5, Math.random()*85+5, '#f97316', '1.1rem', 0.7);
+    if (fireT > 0.85 && Math.random() < 0.1) flashBackground(wrapper, 'rgba(249,115,22,0.12)', 100);
+  }
+
+  // MIMIC: mimic - constantly shapeshifts visually
+  if (e && e.mechanic === 'mimic') {
+    if (emojiEl && Math.random() < 0.06) {
+      emojiEl.style.filter = `hue-rotate(${Math.random()*360}deg) brightness(${1+Math.random()}) saturate(${1+Math.random()*3})`;
+      setTimeout(() => { if(emojiEl) emojiEl.style.filter = ''; }, 300);
+    }
+    if (emojiEl) emojiEl.style.transform = `scale(${0.85+Math.random()*0.5}) rotate(${Math.random()*20-10}deg)`;
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['❓','🎭','✦','💫']), Math.random()*70+5, Math.random()*80+10, '#f59e0b', '1rem', 0.9);
+    if (enemyArea && Math.random() < 0.04) {
+      enemyArea.style.filter = `hue-rotate(${Math.random()*360}deg)`;
+      setTimeout(() => { if(enemyArea) enemyArea.style.filter = ''; }, 200);
     }
   }
 
+  // ================================================================
   // ---- BOSS MECHANICS ----
+  // ================================================================
 
-  // boss_smoke: word randomly vanishes in a puff
-  if (e && e.mechanic === 'boss_smoke' && Math.random() < 0.06) {
-    const wArea = document.getElementById('ctd-word-area');
-    if (wArea) {
-      wArea.style.filter = 'blur(8px)';
-      wArea.style.opacity = '0.1';
-      setTimeout(() => { if (wArea) { wArea.style.filter = ''; wArea.style.opacity = '1'; } }, 400 + Math.random() * 300);
+  // DRAGON PHASE 1: boss_smoke - thick smoke, silhouette effect
+  if (e && e.mechanic === 'boss_smoke') {
+    const smokeT = Math.abs(Math.sin(t * 1.5));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.2 + smokeT*0.3}) rotate(${Math.sin(t*0.8)*10}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${20+smokeT*30}px rgba(100,100,100,0.9)) blur(${smokeT*2}px) brightness(0.6) contrast(2)`;
     }
+    if (wArea && Math.random() < 0.07) {
+      wArea.style.filter = `blur(${Math.random()*10}px)`;
+      wArea.style.opacity = `${0.1 + Math.random()*0.3}`;
+      setTimeout(() => { if (wArea) { wArea.style.filter = ''; wArea.style.opacity = '1'; } }, 500 + Math.random() * 400);
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(100,100,100,${0.3+smokeT*0.4})`, 40);
+    if (Math.random() < 0.08) spawnParticle(floatLayer, pick(['💨','🌫️','◌','○']), Math.random()*70+5, Math.random()*80+10, '#6b7280', '1.3rem', 1.5);
+    flashBackground(wrapper, `rgba(80,80,80,${smokeT*0.07})`, 100);
   }
 
-  // boss_fly: word sweeps horizontally across screen like a diving dragon
+  // DRAGON PHASE 2: boss_fly - full screen dive bomb with motion blur
   if (e && e.mechanic === 'boss_fly') {
-    const wArea = document.getElementById('ctd-word-area');
-    const t = Date.now() / 500;
-    if (wArea) wArea.style.transform = `translateX(${Math.sin(t) * 70}px) translateY(${Math.sin(t * 1.3) * 15}px)`;
+    const flyT = t * 1.8;
+    const flyX = Math.sin(flyT) * 100;
+    const flyY = Math.sin(flyT * 1.3) * 35;
+    if (wArea) {
+      wArea.style.transform = `translateX(${flyX}px) translateY(${flyY}px) rotate(${Math.sin(flyT)*6}deg)`;
+      wArea.style.boxShadow = `${-flyX/3}px 0 20px rgba(255,107,53,0.4)`;
+    }
+    if (emojiEl) {
+      emojiEl.style.transform = `translateX(${-flyX*0.6}px) translateY(${-flyY*0.3}px) scale(${1.3+Math.abs(Math.sin(flyT))*0.5}) rotate(${Math.sin(flyT)*15}deg)`;
+      emojiEl.style.filter = `drop-shadow(${flyX/5}px 0 ${10+Math.abs(Math.sin(flyT))*30}px rgba(255,107,53,1)) brightness(1.6) saturate(2)`;
+      emojiEl.style.fontSize = `5rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(255,107,53,${0.3+Math.abs(Math.sin(flyT))*0.5})`, 40);
+    if (Math.random() < 0.1) spawnParticle(floatLayer, pick(['🔥','💥','🐉','✦']), Math.random()*70+5, Math.random()*80+10, '#ff6b35', '1.2rem', 0.8);
+    if (Math.abs(Math.sin(flyT)) > 0.9) flashBackground(wrapper, 'rgba(255,107,53,0.15)', 120);
   }
 
-  // boss_scatter: letters shift to weird positions via letter-spacing jitter
+  // DRAGON PHASE 3: boss_scatter - letter explosion, flame tornado
   if (e && e.mechanic === 'boss_scatter') {
-    const wDisplay = document.getElementById('ctd-word-display');
+    const scatterT = Math.abs(Math.sin(t * 4));
     if (wDisplay) {
-      wDisplay.style.letterSpacing = `${Math.random() * 12 - 2}px`;
-      wDisplay.style.transform = `skewX(${Math.random() * 10 - 5}deg)`;
+      wDisplay.style.letterSpacing = `${Math.random() * 20 - 5}px`;
+      wDisplay.style.transform = `skewX(${Math.random()*15-7}deg) skewY(${Math.random()*8-4}deg) scale(${0.85+Math.random()*0.4})`;
+      wDisplay.style.textShadow = `${Math.random()*10-5}px ${Math.random()*10-5}px 0 rgba(255,107,53,0.6), ${Math.random()*10-5}px ${Math.random()*10-5}px 0 rgba(239,68,68,0.4)`;
     }
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.5+scatterT*0.5}) rotate(${Math.random()*30-15}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${30+scatterT*30}px rgba(255,107,53,1)) brightness(2) saturate(3)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(255,107,53,${0.4+scatterT*0.4})`, 50);
+    if (Math.random() < 0.15) spawnParticle(floatLayer, pick(['🔥','💥','🌋','⚡','✦']), Math.random()*80+5, Math.random()*85+5, '#ff6b35', '1.2rem', 0.7);
+    if (Math.random() < 0.1) flashBackground(wrapper, 'rgba(255,107,53,0.15)', 80);
   }
 
-  // boss_chaos: ALL effects at once - smoke + fly + scatter + shake
+  // DRAGON PHASE 4: boss_chaos - EVERYTHING breaks
   if (e && e.mechanic === 'boss_chaos') {
-    const wArea = document.getElementById('ctd-word-area');
-    const wDisplay = document.getElementById('ctd-word-display');
-    const wrapper = document.querySelector('.ctd-combat-wrapper');
-    const t = Date.now() / 400;
+    const chaosT = t * 2.5;
     if (wArea) {
-      wArea.style.transform = `translateX(${Math.sin(t) * 50}px) translateY(${Math.cos(t * 1.2) * 20}px)`;
-      if (Math.random() < 0.06) { wArea.style.opacity = '0.05'; setTimeout(() => { if(wArea) wArea.style.opacity = '1'; }, 200); }
+      wArea.style.transform = `translateX(${Math.sin(chaosT)*80}px) translateY(${Math.cos(chaosT*1.2)*35}px) rotate(${Math.sin(chaosT*0.7)*12}deg)`;
+      if (Math.random() < 0.1) { wArea.style.opacity = '0.05'; setTimeout(() => { if(wArea) wArea.style.opacity='1'; }, 150); }
+      wArea.style.borderColor = `hsl(${(t*200)%360}, 100%, 60%)`;
+      wArea.style.boxShadow = `0 0 30px hsl(${(t*200)%360}, 100%, 50%)`;
     }
-    if (wDisplay) wDisplay.style.letterSpacing = `${Math.random() * 8}px`;
-    if (wrapper) wrapper.style.transform = `translate(${Math.random() * 6 - 3}px, ${Math.random() * 6 - 3}px)`;
+    if (wDisplay) {
+      wDisplay.style.letterSpacing = `${Math.random() * 12}px`;
+      wDisplay.style.textShadow = `${Math.random()*6-3}px ${Math.random()*6-3}px 0 rgba(255,0,0,0.5), ${Math.random()*6-3}px ${Math.random()*6-3}px 0 rgba(0,255,0,0.3)`;
+    }
+    if (wrapper) wrapper.style.transform = `translate(${Math.random()*10-5}px, ${Math.random()*10-5}px) rotate(${Math.random()*1-0.5}deg)`;
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.5+Math.random()*0.5}) rotate(${Math.random()*40-20}deg) translate(${Math.random()*30-15}px, ${Math.random()*20-10}px)`;
+      emojiEl.style.filter = `hue-rotate(${t*180%360}deg) brightness(2) saturate(5) drop-shadow(0 0 30px currentColor)`;
+      emojiEl.style.fontSize = `5.5rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `hsl(${(t*200)%360}, 100%, 50%, 0.5)`, 50);
+    if (Math.random() < 0.2) spawnParticle(floatLayer, pick(['🔥','💥','⚡','💀','🐉','🌋','✦']), Math.random()*85+5, Math.random()*85+5, `hsl(${Math.random()*360}, 100%, 70%)`, '1.2rem', 0.6);
+    if (Math.random() < 0.12) flashBackground(wrapper, `rgba(255,${Math.random()*100},0,0.12)`, 80);
   }
 
-  // boss_ratsteal: randomly nibbles off last typed character
-  if (e && e.mechanic === 'boss_ratsteal' && Math.random() < 0.025 && G.typedSoFar.length > 0) {
-    G.typedSoFar = G.typedSoFar.slice(0, -1);
-    const input = document.getElementById('ctd-input');
-    if (input) input.value = G.typedSoFar;
-    updateWordDisplay();
-    floatText('🐀 A rat stole a letter!', '#f59e0b', 'top');
-    sfxError();
+  // RAT KING BOSS PHASE 1: boss_ratsteal - rat infestation crawls everywhere
+  if (e && e.mechanic === 'boss_ratsteal') {
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.1+Math.abs(Math.sin(t*2))*0.3}) rotate(${Math.sin(t*1.5)*15}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 20px rgba(245,158,11,0.9)) brightness(1.4) saturate(2)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(245,158,11,${0.25+Math.abs(Math.sin(t*2))*0.35})`, 30);
+    if (Math.random() < 0.025 && G.typedSoFar.length > 0) {
+      G.typedSoFar = G.typedSoFar.slice(0, -1);
+      const input = document.getElementById('ctd-input');
+      if (input) input.value = G.typedSoFar;
+      updateWordDisplay();
+      floatText('🐀 A rat stole a letter!', '#f59e0b', 'top');
+      flashBackground(wrapper, 'rgba(245,158,11,0.15)', 200);
+      sfxError();
+    }
+    if (Math.random() < 0.1) spawnParticle(floatLayer, pick(['🐀','👑','🦷']), Math.random()*80+5, Math.random()*85+5, '#f59e0b', '0.9rem', 0.9);
   }
 
-  // boss_haunt: word floats around screen gently - more erratic than boss_fly
+  // OVERLORD BOSS PHASE 1: boss_mirror - mirror doubles, phantom copies
+  if (e && e.mechanic === 'boss_mirror') {
+    const mirrorT = Math.abs(Math.sin(t * 1.2));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1 + mirrorT*0.25}) rotate(${Math.sin(t)*20}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${15+mirrorT*25}px rgba(168,85,247,1)) drop-shadow(${Math.sin(t)*10}px 0 10px rgba(99,102,241,0.8)) brightness(1.3)`;
+    }
+    if (wArea) {
+      wArea.style.boxShadow = `${Math.sin(t)*15}px 0 ${20+mirrorT*20}px rgba(168,85,247,0.4), ${-Math.sin(t)*15}px 0 ${20+mirrorT*20}px rgba(99,102,241,0.4)`;
+      wArea.style.borderColor = `rgba(168,85,247,${0.4+mirrorT*0.6})`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(168,85,247,${0.2+mirrorT*0.4})`, 30);
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['🪞','✦','👥','◈']), Math.random()*70+5, Math.random()*80+10, '#a855f7', '1.1rem', 1.1);
+    if (mirrorT > 0.85 && Math.random() < 0.1) flashBackground(wrapper, 'rgba(168,85,247,0.1)', 150);
+  }
+
+  // OVERLORD BOSS PHASE 2: boss_anagram - words swirl and scramble in place
+  if (e && e.mechanic === 'boss_anagram') {
+    const aniT = Math.abs(Math.sin(t * 2));
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.1+aniT*0.3}) rotate(${t*45%360}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${15+aniT*25}px rgba(168,85,247,1)) hue-rotate(${t*60%360}deg) brightness(1.4)`;
+    }
+    if (wDisplay) {
+      wDisplay.style.transform = `rotate(${Math.sin(t*3)*3}deg) scale(${0.9+aniT*0.2})`;
+      wDisplay.style.textShadow = `0 0 ${5+aniT*15}px rgba(168,85,247,${aniT})`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(168,85,247,${0.2+aniT*0.4})`, 30);
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['✨','🔮','🌀','⭐']), Math.random()*70+5, Math.random()*80+10, '#a855f7', '1.1rem', 1.0);
+  }
+
+  // SOUL EATER PHASE 1: hypnosis (same mechanic - use the enhanced hypnosis above)
+  // SOUL EATER PHASE 2: boss_haunt - ghost floats word with eerie trails
   if (e && e.mechanic === 'boss_haunt') {
-    const wArea = document.getElementById('ctd-word-area');
-    const t = Date.now() / 700;
+    const hauntT = t * 1.2;
+    const haunX = Math.sin(hauntT * 1.1) * 70;
+    const haunY = Math.sin(hauntT * 0.9) * 40;
     if (wArea) {
-      wArea.style.transform = `translateX(${Math.sin(t * 1.1) * 55}px) translateY(${Math.sin(t * 0.9) * 30}px)`;
-      wArea.style.opacity = `${0.5 + Math.abs(Math.sin(t * 0.5)) * 0.5}`;
+      wArea.style.transform = `translateX(${haunX}px) translateY(${haunY}px)`;
+      wArea.style.opacity = `${0.4 + Math.abs(Math.sin(hauntT * 0.5)) * 0.6}`;
+      wArea.style.boxShadow = `0 0 ${20+Math.abs(Math.sin(hauntT))*30}px rgba(100,200,255,0.4), 0 0 60px rgba(100,200,255,0.1)`;
+      wArea.style.borderColor = `rgba(100,200,255,${0.3+Math.abs(Math.sin(hauntT))*0.5})`;
     }
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1+Math.abs(Math.sin(hauntT))*0.4}) translateY(${Math.sin(hauntT*0.7)*15}px) rotate(${Math.sin(hauntT*0.5)*20}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${20+Math.abs(Math.sin(hauntT))*30}px rgba(100,200,255,0.9)) brightness(${0.6+Math.abs(Math.sin(hauntT))*0.6}) opacity(${0.4+Math.abs(Math.sin(hauntT))*0.6})`;
+      emojiEl.style.fontSize = `5rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(100,200,255,${0.2+Math.abs(Math.sin(hauntT))*0.4})`, 40);
+    if (Math.random() < 0.08) spawnParticle(floatLayer, pick(['👻','✦','◌','○','💀']), Math.random()*80+5, Math.random()*85+5, '#64c8ff', '1.1rem', 1.3);
   }
 
-  // boss_possess: word floats AND typed chars hidden (like hypnosis+haunt)
+  // SOUL EATER PHASE 3: boss_possess - full possession, bleeding letters
   if (e && e.mechanic === 'boss_possess') {
-    const wArea = document.getElementById('ctd-word-area');
-    const t = Date.now() / 500;
-    if (wArea) wArea.style.transform = `translateX(${Math.sin(t * 1.3) * 65}px) translateY(${Math.cos(t) * 25}px)`;
-    // hide typed chars
-    const typedEl = document.getElementById('ctd-word-typed');
+    const possT = t * 1.8;
+    if (wArea) {
+      wArea.style.transform = `translateX(${Math.sin(possT * 1.3) * 80}px) translateY(${Math.cos(possT) * 35}px) rotate(${Math.sin(possT*0.5)*10}deg)`;
+      wArea.style.borderColor = `rgba(220,38,38,${0.5+Math.abs(Math.sin(possT))*0.5})`;
+      wArea.style.boxShadow = `0 0 ${20+Math.abs(Math.sin(possT))*30}px rgba(220,38,38,0.5)`;
+    }
     if (typedEl && G.typedSoFar.length > 0) typedEl.textContent = '🩸'.repeat(G.typedSoFar.length);
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.3+Math.abs(Math.sin(possT))*0.4}) rotate(${Math.sin(possT*0.7)*25}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 ${25+Math.abs(Math.sin(possT))*25}px rgba(220,38,38,1)) brightness(1.5) saturate(3) hue-rotate(${-30+Math.sin(possT)*30}deg)`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(220,38,38,${0.3+Math.abs(Math.sin(possT))*0.5})`, 50);
+    if (Math.random() < 0.1) spawnParticle(floatLayer, pick(['🩸','💀','👻','✦']), Math.random()*80+5, Math.random()*85+5, '#dc2626', '1.2rem', 1.0);
+    if (Math.random() < 0.08) flashBackground(wrapper, 'rgba(220,38,38,0.1)', 150);
   }
 
-  // boss_quake: violent constant screen shake
-  if (e && e.mechanic === 'boss_quake') {
-    const wrapper = document.querySelector('.ctd-combat-wrapper');
-    if (wrapper) wrapper.style.transform = `translate(${Math.random() * 10 - 5}px, ${Math.random() * 10 - 5}px) rotate(${Math.random() * 2 - 1}deg)`;
-  }
-
-  // boss_boulder: progressively squishes word area (set squish on each tick, reset on word complete)
+  // GOLEM BOSS PHASE 1: boss_boulder - crushing weight, earth rending
   if (e && e.mechanic === 'boss_boulder') {
-    const wArea = document.getElementById('ctd-word-area');
+    const boulderT = Math.abs(Math.sin(t * 1.5));
     if (wArea && G.boulderSquish) {
-      wArea.style.transform = `scaleY(${G.boulderSquish})`;
+      wArea.style.transform = `scaleY(${G.boulderSquish}) scaleX(${2 - G.boulderSquish})`;
+      wArea.style.boxShadow = `0 ${(1-G.boulderSquish)*30}px ${(1-G.boulderSquish)*20}px rgba(120,80,40,0.5)`;
+    }
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.3+boulderT*0.4}) translateY(${boulderT*5}px)`;
+      emojiEl.style.filter = `drop-shadow(0 ${5+boulderT*20}px 20px rgba(120,80,40,0.9)) brightness(0.7) contrast(2)`;
+      emojiEl.style.fontSize = `5.5rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(120,80,40,${0.25+boulderT*0.45})`, 40);
+    if (Math.random() < 0.06) spawnParticle(floatLayer, pick(['🪨','💨','💥','✦']), Math.random()*70+5, Math.random()*80+10, '#78503c', '1.2rem', 1.2);
+    if (Math.random() < 0.04) {
+      flashBackground(wrapper, 'rgba(120,80,40,0.08)', 100);
+      if (wrapper) { wrapper.style.transform = `translate(${Math.random()*4-2}px, ${Math.random()*4-2}px)`; setTimeout(() => { if(wrapper) wrapper.style.transform='none'; }, 80); }
     }
   }
 
-  // boss_petrify: handled in onMistake, just track petrify stacks in timerTick
-  // (nothing per-tick needed here)
+  // GOLEM BOSS PHASE 2: boss_quake - violent screenshake, cracks everywhere
+  if (e && e.mechanic === 'boss_quake') {
+    const quakeI = 8 + Math.abs(Math.sin(t*5))*7;
+    if (wrapper) wrapper.style.transform = `translate(${Math.random()*quakeI-quakeI/2}px, ${Math.random()*quakeI-quakeI/2}px) rotate(${Math.random()*2-1}deg)`;
+    if (emojiEl) {
+      emojiEl.style.transform = `scale(${1.5+Math.random()*0.3}) rotate(${Math.random()*20-10}deg)`;
+      emojiEl.style.filter = `drop-shadow(0 0 30px rgba(120,80,40,1)) brightness(0.65) contrast(2.5) sepia(0.8)`;
+      emojiEl.style.fontSize = `6rem`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(120,80,40,0.5)`, 50);
+    if (Math.random() < 0.12) spawnParticle(floatLayer, pick(['💥','🪨','💨','⚡']), Math.random()*80+5, Math.random()*80+10, '#78503c', '1.3rem', 0.8);
+    if (Math.random() < 0.08) flashBackground(wrapper, 'rgba(120,80,40,0.12)', 80);
+  }
+
+  // GOLEM BOSS PHASE 3: boss_petrify - stone creep, growing gray frost
+  if (e && e.mechanic === 'boss_petrify') {
+    const stacks = G.petrifyStacks || 0;
+    const stone = Math.min(1, stacks * 0.12);
+    if (emojiEl) {
+      emojiEl.style.filter = `grayscale(${stone}) brightness(${1-stone*0.4}) contrast(${1+stone}) drop-shadow(0 0 ${15+stone*25}px rgba(100,100,100,${stone}))`;
+      emojiEl.style.transform = `scale(${1.2+stone*0.3})`;
+    }
+    if (wArea) {
+      wArea.style.borderColor = `rgba(120,120,120,${stone*0.8})`;
+      wArea.style.boxShadow = `0 0 ${stone*30}px rgba(120,120,120,${stone*0.4})`;
+    }
+    if (enemyArea) pulseEnemyGlow(enemyArea, `rgba(120,120,120,${0.2+stone*0.4})`, 30+stone*20);
+    if (Math.random() < 0.04 + stone*0.04) spawnParticle(floatLayer, pick(['🪨','💀','✦','❄️']), Math.random()*70+5, Math.random()*80+10, '#6b7280', '1rem', 1.2);
+  }
 
   updateTimerDisplay();
   updateWordFade();
