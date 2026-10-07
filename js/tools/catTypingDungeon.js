@@ -4643,6 +4643,50 @@ function renderCombat_final() {
     </div>`;
   }
 
+  let enemyAreaHTML = '';
+  if ((e.mechanic === 'swarm' || e.mechanic === 'elite_summon' || e.mechanic === 'summon') && G.swarmTargets.length > 0) {
+    const totalBees = G.swarmTargets.length;
+    let beesHTML = '';
+    for (let i = 0; i < totalBees; i++) {
+      const isDead = i < G.swarmCurrentIndex;
+      const opacity = isDead ? 0.15 : 1;
+      const filter = isDead ? 'grayscale(1) blur(2px)' : 'none';
+      const hpPctLocal = isDead ? 0 : 100;
+      
+      beesHTML += `
+        <div class="ctd-mini-enemy" style="opacity:${opacity}; filter:${filter}; display:flex; flex-direction:column; align-items:center; transition:all 0.3s; margin: 0 8px;">
+          <div style="font-size:3.5rem; margin-bottom:8px;">${e.emoji}</div>
+          <div style="width:45px; height:8px; background:#374151; border-radius:4px; overflow:hidden; border:1px solid #1f2937; box-shadow:0 0 5px rgba(0,0,0,0.5);">
+            <div style="width:${hpPctLocal}%; height:100%; background:#ef4444; transition:width 0.2s;"></div>
+          </div>
+        </div>
+      `;
+    }
+    
+    enemyAreaHTML = `
+      <div class="ctd-enemy-area" style="background:transparent; box-shadow:none; border:none; padding:1rem 0;">
+        ${eliteBadge}${bossPhaseBadge}
+        <div class="ctd-enemy-name" style="margin-bottom:1.5rem; font-size:1.8rem;">${e.name} Swarm</div>
+        <div id="ctd-enemy-emoji" style="display:flex; justify-content:center; flex-wrap:wrap;">
+          ${beesHTML}
+        </div>
+      </div>
+    `;
+  } else {
+    enemyAreaHTML = `
+      <div class="ctd-enemy-area">
+        ${eliteBadge}${bossPhaseBadge}
+        <div class="ctd-enemy-emoji" id="ctd-enemy-emoji">${e.emoji}</div>
+        <div class="ctd-enemy-name">${e.name}</div>
+        ${armorDisplay}
+        <div class="ctd-enemy-hp-bar-wrap">
+          <div class="ctd-enemy-hp-bar"><div class="ctd-enemy-hp-fill" id="ctd-enemy-hp-fill" style="width:${hpPct}%"></div></div>
+          <span class="ctd-enemy-hp-label" id="ctd-enemy-hp-label">${G.enemyHp} / ${G.enemyMaxHp} HP</span>
+        </div>
+      </div>
+    `;
+  }
+
   _container.innerHTML = `
     <div class="ctd-wrapper ctd-combat-wrapper">
       <div class="ctd-hud">
@@ -4654,16 +4698,7 @@ function renderCombat_final() {
       <div class="ctd-player-hp-bar">
         <div class="ctd-player-hp-fill" style="width:${playerHpPct}%; background:${playerHpPct > 50 ? '#10b981' : playerHpPct > 25 ? '#f59e0b' : '#ef4444'}"></div>
       </div>
-      <div class="ctd-enemy-area">
-        ${eliteBadge}${bossPhaseBadge}
-        <div class="ctd-enemy-emoji" id="ctd-enemy-emoji">${e.emoji}</div>
-        <div class="ctd-enemy-name">${e.name}</div>
-        ${armorDisplay}
-        <div class="ctd-enemy-hp-bar-wrap">
-          <div class="ctd-enemy-hp-bar"><div class="ctd-enemy-hp-fill" id="ctd-enemy-hp-fill" style="width:${hpPct}%"></div></div>
-          <span class="ctd-enemy-hp-label" id="ctd-enemy-hp-label">${G.enemyHp} / ${G.enemyMaxHp} HP</span>
-        </div>
-      </div>
+      ${enemyAreaHTML}
       <div class="ctd-word-area" id="ctd-word-area">
         <div class="ctd-type-label">TYPE THIS</div>
         ${swarmHTML}
