@@ -25,7 +25,22 @@ function getWord(difficulty = 1) {
 }
 
 function getWordForEnemy(enemyId, floor = 1) {
-  const diff = Math.min(10, 1 + Math.floor(floor * 0.6));
+  let endlessFloor = (window.G && G.endlessMode) ? (G.endlessFloor || 0) : 0;
+  const diff = Math.min(10, 1 + Math.floor(floor * 0.6) + (endlessFloor * 4));
+
+  if (endlessFloor > 0) {
+    if (endlessFloor === 1) {
+      if (['rat','bat'].includes(enemyId)) return pick([...WORDS.medium, ...WORDS.easy]);
+      if (['troll','golem'].includes(enemyId)) return pick([...WORDS.hard, ...WORDS.medium]);
+      if (enemyId === 'zombie') return pick([...WORDS.hard]);
+    } else {
+      if (['rat','bat'].includes(enemyId)) return pick([...WORDS.hard, ...WORDS.medium]);
+      if (['troll','golem'].includes(enemyId)) return pick([...WORDS.veryhard, ...WORDS.hard]);
+      if (enemyId === 'zombie') return pick([...WORDS.veryhard]);
+    }
+    return getWord(diff);
+  }
+
   // enemy-specific overrides
   if (['rat','bat'].includes(enemyId))     return pick([...WORDS.easy, ...WORDS.easy]);
   if (['troll','golem'].includes(enemyId)) return pick([...WORDS.hard, ...WORDS.medium]);
@@ -2810,7 +2825,7 @@ function startCombat_v2(enemyId, isElite = false) {
   const def = ENEMIES[enemyId];
   if (!def) { advanceMap_v2(); return; }
 
-  const floorMult = 1 + (G.floor - 1) * 0.15 + (G.endlessMode ? G.endlessFloor * 0.08 : 0);
+  const floorMult = 1 + (G.floor - 1) * 0.15 + (G.endlessMode ? G.endlessFloor * 0.40 : 0);
   const eliteMult = isElite ? 1.5 : 1.0;
 
   G.enemy = { ...def, id: enemyId };
@@ -2846,24 +2861,32 @@ function startBoss_v2() {
   }
   const boss = pick(bossPool);
   if (G) G.lastBoss = boss.id;
-  G.boss = { ...boss };
+
+  const floorMult = 1 + (G.floor - 1) * 0.15 + (G.endlessMode ? G.endlessFloor * 0.40 : 0);
+  const scaledMaxHp = Math.round(boss.maxHp * floorMult);
+
+  G.boss = { 
+    ...boss,
+    maxHp: scaledMaxHp,
+    phases: boss.phases.map(p => ({ ...p, hp: Math.round(p.hp * floorMult) }))
+  };
   G.bossPhaseIdx = 0;
-  G.bossHp = boss.maxHp;
-  G.bossMaxHp = boss.maxHp;
-  G.bossPhase = boss.phases[0];
-  G.bossArmor = boss.phases[0].armor || 0;
+  G.bossHp = scaledMaxHp;
+  G.bossMaxHp = scaledMaxHp;
+  G.bossPhase = G.boss.phases[0];
+  G.bossArmor = G.boss.phases[0].armor || 0;
 
   G.enemy = {
     id: `boss_${boss.id}`,
     name: boss.name,
     emoji: boss.emoji,
-    maxHp: boss.maxHp,
+    maxHp: scaledMaxHp,
     atk: boss.atk,
-    mechanic: boss.phases[0].mechanic,
+    mechanic: G.boss.phases[0].mechanic,
     isElite: true,
     isBoss: true,
     gold: boss.gold,
-    armor: boss.phases[0].armor || 0,
+    armor: G.boss.phases[0].armor || 0,
   };
   G.enemyHp = G.bossHp;
   G.enemyMaxHp = G.bossMaxHp;
@@ -3102,7 +3125,8 @@ function triggerVictory_v2() {
     localStorage.setItem('ctd_high_score', score);
     G.highScore = score;
   }
-  submitScore('cat-typing-dungeon', score, `${score} pts`);
+  const formatStr = G.endlessMode ? `${score} pts (Endless Fl. ${G.endlessFloor})` : `${score} pts`;
+  submitScore('cat-typing-dungeon', score, formatStr);
 
   _container.innerHTML = `
     <div class="ctd-wrapper ctd-victory">
@@ -3475,7 +3499,7 @@ function triggerEnemyAttack_v2() {
   if (!G.enemy) return;
   const e = G.enemy;
   let atk = e.atk || 10;
-  const floorScale = 1 + (G.floor - 1) * 0.12 + (G.endlessMode ? (G.endlessFloor||0) * 0.05 : 0);
+  const floorScale = 1 + (G.floor - 1) * 0.12 + (G.endlessMode ? (G.endlessFloor||0) * 0.25 : 0);
   atk = Math.round(atk * floorScale);
   if (e.mechanic === 'punishment' && G.firePenalty > 0) atk = Math.round(atk * (1 + G.firePenalty * 0.25));
 
@@ -3508,7 +3532,8 @@ function onPlayerDeath_v2() {
   G.runScore = score;
   if (score > G.highScore) { localStorage.setItem('ctd_high_score', score); G.highScore = score; }
   
-  submitScore('cat-typing-dungeon', score, `${score} pts`);
+  const formatStr = G.endlessMode ? `${score} pts (Endless Fl. ${G.endlessFloor})` : `${score} pts`;
+  submitScore('cat-typing-dungeon', score, formatStr);
 
   setTimeout(() => renderGameOver_v2(), 500);
 }
@@ -4703,6 +4728,7 @@ function renderCombat_final() {
       <div class="ctd-hud">
         <span class="ctd-hud-hp ${G.hp <= G.maxHp * 0.3 ? 'ctd-hp-danger' : ''}">❤️ ${G.hp}/${G.maxHp}</span>
         <span class="ctd-hud-combo ${G.combo >= 10 ? 'ctd-combo-fire' : ''}">COMBO ×${G.combo}</span>
+        <span class="ctd-hud-mid" style="margin: 0 10px; font-weight:bold; color:#a855f7;">${G.endlessMode ? `Endless Fl. ${G.endlessFloor}` : `Floor ${G.floor}`}</span>
         <span class="ctd-hud-gold">🪙 ${G.gold}</span>
         <button id="ctd-hud-restart" class="ctd-btn-secondary" style="padding:4px 8px; font-size:0.8rem; margin-left:auto;">Restart</button>
       </div>
