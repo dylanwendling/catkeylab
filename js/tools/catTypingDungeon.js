@@ -4096,10 +4096,12 @@ function timerTick_v2() {
       while(newWord === oldWord) newWord = pick(WORDS.hard);
       G.currentWord = newWord;
       G.typedSoFar = '';
+      G.wordTimeLeft += 2.0;
+      G.wordTimeMax = Math.max(G.wordTimeMax, G.wordTimeLeft);
       const input = document.getElementById('ctd-input');
       if (input) input.value = '';
       updateWordDisplay();
-      floatText('🧌 SWAPPED!', '#10b981', 'big');
+      floatText('🧌 SWAPPED! +2.0s', '#10b981', 'big');
       flashBackground(wrapper, 'rgba(34,197,94,0.15)', 300);
       sfxError();
     }
