@@ -3214,18 +3214,7 @@ function renderCatSelect_v2() {
             <span>Defeat the BOSS!</span>
           </div>
         </div>
-        <div class="ctd-dev-menu" style="margin-top:30px; padding-top:20px; border-top:1px solid #374151; text-align:center;">
-          <select id="ctd-dev-enemy-select" class="ctd-btn-secondary" style="margin-right:10px; background-color: #111827;">
-            <option value="">-- Dev: Test Fight --</option>
-            <optgroup label="Normal / Elites">
-              ${Object.keys(ENEMIES).map(id => `<option value="${id}">${ENEMIES[id].name}</option>`).join('')}
-            </optgroup>
-            <optgroup label="Bosses">
-              ${BOSSES.map(b => `<option value="boss_${b.id}">${b.name}</option>`).join('')}
-            </optgroup>
-          </select>
-          <button id="ctd-dev-fight-btn" class="ctd-btn-primary" style="padding:8px 16px;">Fight!</button>
-        </div>
+
       </div>
     </div>
   `;
@@ -3239,22 +3228,7 @@ function renderCatSelect_v2() {
     });
   });
 
-  const devBtn = document.getElementById('ctd-dev-fight-btn');
-  const devSelect = document.getElementById('ctd-dev-enemy-select');
-  if (devBtn && devSelect) {
-    addListener(devBtn, 'click', () => {
-      const val = devSelect.value;
-      if (!val) return;
-      G = initGameState('speed');
-      G.mapRows = generateMap(G.totalNodes);
-      
-      if (val.startsWith('boss_')) {
-        startBoss_v2(val.replace('boss_', ''));
-      } else {
-        startCombat_v2(val, ENEMIES[val].isElite || false);
-      }
-    });
-  }
+
 }
 
 // ============================================================
