@@ -24,6 +24,21 @@ const BLOCK_HEIGHT = 32;
 const BASE_BLOCK_WIDTH = 240;
 const BASE_SPEED = 220; // Virtual pixels per second
 
+// Mobile Optimization & Render Cache Profile
+let isMobile = false;
+let currentDpr = 1;
+let cachedBgGrad = null;
+
+function detectMobileDevice() {
+  if (typeof window === 'undefined') return false;
+  return Boolean(
+    window.innerWidth <= 768 ||
+    (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) ||
+    'ontouchstart' in window ||
+    (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)
+  );
+}
+
 // Game Session Variables
 let tower = [];
 let currentBlock = null;
@@ -467,6 +482,9 @@ export function renderStackPanicGame(container) {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         background: #060913;
         touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+        will-change: transform;
         margin: 0 auto;
         box-sizing: border-box;
       }
@@ -476,6 +494,7 @@ export function renderStackPanicGame(container) {
         width: 100%;
         height: 100%;
         cursor: pointer;
+        touch-action: none;
         -webkit-tap-highlight-color: transparent;
       }
 
@@ -697,11 +716,18 @@ export function renderStackPanicGame(container) {
 
 function resizeCanvas() {
   if (!canvas) return;
-  const rect = canvas.getBoundingClientRect();
-  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  isMobile = detectMobileDevice();
+  // On mobile devices, capping DPR to 1.35 reduces pixel processing from 2.1M down to ~600k,
+  // preventing fill-rate GPU throttling while remaining razor-sharp on mobile screens.
+  currentDpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.35 : 2.0);
 
-  canvas.width = V_WIDTH * dpr;
-  canvas.height = V_HEIGHT * dpr;
+  const targetW = Math.round(V_WIDTH * currentDpr);
+  const targetH = Math.round(V_HEIGHT * currentDpr);
+  if (canvas.width !== targetW || canvas.height !== targetH) {
+    canvas.width = targetW;
+    canvas.height = targetH;
+    cachedBgGrad = null;
+  }
   canvas.style.aspectRatio = `${V_WIDTH} / ${V_HEIGHT}`;
 }
 
@@ -1037,7 +1063,8 @@ function spawnDebris(x, y, w, h, colorIndex, dir) {
 }
 
 function spawnPlacementSparks(x, y) {
-  for (let i = 0; i < 14; i++) {
+  const count = isMobile ? 8 : 14;
+  for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 60 + Math.random() * 120;
     particles.push({
@@ -1045,7 +1072,7 @@ function spawnPlacementSparks(x, y) {
       y: y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed - 30,
-      radius: 2 + Math.random() * 3,
+      radius: 2 + Math.random() * 2.5,
       color: '#22d3ee',
       alpha: 1,
       decay: 2.2
@@ -1054,15 +1081,16 @@ function spawnPlacementSparks(x, y) {
 }
 
 function spawnPerfectCelebration(x, y) {
-  for (let i = 0; i < 28; i++) {
-    const angle = (i / 28) * Math.PI * 2;
+  const count = isMobile ? 16 : 28;
+  for (let i = 0; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2;
     const speed = 90 + Math.random() * 140;
     particles.push({
       x: x,
       y: y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
-      radius: 3 + Math.random() * 3.5,
+      radius: 2.5 + Math.random() * 3,
       color: i % 2 === 0 ? '#fde047' : '#a855f7',
       alpha: 1,
       decay: 1.8
@@ -1071,7 +1099,8 @@ function spawnPerfectCelebration(x, y) {
 }
 
 function spawnShieldBurst(x, y) {
-  for (let i = 0; i < 24; i++) {
+  const count = isMobile ? 12 : 24;
+  for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
     const speed = 80 + Math.random() * 120;
     particles.push({
@@ -1079,7 +1108,7 @@ function spawnShieldBurst(x, y) {
       y: y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
-      radius: 3,
+      radius: 2.5,
       color: '#34d399',
       alpha: 1,
       decay: 2.0
@@ -1089,15 +1118,16 @@ function spawnShieldBurst(x, y) {
 
 function spawnPowerUpCollectionBlast(x, y, color) {
   screenShakeAmount = 6;
-  for (let i = 0; i < 32; i++) {
-    const angle = (i / 32) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+  const count = isMobile ? 18 : 32;
+  for (let i = 0; i < count; i++) {
+    const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
     const speed = 100 + Math.random() * 160;
     particles.push({
       x: x,
       y: y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed - 40,
-      radius: 3 + Math.random() * 3.5,
+      radius: 2.5 + Math.random() * 3,
       color: color,
       alpha: 1,
       decay: 1.6
@@ -1209,11 +1239,17 @@ function update(dt) {
     d.y += d.vy * dt;
     d.vy += 650 * dt; // Gravity
     d.rot += d.vrot * dt;
-    d.alpha -= dt * 0.45;
+    d.alpha -= dt * 0.55;
 
-    if (d.y - cameraY > V_HEIGHT + 100 || d.alpha <= 0) {
+    // Cull immediately when falling below the visible screen viewport
+    if (d.y + cameraY > V_HEIGHT + 80 || d.alpha <= 0) {
       debrisList.splice(i, 1);
     }
+  }
+
+  // Cap max debris on mobile
+  if (isMobile && debrisList.length > 8) {
+    debrisList.splice(0, debrisList.length - 8);
   }
 
   // Update Particles
@@ -1227,6 +1263,11 @@ function update(dt) {
     if (p.alpha <= 0) {
       particles.splice(i, 1);
     }
+  }
+
+  // Cap max particles on mobile to avoid CPU/GPU stalls
+  if (isMobile && particles.length > 50) {
+    particles.splice(0, particles.length - 50);
   }
 
   // Update Floating Texts
@@ -1249,9 +1290,8 @@ function update(dt) {
 function render() {
   if (!ctx || !canvas) return;
 
-  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
   ctx.save();
-  ctx.scale(dpr, dpr);
+  ctx.scale(currentDpr, currentDpr);
 
   // Apply Screen Shake
   if (screenShakeAmount > 0) {
@@ -1260,49 +1300,57 @@ function render() {
     ctx.translate(sx, sy);
   }
 
-  // 1. Background: Dark Arcade Gradient with Subtle Grid
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
-  bgGrad.addColorStop(0, '#040711');
-  bgGrad.addColorStop(0.5, '#070b18');
-  bgGrad.addColorStop(1, '#090d1f');
-  ctx.fillStyle = bgGrad;
+  // 1. Background: Dark Arcade Gradient with Subtle Grid (Cached Gradient)
+  if (!cachedBgGrad) {
+    cachedBgGrad = ctx.createLinearGradient(0, 0, 0, V_HEIGHT);
+    cachedBgGrad.addColorStop(0, '#040711');
+    cachedBgGrad.addColorStop(0.5, '#070b18');
+    cachedBgGrad.addColorStop(1, '#090d1f');
+  }
+  ctx.fillStyle = cachedBgGrad;
   ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
 
-  // Background Cyber Grid Lines (Parallax with camera)
+  // Background Cyber Grid Lines (Batched single path with one stroke)
   ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
   ctx.lineWidth = 1;
+  ctx.beginPath();
   const gridOffsetY = (cameraY * 0.3) % 40;
   for (let y = gridOffsetY; y < V_HEIGHT; y += 40) {
-    ctx.beginPath();
     ctx.moveTo(0, y);
     ctx.lineTo(V_WIDTH, y);
-    ctx.stroke();
   }
   for (let x = 0; x < V_WIDTH; x += 40) {
-    ctx.beginPath();
     ctx.moveTo(x, 0);
     ctx.lineTo(x, V_HEIGHT);
-    ctx.stroke();
   }
+  ctx.stroke();
 
   // 2. Camera Transform for Tower & Debris
   ctx.save();
   ctx.translate(0, cameraY);
 
-  // Draw Ground Base Platform
-  ctx.fillStyle = '#0f172a';
-  ctx.fillRect((V_WIDTH - BASE_BLOCK_WIDTH - 40) / 2, V_HEIGHT - BLOCK_HEIGHT * 1.5, BASE_BLOCK_WIDTH + 40, BLOCK_HEIGHT * 2);
-  ctx.strokeStyle = 'rgba(6, 182, 212, 0.3)';
-  ctx.lineWidth = 2;
-  ctx.strokeRect((V_WIDTH - BASE_BLOCK_WIDTH - 40) / 2, V_HEIGHT - BLOCK_HEIGHT * 1.5, BASE_BLOCK_WIDTH + 40, BLOCK_HEIGHT * 2);
+  const minVisY = -cameraY - BLOCK_HEIGHT - 40;
+  const maxVisY = V_HEIGHT - cameraY + 40;
 
-  // Render Tower Blocks
-  tower.forEach((b, idx) => {
-    drawBlock(b, idx === tower.length - 1);
-  });
+  // Draw Ground Base Platform (Only if on-screen)
+  const basePlatY = V_HEIGHT - BLOCK_HEIGHT * 1.5;
+  if (basePlatY >= minVisY && basePlatY <= maxVisY + BLOCK_HEIGHT * 2) {
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect((V_WIDTH - BASE_BLOCK_WIDTH - 40) / 2, basePlatY, BASE_BLOCK_WIDTH + 40, BLOCK_HEIGHT * 2);
+    ctx.strokeStyle = 'rgba(6, 182, 212, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect((V_WIDTH - BASE_BLOCK_WIDTH - 40) / 2, basePlatY, BASE_BLOCK_WIDTH + 40, BLOCK_HEIGHT * 2);
+  }
+
+  // Render Tower Blocks with Frustum Culling
+  for (let idx = 0; idx < tower.length; idx++) {
+    const b = tower[idx];
+    if (b.y < minVisY || b.y > maxVisY) continue;
+    drawBlock(b, idx === tower.length - 1, false);
+  }
 
   // Render Upcoming Floating Power-Up Beacons in the Sky Ahead
-  renderUpcomingPowerUpsWorld();
+  renderUpcomingPowerUpsWorld(minVisY, maxVisY);
 
   // If Target Lock is active, render holographic laser targeting guide!
   if (autoPerfectTurns > 0 && currentBlock && tower.length > 0) {
@@ -1311,8 +1359,10 @@ function render() {
     ctx.strokeStyle = 'rgba(34, 197, 94, 0.7)';
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 4]);
-    ctx.shadowColor = '#22c55e';
-    ctx.shadowBlur = 10;
+    if (!isMobile) {
+      ctx.shadowColor = '#22c55e';
+      ctx.shadowBlur = 8;
+    }
 
     // Laser boundary lines
     ctx.beginPath();
@@ -1335,45 +1385,57 @@ function render() {
     drawBlock(currentBlock, true, true);
   }
 
-  // Render Falling Sliced Debris
-  debrisList.forEach(d => {
-    ctx.save();
-    ctx.globalAlpha = Math.max(0, d.alpha);
-    ctx.translate(d.x + d.w / 2, d.y + d.h / 2);
-    ctx.rotate(d.rot);
+  // Render Falling Sliced Debris (Frustum Culled)
+  if (debrisList.length > 0) {
+    for (let i = 0; i < debrisList.length; i++) {
+      const d = debrisList[i];
+      if (d.y < minVisY - 50 || d.y > maxVisY + 50) continue;
 
-    const pal = BLOCK_PALETTES[d.colorIndex % BLOCK_PALETTES.length];
-    ctx.fillStyle = pal.main;
-    ctx.fillRect(-d.w / 2, -d.h / 2, d.w, d.h);
-    ctx.strokeStyle = pal.border;
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(-d.w / 2, -d.h / 2, d.w, d.h);
-    ctx.restore();
-  });
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, d.alpha);
+      ctx.translate(d.x + d.w / 2, d.y + d.h / 2);
+      ctx.rotate(d.rot);
 
-  // Render Particles
-  particles.forEach(p => {
-    ctx.save();
-    ctx.globalAlpha = Math.max(0, p.alpha);
-    ctx.fillStyle = p.color;
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-  });
+      const pal = BLOCK_PALETTES[d.colorIndex % BLOCK_PALETTES.length];
+      ctx.fillStyle = pal.main;
+      ctx.fillRect(-d.w / 2, -d.h / 2, d.w, d.h);
+      ctx.strokeStyle = pal.border;
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(-d.w / 2, -d.h / 2, d.w, d.h);
+      ctx.restore();
+    }
+  }
 
-  // Render Floating Texts
-  floatingTexts.forEach(ft => {
-    ctx.save();
-    ctx.globalAlpha = Math.max(0, ft.alpha);
+  // Render Particles (Batched without save/restore per particle)
+  if (particles.length > 0) {
+    for (let i = 0; i < particles.length; i++) {
+      const p = particles[i];
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.fillStyle = p.color;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // Render Floating Texts (Batched, no shadow on mobile)
+  if (floatingTexts.length > 0) {
     ctx.font = '900 16px Inter, sans-serif';
-    ctx.fillStyle = ft.color;
-    ctx.shadowColor = ft.color;
-    ctx.shadowBlur = 10;
     ctx.textAlign = 'center';
-    ctx.fillText(ft.text, ft.x, ft.y);
-    ctx.restore();
-  });
+    if (!isMobile) {
+      ctx.shadowBlur = 8;
+    }
+    for (let i = 0; i < floatingTexts.length; i++) {
+      const ft = floatingTexts[i];
+      ctx.globalAlpha = Math.max(0, ft.alpha);
+      ctx.fillStyle = ft.color;
+      if (!isMobile) ctx.shadowColor = ft.color;
+      ctx.fillText(ft.text, ft.x, ft.y);
+    }
+    ctx.globalAlpha = 1;
+    if (!isMobile) ctx.shadowBlur = 0;
+  }
 
   ctx.restore(); // Restore Camera Transform
 
@@ -1388,10 +1450,17 @@ function drawBlock(b, isTop = false, isMoving = false) {
 
   ctx.save();
 
-  // Glow on top/active block
+  // Glow on top/active block: use lightweight neon rim outline on mobile, mild shadowBlur on desktop
   if (isTop || isMoving) {
-    ctx.shadowColor = pal.glow;
-    ctx.shadowBlur = 14;
+    if (!isMobile) {
+      ctx.shadowColor = pal.glow;
+      ctx.shadowBlur = 10;
+    } else {
+      // Crisp neon rim outline with zero Gaussian blur overhead
+      ctx.strokeStyle = pal.border;
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(b.x - 1, b.y - 1, b.w + 2, b.h + 2);
+    }
   }
 
   // Special Block Visual Accents
@@ -1401,19 +1470,19 @@ function drawBlock(b, isTop = false, isMoving = false) {
   if (b.type === SPECIAL_TYPES.BONUS) {
     fillStyle = '#eab308';
     strokeStyle = '#fde047';
-    ctx.shadowColor = 'rgba(234, 179, 8, 0.8)';
+    if (!isMobile && (isTop || isMoving)) ctx.shadowColor = 'rgba(234, 179, 8, 0.8)';
   } else if (b.type === SPECIAL_TYPES.SLOWMO) {
     fillStyle = '#06b6d4';
     strokeStyle = '#67e8f9';
-    ctx.shadowColor = 'rgba(6, 182, 212, 0.8)';
+    if (!isMobile && (isTop || isMoving)) ctx.shadowColor = 'rgba(6, 182, 212, 0.8)';
   } else if (b.type === SPECIAL_TYPES.TARGET) {
     fillStyle = '#16a34a';
     strokeStyle = '#4ade80';
-    ctx.shadowColor = 'rgba(34, 197, 94, 0.8)';
+    if (!isMobile && (isTop || isMoving)) ctx.shadowColor = 'rgba(34, 197, 94, 0.8)';
   } else if (b.type === SPECIAL_TYPES.WIDE) {
     fillStyle = '#ec4899';
     strokeStyle = '#f472b6';
-    ctx.shadowColor = 'rgba(236, 72, 153, 0.8)';
+    if (!isMobile && (isTop || isMoving)) ctx.shadowColor = 'rgba(236, 72, 153, 0.8)';
   }
 
   // Block Body Fill
@@ -1516,17 +1585,28 @@ function updateHUD() {
    Upcoming Power-Up World & Radar Rendering
    ========================================================================== */
 
-function renderUpcomingPowerUpsWorld() {
+function renderUpcomingPowerUpsWorld(minVisY, maxVisY) {
   const baseBlockY = V_HEIGHT - BLOCK_HEIGHT * 2.5;
   const nowMs = performance.now();
+  let renderedCount = 0;
+  const maxToRender = isMobile ? 1 : 3;
 
-  scheduledPowerUps.forEach(pu => {
-    if (pu.collected) return;
-    // Visible within 15 floors above the current tower
-    if (pu.floor < tower.length) return;
-    if (pu.floor > tower.length + 14) return;
+  for (let i = 0; i < scheduledPowerUps.length; i++) {
+    const pu = scheduledPowerUps[i];
+    if (pu.collected) continue;
+    // Visible within 14 floors above the current tower
+    if (pu.floor < tower.length) continue;
+    if (pu.floor > tower.length + 14) continue;
 
     const targetY = baseBlockY - pu.floor * BLOCK_HEIGHT;
+    // Frustum culling: ignore if outside visible camera view
+    if (minVisY !== undefined && maxVisY !== undefined) {
+      if (targetY < minVisY - 100 || targetY > maxVisY + 100) continue;
+    }
+
+    if (renderedCount >= maxToRender) break;
+    renderedCount++;
+
     const bobOffset = Math.sin(nowMs * 0.0035 + pu.floor) * 5;
     const orbY = targetY + BLOCK_HEIGHT / 2 + bobOffset;
     const orbX = V_WIDTH / 2;
@@ -1564,8 +1644,10 @@ function renderUpcomingPowerUpsWorld() {
       ctx.strokeStyle = pu.info.color;
       ctx.lineWidth = 1.8;
       ctx.setLineDash([4, 4]);
-      ctx.shadowColor = pu.info.color;
-      ctx.shadowBlur = 10;
+      if (!isMobile) {
+        ctx.shadowColor = pu.info.color;
+        ctx.shadowBlur = 8;
+      }
       ctx.beginPath();
       ctx.moveTo(topB.x + topB.w / 2, topB.y);
       ctx.lineTo(orbX, orbY + 18);
@@ -1574,19 +1656,20 @@ function renderUpcomingPowerUpsWorld() {
     }
 
     // 3. Glowing Pulsing Floating Power-Up Beacon
-    ctx.shadowColor = pu.info.glow;
-    ctx.shadowBlur = 22;
-
-    // Outer Aura
     const pulseScale = 1 + Math.sin(nowMs * 0.006 + pu.floor) * 0.12;
-    const auraGrad = ctx.createRadialGradient(orbX, orbY, 4, orbX, orbY, 28 * pulseScale);
-    auraGrad.addColorStop(0, pu.info.color);
-    auraGrad.addColorStop(0.45, pu.info.glow);
-    auraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-    ctx.fillStyle = auraGrad;
+    
+    // Concentric aura circles - zero allocation, instant draw
+    ctx.fillStyle = pu.info.glow;
+    ctx.globalAlpha = 0.25;
     ctx.beginPath();
-    ctx.arc(orbX, orbY, 28 * pulseScale, 0, Math.PI * 2);
+    ctx.arc(orbX, orbY, 26 * pulseScale, 0, Math.PI * 2);
     ctx.fill();
+
+    ctx.globalAlpha = 0.5;
+    ctx.beginPath();
+    ctx.arc(orbX, orbY, 14 * pulseScale, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
 
     // Rotating Holographic Diamond
     ctx.save();
@@ -1616,7 +1699,10 @@ function renderUpcomingPowerUpsWorld() {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const labelText = `${pu.info.icon} ${pu.info.name} • ${floorsAway} FL AWAY`;
-    const textWidth = ctx.measureText(labelText).width;
+    if (!pu._cachedLabelWidth) {
+      pu._cachedLabelWidth = ctx.measureText(labelText).width;
+    }
+    const textWidth = pu._cachedLabelWidth;
     
     ctx.fillStyle = 'rgba(6, 9, 24, 0.92)';
     ctx.fillRect(orbX - textWidth / 2 - 8, orbY + 24, textWidth + 16, 20);
@@ -1625,13 +1711,11 @@ function renderUpcomingPowerUpsWorld() {
     ctx.strokeRect(orbX - textWidth / 2 - 8, orbY + 24, textWidth + 16, 20);
 
     ctx.fillStyle = pu.info.color;
-    ctx.shadowColor = pu.info.color;
-    ctx.shadowBlur = 8;
     ctx.fillText(labelText, orbX, orbY + 34);
     ctx.restore();
 
     ctx.restore();
-  });
+  }
 }
 
 function renderUpcomingPowerUpScreenRadar() {
@@ -1646,9 +1730,11 @@ function renderUpcomingPowerUpScreenRadar() {
     const trackerText = `UPCOMING: ${nextPU.info.icon} ${nextPU.info.name} (in ${floorsAway} floor${floorsAway === 1 ? '' : 's'})`;
     const tWidth = ctx.measureText(trackerText).width;
 
-    ctx.fillStyle = 'rgba(6, 9, 24, 0.9)';
-    ctx.shadowColor = nextPU.info.glow;
-    ctx.shadowBlur = 12;
+    ctx.fillStyle = 'rgba(6, 9, 24, 0.92)';
+    if (!isMobile) {
+      ctx.shadowColor = nextPU.info.glow;
+      ctx.shadowBlur = 8;
+    }
     ctx.beginPath();
     if (ctx.roundRect) {
       ctx.roundRect(pillX - tWidth / 2 - 14, pillY, tWidth + 28, 26, 13);
@@ -1658,7 +1744,7 @@ function renderUpcomingPowerUpScreenRadar() {
     ctx.fill();
 
     ctx.strokeStyle = nextPU.info.color;
-    ctx.lineWidth = 1.2;
+    ctx.lineWidth = 1.5;
     ctx.stroke();
 
     ctx.fillStyle = nextPU.info.color;
