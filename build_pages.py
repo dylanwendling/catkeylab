@@ -192,8 +192,8 @@ TOOL_ROUTES = {
         'path': '/games/last-click/',
         'category': 'games',
         'categoryName': 'Arcade Games',
-        'displayName': 'Last Click Minesweeper',
-        'aliases': ['last-click', 'last-click-game', 'lastclick', 'minesweeper', 'power-minesweeper']
+        'displayName': 'Last Click',
+        'aliases': ['last-click', 'last-click-game', 'lastclick']
     }
 }
 
@@ -305,7 +305,7 @@ STATIC_HEADER_HTML = """
               <a href="/games/typing-dungeon/" class="dropdown-item"><span>🏰</span> <span>Cat Typing Dungeon</span></a>
               <a href="/games/stack-panic/" class="dropdown-item"><span>🥞</span> <span>Stack Panic Arcade</span></a>
               <a href="/games/merge-lab/" class="dropdown-item"><span>🧪</span> <span>Merge Lab Puzzle</span></a>
-              <a href="/games/last-click/" class="dropdown-item"><span>💣</span> <span>Last Click Minesweeper</span></a>
+              <a href="/games/last-click/" class="dropdown-item"><span>💣</span> <span>Last Click</span></a>
             </div>
           </div>
 
@@ -1196,7 +1196,7 @@ def main():
             for alias in tool_route.get('aliases', []):
                 alias_clean = alias.strip('/')
                 alias_dir = f"tools/{alias_clean}" if tool_route['category'] != 'games' else f"games/{alias_clean}"
-                if alias_dir != rel_dir and not os.path.exists(os.path.join(alias_dir, 'index.html')):
+                if alias_dir != rel_dir:
                     os.makedirs(alias_dir, exist_ok=True)
                     alias_file = os.path.join(alias_dir, 'index.html')
                     with open(alias_file, 'w', encoding='utf-8') as f:

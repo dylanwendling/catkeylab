@@ -84,7 +84,7 @@ export function renderHeader(container) {
               <a href="/games/typing-dungeon/" class="dropdown-item"><span>🏰</span> <span>Cat Typing Dungeon</span></a>
               <a href="/games/stack-panic/" class="dropdown-item"><span>🥞</span> <span>Stack Panic Arcade</span></a>
               <a href="/games/merge-lab/" class="dropdown-item"><span>🧪</span> <span>Merge Lab Puzzle</span></a>
-              <a href="/games/last-click/" class="dropdown-item"><span>💣</span> <span>Last Click Minesweeper</span></a>
+              <a href="/games/last-click/" class="dropdown-item"><span>💣</span> <span>Last Click</span></a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
               <a href="/games/" class="dropdown-item"><span>🎮</span> <strong>All Games Directory</strong></a>
             </div>
@@ -181,7 +181,7 @@ export function renderHeader(container) {
           <span>🧪 Merge Lab Puzzle</span>
         </a>
         <a href="/games/last-click/" class="mobile-nav-link" data-route="last-click">
-          <span>💣 Last Click Minesweeper</span>
+          <span>💣 Last Click</span>
         </a>
         <a href="/games/" class="mobile-nav-link" data-route="games">
           <strong>🎮 All Arcade Games Hub</strong>

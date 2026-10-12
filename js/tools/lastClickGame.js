@@ -1,6 +1,6 @@
 /* ==========================================================================
-   CatKeyLab - Last Click: A Power-Up Minesweeper Game
-   High-Precision HTML5 Canvas & Grid Arcade Tactical Minesweeper
+   CatKeyLab - Last Click: A Tactical Grid Power-Up Game
+   High-Precision HTML5 Canvas & Grid Arcade Tactical Game
    Features Board-Based Collectible Power-Ups, Mine Defusal, Shield Protection,
    First-Click Cascade Guarantee, Combo Streaks, Daily Challenge & Leaderboards.
    ========================================================================== */
@@ -9,23 +9,24 @@ import { t } from '../i18n.js';
 import { getAudioContext, isSoundEnabled, toggleSound } from '../audio.js';
 import { submitScore, getLeaderboard, getAnonProfile } from '../leaderboard.js';
 
-// Game State Enum: 'IDLE', 'PLAYING', 'TARGETING', 'WON', 'LOST'
-let gameState = 'IDLE';
+// Game State Enum: 'MENU', 'IDLE', 'PLAYING', 'TARGETING', 'PAUSED', 'WON', 'LOST'
+let gameState = 'MENU';
 
 // Container & References
 let containerRef = null;
 let boardContainer = null;
 let timerInterval = null;
 
-// Difficulty Configurations
+// Difficulty Configurations (Scaled: Easy 6x6, Medium 8x8, Hard 11x11, Impossible 14x14)
 const DIFFICULTIES = {
-  beginner: { id: 'beginner', name: 'Beginner', rows: 9, cols: 9, mines: 10, specials: 3, badge: '🟢 Easy' },
-  intermediate: { id: 'intermediate', name: 'Intermediate', rows: 16, cols: 16, mines: 40, specials: 6, badge: '🟡 Medium' },
-  expert: { id: 'expert', name: 'Expert', rows: 16, cols: 24, mines: 66, specials: 10, badge: '🔴 Hard' },
-  daily: { id: 'daily', name: 'Daily Challenge', rows: 12, cols: 12, mines: 22, specials: 5, badge: '📅 Daily' }
+  easy: { id: 'easy', name: 'Easy', rows: 6, cols: 6, mines: 4, specials: 2, badge: '🟢 Easy (6×6)' },
+  medium: { id: 'medium', name: 'Medium', rows: 8, cols: 8, mines: 10, specials: 4, badge: '🟡 Medium (8×8)' },
+  hard: { id: 'hard', name: 'Hard', rows: 11, cols: 11, mines: 22, specials: 6, badge: '🔴 Hard (11×11)' },
+  impossible: { id: 'impossible', name: 'Impossible', rows: 14, cols: 14, mines: 42, specials: 8, badge: '💀 Impossible (14×14)' },
+  daily: { id: 'daily', name: 'Daily', rows: 9, cols: 9, mines: 14, specials: 5, badge: '📅 Daily (9×9)' }
 };
 
-let currentDiffId = 'beginner';
+let currentDiffId = 'easy';
 
 // Power-Up Special Tile Types
 const SPECIAL_TYPES = {
@@ -36,7 +37,7 @@ const SPECIAL_TYPES = {
   DOUBLE_PTS: { id: 'DOUBLE_PTS', name: 'Double Points', icon: '🌟', color: '#eab308', desc: '2× points for next 10 safe reveals' },
   MYSTERY: { id: 'MYSTERY', name: 'Mystery Gift', icon: '🎁', color: '#ec4899', desc: 'Grants a random beneficial power-up' },
   CHAIN: { id: 'CHAIN', name: 'Chain Reaction', icon: '⚛️', color: '#f43f5e', desc: 'Sends an electrical pulse collecting nearby special tiles' },
-  RECHARGE: { id: 'RECHARGE', name: 'Recharge', icon: '🔋', color: '#14b8a6', desc: 'Restores 1 charge to a depleted power-up' }
+  SONAR: { id: 'SONAR', name: 'Sonar Ping', icon: '🛰️', color: '#14b8a6', desc: 'Acoustic ping reveals 3 guaranteed safe tiles' }
 };
 
 // Cyber Themes (Unlockable via Credits)
@@ -291,9 +292,9 @@ function playSfx(type, param = 1) {
    Board & Grid State Initialization
    ========================================================================== */
 
-function initNewGame(diffId = currentDiffId) {
+function initNewGame(diffId = currentDiffId, keepMenu = false) {
   currentDiffId = diffId;
-  const cfg = DIFFICULTIES[diffId] || DIFFICULTIES.beginner;
+  const cfg = DIFFICULTIES[diffId] || DIFFICULTIES.easy;
   rows = cfg.rows;
   cols = cfg.cols;
   totalMines = cfg.mines;
@@ -317,7 +318,7 @@ function initNewGame(diffId = currentDiffId) {
   firstClickDone = false;
   activeTargetingPowerUp = null;
   doublePtsRemaining = 0;
-  gameState = 'IDLE';
+  gameState = keepMenu ? 'MENU' : 'IDLE';
 
   // Base starting inventory
   inventory = {
@@ -348,7 +349,57 @@ function initNewGame(diffId = currentDiffId) {
 
   renderBoardDOM();
   updateHUD();
+  if (!keepMenu) closeModals();
+}
+
+function pauseGame() {
+  if (gameState !== 'PLAYING' && gameState !== 'TARGETING') return;
+  gameState = 'PAUSED';
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
+  playSfx('button');
+  const modal = document.getElementById('lc-modal-pause');
+  if (modal) modal.style.display = 'flex';
+}
+
+function resumeGame() {
+  if (gameState !== 'PAUSED') return;
+  gameState = firstClickDone ? 'PLAYING' : 'IDLE';
+  if (firstClickDone) startTimer();
+  playSfx('button');
+  const modal = document.getElementById('lc-modal-pause');
+  if (modal) modal.style.display = 'none';
+}
+
+function openRulesModal() {
+  playSfx('button');
+  const modal = document.getElementById('lc-modal-rules');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeRulesModal() {
+  const modal = document.getElementById('lc-modal-rules');
+  if (modal) modal.style.display = 'none';
+}
+
+function showMainMenu() {
+  gameState = 'MENU';
+  if (timerInterval) {
+    clearInterval(timerInterval);
+    timerInterval = null;
+  }
   closeModals();
+  initNewGame(currentDiffId, true);
+  const menuModal = document.getElementById('lc-modal-menu');
+  if (menuModal) menuModal.style.display = 'flex';
+}
+
+function startGameFromMenu(diffId = currentDiffId) {
+  playSfx('button');
+  closeModals();
+  initNewGame(diffId, false);
 }
 
 function startTimer() {
@@ -364,7 +415,7 @@ function startTimer() {
 
 /* First Click Safety & Procedural Generation */
 function generateMinesAndSpecials(firstR, firstC) {
-  const cfg = DIFFICULTIES[currentDiffId] || DIFFICULTIES.beginner;
+  const cfg = DIFFICULTIES[currentDiffId] || DIFFICULTIES.easy;
   const safeCoords = new Set();
 
   // Protect clicked cell and all its immediate 8 neighbors to guarantee an opening cascade
@@ -666,7 +717,7 @@ function activateSpecialTile(typeKey, r, c) {
       break;
 
     case 'MYSTERY':
-      const gifts = ['SCANNER', 'DEFUSER', 'SHIELD', 'PULSE', 'DOUBLE_PTS'];
+      const gifts = ['SCANNER', 'DEFUSER', 'SHIELD', 'PULSE', 'DOUBLE_PTS', 'SONAR'];
       const luckyGift = gifts[Math.floor(getRandom() * gifts.length)];
       activateSpecialTile(luckyGift, r, c);
       break;
@@ -675,8 +726,8 @@ function activateSpecialTile(typeKey, r, c) {
       triggerChainReaction(r, c);
       break;
 
-    case 'RECHARGE':
-      rechargeDepletedPowerUp(r, c);
+    case 'SONAR':
+      triggerSonarPing(r, c);
       break;
   }
 }
@@ -702,23 +753,40 @@ function triggerChainReaction(originR, originC) {
   score += chained * 150;
 }
 
-function rechargeDepletedPowerUp(r, c) {
-  if (inventory.scanner < 1) {
-    inventory.scanner++;
-    spawnFloatingText('🔋 RECHARGED SCANNER!', r, c, '#14b8a6');
-  } else if (inventory.defuser < 1) {
-    inventory.defuser++;
-    spawnFloatingText('🔋 RECHARGED DEFUSER!', r, c, '#14b8a6');
-  } else if (inventory.pulse < 1) {
-    inventory.pulse++;
-    spawnFloatingText('🔋 RECHARGED PULSE!', r, c, '#14b8a6');
-  } else if (inventory.shield < 1) {
-    inventory.shield++;
-    spawnFloatingText('🔋 RECHARGED SHIELD!', r, c, '#14b8a6');
-  } else {
-    score += 300;
-    spawnFloatingText('🔋 FULL CHARGES (+300 PTS)!', r, c, '#14b8a6');
+function triggerSonarPing(originR, originC) {
+  const unrevealedSafe = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const cell = grid[r][c];
+      if (!cell.isMine && cell.state === 'HIDDEN') {
+        unrevealedSafe.push({ r, c });
+      }
+    }
   }
+
+  if (unrevealedSafe.length === 0) {
+    score += 300;
+    spawnFloatingText('🛰️ SECTOR CLEAR (+300 PTS)!', originR, originC, '#14b8a6');
+    return;
+  }
+
+  // Shuffle candidate safe cells
+  for (let i = unrevealedSafe.length - 1; i > 0; i--) {
+    const j = Math.floor(getRandom() * (i + 1));
+    [unrevealedSafe[i], unrevealedSafe[j]] = [unrevealedSafe[j], unrevealedSafe[i]];
+  }
+
+  const picked = unrevealedSafe.slice(0, 3);
+  spawnFloatingText(`🛰️ SONAR PING (+${picked.length} SAFE REVEALS)!`, originR, originC, '#14b8a6');
+  playSfx('powerup_collect', 2);
+
+  picked.forEach((pos, idx) => {
+    setTimeout(() => {
+      if (gameState === 'PLAYING' || gameState === 'IDLE') {
+        revealCell(pos.r, pos.c);
+      }
+    }, (idx + 1) * 140);
+  });
 }
 
 /* Dynamic Mine Disarm & Recalculation */
@@ -1291,6 +1359,12 @@ export function renderLastClickGame(container) {
             <button id="lc-diff-btn" class="lc-powerup-btn" style="font-size:0.75rem; padding:0.25rem 0.55rem;" title="Change Difficulty">
               ${DIFFICULTIES[currentDiffId].badge}
             </button>
+            <button id="lc-btn-rules" class="lc-btn-icon" title="Rules & How to Play (❓)" onclick="window.lcOpenRules()">
+              ❓
+            </button>
+            <button id="lc-btn-pause" class="lc-btn-icon" title="Pause Game (Esc / P)" onclick="window.lcPause()">
+              ⏸️
+            </button>
             <button id="lc-btn-sound" class="lc-btn-icon" title="Toggle Audio">
               ${isSoundEnabled() ? '🔊' : '🔇'}
             </button>
@@ -1339,45 +1413,193 @@ export function renderLastClickGame(container) {
       <div id="lc-board-container">
         <div id="lc-grid" class="lc-grid"></div>
 
-        <!-- 1. Difficulty & Daily Challenge Selection Modal -->
+        <!-- 0. Main Menu Modal -->
+        <div id="lc-modal-menu" class="lc-modal" style="display:flex; overflow-y:auto;">
+          <div style="font-size:3.2rem; margin-bottom:0.25rem; filter:drop-shadow(0 0 16px rgba(6,182,212,0.5));">💣</div>
+          <h1 style="font-size:2.3rem; font-weight:900; letter-spacing:0.04em; margin-bottom:0.25rem; background:linear-gradient(135deg, #22d3ee, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+            LAST CLICK
+          </h1>
+          <p style="color:var(--text-secondary); font-size:0.95rem; margin-bottom:1.25rem; font-weight:500; max-width:340px; line-height:1.4;">
+            One wrong step detonates the sector. Deploy tactical power-ups, disarm hazards, and survive.
+          </p>
+
+          <!-- Difficulty Selectors in Main Menu -->
+          <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); font-weight:800; margin-bottom:0.45rem;">
+            Select Grid Difficulty
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem; width:100%; max-width:320px; margin-bottom:0.75rem;">
+            <button id="lc-menu-diff-easy" class="btn lc-menu-diff-btn ${currentDiffId === 'easy' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('easy')">
+              🟢 Easy (6×6)
+            </button>
+            <button id="lc-menu-diff-medium" class="btn lc-menu-diff-btn ${currentDiffId === 'medium' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('medium')">
+              🟡 Medium (8×8)
+            </button>
+            <button id="lc-menu-diff-hard" class="btn lc-menu-diff-btn ${currentDiffId === 'hard' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('hard')">
+              🔴 Hard (11×11)
+            </button>
+            <button id="lc-menu-diff-impossible" class="btn lc-menu-diff-btn ${currentDiffId === 'impossible' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('impossible')">
+              💀 Impossible (14×14)
+            </button>
+          </div>
+
+          <button id="lc-menu-diff-daily" class="btn ${currentDiffId === 'daily' ? 'btn-primary' : 'btn-secondary'} btn-sm" style="margin-bottom:1.15rem; width:100%; max-width:320px; font-weight:700;" onclick="window.lcSelectMenuDiff('daily')">
+            📅 Daily Seeded Challenge (9×9)
+          </button>
+
+          <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:320px; margin-bottom:1.15rem;">
+            <button id="lc-btn-menu-play" class="btn btn-primary btn-lg" onclick="window.lcStartGame()" style="font-size:1.25rem; font-weight:900; padding:0.85rem; box-shadow:0 0 24px rgba(6,182,212,0.4);">
+              ▶️ PLAY NOW
+            </button>
+            <button class="btn btn-secondary" onclick="window.lcOpenRules()" style="font-weight:700; padding:0.65rem;">
+              📖 HOW TO PLAY & RULES
+            </button>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:0.6rem 1.25rem; width:100%; max-width:320px;">
+            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-weight:700;">Personal High Score</div>
+            <div id="lc-menu-highscore" style="font-size:1.6rem; font-weight:900; color:var(--accent-amber);">${highScore} pts</div>
+          </div>
+        </div>
+
+        <!-- 1. Pause Menu Modal -->
+        <div id="lc-modal-pause" class="lc-modal">
+          <div style="font-size:3rem; margin-bottom:0.25rem;">⏸️</div>
+          <h2 style="font-size:2rem; font-weight:900; margin-bottom:0.25rem; color:var(--text-primary);">GAME PAUSED</h2>
+          <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">Sector exploration frozen.</p>
+
+          <div style="display:flex; flex-direction:column; gap:0.75rem; width:100%; max-width:280px;">
+            <button class="btn btn-primary btn-lg" onclick="window.lcResume()" style="font-weight:800;">
+              ▶️ Resume (Esc / P)
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="window.lcRestart()" style="font-weight:700;">
+              🔄 Restart Match
+            </button>
+            <button class="btn btn-secondary" onclick="window.lcOpenRules()" style="font-weight:600;">
+              📖 Rules & Power-Ups
+            </button>
+            <button class="btn btn-secondary" onclick="window.lcMainMenu()" style="font-weight:600;">
+              🏠 Main Menu
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Rules & Tactical Guide Modal -->
+        <div id="lc-modal-rules" class="lc-modal" style="overflow-y:auto; max-height:100%;">
+          <div style="max-width:540px; width:100%; text-align:left; background:rgba(11, 17, 36, 0.96); border:1px solid var(--border-color); border-radius:var(--radius-xl); padding:1.25rem; box-shadow:0 12px 40px rgba(0,0,0,0.7);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.5rem;">
+              <h2 style="font-size:1.45rem; font-weight:900; margin:0; color:var(--accent-cyan); display:flex; align-items:center; gap:0.5rem;">
+                <span>📖</span> Last Click — Rules & Guide
+              </h2>
+              <button class="btn btn-secondary btn-sm" onclick="window.lcCloseRules()">✖️ Close</button>
+            </div>
+
+            <div style="font-size:0.88rem; line-height:1.55; color:var(--text-secondary); display:flex; flex-direction:column; gap:0.85rem; max-height:60dvh; overflow-y:auto; padding-right:0.35rem;">
+              <div>
+                <strong style="color:var(--text-primary); font-size:0.95rem;">🎯 Objective:</strong>
+                <div>Reveal all safe tiles on the board without detonating hidden mines. Numbers on revealed tiles tell you how many mines touch that tile in the surrounding 8 directions.</div>
+              </div>
+
+              <div>
+                <strong style="color:var(--text-primary); font-size:0.95rem;">⚡ 100% First-Click Protection:</strong>
+                <div>Your opening click is always completely safe and guaranteed to cascade open an informative pocket!</div>
+              </div>
+
+              <div>
+                <strong style="color:var(--text-primary); font-size:0.95rem;">🕹️ Controls:</strong>
+                <div>• <strong>Left Click / Tap:</strong> Reveal tile.</div>
+                <div>• <strong>Right Click / Flag Mode:</strong> Toggle 🚩 warning flags.</div>
+                <div>• <strong>Chording:</strong> Click a revealed numbered tile whose adjacent flag count matches its number to instantly reveal all unflagged neighbors!</div>
+                <div>• <strong>Pause:</strong> Press <strong>Esc</strong> or <strong>P</strong> (or tap ⏸️) anytime to pause.</div>
+              </div>
+
+              <div>
+                <strong style="color:var(--text-primary); font-size:0.95rem;">🎁 Tactical Board Power-Ups:</strong>
+                <div style="display:grid; grid-template-columns:1fr; gap:0.45rem; margin-top:0.35rem;">
+                  <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.6rem; border-radius:var(--radius-sm); border-left:3px solid #06b6d4;">
+                    <strong>📡 Scanner:</strong> Select in inventory and click a 3×3 zone to highlight hidden mines with radar pulses for 5 seconds.
+                  </div>
+                  <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.6rem; border-radius:var(--radius-sm); border-left:3px solid #10b981;">
+                    <strong>✂️ Defuser:</strong> Disarms a suspected mine safely, turning it harmless and decrementing adjacent clues by 1.
+                  </div>
+                  <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.6rem; border-radius:var(--radius-sm); border-left:3px solid #3b82f6;">
+                    <strong>🛡️ Shield:</strong> Passively absorbs 1 accidental detonation, neutralizing the mine and keeping your run alive!
+                  </div>
+                  <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.6rem; border-radius:var(--radius-sm); border-left:3px solid #a855f7;">
+                    <strong>⚡ Reveal Pulse:</strong> Clears a 3×3 zone safely without detonating any mines inside.
+                  </div>
+                  <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.6rem; border-radius:var(--radius-sm); border-left:3px solid #14b8a6;">
+                    <strong>🛰️ Sonar Ping:</strong> Acoustic reconnaissance pulse that instantly detects and reveals 3 guaranteed safe tiles across the board!
+                  </div>
+                  <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.6rem; border-radius:var(--radius-sm); border-left:3px solid #eab308;">
+                    <strong>🌟 Double Points:</strong> Awards 2× points for your next 10 safe moves.
+                  </div>
+                  <div style="background:rgba(255,255,255,0.04); padding:0.4rem 0.6rem; border-radius:var(--radius-sm); border-left:3px solid #f43f5e;">
+                    <strong>⚛️ Chain Reaction:</strong> Collects all special tiles within a 3-tile radius.
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <strong style="color:var(--text-primary); font-size:0.95rem;">🔥 Streaks & Progression:</strong>
+                <div>Safe reveals chain into combo streaks for high scores. Completing boards rewards Cyber Credits to unlock board color themes!</div>
+              </div>
+            </div>
+
+            <div style="margin-top:1rem; text-align:center;">
+              <button class="btn btn-primary" onclick="window.lcCloseRules()" style="width:100%; font-weight:800; padding:0.65rem;">
+                👍 UNDERSTOOD — LET'S PLAY
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Difficulty & Daily Challenge Selection Modal -->
         <div id="lc-modal-diff" class="lc-modal">
           <div style="font-size:2.4rem; margin-bottom:0.25rem;">💣</div>
           <h2 style="font-size:1.6rem; font-weight:900; margin-bottom:0.5rem; color:var(--text-primary);">SELECT DIFFICULTY</h2>
           <div style="display:flex; flex-direction:column; gap:0.5rem; width:100%; max-width:280px; margin-bottom:1rem;">
-            <button class="btn btn-secondary" onclick="window.lcSetDiff('beginner')">
-              🟢 Beginner (9×9 • 10 Mines)
+            <button class="btn btn-secondary" onclick="window.lcSetDiff('easy')">
+              🟢 Easy (6×6 • 4 Mines)
             </button>
-            <button class="btn btn-secondary" onclick="window.lcSetDiff('intermediate')">
-              🟡 Intermediate (16×16 • 40 Mines)
+            <button class="btn btn-secondary" onclick="window.lcSetDiff('medium')">
+              🟡 Medium (8×8 • 10 Mines)
             </button>
-            <button class="btn btn-secondary" onclick="window.lcSetDiff('expert')">
-              🔴 Expert (24×16 • 66 Mines)
+            <button class="btn btn-secondary" onclick="window.lcSetDiff('hard')">
+              🔴 Hard (11×11 • 22 Mines)
+            </button>
+            <button class="btn btn-secondary" onclick="window.lcSetDiff('impossible')">
+              💀 Impossible (14×14 • 42 Mines)
             </button>
             <button class="btn btn-primary" onclick="window.lcSetDiff('daily')" style="box-shadow:0 0 16px rgba(6,182,212,0.4);">
-              📅 Daily Seeded Challenge
+              📅 Daily Seeded Challenge (9×9)
             </button>
           </div>
           <button class="btn btn-secondary btn-sm" onclick="window.lcCloseDiff()">Close</button>
         </div>
 
-        <!-- 2. Victory Modal -->
+        <!-- 4. Victory Modal -->
         <div id="lc-modal-victory" class="lc-modal">
           <div style="font-size:3rem; margin-bottom:0.25rem;">🏆</div>
-          <h2 style="font-size:2rem; font-weight:900; color:#4ade80; margin-bottom:0.25rem;">BOARD CLEARED!</h2>
+          <h2 style="font-size:2rem; font-weight:900; color:#4ade80; margin-bottom:0.25rem;">SECTOR CLEARED!</h2>
           <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem;">
-            Tactical Mine Sweeping Masterclass. All threats neutralized.
+            Tactical grid masterclass. All threats neutralized.
           </p>
           <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem 1.25rem; margin-bottom:1.25rem; width:100%; max-width:280px;">
             <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Final Score</div>
             <div id="lc-vic-score" style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);">0</div>
             <div id="lc-vic-credits" style="font-size:0.85rem; font-weight:700; color:#fde047; margin-top:0.2rem;">+0 Cyber Credits 🪙</div>
           </div>
-          <button class="btn btn-primary btn-lg" onclick="window.lcRestart()" style="width:100%; max-width:260px; font-weight:900;">
-            ▶️ PLAY AGAIN
-          </button>
+          <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:260px;">
+            <button class="btn btn-primary btn-lg" onclick="window.lcRestart()" style="font-weight:900;">
+              ▶️ PLAY AGAIN
+            </button>
+            <button class="btn btn-secondary" onclick="window.lcMainMenu()" style="font-weight:700;">
+              🏠 MAIN MENU
+            </button>
+          </div>
         </div>
 
-        <!-- 3. Defeat Modal -->
+        <!-- 5. Defeat Modal -->
         <div id="lc-modal-defeat" class="lc-modal">
           <div style="font-size:3rem; margin-bottom:0.25rem;">💥</div>
           <h2 style="font-size:2rem; font-weight:900; color:#f43f5e; margin-bottom:0.25rem;">DETONATION!</h2>
@@ -1388,9 +1610,14 @@ export function renderLastClickGame(container) {
             <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Final Score</div>
             <div id="lc-def-score" style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);">0</div>
           </div>
-          <button class="btn btn-primary btn-lg" onclick="window.lcRestart()" style="width:100%; max-width:260px; font-weight:900;">
-            🔄 TRY AGAIN
-          </button>
+          <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:260px;">
+            <button class="btn btn-primary btn-lg" onclick="window.lcRestart()" style="font-weight:900;">
+              🔄 TRY AGAIN
+            </button>
+            <button class="btn btn-secondary" onclick="window.lcMainMenu()" style="font-weight:700;">
+              🏠 MAIN MENU
+            </button>
+          </div>
         </div>
 
       </div>
@@ -1401,24 +1628,47 @@ export function renderLastClickGame(container) {
   boardContainer = document.getElementById('lc-board-container');
 
   // Window helper hooks for inline onclicks
-  window.lcRestart = () => initNewGame(currentDiffId);
+  window.lcRestart = () => startGameFromMenu(currentDiffId);
   window.lcSetDiff = (id) => {
-    initNewGame(id);
+    currentDiffId = id;
+    startGameFromMenu(id);
     document.getElementById('lc-modal-diff').style.display = 'none';
   };
   window.lcCloseDiff = () => {
     document.getElementById('lc-modal-diff').style.display = 'none';
   };
+  window.lcSelectMenuDiff = (id) => {
+    currentDiffId = id;
+    initNewGame(id, true);
+    document.querySelectorAll('.lc-menu-diff-btn').forEach(b => {
+      b.classList.remove('btn-primary');
+      b.classList.add('btn-secondary');
+    });
+    const activeBtn = document.getElementById(`lc-menu-diff-${id}`);
+    if (activeBtn) {
+      activeBtn.classList.remove('btn-secondary');
+      activeBtn.classList.add('btn-primary');
+    }
+    const diffBtn = document.getElementById('lc-diff-btn');
+    if (diffBtn) diffBtn.textContent = DIFFICULTIES[id].badge;
+  };
+  window.lcStartGame = () => startGameFromMenu(currentDiffId);
+  window.lcPause = pauseGame;
+  window.lcResume = resumeGame;
+  window.lcOpenRules = openRulesModal;
+  window.lcCloseRules = closeRulesModal;
+  window.lcMainMenu = showMainMenu;
 
   bindUIEvents();
-  initNewGame(currentDiffId);
+  initNewGame(currentDiffId, true);
 }
 
 function renderBoardDOM() {
   const gridEl = document.getElementById('lc-grid');
   if (!gridEl) return;
 
-  gridEl.style.gridTemplateColumns = `repeat(${cols}, 32px)`;
+  const cellSize = cols <= 6 ? 44 : (cols <= 8 ? 36 : (cols <= 11 ? 28 : 24));
+  gridEl.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
   gridEl.innerHTML = '';
 
   for (let r = 0; r < rows; r++) {
@@ -1426,6 +1676,9 @@ function renderBoardDOM() {
       const cellEl = document.createElement('div');
       cellEl.id = `lc-c-${r}-${c}`;
       cellEl.className = 'lc-cell';
+      cellEl.style.width = `${cellSize}px`;
+      cellEl.style.height = `${cellSize}px`;
+      cellEl.style.fontSize = cellSize >= 36 ? '1.1rem' : (cellSize >= 28 ? '0.88rem' : '0.72rem');
       cellEl.dataset.r = r;
       cellEl.dataset.c = c;
 
@@ -1607,6 +1860,22 @@ function bindUIEvents() {
     });
   }
 
+  const btnPause = document.getElementById('lc-btn-pause');
+  if (btnPause) {
+    btnPause.addEventListener('click', () => {
+      if (gameState === 'PLAYING' || gameState === 'TARGETING') {
+        pauseGame();
+      } else if (gameState === 'PAUSED') {
+        resumeGame();
+      }
+    });
+  }
+
+  const btnRules = document.getElementById('lc-btn-rules');
+  if (btnRules) {
+    btnRules.addEventListener('click', openRulesModal);
+  }
+
   // Mobile Flag Mode Toggle
   const btnFlagToggle = document.getElementById('lc-btn-flag-toggle');
   const flagStatusEl = document.getElementById('lc-flag-status');
@@ -1644,12 +1913,33 @@ function bindUIEvents() {
       selectTargetingPowerUp('defuser');
     } else if (e.code === 'Digit3') {
       selectTargetingPowerUp('pulse');
-    } else if (e.code === 'Escape') {
-      cancelTargeting();
-      closeModals();
-    } else if (e.code === 'Space' && (gameState === 'WON' || gameState === 'LOST')) {
+    } else if (e.code === 'KeyP') {
       e.preventDefault();
-      initNewGame(currentDiffId);
+      if (gameState === 'PLAYING' || gameState === 'TARGETING') pauseGame();
+      else if (gameState === 'PAUSED') resumeGame();
+    } else if (e.code === 'Escape') {
+      e.preventDefault();
+      const rulesModal = document.getElementById('lc-modal-rules');
+      const diffModal = document.getElementById('lc-modal-diff');
+      if (rulesModal && rulesModal.style.display === 'flex') {
+        rulesModal.style.display = 'none';
+      } else if (diffModal && diffModal.style.display === 'flex') {
+        diffModal.style.display = 'none';
+      } else if (activeTargetingPowerUp) {
+        cancelTargeting();
+      } else if (gameState === 'PLAYING' || gameState === 'TARGETING') {
+        pauseGame();
+      } else if (gameState === 'PAUSED') {
+        resumeGame();
+      }
+    } else if (e.code === 'Space') {
+      if (gameState === 'WON' || gameState === 'LOST') {
+        e.preventDefault();
+        startGameFromMenu(currentDiffId);
+      } else if (gameState === 'MENU') {
+        e.preventDefault();
+        startGameFromMenu(currentDiffId);
+      }
     }
   };
 

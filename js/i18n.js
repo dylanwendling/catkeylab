@@ -46,7 +46,7 @@ export const translations = {
     navFAQ: 'FAQ',
     stackPanicTitle: 'Stack Panic Arcade',
     mergeLabTitle: 'Merge Lab Puzzle',
-    lastClickTitle: 'Last Click Minesweeper',
+    lastClickTitle: 'Last Click',
     
     // Hero
     heroBadge: '⚡ 100% Free & In-Browser Tools',

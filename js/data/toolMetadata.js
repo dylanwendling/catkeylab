@@ -733,23 +733,23 @@ export const TOOL_METADATA = {
   },
   'last-click': {
     titleKey: 'lastClickTitle',
-    desc: 'Tactical power-up Minesweeper featuring board-based special tiles, interactive mine defusal, shield barriers, combo streaks, and daily seeded challenges.',
+    desc: 'Tactical grid power-up game featuring board-based special tiles, interactive mine defusal, shield barriers, combo streaks, and daily seeded challenges.',
     icon: '💣',
     category: 'games',
     content: {
-      intro: 'Step into Last Click: an arcade reimagining of classic Minesweeper for CatKeyLab. Uncover numbered tiles, interpret spatial logic, and collect board-based tactical power-ups. Disarm suspected mines with precision Defusers, scan dangerous quadrants with Scanners, survive accidental detonations with Shields, and clear safe pockets with Reveal Pulses.',
+      intro: 'Step into Last Click: a tactical arcade grid game for CatKeyLab. Uncover numbered tiles, interpret spatial logic, and collect board-based tactical power-ups. Disarm suspected mines with precision Defusers, scan dangerous quadrants with Scanners, survive accidental detonations with Shields, and reveal safe pockets with Sonar Pings.',
       howTo: [
         'Left Click or Tap hidden tiles to reveal them. Your very first click is 100% guaranteed safe with an opening cascade.',
         'Numbers indicate exactly how many mines touch that specific tile (horizontally, vertically, and diagonally).',
         'Right Click or toggle Flag Mode on mobile to mark suspected mine locations with red flags.',
-        'Discover and collect special tiles directly on the board: Scanners (3x3 radar), Defusers (safely neutralize mines), Shields (absorb detonations), Reveal Pulses (open safe zones), Double Points, and Chain Reactions.',
+        'Discover and collect special tiles directly on the board: Scanners (3x3 radar), Defusers (safely neutralize mines), Shields (absorb detonations), Reveal Pulses (open safe zones), Sonar Pings (reveal 3 safe tiles), Double Points, and Chain Reactions.',
         'Target power-ups by selecting them in your inventory, then clicking a target board tile.',
         'Use Chording: Click an already-revealed numbered tile whose adjacent flag count matches its clue to instantly reveal all unflagged neighbors!',
-        'Clear all safe non-mine tiles to achieve victory, earn Cyber Credits, and claim your spot on the global leaderboard!'
+        'Clear all safe non-mine tiles across Easy (6x6), Medium (8x8), Hard (11x11), and Impossible (14x14) boards to achieve victory!'
       ],
       whatItMeasures: 'Last Click evaluates spatial deductive reasoning, probabilistic risk assessment, tactical resource allocation, and cognitive composure under uncertainty.',
-      whyUseIt: 'Unlike traditional Minesweeper where 50/50 guesses can abruptly end a long run, Last Click equips players with tactical power-ups and protective shields to overcome ambiguous boards through strategic resource management.',
-      interpretResults: 'Clearing Beginner in under 60s demonstrates swift spatial deduction. Intermediate victories reflect solid multi-step planning. Clearing Expert or Daily Seeded challenges with high combos marks true Grandmaster Minesweeper mastery.',
+      whyUseIt: 'Unlike traditional grid deduction where 50/50 guesses can abruptly end a long run, Last Click equips players with tactical power-ups and protective shields to overcome ambiguous boards through strategic resource management.',
+      interpretResults: 'Clearing Easy in under 30s demonstrates swift spatial deduction. Medium victories reflect solid multi-step planning. Conquering Hard, Impossible, or Daily Seeded challenges marks true tactical Grandmaster mastery.',
       tips: [
         'Look for the 1-1 and 1-2-1 edge patterns to identify guaranteed safe and mine tiles without guessing.',
         'Save your Defusers for unavoidable 50/50 corner guesses to remove the mine and update surrounding numbers safely.',

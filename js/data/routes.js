@@ -177,8 +177,8 @@ export const TOOL_ROUTES = {
     path: '/games/last-click/',
     category: 'games',
     categoryName: 'Arcade Games',
-    displayName: 'Last Click Minesweeper',
-    aliases: ['last-click', 'last-click-game', 'lastclick', 'minesweeper', 'power-minesweeper']
+    displayName: 'Last Click',
+    aliases: ['last-click', 'last-click-game', 'lastclick']
   }
 };
 
