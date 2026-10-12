@@ -165,6 +165,13 @@ export const TOOL_ROUTES = {
     categoryName: 'Arcade Games',
     displayName: 'Stack Panic Arcade',
     aliases: ['stack-panic', 'stack-panic-game', 'stacker', 'stack-game']
+  },
+  'merge-lab': {
+    path: '/games/merge-lab/',
+    category: 'games',
+    categoryName: 'Arcade Games',
+    displayName: 'Merge Lab Puzzle',
+    aliases: ['merge-lab', 'merge-lab-game', 'mergelab', 'merge', '2048']
   }
 };
 

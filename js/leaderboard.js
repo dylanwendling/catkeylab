@@ -30,7 +30,8 @@ const INITIAL_LEADERBOARDS = {
   'cat-mini-golf-game-9': [],
   'cat-mini-golf-game-18': [],
   'cat-typing-dungeon': [],
-  'stack-panic': []
+  'stack-panic': [],
+  'merge-lab': []
 };
 
 // Get or Create Anonymous Identity
@@ -393,6 +394,13 @@ export function getPercentile(testId, score, rank = null) {
       if (score >= 150) return "Top 15% (High Rise Builder 🏢)";
       if (score >= 60) return "Top 40% (Solid Stacker 🧱)";
       return "Top 60% (Casual Stacker)";
+
+    case 'merge-lab':
+      if (score >= 25000) return "Top 1% (Quantum Synthesis Master 🧬)";
+      if (score >= 12000) return "Top 5% (Lab Senior Scientist 🧪)";
+      if (score >= 6000) return "Top 15% (Reactor Specialist ⚡)";
+      if (score >= 2000) return "Top 40% (Competent Synthesizer 🔬)";
+      return "Top 60% (Junior Researcher)";
 
     default:
       return "Top 15%";
