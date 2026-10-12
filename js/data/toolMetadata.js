@@ -663,5 +663,38 @@ export const TOOL_METADATA = {
       { q: 'Can I play this on a mobile phone?', a: 'Yes! The game is explicitly designed to be mobile-first. Tap the input box and use your phone\'s native keyboard to type the words.' },
       { q: 'What do the passives do?', a: 'Passives are upgrades you get from shops and chests. They modify the game rules - giving you more time, bonus damage, healing, or special abilities like ignoring a mistake.' }
     ]
+  },
+  'stack-panic': {
+    titleKey: 'stackPanicTitle',
+    desc: 'Drop moving cyber blocks onto a rising tower with precision slicing physics, perfect placement combos, and power-up modifiers.',
+    icon: '🥞',
+    category: 'games',
+    content: {
+      intro: 'Test your timing and rhythm in Stack Panic! Drop moving neon blocks with surgical precision. Overhanging pieces are sliced off, narrowing your platform as you reach for the sky. Chain perfect placements for combo multipliers and unlock game-saving special blocks.',
+      howTo: [
+        'Watch the moving neon block oscillate horizontally across the play zone.',
+        'Press Spacebar, Left Click, or Tap the screen to drop the block onto the tower.',
+        'Any overhanging portion extending past the underlying block is sliced away into falling physics debris.',
+        'Align the block within the perfect tolerance threshold to preserve full block width and build your combo multiplier.',
+        'Collect special blocks: Golden Bonus (+50 pts), Frost Slow-Motion (cools speed for 3 blocks), Emerald Shield (saves 1 mistake), and Neon Recovery (+32px width).',
+        'Stack as high as you can before a complete miss topples the tower!'
+      ],
+      whatItMeasures: 'Stack Panic tests rhythmic timing, visual spatial prediction, dynamic reaction control, and risk management under escalating speed pressure.',
+      whyUseIt: 'It is an addictive, fast-paced arcade benchmark that trains micro-adjustments, hand-eye coordination, and split-second focus.',
+      interpretResults: 'Reaching 30+ floors demonstrates solid timing. 70+ floors requires consistent rhythm under high velocity. Scores above 150+ reflect mastery of perfect placement combos and strategic power-up utilization.',
+      tips: [
+        'Focus on the leading edge of the underlying block rather than the moving block.',
+        'Establish a rhythmic cadence: the moving block bounces at consistent intervals.',
+        'Save your Shield for emergency near-misses when the platform has become razor thin.',
+        'Prioritize perfect placements early in the match while movement speed is manageable to build a high score multiplier.'
+      ],
+      relatedTools: ['reaction-time-test', 'aim-trainer-test', 'cps-test']
+    },
+    faqs: [
+      { q: 'How does the slicing mechanic work in Stack Panic?', a: 'When a block lands, any portion extending beyond the support platform underneath is cut off and falls as physical debris. The remaining overlapping area becomes your new landing pad.' },
+      { q: 'What is a Perfect Placement?', a: 'A Perfect Placement occurs when you drop a block within 4.5% horizontal alignment of the block below. This preserves your entire block width, sparks celebratory particles, and advances your consecutive combo multiplier.' },
+      { q: 'What do the special blocks do?', a: 'Golden blocks award +50 bonus points. Frost blocks slow down block movement speed for 3 turns. Emerald Shield blocks absorb 1 complete miss or mistake. Neon Wide blocks restore +32 pixels of lost platform width.' },
+      { q: 'Are high scores saved and submitted to the leaderboard?', a: 'Yes! Your personal best is saved locally in your browser, and every completed match automatically submits your score to the CatKeyLab anonymous global leaderboard.' }
+    ]
   }
 };

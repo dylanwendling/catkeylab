@@ -26,7 +26,8 @@ const TEST_TABS = [
   { id: 'cat-mini-golf-game-3', label: '⛳ Mini Golf (3 Holes)' },
   { id: 'cat-mini-golf-game-9', label: '⛳ Mini Golf (9 Holes)' },
   { id: 'cat-mini-golf-game-18', label: '🏆 Mini Golf (18 Holes)' },
-  { id: 'cat-typing-dungeon', label: '⚔️ Cat Typing Dungeon' }
+  { id: 'cat-typing-dungeon', label: '⚔️ Cat Typing Dungeon' },
+  { id: 'stack-panic', label: '🥞 Stack Panic' }
 ];
 
 export function renderLeaderboardView(container) {

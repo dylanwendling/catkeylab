@@ -173,6 +173,13 @@ TOOL_ROUTES = {
         'categoryName': 'Arcade Games',
         'displayName': 'Cat Typing Dungeon',
         'aliases': ['typing-dungeon', 'cat-typing-dungeon', 'cat-typing-dungeon-game']
+    },
+    'stack-panic': {
+        'path': '/games/stack-panic/',
+        'category': 'games',
+        'categoryName': 'Arcade Games',
+        'displayName': 'Stack Panic Arcade',
+        'aliases': ['stack-panic', 'stack-panic-game', 'stacker', 'stack-game']
     }
 }
 
@@ -281,6 +288,8 @@ STATIC_HEADER_HTML = """
               <a href="/games/fruit-slicer/" class="dropdown-item"><span>🍉</span> <span>Fruit Slicer Arcade</span></a>
               <a href="/games/fish-maze/" class="dropdown-item"><span>🐟</span> <span>Nibbles Fish Maze</span></a>
               <a href="/games/card-memory/" class="dropdown-item"><span>🎴</span> <span>Card Memory Match</span></a>
+              <a href="/games/typing-dungeon/" class="dropdown-item"><span>🏰</span> <span>Cat Typing Dungeon</span></a>
+              <a href="/games/stack-panic/" class="dropdown-item"><span>🥞</span> <span>Stack Panic Arcade</span></a>
             </div>
           </div>
 

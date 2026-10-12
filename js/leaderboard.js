@@ -29,7 +29,8 @@ const INITIAL_LEADERBOARDS = {
   'cat-mini-golf-game-3': [],
   'cat-mini-golf-game-9': [],
   'cat-mini-golf-game-18': [],
-  'cat-typing-dungeon': []
+  'cat-typing-dungeon': [],
+  'stack-panic': []
 };
 
 // Get or Create Anonymous Identity
@@ -385,6 +386,13 @@ export function getPercentile(testId, score, rank = null) {
       if (score >= 8) return "Top 15% (Rabbit Clicker)";
       if (score >= 6) return "Top 40% (Greyhound Clicker)";
       return "Top 60% (Casual)";
+
+    case 'stack-panic':
+      if (score >= 400) return "Top 1% (Master Skyscraper Architect 🏗️)";
+      if (score >= 250) return "Top 5% (Precision Stacker ⚡)";
+      if (score >= 150) return "Top 15% (High Rise Builder 🏢)";
+      if (score >= 60) return "Top 40% (Solid Stacker 🧱)";
+      return "Top 60% (Casual Stacker)";
 
     default:
       return "Top 15%";

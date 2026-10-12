@@ -82,6 +82,7 @@ export function renderHeader(container) {
               <a href="/games/fish-maze/" class="dropdown-item"><span>🐟</span> <span>Nibbles Fish Maze</span></a>
               <a href="/games/card-memory/" class="dropdown-item"><span>🎴</span> <span>Card Memory Match</span></a>
               <a href="/games/typing-dungeon/" class="dropdown-item"><span>🏰</span> <span>Cat Typing Dungeon</span></a>
+              <a href="/games/stack-panic/" class="dropdown-item"><span>🥞</span> <span>Stack Panic Arcade</span></a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
               <a href="/games/" class="dropdown-item"><span>🎮</span> <strong>All Games Directory</strong></a>
             </div>
@@ -170,6 +171,9 @@ export function renderHeader(container) {
         </a>
         <a href="/games/typing-dungeon/" class="mobile-nav-link" data-route="cat-typing-dungeon">
           <span>🏰 Cat Typing Dungeon</span>
+        </a>
+        <a href="/games/stack-panic/" class="mobile-nav-link" data-route="stack-panic">
+          <span>🥞 Stack Panic Arcade</span>
         </a>
         <a href="/games/" class="mobile-nav-link" data-route="games">
           <strong>🎮 All Arcade Games Hub</strong>

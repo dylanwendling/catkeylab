@@ -158,6 +158,13 @@ export const TOOL_ROUTES = {
     categoryName: 'Arcade Games',
     displayName: 'Cat Typing Dungeon',
     aliases: ['typing-dungeon', 'cat-typing-dungeon', 'cat-typing-dungeon-game']
+  },
+  'stack-panic': {
+    path: '/games/stack-panic/',
+    category: 'games',
+    categoryName: 'Arcade Games',
+    displayName: 'Stack Panic Arcade',
+    aliases: ['stack-panic', 'stack-panic-game', 'stacker', 'stack-game']
   }
 };
 

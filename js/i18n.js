@@ -44,6 +44,7 @@ export const translations = {
     navGames: 'Games',
     navAbout: 'About',
     navFAQ: 'FAQ',
+    stackPanicTitle: 'Stack Panic Arcade',
     
     // Hero
     heroBadge: '⚡ 100% Free & In-Browser Tools',
