@@ -676,7 +676,7 @@ export const TOOL_METADATA = {
         'Press Spacebar, Left Click, or Tap the screen to drop the block onto the tower.',
         'Any overhanging portion extending past the underlying block is sliced away into falling physics debris.',
         'Align the block within the perfect tolerance threshold to preserve full block width and build your combo multiplier.',
-        'Collect special blocks: Golden Bonus (+50 pts), Frost Slow-Motion (cools speed for 3 blocks), Emerald Shield (saves 1 mistake), and Neon Recovery (+32px width).',
+        'Collect special blocks: Golden Bonus (+50 pts), Frost Slow-Motion (cools speed for 4 blocks), Bullseye Target Lock (auto-perfects next 3 drops), and Neon Recovery (+32px width).',
         'Stack as high as you can before a complete miss topples the tower!'
       ],
       whatItMeasures: 'Stack Panic tests rhythmic timing, visual spatial prediction, dynamic reaction control, and risk management under escalating speed pressure.',
@@ -685,7 +685,7 @@ export const TOOL_METADATA = {
       tips: [
         'Focus on the leading edge of the underlying block rather than the moving block.',
         'Establish a rhythmic cadence: the moving block bounces at consistent intervals.',
-        'Save your Shield for emergency near-misses when the platform has become razor thin.',
+        'Grab Target Lock to automatically score 3 guaranteed Perfect drops in a row, expanding combos and preserving width.',
         'Prioritize perfect placements early in the match while movement speed is manageable to build a high score multiplier.'
       ],
       relatedTools: ['reaction-time-test', 'aim-trainer-test', 'cps-test']
@@ -693,7 +693,7 @@ export const TOOL_METADATA = {
     faqs: [
       { q: 'How does the slicing mechanic work in Stack Panic?', a: 'When a block lands, any portion extending beyond the support platform underneath is cut off and falls as physical debris. The remaining overlapping area becomes your new landing pad.' },
       { q: 'What is a Perfect Placement?', a: 'A Perfect Placement occurs when you drop a block within 4.5% horizontal alignment of the block below. This preserves your entire block width, sparks celebratory particles, and advances your consecutive combo multiplier.' },
-      { q: 'What do the special blocks do?', a: 'Golden blocks award +50 bonus points. Frost blocks slow down block movement speed for 3 turns. Emerald Shield blocks absorb 1 complete miss or mistake. Neon Wide blocks restore +32 pixels of lost platform width.' },
+      { q: 'What do the special blocks do?', a: 'Golden blocks award +50 bonus points. Frost blocks slow down block movement speed for 4 turns. Bullseye Target Lock locks onto the base and guarantees Perfect placement for the next 3 drops. Neon Wide blocks restore +32 pixels of lost platform width.' },
       { q: 'Are high scores saved and submitted to the leaderboard?', a: 'Yes! Your personal best is saved locally in your browser, and every completed match automatically submits your score to the CatKeyLab anonymous global leaderboard.' }
     ]
   }

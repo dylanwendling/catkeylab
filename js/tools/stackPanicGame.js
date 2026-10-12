@@ -42,7 +42,7 @@ let maxCombo = 0;
 let perfectCount = 0;
 let totalGamesPlayed = 0;
 let totalLifetimePerfects = 0;
-let shieldActive = false;
+let autoPerfectTurns = 0;
 let slowMoTurns = 0;
 let screenShakeAmount = 0;
 
@@ -63,17 +63,17 @@ const SPECIAL_TYPES = {
   NORMAL: 'NORMAL',
   BONUS: 'BONUS',     // Golden Block: +50 Bonus Points
   SLOWMO: 'SLOWMO',   // Frost Cyan: Slows horizontal speed for 4 blocks
-  SHIELD: 'SHIELD',   // Emerald Shield: Absorbs 1 near-miss/mistake
+  TARGET: 'TARGET',   // Bullseye Target: Auto-Perfect next 3 drops
   WIDE: 'WIDE'        // Neon Magenta: Expands block width +32px
 };
 
 const POWERUP_INFO = {
-  [SPECIAL_TYPES.SHIELD]: {
-    name: 'SHIELD',
-    icon: '🛡️',
-    color: '#10b981',
-    glow: 'rgba(16, 185, 129, 0.75)',
-    desc: 'Absorbs 1 Mistake'
+  [SPECIAL_TYPES.TARGET]: {
+    name: 'TARGET LOCK',
+    icon: '🎯',
+    color: '#22c55e',
+    glow: 'rgba(34, 197, 94, 0.75)',
+    desc: 'Auto-Perfect Next 3'
   },
   [SPECIAL_TYPES.SLOWMO]: {
     name: 'SLOW-MO',
@@ -103,10 +103,10 @@ let scheduledPowerUps = [];
 function generateScheduledPowerUps(startFloor = 5) {
   const sequence = [
     SPECIAL_TYPES.SLOWMO,
-    SPECIAL_TYPES.SHIELD,
+    SPECIAL_TYPES.TARGET,
     SPECIAL_TYPES.BONUS,
     SPECIAL_TYPES.WIDE,
-    SPECIAL_TYPES.SHIELD,
+    SPECIAL_TYPES.TARGET,
     SPECIAL_TYPES.BONUS,
     SPECIAL_TYPES.SLOWMO,
     SPECIAL_TYPES.WIDE
@@ -184,32 +184,20 @@ function playArcadeSound(type, param = 1) {
         osc.start(now + i * 0.06);
         osc.stop(now + i * 0.06 + 0.18);
       });
-    } else if (type === 'shield_gain') {
-      // Shield activated hum
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(220, now);
-      osc.frequency.linearRampToValueAtTime(587.33, now + 0.22);
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
-      osc.connect(gain);
-      gain.connect(actx.destination);
-      osc.start(now);
-      osc.stop(now + 0.25);
-    } else if (type === 'shield_save') {
-      // Shield consumed rescue blast
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(600, now);
-      osc.frequency.exponentialRampToValueAtTime(200, now + 0.35);
-      gain.gain.setValueAtTime(0.25, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-      osc.connect(gain);
-      gain.connect(actx.destination);
-      osc.start(now);
-      osc.stop(now + 0.35);
+    } else if (type === 'target_gain') {
+      // Target Lock robotic computer chime sequence
+      [587.33, 880, 1174.66].forEach((freq, idx) => {
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.05);
+        gain.gain.setValueAtTime(0.18, now + idx * 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.05 + 0.12);
+        osc.connect(gain);
+        gain.connect(actx.destination);
+        osc.start(now + idx * 0.05);
+        osc.stop(now + idx * 0.05 + 0.12);
+      });
     } else if (type === 'game_over') {
       // Melancholic descending arcade fail chord
       [320, 280, 240, 180].forEach((freq, i) => {
@@ -300,10 +288,10 @@ export function renderStackPanicGame(container) {
             <span id="sp-hud-combo-text" style="font-size:0.85rem; font-weight:900; color:#fde047;">1x</span>
           </div>
 
-          <!-- Shield Badge Indicator -->
-          <div id="sp-hud-shield-badge" style="display:none; align-items:center; gap:0.25rem; background:rgba(16,185,129,0.2); border:1px solid rgba(16,185,129,0.5); padding:0.25rem 0.65rem; border-radius:999px;">
-            <span style="font-size:0.9rem;">🛡️</span>
-            <span style="font-size:0.85rem; font-weight:900; color:#34d399;">SHIELD</span>
+          <!-- Target Lock Badge Indicator -->
+          <div id="sp-hud-target-badge" style="display:none; align-items:center; gap:0.25rem; background:rgba(34,197,94,0.2); border:1px solid rgba(34,197,94,0.5); padding:0.25rem 0.65rem; border-radius:999px;">
+            <span style="font-size:0.9rem;">🎯</span>
+            <span id="sp-hud-target-text" style="font-size:0.85rem; font-weight:900; color:#4ade80;">3x</span>
           </div>
 
           <!-- SlowMo Badge Indicator -->
@@ -428,9 +416,9 @@ export function renderStackPanicGame(container) {
       </div>
 
       <!-- Quick Controls Reference Bar -->
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted); padding:0 0.5rem;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted); padding:0 0.5rem; flex-wrap:wrap; gap:0.5rem;">
         <div>⚡ <strong>Space / Click / Tap</strong> to drop block</div>
-        <div>🛡️ <strong>Shield</strong> saves 1 miss</div>
+        <div>🎯 <strong>Target Lock</strong> auto-perfects next 3</div>
         <div>❄️ <strong>Slow-Mo</strong> cools speed</div>
       </div>
 
@@ -486,7 +474,7 @@ function startNewGame() {
   combo = 0;
   maxCombo = 0;
   perfectCount = 0;
-  shieldActive = false;
+  autoPerfectTurns = 0;
   slowMoTurns = 0;
   screenShakeAmount = 0;
   debrisList = [];
@@ -640,6 +628,31 @@ function dropCurrentBlock() {
   canDrop = false;
 
   const topBlock = tower[tower.length - 1];
+
+  // 0. Auto-Perfect Target Lock Check: GUARANTEE A PERFECT DROP!
+  if (autoPerfectTurns > 0) {
+    autoPerfectTurns--;
+    // Auto-align block to exact top block position!
+    currentBlock.x = topBlock.x;
+    currentBlock.w = topBlock.w;
+    combo++;
+    if (combo > maxCombo) maxCombo = combo;
+    perfectCount++;
+    totalLifetimePerfects++;
+
+    const pointsEarned = (5 + combo * 3) * (currentBlock.type === SPECIAL_TYPES.BONUS ? 2 : 1);
+    score += pointsEarned;
+
+    playArcadeSound('perfect', combo);
+    spawnPerfectCelebration(currentBlock.x + currentBlock.w / 2, currentBlock.y + currentBlock.h / 2);
+    const leftMsg = autoPerfectTurns > 0 ? ` (${autoPerfectTurns} left)` : '';
+    spawnFloatingText(`🎯 AUTO-PERFECT! x${combo}${leftMsg}`, currentBlock.x + currentBlock.w / 2, currentBlock.y - 12, '#4ade80');
+    screenShakeAmount = 4;
+
+    finalizePlacement(currentBlock);
+    return;
+  }
+
   const diff = currentBlock.x - topBlock.x;
   const perfectTolerance = Math.max(3, currentBlock.w * 0.045);
 
@@ -706,22 +719,6 @@ function dropCurrentBlock() {
 }
 
 function handleMiss() {
-  // If Shield is active, rescue the player!
-  if (shieldActive) {
-    shieldActive = false;
-    playArcadeSound('shield_save');
-    screenShakeAmount = 8;
-
-    const topBlock = tower[tower.length - 1];
-    currentBlock.x = topBlock.x;
-    currentBlock.w = topBlock.w;
-
-    spawnFloatingText('🛡️ SHIELD SAVED YOU!', V_WIDTH / 2, currentBlock.y - 14, '#34d399');
-    spawnShieldBurst(currentBlock.x + currentBlock.w / 2, currentBlock.y + currentBlock.h / 2);
-    finalizePlacement(currentBlock);
-    return;
-  }
-
   // Full Miss Fall Debris
   spawnDebris(currentBlock.x, currentBlock.y, currentBlock.w, currentBlock.h, currentBlock.colorIndex, currentBlock.dir);
   currentBlock = null;
@@ -745,10 +742,10 @@ function finalizePlacement(placedBlock) {
     slowMoTurns = 4; // Active for next 4 blocks
     playArcadeSound('button');
     spawnFloatingText('❄️ SLOW-MO (4 TURNS)!', placedBlock.x + placedBlock.w / 2, placedBlock.y - 28, '#22d3ee');
-  } else if (placedBlock.type === SPECIAL_TYPES.SHIELD) {
-    shieldActive = true;
-    playArcadeSound('shield_gain');
-    spawnFloatingText('🛡️ SHIELD EQUIPPED!', placedBlock.x + placedBlock.w / 2, placedBlock.y - 28, '#34d399');
+  } else if (placedBlock.type === SPECIAL_TYPES.TARGET) {
+    autoPerfectTurns = 3;
+    playArcadeSound('target_gain');
+    spawnFloatingText('🎯 TARGET LOCK (3 AUTO-PERFECTS)!', placedBlock.x + placedBlock.w / 2, placedBlock.y - 28, '#4ade80');
   } else if (placedBlock.type === SPECIAL_TYPES.WIDE) {
     placedBlock.w = Math.min(BASE_BLOCK_WIDTH, placedBlock.w + 32);
     playArcadeSound('bonus');
@@ -1059,6 +1056,32 @@ function render() {
   // Render Upcoming Floating Power-Up Beacons in the Sky Ahead
   renderUpcomingPowerUpsWorld();
 
+  // If Target Lock is active, render holographic laser targeting guide!
+  if (autoPerfectTurns > 0 && currentBlock && tower.length > 0) {
+    const topB = tower[tower.length - 1];
+    ctx.save();
+    ctx.strokeStyle = 'rgba(34, 197, 94, 0.7)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.shadowColor = '#22c55e';
+    ctx.shadowBlur = 10;
+
+    // Laser boundary lines
+    ctx.beginPath();
+    ctx.moveTo(topB.x, topB.y);
+    ctx.lineTo(topB.x, currentBlock.y + currentBlock.h);
+    ctx.moveTo(topB.x + topB.w, topB.y);
+    ctx.lineTo(topB.x + topB.w, currentBlock.y + currentBlock.h);
+    ctx.stroke();
+
+    // Crosshairs on base block
+    ctx.font = '18px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🎯', topB.x + topB.w / 2, topB.y + topB.h / 2);
+    ctx.restore();
+  }
+
   // Render Active Moving Block
   if (currentBlock) {
     drawBlock(currentBlock, true, true);
@@ -1135,10 +1158,10 @@ function drawBlock(b, isTop = false, isMoving = false) {
     fillStyle = '#06b6d4';
     strokeStyle = '#67e8f9';
     ctx.shadowColor = 'rgba(6, 182, 212, 0.8)';
-  } else if (b.type === SPECIAL_TYPES.SHIELD) {
-    fillStyle = '#10b981';
-    strokeStyle = '#6ee7b7';
-    ctx.shadowColor = 'rgba(16, 185, 129, 0.8)';
+  } else if (b.type === SPECIAL_TYPES.TARGET) {
+    fillStyle = '#16a34a';
+    strokeStyle = '#4ade80';
+    ctx.shadowColor = 'rgba(34, 197, 94, 0.8)';
   } else if (b.type === SPECIAL_TYPES.WIDE) {
     fillStyle = '#ec4899';
     strokeStyle = '#f472b6';
@@ -1167,7 +1190,7 @@ function drawBlock(b, isTop = false, isMoving = false) {
     let icon = '';
     if (b.type === SPECIAL_TYPES.BONUS) icon = '🌟';
     else if (b.type === SPECIAL_TYPES.SLOWMO) icon = '❄️';
-    else if (b.type === SPECIAL_TYPES.SHIELD) icon = '🛡️';
+    else if (b.type === SPECIAL_TYPES.TARGET) icon = '🎯';
     else if (b.type === SPECIAL_TYPES.WIDE) icon = '💖';
 
     ctx.font = '14px Inter, sans-serif';
@@ -1198,9 +1221,15 @@ function updateHUD() {
     }
   }
 
-  const shieldBadge = document.getElementById('sp-hud-shield-badge');
-  if (shieldBadge) {
-    shieldBadge.style.display = shieldActive ? 'flex' : 'none';
+  const targetBadge = document.getElementById('sp-hud-target-badge');
+  const targetText = document.getElementById('sp-hud-target-text');
+  if (targetBadge && targetText) {
+    if (autoPerfectTurns > 0) {
+      targetBadge.style.display = 'flex';
+      targetText.textContent = `${autoPerfectTurns}x`;
+    } else {
+      targetBadge.style.display = 'none';
+    }
   }
 
   const slowmoBadge = document.getElementById('sp-hud-slowmo-badge');
