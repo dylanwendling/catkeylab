@@ -461,41 +461,48 @@ export function renderMergeLabGame(container) {
   container.innerHTML = `
     <style>
       .ml-wrapper {
-        max-width: 520px;
+        max-width: 500px;
         margin: 0 auto;
         user-select: none;
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        box-sizing: border-box;
       }
 
-      /* Compact vertical footprint on mobile screens */
+      /* Compact mobile padding & zero-scroll vertical footprint */
       @media (max-width: 768px) {
-        .tool-page-main > div:first-child {
-          margin-bottom: 0.35rem !important;
+        #breadcrumbs-container,
+        .breadcrumbs {
+          display: none !important;
         }
-        .tool-page-main > div:first-child h1 {
-          font-size: 1.35rem !important;
+        .tool-page-main > div:first-child {
           margin-bottom: 0.15rem !important;
         }
+        .tool-page-main > div:first-child h1 {
+          font-size: 1.15rem !important;
+          margin-bottom: 0.05rem !important;
+        }
         .tool-page-main > div:first-child p {
-          display: none !important; /* Conceal long intro paragraph during gameplay to save vertical height */
+          display: none !important;
         }
         .container {
-          padding-top: 0.4rem !important;
+          padding-top: 0.2rem !important;
+          padding-bottom: 0.2rem !important;
         }
       }
 
-      /* Unified Clean HUD Card */
+      /* Unified Clean Glassmorphic HUD Card */
       .ml-hud-card {
         width: 100%;
-        background: var(--bg-secondary);
+        background: rgba(11, 17, 36, 0.88);
+        backdrop-filter: blur(12px);
         border: 1px solid var(--border-color);
         border-radius: var(--radius-lg);
-        padding: 0.45rem 0.75rem;
-        margin-bottom: 0.45rem;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        padding: 0.4rem 0.65rem;
+        margin-bottom: 0.4rem;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
         display: flex;
         flex-direction: column;
         gap: 0.35rem;
@@ -507,7 +514,7 @@ export function renderMergeLabGame(container) {
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        gap: 0.5rem;
+        gap: 0.45rem;
       }
 
       /* Score & Best Stat Pills */
@@ -521,8 +528,8 @@ export function renderMergeLabGame(container) {
         background: rgba(0, 0, 0, 0.35);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: var(--radius-md);
-        padding: 0.2rem 0.55rem;
-        min-width: 58px;
+        padding: 0.2rem 0.5rem;
+        min-width: 54px;
         text-align: center;
         display: flex;
         flex-direction: column;
@@ -530,7 +537,7 @@ export function renderMergeLabGame(container) {
       }
 
       .ml-stat-label {
-        font-size: 0.62rem;
+        font-size: 0.6rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.06em;
@@ -540,7 +547,7 @@ export function renderMergeLabGame(container) {
       }
 
       .ml-stat-val {
-        font-size: 1.22rem;
+        font-size: 1.15rem;
         font-weight: 900;
         line-height: 1.1;
       }
@@ -557,7 +564,7 @@ export function renderMergeLabGame(container) {
       .ml-hud-actions {
         display: flex;
         align-items: center;
-        gap: 0.35rem;
+        gap: 0.3rem;
       }
 
       .ml-hud-btn {
@@ -578,17 +585,17 @@ export function renderMergeLabGame(container) {
       }
 
       .ml-board-btn {
-        padding: 0.35rem 0.65rem;
-        font-size: 0.8rem;
+        padding: 0.25rem 0.55rem;
+        font-size: 0.78rem;
         font-weight: 800;
         gap: 0.25rem;
         white-space: nowrap;
       }
 
       .ml-icon-btn {
-        width: 32px;
-        height: 32px;
-        font-size: 1.05rem;
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
         padding: 0;
       }
 
@@ -597,12 +604,12 @@ export function renderMergeLabGame(container) {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        background: rgba(0, 0, 0, 0.2);
+        background: rgba(0, 0, 0, 0.25);
         border: 1px solid rgba(255, 255, 255, 0.04);
         border-radius: var(--radius-sm);
-        padding: 0.2rem 0.55rem;
-        font-size: 0.75rem;
-        gap: 0.3rem;
+        padding: 0.18rem 0.5rem;
+        font-size: 0.74rem;
+        gap: 0.25rem;
         overflow-x: auto;
         scrollbar-width: none;
       }
@@ -616,7 +623,7 @@ export function renderMergeLabGame(container) {
         border: none;
         padding: 0;
         color: var(--text-secondary);
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 800;
         cursor: pointer;
         display: flex;
@@ -633,7 +640,7 @@ export function renderMergeLabGame(container) {
         gap: 0.2rem;
         color: var(--text-secondary);
         white-space: nowrap;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
       }
 
       @media (max-width: 440px) {
@@ -646,10 +653,10 @@ export function renderMergeLabGame(container) {
       #ml-canvas-container {
         position: relative;
         width: 100%;
-        max-width: 520px;
+        max-width: 490px;
         aspect-ratio: 1 / 1;
-        max-height: calc(100dvh - 165px);
-        width: min(100%, calc(100dvh - 165px));
+        max-height: calc(100dvh - 180px);
+        width: min(100%, calc(100dvh - 180px));
         border-radius: var(--radius-xl);
         overflow: hidden;
         border: 2px solid var(--border-color);
@@ -660,12 +667,32 @@ export function renderMergeLabGame(container) {
         box-sizing: border-box;
       }
 
+      @media (max-width: 768px) {
+        #ml-canvas-container {
+          max-height: calc(100dvh - 200px);
+          width: min(100%, calc(100dvh - 200px));
+        }
+      }
+
       #ml-canvas {
         display: block;
         width: 100%;
         height: 100%;
         cursor: grab;
         -webkit-tap-highlight-color: transparent;
+      }
+
+      .ml-footer-tips {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.45rem;
+        font-size: 0.74rem;
+        color: var(--text-muted);
+        flex-wrap: wrap;
+        text-align: center;
+        padding: 0 0.5rem;
       }
     </style>
 
@@ -724,68 +751,70 @@ export function renderMergeLabGame(container) {
         <canvas id="ml-canvas"></canvas>
 
         <!-- 1. Main Menu Overlay -->
-        <div id="ml-modal-menu" style="position:absolute; inset:0; background:rgba(6,10,23,0.88); backdrop-filter:blur(8px); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:1.5rem; text-align:center; z-index:10;">
-          <div style="font-size:3.5rem; margin-bottom:0.25rem;">🧪</div>
-          <h1 style="font-size:2.5rem; font-weight:900; letter-spacing:0.04em; margin-bottom:0.25rem; background:linear-gradient(135deg, #22d3ee, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+        <div id="ml-modal-menu" style="position:absolute; inset:0; background:rgba(6,10,23,0.92); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:clamp(0.75rem, 3vw, 1.25rem); text-align:center; z-index:10; box-sizing:border-box;">
+          <div style="font-size:clamp(2rem, 5.5vw, 2.75rem); line-height:1; margin-bottom:0.2rem; filter:drop-shadow(0 0 12px rgba(6,182,212,0.5));">🧪</div>
+          <h1 style="font-size:clamp(1.6rem, 5.5vw, 2.2rem); font-weight:900; letter-spacing:0.04em; margin:0 0 0.25rem 0; background:linear-gradient(135deg, #22d3ee, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent; line-height:1.15;">
             MERGE LAB
           </h1>
-          <p style="color:var(--text-secondary); font-size:0.95rem; max-width:380px; margin-bottom:1.5rem;">
-            Swipe to merge matching elements. Larger merges spawn collectible in-board laboratory power-ups!
+          <p style="color:var(--text-secondary); font-size:clamp(0.75rem, 2.4vw, 0.88rem); max-width:300px; margin:0 0 clamp(0.75rem, 2.5vw, 1.1rem) 0; line-height:1.35;">
+            Swipe to merge matching elements & synthesize powerful lab power-ups!
           </p>
 
-          <div style="display:flex; flex-direction:column; gap:0.75rem; width:100%; max-width:300px; margin-bottom:1.5rem;">
-            <button id="ml-btn-start" class="btn btn-primary btn-lg" style="font-size:1.2rem; font-weight:900; padding:0.85rem; box-shadow:0 0 24px rgba(6,182,212,0.4);">
+          <div style="display:flex; flex-direction:column; gap:0.45rem; width:100%; max-width:270px; margin-bottom:clamp(0.6rem, 2vw, 0.9rem);">
+            <button id="ml-btn-start" class="btn btn-primary" style="font-size:clamp(0.95rem, 2.8vw, 1.1rem); font-weight:900; padding:0.65rem 1rem; box-shadow:0 0 20px rgba(6,182,212,0.4); border-radius:var(--radius-md);">
               ▶️ START EXPERIMENT
             </button>
-            <button id="ml-btn-open-boards" class="btn btn-secondary btn-lg" style="font-weight:700;">
-              🎛️ Select Board Size
-            </button>
-            <button id="ml-btn-tutorial" class="btn btn-secondary" style="font-weight:600;">
-              📖 Power-Up Codex & Rules
-            </button>
+            <div style="display:flex; gap:0.45rem; width:100%;">
+              <button id="ml-btn-open-boards" class="btn btn-secondary" style="flex:1; font-size:clamp(0.72rem, 2.2vw, 0.82rem); font-weight:700; padding:0.5rem 0.35rem; white-space:nowrap;">
+                🎛️ Board Size
+              </button>
+              <button id="ml-btn-tutorial" class="btn btn-secondary" style="flex:1; font-size:clamp(0.72rem, 2.2vw, 0.82rem); font-weight:700; padding:0.5rem 0.35rem; white-space:nowrap;">
+                📖 Codex & Rules
+              </button>
+            </div>
           </div>
 
-          <p style="font-size:0.8rem; color:var(--text-muted); max-width:360px;">
-            ⌨️ <strong>Desktop:</strong> Arrow Keys or WASD • 📱 <strong>Mobile:</strong> Swipe anywhere on board
-          </p>
+          <div style="font-size:clamp(0.7rem, 2.1vw, 0.78rem); color:var(--text-muted); display:flex; align-items:center; gap:0.3rem;">
+            <span>📱</span> <span>Swipe anywhere on grid to move</span>
+          </div>
         </div>
 
         <!-- 2. Board Selection Overlay -->
-        <div id="ml-modal-boards" style="position:absolute; inset:0; background:rgba(6,10,23,0.92); backdrop-filter:blur(8px); display:none; flex-direction:column; justify-content:center; align-items:center; padding:1.5rem; text-align:center; z-index:12; overflow-y:auto;">
-          <h2 style="font-size:1.8rem; font-weight:900; margin-bottom:0.25rem; color:var(--text-primary);">🎛️ SELECT LABORATORY GRID</h2>
-          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.25rem;">Unlock larger boards by synthesizing high-tier tiles!</p>
+        <div id="ml-modal-boards" style="position:absolute; inset:0; background:rgba(6,10,23,0.94); backdrop-filter:blur(10px); display:none; flex-direction:column; justify-content:center; align-items:center; padding:clamp(0.65rem, 2.5vw, 1.25rem); text-align:center; z-index:12; overflow-y:auto; box-sizing:border-box;">
+          <h2 style="font-size:clamp(1.2rem, 3.8vw, 1.6rem); font-weight:900; margin-bottom:0.15rem; color:var(--text-primary);">🎛️ SELECT LABORATORY GRID</h2>
+          <p style="color:var(--text-muted); font-size:clamp(0.72rem, 2.2vw, 0.82rem); margin-bottom:clamp(0.5rem, 1.8vw, 0.9rem);">Unlock smaller high-pressure boards by synthesizing high tiles!</p>
 
-          <div id="ml-boards-list" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; width:100%; max-width:440px; margin-bottom:1.25rem;">
+          <div id="ml-boards-list" style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem; width:100%; max-width:440px; margin-bottom:0.75rem;">
             <!-- Dynamically populated -->
           </div>
 
-          <button id="ml-btn-close-boards" class="btn btn-secondary" style="font-weight:700; width:100%; max-width:200px;">
+          <button id="ml-btn-close-boards" class="btn btn-secondary btn-sm" style="font-weight:700; width:100%; max-width:180px;">
             ← Back
           </button>
         </div>
 
         <!-- 3. Power-Up Codex / Tutorial Overlay -->
-        <div id="ml-modal-codex" style="position:absolute; inset:0; background:rgba(6,10,23,0.95); backdrop-filter:blur(8px); display:none; flex-direction:column; justify-content:flex-start; align-items:center; padding:1.5rem; text-align:left; z-index:14; overflow-y:auto;">
+        <div id="ml-modal-codex" style="position:absolute; inset:0; background:rgba(6,10,23,0.95); backdrop-filter:blur(8px); display:none; flex-direction:column; justify-content:flex-start; align-items:center; padding:1.25rem; text-align:left; z-index:14; overflow-y:auto; box-sizing:border-box;">
           <div style="width:100%; max-width:480px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-              <h2 style="font-size:1.6rem; font-weight:900; color:var(--accent-cyan); margin:0;">📖 Lab Codex & Power-Ups</h2>
-              <button id="ml-btn-close-codex" class="btn btn-sm btn-secondary" style="padding:0.3rem 0.6rem;">✕</button>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.85rem;">
+              <h2 style="font-size:1.4rem; font-weight:900; color:var(--accent-cyan); margin:0;">📖 Lab Codex & Power-Ups</h2>
+              <button id="ml-btn-close-codex" class="btn btn-sm btn-secondary" style="padding:0.25rem 0.55rem;">✕</button>
             </div>
             
-            <p style="font-size:0.85rem; color:var(--text-secondary); line-height:1.6; margin-bottom:1rem;">
-              Unlike other merge games, power-ups in <strong>Merge Lab</strong> spawn directly as <strong>collectible tiles on the board</strong>! When you swipe a numbered tile into a power-up, it activates immediately!
+            <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.55; margin-bottom:0.85rem;">
+              Unlike other merge games, power-ups in <strong>Merge Lab</strong> spawn directly as <strong>collectible tiles on the board</strong>! Swipe a numbered tile into a power-up to activate it immediately!
             </p>
 
-            <div style="display:flex; flex-direction:column; gap:0.6rem; margin-bottom:1.5rem;">
+            <div style="display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.25rem;">
               ${Object.values(POWER_UP_TYPES).map(pu => `
-                <div style="display:flex; align-items:center; gap:0.75rem; background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.6rem 0.85rem;">
-                  <div style="font-size:1.8rem; min-width:36px; text-align:center;">${pu.icon}</div>
+                <div style="display:flex; align-items:center; gap:0.65rem; background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.5rem 0.75rem;">
+                  <div style="font-size:1.6rem; min-width:32px; text-align:center;">${pu.icon}</div>
                   <div style="flex:1;">
-                    <div style="display:flex; align-items:center; gap:0.5rem;">
-                      <strong style="color:${pu.color}; font-size:0.95rem;">${pu.name}</strong>
-                      <span style="font-size:0.7rem; text-transform:uppercase; font-weight:800; background:rgba(255,255,255,0.08); padding:0.15rem 0.4rem; border-radius:4px; color:var(--text-muted);">${pu.rarity}</span>
+                    <div style="display:flex; align-items:center; gap:0.4rem;">
+                      <strong style="color:${pu.color}; font-size:0.9rem;">${pu.name}</strong>
+                      <span style="font-size:0.68rem; text-transform:uppercase; font-weight:800; background:rgba(255,255,255,0.08); padding:0.1rem 0.35rem; border-radius:4px; color:var(--text-muted);">${pu.rarity}</span>
                     </div>
-                    <div style="font-size:0.8rem; color:var(--text-secondary);">${pu.desc}</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary); line-height:1.3;">${pu.desc}</div>
                   </div>
                 </div>
               `).join('')}
@@ -794,16 +823,16 @@ export function renderMergeLabGame(container) {
         </div>
 
         <!-- 4. Pause Menu Overlay -->
-        <div id="ml-modal-pause" style="position:absolute; inset:0; background:rgba(6,10,23,0.88); backdrop-filter:blur(8px); display:none; flex-direction:column; justify-content:center; align-items:center; padding:1.5rem; text-align:center; z-index:10;">
-          <div style="font-size:3rem; margin-bottom:0.5rem;">⏸️</div>
-          <h2 style="font-size:2rem; font-weight:900; margin-bottom:0.25rem; color:var(--text-primary);">EXPERIMENT PAUSED</h2>
-          <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.5rem;">The laboratory reaction is on hold.</p>
+        <div id="ml-modal-pause" style="position:absolute; inset:0; background:rgba(6,10,23,0.92); backdrop-filter:blur(8px); display:none; flex-direction:column; justify-content:center; align-items:center; padding:1.25rem; text-align:center; z-index:10; box-sizing:border-box;">
+          <div style="font-size:2.4rem; margin-bottom:0.25rem;">⏸️</div>
+          <h2 style="font-size:1.6rem; font-weight:900; margin-bottom:0.2rem; color:var(--text-primary);">EXPERIMENT PAUSED</h2>
+          <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1.15rem;">The laboratory reaction is on hold.</p>
 
-          <div style="display:flex; flex-direction:column; gap:0.75rem; width:100%; max-width:260px;">
+          <div style="display:flex; flex-direction:column; gap:0.5rem; width:100%; max-width:240px;">
             <button id="ml-btn-resume" class="btn btn-primary btn-lg" style="font-weight:800;">
               ▶️ Resume (Esc)
             </button>
-            <button id="ml-btn-restart-pause" class="btn btn-secondary btn-lg" style="font-weight:700;">
+            <button id="ml-btn-restart-pause" class="btn btn-secondary" style="font-weight:700;">
               🔄 Restart Run
             </button>
             <button id="ml-btn-menu-pause" class="btn btn-secondary" style="font-weight:600;">
@@ -813,50 +842,50 @@ export function renderMergeLabGame(container) {
         </div>
 
         <!-- 5. Game Over Overlay -->
-        <div id="ml-modal-gameover" style="position:absolute; inset:0; background:rgba(6,10,23,0.92); backdrop-filter:blur(8px); display:none; flex-direction:column; justify-content:center; align-items:center; padding:1.5rem; text-align:center; z-index:10; overflow-y:auto;">
-          <div style="font-size:3rem; margin-bottom:0.25rem;">💥</div>
-          <h2 style="font-size:2.2rem; font-weight:900; margin-bottom:0.25rem; color:var(--text-primary);">REACTION COMPLETE!</h2>
-          <div id="ml-new-record-tag" style="display:none; background:linear-gradient(135deg, #eab308, #f59e0b); color:#000; font-size:0.8rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; padding:0.25rem 0.75rem; border-radius:999px; margin-bottom:0.75rem;">
-            🏆 NEW LABORATORY RECORD!
+        <div id="ml-modal-gameover" style="position:absolute; inset:0; background:rgba(6,10,23,0.94); backdrop-filter:blur(10px); display:none; flex-direction:column; justify-content:center; align-items:center; padding:1rem; text-align:center; z-index:10; overflow-y:auto; box-sizing:border-box;">
+          <div style="font-size:2.5rem; margin-bottom:0.15rem;">💥</div>
+          <h2 style="font-size:clamp(1.4rem, 4vw, 1.8rem); font-weight:900; margin-bottom:0.2rem; color:var(--text-primary);">REACTION COMPLETE!</h2>
+          <div id="ml-new-record-tag" style="display:none; background:linear-gradient(135deg, #eab308, #f59e0b); color:#000; font-size:0.75rem; font-weight:900; text-transform:uppercase; letter-spacing:0.06em; padding:0.2rem 0.65rem; border-radius:999px; margin-bottom:0.5rem;">
+            🏆 NEW RECORD!
           </div>
 
           <!-- Stats Grid -->
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; width:100%; max-width:340px; margin-bottom:1.25rem;">
-            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem;">
-              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Final Score</div>
-              <div id="ml-go-score" style="font-size:1.6rem; font-weight:900; color:var(--accent-cyan);">0</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem; width:100%; max-width:300px; margin-bottom:0.85rem;">
+            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.5rem;">
+              <div style="font-size:0.68rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Final Score</div>
+              <div id="ml-go-score" style="font-size:1.35rem; font-weight:900; color:var(--accent-cyan);">0</div>
             </div>
-            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem;">
-              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Highest Tile</div>
-              <div id="ml-go-tile" style="font-size:1.6rem; font-weight:900; color:var(--accent-amber);">2</div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.5rem;">
+              <div style="font-size:0.68rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Highest Tile</div>
+              <div id="ml-go-tile" style="font-size:1.35rem; font-weight:900; color:var(--accent-amber);">2</div>
             </div>
-            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem;">
-              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Total Merges</div>
-              <div id="ml-go-merges" style="font-size:1.3rem; font-weight:800; color:var(--text-primary);">0</div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.5rem;">
+              <div style="font-size:0.68rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Total Merges</div>
+              <div id="ml-go-merges" style="font-size:1.15rem; font-weight:800; color:var(--text-primary);">0</div>
             </div>
-            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem;">
-              <div style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Power-Ups Used</div>
-              <div id="ml-go-powerups" style="font-size:1.3rem; font-weight:800; color:#34d399;">0</div>
+            <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.5rem;">
+              <div style="font-size:0.68rem; text-transform:uppercase; color:var(--text-muted); font-weight:700;">Power-Ups Used</div>
+              <div id="ml-go-powerups" style="font-size:1.15rem; font-weight:800; color:#34d399;">0</div>
             </div>
           </div>
 
           <!-- Leaderboard Rank Badge -->
-          <div id="ml-go-rank-card" style="display:none; background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-md); padding:0.6rem 1rem; width:100%; max-width:340px; margin-bottom:1.25rem;">
-            <div id="ml-go-rank-text" style="font-size:0.9rem; font-weight:700; color:var(--accent-cyan);">
+          <div id="ml-go-rank-card" style="display:none; background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-md); padding:0.45rem 0.8rem; width:100%; max-width:300px; margin-bottom:0.85rem;">
+            <div id="ml-go-rank-text" style="font-size:0.82rem; font-weight:700; color:var(--accent-cyan);">
               🏆 Submitted to Global Leaderboard!
             </div>
           </div>
 
           <!-- Action Buttons -->
-          <div style="display:flex; flex-direction:column; gap:0.65rem; width:100%; max-width:340px;">
-            <button id="ml-btn-play-again" class="btn btn-primary btn-lg" style="font-weight:900; font-size:1.15rem; padding:0.85rem;">
+          <div style="display:flex; flex-direction:column; gap:0.45rem; width:100%; max-width:300px;">
+            <button id="ml-btn-play-again" class="btn btn-primary" style="font-weight:900; font-size:1.05rem; padding:0.65rem;">
               🔄 PLAY AGAIN
             </button>
-            <div style="display:flex; gap:0.65rem;">
-              <a href="/leaderboards/" class="btn btn-secondary" style="flex:1; font-size:0.9rem; font-weight:700; text-align:center;">
+            <div style="display:flex; gap:0.45rem;">
+              <a href="/leaderboards/" class="btn btn-secondary" style="flex:1; font-size:0.82rem; font-weight:700; text-align:center;">
                 🏆 Leaderboard
               </a>
-              <button id="ml-btn-menu-go" class="btn btn-secondary" style="flex:1; font-size:0.9rem; font-weight:700;">
+              <button id="ml-btn-menu-go" class="btn btn-secondary" style="flex:1; font-size:0.82rem; font-weight:700;">
                 🏠 Main Menu
               </button>
             </div>
@@ -866,10 +895,10 @@ export function renderMergeLabGame(container) {
       </div>
 
       <!-- Quick How to Play Guide -->
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted); padding:0 0.5rem; flex-wrap:wrap; gap:0.5rem;">
-        <div>🧪 <strong>Swipe / WASD</strong> to move all tiles</div>
-        <div>💣 <strong>Collide into power-ups</strong> to collect them</div>
-        <div>⚡ <strong>Bigger merges</strong> spawn rarer power-ups</div>
+      <div class="ml-footer-tips">
+        <span>🧪 <strong>Swipe</strong> to merge</span>
+        <span>💣 <strong>Touch power-ups</strong> to collect</span>
+        <span>⚡ <strong>Big merges</strong> = rare power-ups</span>
       </div>
 
     </div>
@@ -1905,26 +1934,26 @@ function openBoardSelectModal() {
     const rec = prog.records[b.id] || { highScore: 0, maxTile: 2 };
 
     return `
-      <div class="ml-board-card" data-board-id="${b.id}" style="background:rgba(255,255,255,${isCurrent ? '0.12' : '0.04'}); border:2px solid ${isCurrent ? 'var(--accent-cyan)' : (isUnlocked ? 'var(--border-color)' : 'rgba(239,68,68,0.4)')}; border-radius:var(--radius-lg); padding:0.85rem; text-align:left; cursor:${isUnlocked ? 'pointer' : 'not-allowed'}; opacity:${isUnlocked ? '1' : '0.6'};">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
-          <div style="display:flex; align-items:center; gap:0.5rem;">
-            <strong style="color:${isCurrent ? 'var(--accent-cyan)' : 'var(--text-primary)'}; font-size:1.15rem;">${b.size}×${b.size}</strong>
-            <span style="font-size:0.75rem; font-weight:800; padding:0.15rem 0.5rem; border-radius:4px; background:rgba(255,255,255,0.06); color:${b.badgeColor}; border:1px solid ${b.badgeColor}40;">
+      <div class="ml-board-card" data-board-id="${b.id}" style="background:rgba(255,255,255,${isCurrent ? '0.12' : '0.04'}); border:2px solid ${isCurrent ? 'var(--accent-cyan)' : (isUnlocked ? 'var(--border-color)' : 'rgba(239,68,68,0.4)')}; border-radius:var(--radius-md); padding:0.55rem 0.65rem; text-align:left; cursor:${isUnlocked ? 'pointer' : 'not-allowed'}; opacity:${isUnlocked ? '1' : '0.6'}; box-sizing:border-box;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.15rem;">
+          <div style="display:flex; align-items:center; gap:0.35rem;">
+            <strong style="color:${isCurrent ? 'var(--accent-cyan)' : 'var(--text-primary)'}; font-size:1.05rem;">${b.size}×${b.size}</strong>
+            <span style="font-size:0.68rem; font-weight:800; padding:0.1rem 0.35rem; border-radius:4px; background:rgba(255,255,255,0.06); color:${b.badgeColor}; border:1px solid ${b.badgeColor}40;">
               ${b.difficulty}
             </span>
           </div>
-          <span style="font-size:0.72rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px; ${isUnlocked ? 'background:rgba(16,185,129,0.2); color:#34d399;' : 'background:rgba(239,68,68,0.2); color:#f87171;'}">
+          <span style="font-size:0.68rem; font-weight:800; padding:0.1rem 0.35rem; border-radius:4px; ${isUnlocked ? 'background:rgba(16,185,129,0.2); color:#34d399;' : 'background:rgba(239,68,68,0.2); color:#f87171;'}">
             ${isUnlocked ? (isCurrent ? 'ACTIVE' : 'READY') : 'LOCKED 🔒'}
           </span>
         </div>
-        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.35rem; line-height:1.3;">
+        <div style="font-size:0.68rem; color:var(--text-muted); margin-bottom:0.2rem; line-height:1.25;">
           ${b.desc}
         </div>
-        <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.5rem; line-height:1.4;">
+        <div style="font-size:0.72rem; color:var(--text-secondary); margin-bottom:0.35rem; line-height:1.3;">
           ${isUnlocked ? `🏆 Best: <strong>${rec.highScore}</strong> • Max: <strong>${rec.maxTile}</strong>` : `🔒 Req: <em>${b.unlockReqText}</em>`}
         </div>
         ${isUnlocked ? `
-          <button class="btn btn-sm ${isCurrent ? 'btn-primary' : 'btn-secondary'}" style="width:100%; font-size:0.8rem; font-weight:700;">
+          <button class="btn btn-sm ${isCurrent ? 'btn-primary' : 'btn-secondary'}" style="width:100%; font-size:0.75rem; font-weight:700; padding:0.25rem 0.5rem;">
             ${isCurrent ? 'Playing Now' : 'Select Board'}
           </button>
         ` : ''}
