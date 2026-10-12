@@ -169,6 +169,7 @@ export const STATIC_PAGES = {
   'contact': { path: '/contact/', title: 'Contact & Support - CatKeyLab', crumb: 'Contact' },
   'sitemap': { path: '/sitemap/', title: 'Sitemap & Tools Directory - CatKeyLab', crumb: 'Sitemap' },
   'tools': { path: '/tools/', title: 'Tools & Games Directory - CatKeyLab', crumb: 'All Tools' },
+  'games': { path: '/games/', title: 'Free Online Cat Arcade Games - CatKeyLab 🎮', crumb: 'Arcade Games' },
   'leaderboards': { path: '/leaderboards/', title: 'Anonymous Global Leaderboards - CatKeyLab', crumb: 'Leaderboards' },
   'nibbles': { path: '/nibbles/', title: 'Meet Nibbles 🐱 - The Real Orange Cat - CatKeyLab', crumb: 'Meet Nibbles' }
 };

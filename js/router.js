@@ -155,6 +155,10 @@ export function handleRoute() {
       renderToolsDirectoryPage(mainContainer);
       renderBreadcrumbs(breadcrumbsContainer, 'All Tools', 'Directory', '/tools/');
       updateSEOMetadata('Mouse & Keyboard Tools Directory - CatKeyLab 🐾', 'Browse all free online mouse button testers, keyboard key testers, typing tests, clicking, and speed testing utilities.');
+    } else if (resolved.key === 'games') {
+      renderGamesDirectoryPage(mainContainer);
+      renderBreadcrumbs(breadcrumbsContainer, 'Arcade Games 🎮', 'Directory', '/games/');
+      updateSEOMetadata('Free Online Cat Arcade Games - CatKeyLab 🐾', 'Play free in-browser cat arcade games featuring Nibbles: Mini Golf, Cat Fishing, Fruit Slicer, Fish Maze, Card Memory Match, and Cat Typing Dungeon!');
     } else if (resolved.key === 'leaderboards') {
       renderLeaderboardView(mainContainer);
       renderBreadcrumbs(breadcrumbsContainer, 'Anonymous Leaderboards 🏆', 'Platform', '/leaderboards/');
@@ -196,6 +200,7 @@ function updateNavState(canonicalPath, routeKey) {
     if (
       (canonicalPath && href === canonicalPath) ||
       (routeKey && route === routeKey) ||
+      (route === 'games' && canonicalPath && canonicalPath.startsWith('/games/')) ||
       (canonicalPath === '/' && (href === '/' || href === '#' || route === ''))
     ) {
       link.classList.add('active');
@@ -597,6 +602,7 @@ function renderToolsDirectoryPage(container) {
           <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="clicking" data-i18n="filterClicking">${t('filterClicking')}</button>
           <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="speed" data-i18n="filterSpeed">${t('filterSpeed')}</button>
           <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="hardware" data-i18n="filterHardware">${t('filterHardware')}</button>
+          <button class="btn btn-sm btn-secondary tool-filter-btn" data-filter="games">🎮 Arcade Games</button>
         </div>
       </div>
 
@@ -626,6 +632,45 @@ function renderToolsDirectoryPage(container) {
   `;
 
   bindToolsDirectoryEvents();
+}
+
+function renderGamesDirectoryPage(container) {
+  const gameKeys = Object.keys(TOOL_ROUTES).filter(k => TOOL_ROUTES[k].category === 'games');
+
+  container.innerHTML = `
+    <div class="container section">
+      <div class="section-header" style="text-align:center; margin-bottom:2.5rem;">
+        <h1 class="section-title">🐱 Cat Arcade Games</h1>
+        <p class="section-subtitle" style="max-width:680px; margin:0.5rem auto 0; color:var(--text-secondary);">
+          Free in-browser HTML5 & 3D arcade games featuring Nibbles the Cat! No downloads, no accounts, and 100% free to play.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+        ${gameKeys.map(key => {
+          const route = TOOL_ROUTES[key];
+          const tool = TOOL_METADATA[key] || {};
+          return `
+            <div class="tool-card featured-tool-card" style="border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card)); display:flex; flex-direction:column; justify-content:space-between;">
+              <div>
+                <div class="tool-card-header">
+                  <div class="tool-card-icon" style="font-size:2.5rem;">${tool.icon || '🎮'}</div>
+                  <span class="tool-card-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;">ARCADE GAME</span>
+                </div>
+                <h3 class="tool-card-title">${route.displayName}</h3>
+                <p class="tool-card-desc" style="margin-bottom:1.5rem;">${tool.desc || ''}</p>
+              </div>
+              <div class="tool-card-footer">
+                <a href="${route.path}" class="btn btn-primary btn-sm" style="width:100%;">
+                  <span>Play ${tool.icon || ''}</span> →
+                </a>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
 }
 
 function bindToolsDirectoryEvents() {

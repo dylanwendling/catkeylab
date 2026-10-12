@@ -81,6 +81,9 @@ export function renderHeader(container) {
               <a href="/games/fruit-slicer/" class="dropdown-item"><span>🍉</span> <span>Fruit Slicer Arcade</span></a>
               <a href="/games/fish-maze/" class="dropdown-item"><span>🐟</span> <span>Nibbles Fish Maze</span></a>
               <a href="/games/card-memory/" class="dropdown-item"><span>🎴</span> <span>Card Memory Match</span></a>
+              <a href="/games/typing-dungeon/" class="dropdown-item"><span>🏰</span> <span>Cat Typing Dungeon</span></a>
+              <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
+              <a href="/games/" class="dropdown-item"><span>🎮</span> <strong>All Games Directory</strong></a>
             </div>
           </div>
 
@@ -165,6 +168,12 @@ export function renderHeader(container) {
         <a href="/games/fruit-slicer/" class="mobile-nav-link" data-route="fruit-slicer-game">
           <span>🍉 Fruit Slicer Arcade</span>
         </a>
+        <a href="/games/typing-dungeon/" class="mobile-nav-link" data-route="cat-typing-dungeon">
+          <span>🏰 Cat Typing Dungeon</span>
+        </a>
+        <a href="/games/" class="mobile-nav-link" data-route="games">
+          <strong>🎮 All Arcade Games Hub</strong>
+        </a>
         <div style="height:1px; background:var(--border-color); margin:0.5rem 0;"></div>
         <a href="/tools/" class="mobile-nav-link" data-route="tools">
           <strong>📂 All Tools Directory</strong>
@@ -191,9 +200,9 @@ export function renderHeader(container) {
         <span class="tab-icon">⌨️</span>
         <span class="tab-label">Typing</span>
       </a>
-      <a href="/tools/cps-test/" class="mobile-bottom-tab" data-route="cps-test">
-        <span class="tab-icon">⚡</span>
-        <span class="tab-label">CPS</span>
+      <a href="/games/" class="mobile-bottom-tab" data-route="games">
+        <span class="tab-icon">🎮</span>
+        <span class="tab-label">Games</span>
       </a>
       <a href="/tools/aim-trainer/" class="mobile-bottom-tab" data-route="aim-trainer">
         <span class="tab-icon">🎯</span>

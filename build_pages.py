@@ -1451,6 +1451,41 @@ def main():
     </div>
     """
 
+    # Games Directory Page
+    games_cards = []
+    for k, r in TOOL_ROUTES.items():
+        if r.get('category') == 'games':
+            meta = tool_metadata.get(k, {})
+            games_cards.append(f"""
+              <div class="tool-card featured-tool-card" style="border:1px solid var(--accent-cyan-glow); background:linear-gradient(180deg, rgba(6,182,212,0.08), var(--bg-card)); padding:1.5rem; border-radius:var(--radius-lg); display:flex; flex-direction:column; justify-content:space-between;">
+                <div>
+                  <div class="tool-card-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <div style="font-size:2.5rem;">{meta.get('icon', '🎮')}</div>
+                    <span class="tool-card-badge" style="background:rgba(6,182,212,0.2); color:var(--accent-cyan); font-weight:700;">ARCADE GAME</span>
+                  </div>
+                  <h3 style="font-size:1.25rem; font-weight:700; color:var(--text-primary); margin-bottom:0.5rem;">{escape(r['displayName'])}</h3>
+                  <p style="color:var(--text-secondary); font-size:0.95rem; line-height:1.6; margin-bottom:1.5rem;">{escape(meta.get('desc', ''))}</p>
+                </div>
+                <a href="{r['path']}" class="btn btn-primary btn-sm" style="width:100%; text-align:center;">
+                  <span>Play {meta.get('icon', '')}</span> →
+                </a>
+              </div>
+            """)
+
+    games_body = f"""
+    <div class="container section">
+      <div class="section-header" style="text-align:center; margin-bottom:2.5rem;">
+        <h1 class="section-title">🐱 Cat Arcade Games</h1>
+        <p class="section-subtitle" style="max-width:700px; margin:0.5rem auto 0; color:var(--text-secondary);">Play free in-browser HTML5 & 3D arcade games featuring Nibbles the Cat! No downloads, no accounts, and 100% free to play.</p>
+      </div>
+
+      <div class="grid grid-cols-3" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem;">
+        {''.join(games_cards)}
+      </div>
+      {render_ad_slot()}
+    </div>
+    """
+
     # Sitemap Directory Page
     sitemap_list_items = []
     for k, r in TOOL_ROUTES.items():
@@ -1476,6 +1511,7 @@ def main():
             <li><a href="/privacy/" style="color:var(--accent-cyan); font-weight:600;">Privacy Policy</a></li>
             <li><a href="/terms/" style="color:var(--accent-cyan); font-weight:600;">Terms of Service</a></li>
             <li><a href="/contact/" style="color:var(--accent-cyan); font-weight:600;">Contact & Support</a></li>
+            <li><a href="/games/" style="color:var(--accent-cyan); font-weight:600;">Free Cat Arcade Games</a></li>
             <li><a href="/leaderboards/" style="color:var(--accent-cyan); font-weight:600;">Anonymous Global Leaderboards</a></li>
           </ul>
         </div>
@@ -1532,6 +1568,13 @@ def main():
             'desc': 'Browse all free online keyboard switch testers, mouse button testers, typing speed tests, clicking speed tests, and memory benchmark utilities.',
             'crumb': 'All Tools',
             'body': tools_body
+        },
+        'games': {
+            'path': '/games/',
+            'title': 'Free Online Cat Arcade Games - CatKeyLab 🎮',
+            'desc': 'Play free in-browser cat arcade games featuring Nibbles: Mini Golf, Cat Fishing, Fruit Slicer, Fish Maze, Card Memory Match, and Cat Typing Dungeon! 100% free with no downloads.',
+            'crumb': 'Arcade Games',
+            'body': games_body
         },
         'leaderboards': {
             'path': '/leaderboards/',

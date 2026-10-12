@@ -14,6 +14,58 @@ let lastMouseX = 0;
 let lastMouseY = 0;
 let isDragging = false;
 let animationId = null;
+let lastBounceSoundTime = 0;
+
+function playBounceSound(velocity) {
+  const now = performance.now();
+  if (now - lastBounceSoundTime > 120 && Math.abs(velocity) > 2.5) {
+    lastBounceSoundTime = now;
+    playClickSound(540, 0.02);
+  }
+}
+
+/**
+ * Calculates current screen boundaries accounting for sticky header & mobile home bar
+ */
+function getYarnBoundaries() {
+  const isMobile = window.innerWidth <= 768;
+  const ballSize = yarnEl ? (yarnEl.offsetWidth || (isMobile ? 44 : 56)) : (isMobile ? 44 : 56);
+
+  // 1. Header Boundary (Top)
+  let headerBottom = 0;
+  const headerEl = document.querySelector('.site-header');
+  if (headerEl) {
+    const rect = headerEl.getBoundingClientRect();
+    if (rect.bottom > 0) {
+      headerBottom = rect.bottom;
+    }
+  } else {
+    headerBottom = 62;
+  }
+  const minY = Math.max(10, headerBottom + 6);
+
+  // 2. Mobile Home Bar Boundary (Bottom)
+  let bottomLimit = window.innerHeight;
+  const bottomBarEl = document.getElementById('mobile-bottom-bar');
+  if (bottomBarEl) {
+    const style = window.getComputedStyle(bottomBarEl);
+    if (style.display !== 'none' && style.visibility !== 'hidden') {
+      const rect = bottomBarEl.getBoundingClientRect();
+      if (rect.top > 0) {
+        bottomLimit = rect.top;
+      } else {
+        bottomLimit = window.innerHeight - (bottomBarEl.offsetHeight || 64);
+      }
+    }
+  }
+  const maxY = Math.max(minY + 20, bottomLimit - ballSize - 6);
+
+  // 3. Horizontal Viewport Boundaries (Left & Right)
+  const minX = 10;
+  const maxX = Math.max(minX + 20, window.innerWidth - ballSize - 10);
+
+  return { minX, maxX, minY, maxY, ballSize };
+}
 
 export function initYarnBall() {
   // Spawn Yarn Container if not present
@@ -32,9 +84,10 @@ export function initYarnBall() {
   yarnEl = document.getElementById('yarn-ball');
   if (!yarnEl) return;
 
-  // Set initial position at bottom right safely within viewport bounds
-  posX = Math.max(10, window.innerWidth - (window.innerWidth < 640 ? 65 : 120));
-  posY = Math.max(10, window.innerHeight - (window.innerWidth < 640 ? 70 : 100));
+  // Set initial position safely inside bounds, above the mobile home bar and food bowl
+  const bounds = getYarnBoundaries();
+  posX = Math.max(bounds.minX, bounds.maxX - (window.innerWidth <= 768 ? 16 : 50));
+  posY = Math.max(bounds.minY, bounds.maxY - (window.innerWidth <= 768 ? 16 : 30));
   updateYarnPosition();
 
   // Mouse & Touch Drag Handlers
@@ -47,10 +100,11 @@ export function initYarnBall() {
   window.addEventListener('touchend', endDrag);
 
   window.addEventListener('resize', () => {
-    const maxX = Math.max(10, window.innerWidth - 65);
-    const maxY = Math.max(10, window.innerHeight - 65);
-    if (posX > maxX) posX = maxX;
-    if (posY > maxY) posY = maxY;
+    const bounds = getYarnBoundaries();
+    if (posX < bounds.minX) posX = bounds.minX;
+    if (posX > bounds.maxX) posX = bounds.maxX;
+    if (posY < bounds.minY) posY = bounds.minY;
+    if (posY > bounds.maxY) posY = bounds.maxY;
     updateYarnPosition();
   });
 
@@ -87,13 +141,12 @@ function onDrag(e) {
   posX += dx;
   posY += dy;
 
-  // Clamp within viewport to prevent horizontal page scrolling
-  const maxX = Math.max(10, window.innerWidth - 60);
-  const maxY = Math.max(10, window.innerHeight - 60);
-  if (posX < 5) posX = 5;
-  if (posX > maxX) posX = maxX;
-  if (posY < 5) posY = 5;
-  if (posY > maxY) posY = maxY;
+  // Clamp within playable bounds so user cannot drag under header or home bar
+  const bounds = getYarnBoundaries();
+  if (posX < bounds.minX) posX = bounds.minX;
+  if (posX > bounds.maxX) posX = bounds.maxX;
+  if (posY < bounds.minY) posY = bounds.minY;
+  if (posY > bounds.maxY) posY = bounds.maxY;
 
   // Smooth velocity calculation for flicking/throwing momentum
   velX = dx * 0.8;
@@ -123,24 +176,30 @@ function updatePhysics() {
     velX *= 0.94;
     velY *= 0.94;
 
-    // Viewport Boundary Bounce (Strictly Clamped)
-    const maxX = Math.max(10, window.innerWidth - 65);
-    const maxY = Math.max(10, window.innerHeight - 65);
+    const bounds = getYarnBoundaries();
 
-    if (posX < 10) {
-      posX = 10;
-      velX = -velX * 0.6;
-    } else if (posX > maxX) {
-      posX = maxX;
-      velX = -velX * 0.6;
+    // 1. Horizontal Left/Right Boundary Bounces
+    if (posX < bounds.minX) {
+      posX = bounds.minX;
+      velX = Math.abs(velX) * 0.65;
+      playBounceSound(velX);
+    } else if (posX > bounds.maxX) {
+      posX = bounds.maxX;
+      velX = -Math.abs(velX) * 0.65;
+      playBounceSound(velX);
     }
 
-    if (posY < 10) {
-      posY = 10;
-      velY = -velY * 0.6;
-    } else if (posY > maxY) {
-      posY = maxY;
-      velY = -velY * 0.6;
+    // 2. Header (Top) Bounce
+    if (posY < bounds.minY) {
+      posY = bounds.minY;
+      velY = Math.abs(velY) * 0.65; // Bounce downward away from header
+      playBounceSound(velY);
+    } 
+    // 3. Home Bar / Bottom Screen Bounce
+    else if (posY > bounds.maxY) {
+      posY = bounds.maxY;
+      velY = -Math.abs(velY) * 0.65; // Bounce upward away from home bar
+      playBounceSound(velY);
     }
 
     updateYarnPosition();
@@ -157,8 +216,10 @@ function updateYarnPosition() {
 
 function checkCatProximity() {
   const mascotPos = getMascotPosition();
-  const yarnCenterX = posX + 28;
-  const yarnCenterY = posY + 28;
+  const bounds = getYarnBoundaries();
+  const radius = bounds.ballSize / 2;
+  const yarnCenterX = posX + radius;
+  const yarnCenterY = posY + radius;
 
   const dist = Math.hypot(yarnCenterX - mascotPos.x, yarnCenterY - mascotPos.y);
 
