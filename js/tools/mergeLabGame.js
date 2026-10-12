@@ -21,56 +21,64 @@ let containerRef = null;
 // Virtual High-DPI Coordinate Space
 const V_SIZE = 560; // 560x560 board coordinate space
 
-// Board Configurations & Unlock Thresholds
+// Board Configurations & Unlock Thresholds (6x6 Easy, 5x5 Medium, 4x4 Hard, 3x3 Impossible)
 const BOARD_CONFIGS = {
-  '5x5': {
-    id: '5x5',
-    name: '5×5 Laboratory (Intro)',
-    size: 5,
-    cells: 25,
+  '6x6': {
+    id: '6x6',
+    name: '6×6 Expansion Lab',
+    difficulty: 'Easy',
+    badgeColor: '#10b981',
+    size: 6,
+    cells: 36,
     spawnCount: 1,
     unlockReqText: 'Default Starting Board',
     unlockTile: 0,
     unlockScore: 0,
-    desc: 'Introduction to lab synthesis and common power-ups.'
+    desc: 'Spacious 36-cell grid. Relaxing room for building massive tile values and chain combos.'
   },
-  '6x6': {
-    id: '6x6',
-    name: '6×6 Expansion Lab',
-    size: 6,
-    cells: 36,
+  '5x5': {
+    id: '5x5',
+    name: '5×5 Standard Reactor',
+    difficulty: 'Medium',
+    badgeColor: '#06b6d4',
+    size: 5,
+    cells: 25,
     spawnCount: 1,
-    unlockReqText: 'Create a 512 Tile or 2,500 Pts on 5×5',
-    unlockTile: 512,
-    unlockScore: 2500,
-    desc: 'Wider grid with uncommon supercharge beams and magnet power-ups.'
+    unlockReqText: 'Reach a 256 Tile or 1,500 Pts on 6×6',
+    unlockTile: 256,
+    unlockScore: 1500,
+    desc: 'Balanced 25-cell reactor. Strategic positioning and board management become crucial.'
   },
-  '8x8': {
-    id: '8x8',
-    name: '8×8 Advanced Reactor',
-    size: 8,
-    cells: 64,
-    spawnCount: 2,
-    unlockReqText: 'Create a 1024 Tile or 8,000 Pts on 6×6',
+  '4x4': {
+    id: '4x4',
+    name: '4×4 Pressure Core',
+    difficulty: 'Hard',
+    badgeColor: '#f59e0b',
+    size: 4,
+    cells: 16,
+    spawnCount: 1,
+    unlockReqText: 'Reach a 512 Tile or 4,000 Pts on 5×5',
+    unlockTile: 512,
+    unlockScore: 4000,
+    desc: 'The classic 16-cell pressure core. Tight space demands surgical precision.'
+  },
+  '3x3': {
+    id: '3x3',
+    name: '3×3 Quantum Singularity',
+    difficulty: 'Impossible',
+    badgeColor: '#ef4444',
+    size: 3,
+    cells: 9,
+    spawnCount: 1,
+    unlockReqText: 'Reach a 1024 Tile or 8,000 Pts on 4×4',
     unlockTile: 1024,
     unlockScore: 8000,
-    desc: 'Deep strategic room for chain reactions and rare wildcards.'
-  },
-  '10x10': {
-    id: '10x10',
-    name: '10×10 Quantum Master',
-    size: 10,
-    cells: 100,
-    spawnCount: 2,
-    unlockReqText: 'Create a 2048 Tile or 20,000 Pts on 8×8',
-    unlockTile: 2048,
-    unlockScore: 20000,
-    desc: 'The ultimate synthesis grid. Epic black holes & quantum leaps.'
+    desc: 'Brutal 9-cell singularity! Ultra-dense quarters where every single swipe is survival.'
   }
 };
 
-let currentBoardId = '5x5';
-let boardSize = 5;
+let currentBoardId = '6x6';
+let boardSize = 6;
 let grid = []; // 2D array [row][col] of tile or power-up objects
 let movingTiles = []; // Tiles animating sliding motion
 let particles = [];
@@ -347,20 +355,39 @@ function playLabSound(type, param = 1) {
 
 function getProgression() {
   const defaultProg = {
-    unlocked: ['5x5'],
-    activeBoard: '5x5',
+    unlocked: ['6x6'],
+    activeBoard: '6x6',
     records: {
-      '5x5': { highScore: 0, maxTile: 2, totalMerges: 0 },
       '6x6': { highScore: 0, maxTile: 2, totalMerges: 0 },
-      '8x8': { highScore: 0, maxTile: 2, totalMerges: 0 },
-      '10x10': { highScore: 0, maxTile: 2, totalMerges: 0 }
+      '5x5': { highScore: 0, maxTile: 2, totalMerges: 0 },
+      '4x4': { highScore: 0, maxTile: 2, totalMerges: 0 },
+      '3x3': { highScore: 0, maxTile: 2, totalMerges: 0 }
     }
   };
   try {
     const raw = localStorage.getItem('catkeylab_mergelab_progression');
     if (!raw) return defaultProg;
     const parsed = JSON.parse(raw);
-    return { ...defaultProg, ...parsed, records: { ...defaultProg.records, ...(parsed.records || {}) } };
+
+    // Filter valid board keys
+    let activeBoard = parsed.activeBoard;
+    if (!['6x6', '5x5', '4x4', '3x3'].includes(activeBoard)) {
+      activeBoard = '6x6';
+    }
+
+    const unlocked = Array.isArray(parsed.unlocked)
+      ? parsed.unlocked.filter(id => ['6x6', '5x5', '4x4', '3x3'].includes(id))
+      : ['6x6'];
+    if (!unlocked.includes('6x6')) unlocked.unshift('6x6');
+
+    return {
+      unlocked,
+      activeBoard,
+      records: {
+        ...defaultProg.records,
+        ...(parsed.records || {})
+      }
+    };
   } catch (e) {
     return defaultProg;
   }
@@ -376,30 +403,30 @@ function checkBoardUnlocks() {
   const prog = getProgression();
   let newlyUnlocked = false;
 
-  // Check 6x6 Unlock (From 5x5: Tile 512 or 2,500 pts)
-  if (!prog.unlocked.includes('6x6')) {
-    const rec5 = prog.records['5x5'];
-    if ((rec5 && (rec5.maxTile >= 512 || rec5.highScore >= 2500)) || highestTile >= 512 || score >= 2500) {
-      prog.unlocked.push('6x6');
-      newlyUnlocked = '6×6 Expansion Lab';
-    }
-  }
-
-  // Check 8x8 Unlock (From 6x6: Tile 1024 or 8,000 pts)
-  if (!prog.unlocked.includes('8x8')) {
+  // Check 5x5 Unlock (From 6x6: Tile 256 or 1,500 pts)
+  if (!prog.unlocked.includes('5x5')) {
     const rec6 = prog.records['6x6'];
-    if (prog.unlocked.includes('6x6') && ((rec6 && (rec6.maxTile >= 1024 || rec6.highScore >= 8000)) || highestTile >= 1024 || score >= 8000)) {
-      prog.unlocked.push('8x8');
-      newlyUnlocked = '8×8 Advanced Reactor';
+    if ((rec6 && (rec6.maxTile >= 256 || rec6.highScore >= 1500)) || highestTile >= 256 || score >= 1500) {
+      prog.unlocked.push('5x5');
+      newlyUnlocked = '5×5 Standard Reactor (Medium)';
     }
   }
 
-  // Check 10x10 Unlock (From 8x8: Tile 2048 or 20,000 pts)
-  if (!prog.unlocked.includes('10x10')) {
-    const rec8 = prog.records['8x8'];
-    if (prog.unlocked.includes('8x8') && ((rec8 && (rec8.maxTile >= 2048 || rec8.highScore >= 20000)) || highestTile >= 2048 || score >= 20000)) {
-      prog.unlocked.push('10x10');
-      newlyUnlocked = '10×10 Quantum Master Board';
+  // Check 4x4 Unlock (From 5x5: Tile 512 or 4,000 pts)
+  if (!prog.unlocked.includes('4x4')) {
+    const rec5 = prog.records['5x5'];
+    if (prog.unlocked.includes('5x5') && ((rec5 && (rec5.maxTile >= 512 || rec5.highScore >= 4000)) || highestTile >= 512 || score >= 4000)) {
+      prog.unlocked.push('4x4');
+      newlyUnlocked = '4×4 Pressure Core (Hard)';
+    }
+  }
+
+  // Check 3x3 Unlock (From 4x4: Tile 1024 or 8,000 pts)
+  if (!prog.unlocked.includes('3x3')) {
+    const rec4 = prog.records['4x4'];
+    if (prog.unlocked.includes('4x4') && ((rec4 && (rec4.maxTile >= 1024 || rec4.highScore >= 8000)) || highestTile >= 1024 || score >= 8000)) {
+      prog.unlocked.push('3x3');
+      newlyUnlocked = '3×3 Quantum Singularity (Impossible)';
     }
   }
 
@@ -427,8 +454,9 @@ function checkBoardUnlocks() {
 export function renderMergeLabGame(container) {
   containerRef = container;
   const prog = getProgression();
-  currentBoardId = prog.activeBoard || '5x5';
-  boardSize = BOARD_CONFIGS[currentBoardId].size;
+  currentBoardId = prog.activeBoard || '6x6';
+  boardSize = BOARD_CONFIGS[currentBoardId] ? BOARD_CONFIGS[currentBoardId].size : 6;
+  const initBoard = BOARD_CONFIGS[currentBoardId] || { size: 6, difficulty: 'Easy' };
 
   container.innerHTML = `
     <div class="ml-wrapper" style="max-width:620px; margin:0 auto; user-select:none;">
@@ -446,8 +474,8 @@ export function renderMergeLabGame(container) {
 
         <!-- Mode & Board Picker Buttons -->
         <div style="display:flex; align-items:center; gap:0.5rem;">
-          <button id="ml-board-select-btn" class="btn btn-sm btn-secondary" style="font-weight:700; font-size:0.85rem; padding:0.4rem 0.75rem;" title="Select Board Size">
-            🎛️ <span id="ml-hud-board-label">${currentBoardId}</span>
+          <button id="ml-board-select-btn" class="btn btn-sm btn-secondary" style="font-weight:700; font-size:0.85rem; padding:0.4rem 0.75rem;" title="Select Board Difficulty">
+            🎛️ <span id="ml-hud-board-label">${initBoard.size}×${initBoard.size} (${initBoard.difficulty})</span>
           </button>
           <button id="ml-mode-toggle-btn" class="btn btn-sm btn-secondary" style="font-weight:700; font-size:0.85rem; padding:0.4rem 0.75rem;" title="Switch Game Mode">
             🕹️ <span id="ml-hud-mode-label">CLASSIC</span>
@@ -732,7 +760,9 @@ function startNewGame() {
 }
 
 function initMenuBoard() {
-  boardSize = 5;
+  const prog = getProgression();
+  currentBoardId = prog.activeBoard || '6x6';
+  boardSize = BOARD_CONFIGS[currentBoardId] ? BOARD_CONFIGS[currentBoardId].size : 6;
   grid = [];
   for (let r = 0; r < boardSize; r++) {
     grid[r] = [];
@@ -740,16 +770,18 @@ function initMenuBoard() {
       grid[r][c] = null;
     }
   }
-  // Decorative layout in menu
-  grid[2][2] = createTile(128);
-  grid[1][2] = createTile(64);
-  grid[3][2] = createTile(64);
-  grid[2][1] = createTile(32);
-  grid[2][3] = createTile(32);
-  grid[0][2] = createPowerUpTile('FUSION_PULSE');
-  grid[4][2] = createPowerUpTile('SUPERCHARGE_BEAM');
-  grid[2][0] = createPowerUpTile('WILD');
-  grid[2][4] = createPowerUpTile('QUANTUM');
+  // Decorative layout in menu adapted to boardSize
+  const midR = Math.floor(boardSize / 2);
+  const midC = Math.floor(boardSize / 2);
+  grid[midR][midC] = createTile(128);
+  if (midR > 0) grid[midR - 1][midC] = createTile(64);
+  if (midR < boardSize - 1) grid[midR + 1][midC] = createTile(64);
+  if (midC > 0) grid[midR][midC - 1] = createTile(32);
+  if (midC < boardSize - 1) grid[midR][midC + 1] = createTile(32);
+  grid[0][0] = createPowerUpTile('FUSION_PULSE');
+  if (boardSize - 1 > 0) grid[boardSize - 1][boardSize - 1] = createPowerUpTile('SUPERCHARGE_BEAM');
+  if (boardSize - 1 > 0) grid[boardSize - 1][0] = createPowerUpTile('WILD');
+  if (boardSize - 1 > 0) grid[0][boardSize - 1] = createPowerUpTile('QUANTUM');
 }
 
 function pauseGame() {
@@ -1400,7 +1432,7 @@ function spawnFloatingText(text, x, y, color) {
 
 function getCellCenter(r, c) {
   const padding = 14;
-  const gap = boardSize >= 8 ? 6 : 10;
+  const gap = boardSize <= 3 ? 16 : (boardSize === 4 ? 14 : (boardSize === 5 ? 12 : 10));
   const boardArea = V_SIZE - padding * 2;
   const cellSize = (boardArea - (boardSize - 1) * gap) / boardSize;
   const x = padding + c * (cellSize + gap) + cellSize / 2;
@@ -1477,7 +1509,8 @@ function render() {
 
   // Draw Grid Matrix
   const padding = 14;
-  const gap = boardSize >= 8 ? 6 : 10;
+  const gap = boardSize <= 3 ? 16 : (boardSize === 4 ? 14 : (boardSize === 5 ? 12 : 10));
+  const cornerRadius = boardSize <= 4 ? 12 : 8;
   const boardArea = V_SIZE - padding * 2;
   const cellSize = (boardArea - (boardSize - 1) * gap) / boardSize;
 
@@ -1488,7 +1521,7 @@ function render() {
 
       // Empty Slot Well
       ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
-      roundRect(ctx, x, y, cellSize, cellSize, 8);
+      roundRect(ctx, x, y, cellSize, cellSize, cornerRadius);
       ctx.fill();
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
       ctx.lineWidth = 1;
@@ -1547,7 +1580,7 @@ function drawCellTile(t, x, y, size) {
 
     // Glowing border and vibrant dark background
     ctx.fillStyle = '#0f172a';
-    roundRect(ctx, drawX, drawY, size, size, 8);
+    roundRect(ctx, drawX, drawY, size, size, Math.max(6, Math.floor(size * 0.12)));
     ctx.fill();
 
     // Rarity Outer Border Ring
@@ -1574,7 +1607,7 @@ function drawCellTile(t, x, y, size) {
 
     // Fill Tile Body
     ctx.fillStyle = colors.bg;
-    roundRect(ctx, drawX, drawY, size, size, 8);
+    roundRect(ctx, drawX, drawY, size, size, Math.max(6, Math.floor(size * 0.12)));
     ctx.fill();
 
     // Edge Highlight & Border
@@ -1632,7 +1665,10 @@ function updateHUD() {
   if (comboEl) comboEl.textContent = `${Math.max(1, combo)}x`;
 
   const boardLabel = document.getElementById('ml-hud-board-label');
-  if (boardLabel) boardLabel.textContent = currentBoardId;
+  if (boardLabel) {
+    const cfg = BOARD_CONFIGS[currentBoardId] || { size: boardSize, difficulty: 'Easy' };
+    boardLabel.textContent = `${cfg.size}×${cfg.size} (${cfg.difficulty})`;
+  }
 
   const modeLabel = document.getElementById('ml-hud-mode-label');
   if (modeLabel) modeLabel.textContent = gameMode;
@@ -1651,11 +1687,19 @@ function openBoardSelectModal() {
 
     return `
       <div class="ml-board-card" data-board-id="${b.id}" style="background:rgba(255,255,255,${isCurrent ? '0.12' : '0.04'}); border:2px solid ${isCurrent ? 'var(--accent-cyan)' : (isUnlocked ? 'var(--border-color)' : 'rgba(239,68,68,0.4)')}; border-radius:var(--radius-lg); padding:0.85rem; text-align:left; cursor:${isUnlocked ? 'pointer' : 'not-allowed'}; opacity:${isUnlocked ? '1' : '0.6'};">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-          <strong style="color:${isCurrent ? 'var(--accent-cyan)' : 'var(--text-primary)'}; font-size:1.05rem;">${b.size}×${b.size}</strong>
-          <span style="font-size:0.75rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px; ${isUnlocked ? 'background:rgba(16,185,129,0.2); color:#34d399;' : 'background:rgba(239,68,68,0.2); color:#f87171;'}">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.25rem;">
+          <div style="display:flex; align-items:center; gap:0.5rem;">
+            <strong style="color:${isCurrent ? 'var(--accent-cyan)' : 'var(--text-primary)'}; font-size:1.15rem;">${b.size}×${b.size}</strong>
+            <span style="font-size:0.75rem; font-weight:800; padding:0.15rem 0.5rem; border-radius:4px; background:rgba(255,255,255,0.06); color:${b.badgeColor}; border:1px solid ${b.badgeColor}40;">
+              ${b.difficulty}
+            </span>
+          </div>
+          <span style="font-size:0.72rem; font-weight:800; padding:0.15rem 0.45rem; border-radius:4px; ${isUnlocked ? 'background:rgba(16,185,129,0.2); color:#34d399;' : 'background:rgba(239,68,68,0.2); color:#f87171;'}">
             ${isUnlocked ? (isCurrent ? 'ACTIVE' : 'READY') : 'LOCKED 🔒'}
           </span>
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.35rem; line-height:1.3;">
+          ${b.desc}
         </div>
         <div style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:0.5rem; line-height:1.4;">
           ${isUnlocked ? `🏆 Best: <strong>${rec.highScore}</strong> • Max: <strong>${rec.maxTile}</strong>` : `🔒 Req: <em>${b.unlockReqText}</em>`}

@@ -699,35 +699,35 @@ export const TOOL_METADATA = {
   },
   'merge-lab': {
     titleKey: 'mergeLabTitle',
-    desc: 'Swipe-based number merging puzzle where big merges synthesize dynamic in-board power-ups across 4 progressive board sizes.',
+    desc: 'Swipe-based number merging puzzle where big merges synthesize dynamic in-board power-ups across 4 board difficulties (6x6 Easy to 3x3 Impossible).',
     icon: '🧪',
     category: 'games',
     content: {
-      intro: 'Step into the Merge Lab! Swipe matching numbered tiles together to synthesize higher elements. Merges synthesize dynamic collectible power-ups directly onto empty grid spaces. Unlock larger reactor boards as you advance from 5x5 all the way to the 10x10 Quantum Master.',
+      intro: 'Step into the Merge Lab! Swipe matching numbered tiles together to synthesize higher elements. Merges synthesize dynamic collectible power-ups directly onto empty grid spaces. Progress through 4 difficulty board sizes: 6x6 (Easy), 5x5 (Medium), 4x4 (Hard), and the brutal 3x3 (Impossible)!',
       howTo: [
         'Swipe Up, Down, Left, or Right (using Arrow Keys, WASD, or Touch Gestures) to slide all tiles in that direction.',
         'When two tiles with identical numbers collide, they merge into a single tile with double the value.',
         'Higher-tier merges have a chance to synthesize power-ups directly onto empty board spaces.',
-        'Slide numbered tiles onto board power-ups to collect and activate their effects.',
-        'Unlock larger board sizes (6x6, 8x8, 10x10) by achieving score and tile milestones.',
+        'Slide numbered tiles onto board power-ups to collect and activate their non-destructive effects.',
+        'Unlock increasingly challenging boards (6x6 Easy, 5x5 Medium, 4x4 Hard, 3x3 Impossible) by achieving score and tile milestones.',
         'Survive as long as possible by preventing the grid from filling completely with unmergeable tiles.'
       ],
-      whatItMeasures: 'Merge Lab tests spatial reasoning, multi-step tactical planning, risk mitigation, and adaptive problem-solving under progressive grid constraints.',
-      whyUseIt: 'It combines the timeless satisfaction of number merging with deep tactical power-up management and progressive board sizes for endless replayability.',
-      interpretResults: 'Scores above 2,500 demonstrate solid board control. Reaching 8,000+ requires smart power-up collection and chain setup. Scores exceeding 20,000+ represent mastery of large-scale board synthesis on advanced reactors.',
+      whatItMeasures: 'Merge Lab tests spatial reasoning, multi-step tactical planning, risk mitigation, and adaptive problem-solving under escalating grid pressure.',
+      whyUseIt: 'It combines the timeless satisfaction of number merging with deep tactical power-up management and progressive board difficulties for endless replayability.',
+      interpretResults: 'Scores above 1,500 demonstrate solid board control. Reaching 4,000+ requires smart power-up collection and chain setup. Mastering the 4x4 and surviving on 3x3 Impossible represents true Grandmaster puzzle skill.',
       tips: [
         'Keep your highest-value tiles clustered in one corner to maintain clean merge pathways.',
         'Do not leave low-tier power-ups uncollected if board space is getting tight - slide into them to clear room and boost values.',
         'Trigger Fusion Pulses and Element Condensers to double clusters and fuse low tiles into high-tier elements.',
         'Take advantage of Supercharge Beams and Quantum Merges to leapfrog merge tiers instantly across rows and columns.',
-        'In Timed Mode, prioritize rapid merges over slow micro-optimization to maintain high combo multipliers.'
+        'On 3x3 Impossible, every single swipe matters! Prioritize immediate merges to avoid getting gridlocked.'
       ],
       relatedTools: ['stack-panic', 'reaction-time-test', 'sequence-memory-test']
     },
     faqs: [
       { q: 'How do power-ups appear in Merge Lab?', a: 'Power-ups spawn directly onto unoccupied board cells when successful merges occur. The higher the merged tile value, the greater the chance and the rarer the synthesized power-up.' },
       { q: 'How do I collect a power-up?', a: 'Power-ups occupy real cells on the grid. Swipe a numbered tile into the power-up cell to collect it and trigger its effect immediately.' },
-      { q: 'How do I unlock larger boards?', a: 'Start on the 5x5 board. Reaching a 512 tile or 2,500 points unlocks 6x6. Reaching a 1024 tile or 8,000 points on 6x6 unlocks 8x8. Reaching a 2048 tile or 20,000 points on 8x8 unlocks 10x10 Quantum Master.' },
+      { q: 'How do I unlock harder boards?', a: 'Start on the 6x6 Easy board. Reaching a 256 tile or 1,500 points unlocks 5x5 Medium. Reaching a 512 tile or 4,000 points on 5x5 unlocks 4x4 Hard. Reaching a 1024 tile or 8,000 points on 4x4 unlocks the brutal 3x3 Impossible board!' },
       { q: 'Are my scores and unlocked boards saved?', a: 'Yes! All unlocked boards, personal high scores, and highest tiles achieved are saved locally in your browser and automatically submitted to the CatKeyLab anonymous global leaderboard.' }
     ]
   }
