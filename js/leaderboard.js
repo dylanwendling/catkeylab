@@ -208,6 +208,21 @@ export function getLeaderboard(testId) {
   // Sort logic (Lower is better for reaction-time, aim-trainer, and mini-golf; Higher is better for others)
   const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test' || testId === 'fish-maze-game' || testId === 'card-memory-game' || testId.startsWith('cat-mini-golf-game');
 
+  // Sanitize any missing or corrupted "undefined" display values
+  let fixedAny = false;
+  list.forEach(item => {
+    if (!item.display || item.display === 'undefined') {
+      item.display = `${(item.score || 0).toLocaleString()} pts`;
+      fixedAny = true;
+    }
+  });
+  if (fixedAny) {
+    data[testId] = list;
+    try {
+      localStorage.setItem('catkeylab_leaderboards_v8', JSON.stringify(data));
+    } catch (e) {}
+  }
+
   return list.sort((a, b) => isLowerBetter ? a.score - b.score : b.score - a.score);
 }
 
@@ -225,11 +240,13 @@ export function submitScore(testId, scoreVal, scoreDisplay) {
 
   const isLowerBetter = testId === 'reaction-time-test' || testId === 'aim-trainer-test' || testId === 'fish-maze-game' || testId === 'card-memory-game' || testId.startsWith('cat-mini-golf-game');
 
+  const safeDisplay = (scoreDisplay && scoreDisplay !== 'undefined') ? scoreDisplay : `${scoreVal.toLocaleString()} pts`;
+
   const newEntry = {
     handle: profile.handle,
     avatar: profile.avatar,
     score: scoreVal,
-    display: scoreDisplay,
+    display: safeDisplay,
     date: "Just now",
     timestamp: Date.now(),
     isUser: true

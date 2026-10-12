@@ -235,7 +235,7 @@ function renderTable(testId) {
                 </div>
               </td>
               <td style="text-align:right; font-weight:800; color:var(--accent-cyan);">
-                ${item.display}
+                ${(item.display && item.display !== 'undefined') ? item.display : `${(item.score || 0).toLocaleString()} pts`}
               </td>
               <td style="text-align:right; color:var(--text-muted); font-size:0.85rem;">
                 ${formatRelativeTime(item.timestamp, item.date)}

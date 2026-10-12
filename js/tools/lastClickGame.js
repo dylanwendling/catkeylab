@@ -998,6 +998,8 @@ function triggerGameOver(isWin, triggerR = 0, triggerC = 0) {
   if (timerInterval) clearInterval(timerInterval);
   timerInterval = null;
 
+  const diffName = DIFFICULTIES[currentDiffId]?.name || 'Standard';
+
   if (isWin) {
     gameState = 'WON';
     playSfx('win');
@@ -1011,10 +1013,13 @@ function triggerGameOver(isWin, triggerR = 0, triggerC = 0) {
     cyberCredits += earnedCredits;
     savePersistence();
 
-    // Submit to leaderboard
-    submitScore('last-click', score);
+    // Submit to leaderboard with 3 parameters: (testId, scoreVal, scoreDisplay)
+    let rankInfo = null;
+    if (score > 0) {
+      rankInfo = submitScore('last-click', score, `${score.toLocaleString()} pts (${diffName})`);
+    }
 
-    showVictoryModal(earnedCredits);
+    showVictoryModal(earnedCredits, rankInfo);
   } else {
     gameState = 'LOST';
     playSfx('explosion');
@@ -1031,8 +1036,14 @@ function triggerGameOver(isWin, triggerR = 0, triggerC = 0) {
       }
     }
 
+    // Submit points earned before detonation to leaderboard
+    let rankInfo = null;
+    if (score > 0) {
+      rankInfo = submitScore('last-click', score, `${score.toLocaleString()} pts (${diffName})`);
+    }
+
     savePersistence();
-    showDefeatModal(triggerR, triggerC);
+    showDefeatModal(triggerR, triggerC, rankInfo);
   }
 
   updateHUD();
@@ -1648,43 +1659,69 @@ export function renderLastClickGame(container) {
         <!-- 4. Victory Modal -->
         <div id="lc-modal-victory" class="lc-modal">
           <div style="font-size:3rem; margin-bottom:0.25rem;">🏆</div>
-          <h2 style="font-size:2rem; font-weight:900; color:#4ade80; margin-bottom:0.25rem;">SECTOR CLEARED!</h2>
-          <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem;">
+          <h2 style="font-size:1.9rem; font-weight:900; color:#4ade80; margin-bottom:0.25rem;">SECTOR CLEARED!</h2>
+          <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:0.75rem;">
             Tactical grid masterclass. All threats neutralized.
           </p>
-          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem 1.25rem; margin-bottom:1.25rem; width:100%; max-width:280px;">
-            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Final Score</div>
+          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.65rem 1.25rem; margin-bottom:0.75rem; width:100%; max-width:280px;">
+            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Final Score</div>
             <div id="lc-vic-score" style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);">0</div>
             <div id="lc-vic-credits" style="font-size:0.85rem; font-weight:700; color:#fde047; margin-top:0.2rem;">+0 Cyber Credits 🪙</div>
           </div>
-          <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:260px;">
+
+          <!-- Leaderboard Anonymous Rank Badge -->
+          <div id="lc-vic-rank-card" style="display:none; background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-md); padding:0.5rem 0.85rem; width:100%; max-width:280px; margin-bottom:0.85rem;">
+            <div id="lc-vic-rank-text" style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">
+              🏆 Submitted to Global Leaderboard!
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:0.55rem; width:100%; max-width:280px;">
             <button id="lc-btn-vic-restart" class="btn btn-primary btn-lg" style="font-weight:900;">
               ▶️ PLAY AGAIN
             </button>
-            <button id="lc-btn-vic-menu" class="btn btn-secondary" style="font-weight:700;">
-              🏠 MAIN MENU
-            </button>
+            <div style="display:flex; gap:0.5rem;">
+              <a href="/leaderboards/" class="btn btn-secondary" style="flex:1; font-size:0.85rem; font-weight:700; text-align:center;">
+                🏆 Leaderboard
+              </a>
+              <button id="lc-btn-vic-menu" class="btn btn-secondary" style="flex:1; font-size:0.85rem; font-weight:700;">
+                🏠 Main Menu
+              </button>
+            </div>
           </div>
         </div>
 
         <!-- 5. Defeat Modal -->
         <div id="lc-modal-defeat" class="lc-modal">
           <div style="font-size:3rem; margin-bottom:0.25rem;">💥</div>
-          <h2 style="font-size:2rem; font-weight:900; color:#f43f5e; margin-bottom:0.25rem;">DETONATION!</h2>
-          <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:1rem;">
+          <h2 style="font-size:1.9rem; font-weight:900; color:#f43f5e; margin-bottom:0.25rem;">DETONATION!</h2>
+          <p style="color:var(--text-secondary); font-size:0.88rem; margin-bottom:0.75rem;">
             A hidden mine was triggered. Shield was depleted.
           </p>
-          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.75rem 1.25rem; margin-bottom:1.25rem; width:100%; max-width:280px;">
-            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase;">Final Score</div>
+          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.65rem 1.25rem; margin-bottom:0.75rem; width:100%; max-width:280px;">
+            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Final Score</div>
             <div id="lc-def-score" style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);">0</div>
           </div>
-          <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:260px;">
+
+          <!-- Leaderboard Anonymous Rank Badge -->
+          <div id="lc-def-rank-card" style="display:none; background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); border-radius:var(--radius-md); padding:0.5rem 0.85rem; width:100%; max-width:280px; margin-bottom:0.85rem;">
+            <div id="lc-def-rank-text" style="font-size:0.85rem; font-weight:700; color:var(--accent-cyan);">
+              🏆 Submitted to Global Leaderboard!
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:0.55rem; width:100%; max-width:280px;">
             <button id="lc-btn-def-restart" class="btn btn-primary btn-lg" style="font-weight:900;">
               🔄 TRY AGAIN
             </button>
-            <button id="lc-btn-def-menu" class="btn btn-secondary" style="font-weight:700;">
-              🏠 MAIN MENU
-            </button>
+            <div style="display:flex; gap:0.5rem;">
+              <a href="/leaderboards/" class="btn btn-secondary" style="flex:1; font-size:0.85rem; font-weight:700; text-align:center;">
+                🏆 Leaderboard
+              </a>
+              <button id="lc-btn-def-menu" class="btn btn-secondary" style="flex:1; font-size:0.85rem; font-weight:700;">
+                🏠 Main Menu
+              </button>
+            </div>
           </div>
         </div>
 
@@ -1903,19 +1940,39 @@ function spawnBanner(msg) {
   }, 4000);
 }
 
-function showVictoryModal(credits) {
+function showVictoryModal(credits, rankInfo = null) {
   const modal = document.getElementById('lc-modal-victory');
   const scoreEl = document.getElementById('lc-vic-score');
   const credEl = document.getElementById('lc-vic-credits');
-  if (scoreEl) scoreEl.textContent = score;
+  if (scoreEl) scoreEl.textContent = score.toLocaleString();
   if (credEl) credEl.textContent = `+${credits} Cyber Credits 🪙`;
+
+  const rankCard = document.getElementById('lc-vic-rank-card');
+  const rankText = document.getElementById('lc-vic-rank-text');
+  if (rankCard && rankText && rankInfo) {
+    rankCard.style.display = 'block';
+    rankText.innerHTML = `🏆 <strong>Rank #${rankInfo.rank}</strong> Worldwide (${rankInfo.percentile})`;
+  } else if (rankCard) {
+    rankCard.style.display = 'none';
+  }
+
   if (modal) modal.style.display = 'flex';
 }
 
-function showDefeatModal(r, c) {
+function showDefeatModal(r, c, rankInfo = null) {
   const modal = document.getElementById('lc-modal-defeat');
   const scoreEl = document.getElementById('lc-def-score');
-  if (scoreEl) scoreEl.textContent = score;
+  if (scoreEl) scoreEl.textContent = score.toLocaleString();
+
+  const rankCard = document.getElementById('lc-def-rank-card');
+  const rankText = document.getElementById('lc-def-rank-text');
+  if (rankCard && rankText && rankInfo) {
+    rankCard.style.display = 'block';
+    rankText.innerHTML = `🏆 <strong>Rank #${rankInfo.rank}</strong> Worldwide (${rankInfo.percentile})`;
+  } else if (rankCard) {
+    rankCard.style.display = 'none';
+  }
+
   if (modal) modal.style.display = 'flex';
 }
 
