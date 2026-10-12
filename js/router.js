@@ -214,14 +214,12 @@ function renderHomePage(container) {
         <p class="hero-subtitle" data-i18n="heroSubtitle">${t('heroSubtitle')}</p>
         <div class="hero-ctas">
           <a href="/tools/typing-test/" class="btn btn-primary btn-lg">
-            <span>⌨️⚡ Test Typing Speed (WPM)</span>
+            <span>⌨️ Test Typing Speed (WPM)</span>
           </a>
           <a href="/tools/mouse-test/" class="btn btn-secondary btn-lg">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5"/></svg>
             <span>🖱️ Test Mouse Buttons</span>
           </a>
           <a href="/tools/keyboard-test/" class="btn btn-secondary btn-lg">
-            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/></svg>
             <span>🖥️ Test Keyboard Keys</span>
           </a>
           <button id="hero-surprise-btn" class="btn btn-surprise btn-lg">
@@ -233,8 +231,7 @@ function renderHomePage(container) {
         <div class="hero-quick-test-card" id="hero-quick-test-zone">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
             <div style="font-weight:700; font-size:1.1rem; color:var(--accent-emerald); display:flex; align-items:center; gap:0.5rem;">
-              <span class="status-dot" style="background:var(--accent-emerald);"></span>
-              <span>⚡ Instant Mouse & Keyboard Quick Inspector</span>
+              <span>Instant Mouse & Keyboard Quick Inspector</span>
             </div>
             <span style="font-size:0.8rem; color:var(--text-muted);">Click anywhere or press any key right now to inspect live</span>
           </div>
