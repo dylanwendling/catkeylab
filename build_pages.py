@@ -795,7 +795,7 @@ def generate_home_page(tool_metadata):
           CatKeyLab provides free browser-based tools for testing keyboards, mice, typing speed, clicking performance, reaction time, memory, and other computer-input functions. No downloads, no accounts: just open and test.
         </p>
         <div class="hero-ctas">
-          <a href="/tools/typing-test/" class="btn btn-primary btn-lg">
+          <a href="/tools/typing-test/" class="btn btn-secondary btn-lg">
             <span>⌨️ Test Typing Speed (WPM)</span>
           </a>
           <a href="/tools/mouse-test/" class="btn btn-secondary btn-lg">

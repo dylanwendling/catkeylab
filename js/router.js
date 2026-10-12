@@ -213,7 +213,7 @@ function renderHomePage(container) {
         <h1 class="hero-title" data-i18n="heroTitle">${t('heroTitle')}</h1>
         <p class="hero-subtitle" data-i18n="heroSubtitle">${t('heroSubtitle')}</p>
         <div class="hero-ctas">
-          <a href="/tools/typing-test/" class="btn btn-primary btn-lg">
+          <a href="/tools/typing-test/" class="btn btn-secondary btn-lg">
             <span>⌨️ Test Typing Speed (WPM)</span>
           </a>
           <a href="/tools/mouse-test/" class="btn btn-secondary btn-lg">
