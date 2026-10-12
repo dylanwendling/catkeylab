@@ -210,9 +210,6 @@ function renderHomePage(container) {
     <!-- Hero Section -->
     <section class="hero">
       <div class="container">
-        <div class="hero-badge" data-i18n="heroBadge" style="background:linear-gradient(90deg, rgba(16,185,129,0.18), rgba(249,115,22,0.18)); border-color:rgba(16,185,129,0.35); color:var(--accent-emerald);">
-          ${t('heroBadge')}
-        </div>
         <h1 class="hero-title" data-i18n="heroTitle">${t('heroTitle')}</h1>
         <p class="hero-subtitle" data-i18n="heroSubtitle">${t('heroSubtitle')}</p>
         <div class="hero-ctas">

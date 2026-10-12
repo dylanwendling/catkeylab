@@ -788,9 +788,6 @@ def generate_home_page(tool_metadata):
     <!-- Hero Section -->
     <section class="hero">
       <div class="container">
-        <div class="hero-badge" style="background:linear-gradient(90deg, rgba(16,185,129,0.18), rgba(249,115,22,0.18)); border-color:rgba(16,185,129,0.35); color:var(--accent-emerald);">
-          🐾 CatKeyLab • Free Browser-Based Input Testing & Benchmarks
-        </div>
         <h1 class="hero-title">
           <span>Free Online Keyboard, Mouse &amp; <span style="white-space: nowrap;">Typing Tests 🐾</span></span>
         </h1>
