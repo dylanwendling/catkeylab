@@ -158,6 +158,13 @@ export const TOOL_ROUTES = {
     categoryName: 'Arcade Games',
     displayName: 'Cat Typing Dungeon',
     aliases: ['typing-dungeon', 'cat-typing-dungeon', 'cat-typing-dungeon-game']
+  },
+  'cat-dash': {
+    path: '/games/cat-dash/',
+    category: 'games',
+    categoryName: 'Arcade Games',
+    displayName: 'Cat Dash - Endless Runner',
+    aliases: ['cat-dash', 'cat-dash-game', 'dash']
   }
 };
 

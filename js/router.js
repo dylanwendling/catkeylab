@@ -34,6 +34,7 @@ import { renderCatMiniGolfGame, cleanupCatMiniGolfGame } from './tools/catMiniGo
 import { renderCatFishingGame, cleanupCatFishingGame } from './tools/catFishingGame.js';
 import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlicerGame.js';
 import { renderCatTypingDungeon_MAIN as renderCatTypingDungeon, cleanupCatTypingDungeon } from './tools/catTypingDungeon.js?v=46';
+import { renderCatDashGame, cleanupCatDashGame } from './tools/catDashGame.js';
 
 let currentCleanup = null;
 
@@ -98,6 +99,8 @@ TOOL_METADATA['fruit-slicer-game'].renderFn = renderFruitSlicerGame;
 TOOL_METADATA['fruit-slicer-game'].cleanupFn = cleanupFruitSlicerGame;
 TOOL_METADATA['cat-typing-dungeon'].renderFn = renderCatTypingDungeon;
 TOOL_METADATA['cat-typing-dungeon'].cleanupFn = cleanupCatTypingDungeon;
+TOOL_METADATA['cat-dash'].renderFn = renderCatDashGame;
+TOOL_METADATA['cat-dash'].cleanupFn = cleanupCatDashGame;
 TOOL_METADATA['typing-test'].renderFn = renderTypingTest;
 TOOL_METADATA['typing-test'].cleanupFn = cleanupTypingTest;
 TOOL_METADATA['mouse-test'].renderFn = renderMouseTest;

@@ -72,6 +72,7 @@ export const translations = {
     catMiniGolfTitle: 'Nibbles Ultimate 2D Mini Golf',
     catFishingTitle: 'Nibbles 2D Fishing Adventure',
     fruitSlicerTitle: 'Nibbles Fruit Slicer Arcade',
+    catDashTitle: 'Cat Dash — Endless Runner',
     numberTestSubtitle: 'Remember the longest number sequence you can.',
     verbalTestTitle: 'Verbal Memory Test',
     verbalTestSubtitle: 'Keep as many words in short term memory as possible.',
