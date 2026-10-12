@@ -43,7 +43,7 @@ const BOARD_CONFIGS = {
     unlockReqText: 'Create a 512 Tile or 2,500 Pts on 5×5',
     unlockTile: 512,
     unlockScore: 2500,
-    desc: 'Wider grid with uncommon lightning and magnet power-ups.'
+    desc: 'Wider grid with uncommon supercharge beams and magnet power-ups.'
   },
   '8x8': {
     id: '8x8',
@@ -98,42 +98,42 @@ let challengeCompleted = false;
 // Power-Up Database Definitions
 const POWER_UP_TYPES = {
   // Common
-  BOMB: {
-    id: 'BOMB',
-    name: 'Bomb',
-    icon: '💣',
+  FUSION_PULSE: {
+    id: 'FUSION_PULSE',
+    name: 'Fusion Pulse',
+    icon: '💥',
     rarity: 'common',
-    color: '#ef4444',
-    glow: 'rgba(239, 68, 68, 0.7)',
-    desc: 'Detonates 3×3 surrounding area!'
+    color: '#f97316',
+    glow: 'rgba(249, 115, 22, 0.7)',
+    desc: 'Surrounding 3×3 energy pulse: doubles every neighboring tile!'
   },
-  ERASER: {
-    id: 'ERASER',
-    name: 'Tile Eraser',
-    icon: '🧽',
+  CLONE_VIAL: {
+    id: 'CLONE_VIAL',
+    name: 'Clone Vial',
+    icon: '🧬',
     rarity: 'common',
     color: '#06b6d4',
     glow: 'rgba(6, 182, 212, 0.7)',
-    desc: 'Wipes out the lowest tile on the board!'
+    desc: 'Duplicates the colliding tile into an open space for an instant merge!'
   },
   SHUFFLE: {
     id: 'SHUFFLE',
     name: 'Mini Shuffle',
     icon: '🔀',
     rarity: 'common',
-    color: '#f97316',
-    glow: 'rgba(249, 115, 22, 0.7)',
-    desc: 'Shuffles tiles into merge clusters!'
+    color: '#3b82f6',
+    glow: 'rgba(59, 130, 246, 0.7)',
+    desc: 'Shuffles tiles into merge clusters without changing values!'
   },
   // Uncommon
-  LIGHTNING: {
-    id: 'LIGHTNING',
-    name: 'Lightning Beam',
+  SUPERCHARGE_BEAM: {
+    id: 'SUPERCHARGE_BEAM',
+    name: 'Supercharge Beam',
     icon: '⚡',
     rarity: 'uncommon',
     color: '#eab308',
     glow: 'rgba(234, 179, 8, 0.7)',
-    desc: 'Clears an entire row or column!'
+    desc: 'Electric crossbeam: doubles all tiles along its row and column!'
   },
   MULTIPLIER: {
     id: 'MULTIPLIER',
@@ -142,16 +142,16 @@ const POWER_UP_TYPES = {
     rarity: 'uncommon',
     color: '#a855f7',
     glow: 'rgba(168, 85, 247, 0.7)',
-    desc: 'Doubles colliding tile value!'
+    desc: 'Doubles the colliding tile value & grants double points!'
   },
   MAGNET: {
     id: 'MAGNET',
     name: 'Magnet',
     icon: '🧲',
     rarity: 'uncommon',
-    color: '#3b82f6',
-    glow: 'rgba(59, 130, 246, 0.7)',
-    desc: 'Pulls matching tiles together for instant merges!'
+    color: '#0ea5e9',
+    glow: 'rgba(14, 165, 233, 0.7)',
+    desc: 'Pulls matching tiles together for instant auto-merges!'
   },
   // Rare
   CHAIN_REACTOR: {
@@ -161,7 +161,7 @@ const POWER_UP_TYPES = {
     rarity: 'rare',
     color: '#ec4899',
     glow: 'rgba(236, 72, 153, 0.7)',
-    desc: 'Auto-merges adjacent matching pairs!'
+    desc: 'Auto-merges adjacent matching pairs across the entire board!'
   },
   WILD: {
     id: 'WILD',
@@ -170,16 +170,16 @@ const POWER_UP_TYPES = {
     rarity: 'rare',
     color: '#10b981',
     glow: 'rgba(16, 185, 129, 0.7)',
-    desc: 'Chameleon tile: merges with ANY number!'
+    desc: 'Chameleon catalyst: merges with ANY number it touches!'
   },
-  BOARD_CLEANER: {
-    id: 'BOARD_CLEANER',
-    name: 'Board Cleaner',
-    icon: '🧹',
+  CONDENSER: {
+    id: 'CONDENSER',
+    name: 'Element Condenser',
+    icon: '⚗️',
     rarity: 'rare',
     color: '#14b8a6',
     glow: 'rgba(20, 184, 166, 0.7)',
-    desc: 'Vaporizes all 2s and 4s across the board!'
+    desc: 'Fuses all stray 2s & 4s into one high-tier synthesized tile!'
   },
   // Epic & Legendary
   BLACK_HOLE: {
@@ -189,7 +189,7 @@ const POWER_UP_TYPES = {
     rarity: 'epic',
     color: '#8b5cf6',
     glow: 'rgba(139, 92, 246, 0.85)',
-    desc: 'Vortex absorbs surrounding tiles into score!'
+    desc: 'Vortex absorbs surrounding mass and forges a giant Singularity tile!'
   },
   QUANTUM: {
     id: 'QUANTUM',
@@ -198,7 +198,7 @@ const POWER_UP_TYPES = {
     rarity: 'epic',
     color: '#f43f5e',
     glow: 'rgba(244, 63, 94, 0.85)',
-    desc: 'Leaps tile value 2 tiers higher!'
+    desc: 'Leaps tile value 2 tiers higher (4× multiplier)!'
   },
   OVERDRIVE: {
     id: 'OVERDRIVE',
@@ -207,16 +207,16 @@ const POWER_UP_TYPES = {
     rarity: 'legendary',
     color: '#fbbf24',
     glow: 'rgba(251, 191, 36, 0.9)',
-    desc: '3× Score Surge and guaranteed power-ups!'
+    desc: '3× Score Surge and guaranteed power-ups for 5 turns!'
   }
 };
 
 // Power-Up Spawn Probability Scaling Configuration
 const POWER_UP_SPAWN_TIERS = [
-  { minVal: 4, maxVal: 16, chance: 0.16, pool: ['BOMB', 'ERASER', 'SHUFFLE'] },
-  { minVal: 32, maxVal: 64, chance: 0.32, pool: ['BOMB', 'ERASER', 'SHUFFLE', 'LIGHTNING', 'MULTIPLIER', 'MAGNET'] },
-  { minVal: 128, maxVal: 256, chance: 0.50, pool: ['LIGHTNING', 'MULTIPLIER', 'MAGNET', 'CHAIN_REACTOR', 'WILD', 'BOARD_CLEANER'] },
-  { minVal: 512, maxVal: 1024, chance: 0.75, pool: ['CHAIN_REACTOR', 'WILD', 'BOARD_CLEANER', 'BLACK_HOLE', 'QUANTUM'] },
+  { minVal: 4, maxVal: 16, chance: 0.16, pool: ['FUSION_PULSE', 'CLONE_VIAL', 'SHUFFLE'] },
+  { minVal: 32, maxVal: 64, chance: 0.32, pool: ['FUSION_PULSE', 'CLONE_VIAL', 'SHUFFLE', 'SUPERCHARGE_BEAM', 'MULTIPLIER', 'MAGNET'] },
+  { minVal: 128, maxVal: 256, chance: 0.50, pool: ['SUPERCHARGE_BEAM', 'MULTIPLIER', 'MAGNET', 'CHAIN_REACTOR', 'WILD', 'CONDENSER'] },
+  { minVal: 512, maxVal: 1024, chance: 0.75, pool: ['CHAIN_REACTOR', 'WILD', 'CONDENSER', 'BLACK_HOLE', 'QUANTUM'] },
   { minVal: 2048, maxVal: Infinity, chance: 0.95, pool: ['BLACK_HOLE', 'QUANTUM', 'OVERDRIVE'] }
 ];
 
@@ -299,18 +299,19 @@ function playLabSound(type, param = 1) {
         osc.start(now + i * 0.04);
         osc.stop(now + i * 0.04 + 0.18);
       });
-    } else if (type === 'bomb') {
-      const osc = actx.createOscillator();
-      const gain = actx.createGain();
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(140, now);
-      osc.frequency.exponentialRampToValueAtTime(30, now + 0.35);
-      gain.gain.setValueAtTime(0.3, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-      osc.connect(gain);
-      gain.connect(actx.destination);
-      osc.start(now);
-      osc.stop(now + 0.35);
+    } else if (type === 'fusion_pulse') {
+      [220, 330, 440, 660, 880].forEach((f, i) => {
+        const osc = actx.createOscillator();
+        const gain = actx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(f, now + i * 0.035);
+        gain.gain.setValueAtTime(0.2, now + i * 0.035);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.035 + 0.16);
+        osc.connect(gain);
+        gain.connect(actx.destination);
+        osc.start(now + i * 0.035);
+        osc.stop(now + i * 0.035 + 0.16);
+      });
     } else if (type === 'lightning') {
       const osc = actx.createOscillator();
       const gain = actx.createGain();
@@ -745,8 +746,8 @@ function initMenuBoard() {
   grid[3][2] = createTile(64);
   grid[2][1] = createTile(32);
   grid[2][3] = createTile(32);
-  grid[0][2] = createPowerUpTile('BOMB');
-  grid[4][2] = createPowerUpTile('LIGHTNING');
+  grid[0][2] = createPowerUpTile('FUSION_PULSE');
+  grid[4][2] = createPowerUpTile('SUPERCHARGE_BEAM');
   grid[2][0] = createPowerUpTile('WILD');
   grid[2][4] = createPowerUpTile('QUANTUM');
 }
@@ -818,7 +819,7 @@ function createTile(val) {
 }
 
 function createPowerUpTile(typeKey) {
-  const pu = POWER_UP_TYPES[typeKey] || POWER_UP_TYPES.BOMB;
+  const pu = POWER_UP_TYPES[typeKey] || POWER_UP_TYPES.FUSION_PULSE;
   return {
     id: nextTileId++,
     isPowerUp: true,
@@ -1052,46 +1053,72 @@ function activatePowerUp(typeKey, atRow, atCol, triggeringTile) {
   playLabSound('powerup_collect');
   const pos = getCellCenter(atRow, atCol);
 
-  if (typeKey === 'BOMB') {
-    // 3x3 blast area
-    screenShakeAmount = 10;
-    playLabSound('bomb');
-    let clearedCount = 0;
+  if (typeKey === 'FUSION_PULSE') {
+    // 3x3 surrounding pulse: doubles every neighboring tile value!
+    screenShakeAmount = 6;
+    playLabSound('fusion_pulse');
+    let upgradedCount = 0;
     for (let r = Math.max(0, atRow - 1); r <= Math.min(boardSize - 1, atRow + 1); r++) {
       for (let c = Math.max(0, atCol - 1); c <= Math.min(boardSize - 1, atCol + 1); c++) {
-        if (grid[r][c] && grid[r][c] !== triggeringTile) {
-          grid[r][c] = null;
-          clearedCount++;
-          spawnMergeSparkles(r, c, '#ef4444');
+        const neighbor = grid[r][c];
+        if (neighbor && !neighbor.isPowerUp) {
+          neighbor.val *= 2;
+          neighbor.scale = 1.35;
+          if (neighbor.val > highestTile) highestTile = neighbor.val;
+          score += neighbor.val;
+          upgradedCount++;
+          spawnMergeSparkles(r, c, '#f97316');
         }
       }
     }
-    score += clearedCount * 50;
-    spawnFloatingText('💣 BOMB DETONATED (+3×3)!', pos.x, pos.y - 25, '#ef4444');
+    spawnFloatingText(`💥 FUSION PULSE (DOUBLED ${upgradedCount} TILES)!`, pos.x, pos.y - 25, '#f97316');
   }
 
-  else if (typeKey === 'ERASER') {
-    // Find lowest tile on the board and erase it
-    let lowestVal = Infinity;
+  else if (typeKey === 'CLONE_VIAL') {
+    // Creates an exact clone of the colliding tile into an open cell (prefers adjacent cells for instant merge setup!)
+    playLabSound('powerup_collect');
+    let clonedVal = (triggeringTile && !triggeringTile.isPowerUp) ? triggeringTile.val : 4;
+    
+    // Search adjacent open cells first
+    const adjacentEmpty = [];
+    const deltas = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+    deltas.forEach(([dr, dc]) => {
+      const nr = atRow + dr;
+      const nc = atCol + dc;
+      if (nr >= 0 && nr < boardSize && nc >= 0 && nc < boardSize && !grid[nr][nc]) {
+        adjacentEmpty.push({ r: nr, c: nc });
+      }
+    });
+
     let targetCell = null;
-    for (let r = 0; r < boardSize; r++) {
-      for (let c = 0; c < boardSize; c++) {
-        const t = grid[r][c];
-        if (t && !t.isPowerUp && t.val < lowestVal) {
-          lowestVal = t.val;
-          targetCell = { r, c };
-        }
+    if (adjacentEmpty.length > 0) {
+      targetCell = adjacentEmpty[Math.floor(Math.random() * adjacentEmpty.length)];
+    } else {
+      const allEmpty = getEmptyCells();
+      if (allEmpty.length > 0) {
+        targetCell = allEmpty[Math.floor(Math.random() * allEmpty.length)];
       }
     }
+
     if (targetCell) {
-      grid[targetCell.r][targetCell.c] = null;
+      const clone = createTile(clonedVal);
+      clone.scale = 1.4;
+      grid[targetCell.r][targetCell.c] = clone;
       spawnMergeSparkles(targetCell.r, targetCell.c, '#06b6d4');
-      spawnFloatingText(`🧽 ERASED TILE ${lowestVal}!`, pos.x, pos.y - 25, '#06b6d4');
+      score += clonedVal;
+      spawnFloatingText(`🧬 CLONED ${clonedVal} TILE!`, pos.x, pos.y - 25, '#06b6d4');
+    } else if (triggeringTile && !triggeringTile.isPowerUp) {
+      // Board full: double colliding tile directly
+      triggeringTile.val *= 2;
+      triggeringTile.scale = 1.4;
+      if (triggeringTile.val > highestTile) highestTile = triggeringTile.val;
+      score += triggeringTile.val;
+      spawnFloatingText(`🧬 OVERFLOW BOOST → ${triggeringTile.val}!`, pos.x, pos.y - 25, '#06b6d4');
     }
   }
 
   else if (typeKey === 'SHUFFLE') {
-    // Rearrange all numbered tiles randomly
+    // Rearrange all numbered tiles randomly without changing values
     const tilesList = [];
     for (let r = 0; r < boardSize; r++) {
       for (let c = 0; c < boardSize; c++) {
@@ -1114,37 +1141,44 @@ function activatePowerUp(typeKey, atRow, atCol, triggeringTile) {
         grid[pick.r][pick.c] = t;
       }
     });
-    spawnFloatingText('🔀 TILES SHUFFLED!', pos.x, pos.y - 25, '#f97316');
+    spawnFloatingText('🔀 TILES SHUFFLED!', pos.x, pos.y - 25, '#3b82f6');
   }
 
-  else if (typeKey === 'LIGHTNING') {
-    // Vaporize entire row or column (picks whichever has more tiles)
+  else if (typeKey === 'SUPERCHARGE_BEAM') {
+    // Pure electric crossbeam: doubles all tiles in its row AND column!
     playLabSound('lightning');
     screenShakeAmount = 8;
-    let rowTiles = 0, colTiles = 0;
-    for (let i = 0; i < boardSize; i++) {
-      if (grid[atRow][i] && grid[atRow][i] !== triggeringTile) rowTiles++;
-      if (grid[i][atCol] && grid[i][atCol] !== triggeringTile) colTiles++;
+    let chargedCount = 0;
+    
+    // Double all tiles along the row
+    for (let c = 0; c < boardSize; c++) {
+      const t = grid[atRow][c];
+      if (t && !t.isPowerUp) {
+        t.val *= 2;
+        t.scale = 1.35;
+        if (t.val > highestTile) highestTile = t.val;
+        score += t.val;
+        chargedCount++;
+        spawnMergeSparkles(atRow, c, '#eab308');
+      }
     }
 
-    if (rowTiles >= colTiles) {
-      for (let c = 0; c < boardSize; c++) {
-        if (grid[atRow][c] && grid[atRow][c] !== triggeringTile) {
-          grid[atRow][c] = null;
-          spawnMergeSparkles(atRow, c, '#eab308');
-        }
-      }
-      spawnFloatingText('⚡ LIGHTNING ROW CLEARED!', pos.x, pos.y - 25, '#eab308');
-    } else {
-      for (let r = 0; r < boardSize; r++) {
-        if (grid[r][atCol] && grid[r][atCol] !== triggeringTile) {
-          grid[r][atCol] = null;
+    // Double all tiles along the column (skip intersection to not double twice)
+    for (let r = 0; r < boardSize; r++) {
+      if (r !== atRow) {
+        const t = grid[r][atCol];
+        if (t && !t.isPowerUp) {
+          t.val *= 2;
+          t.scale = 1.35;
+          if (t.val > highestTile) highestTile = t.val;
+          score += t.val;
+          chargedCount++;
           spawnMergeSparkles(r, atCol, '#eab308');
         }
       }
-      spawnFloatingText('⚡ LIGHTNING COLUMN CLEARED!', pos.x, pos.y - 25, '#eab308');
     }
-    score += 250;
+
+    spawnFloatingText(`⚡ SUPERCHARGED ${chargedCount} TILES (DOUBLED)!`, pos.x, pos.y - 25, '#eab308');
   }
 
   else if (typeKey === 'MULTIPLIER') {
@@ -1209,38 +1243,91 @@ function activatePowerUp(typeKey, atRow, atCol, triggeringTile) {
     spawnFloatingText('🃏 WILD CATALYST COLLECTED!', pos.x, pos.y - 25, '#10b981');
   }
 
-  else if (typeKey === 'BOARD_CLEANER') {
-    // Clear all 2s and 4s
-    let cleared = 0;
+  else if (typeKey === 'CONDENSER') {
+    // Condenses all stray 2s & 4s into one high-tier synthesized tile!
+    let totalAbsorbed = 0;
+    let lowCount = 0;
     for (let r = 0; r < boardSize; r++) {
       for (let c = 0; c < boardSize; c++) {
         const t = grid[r][c];
-        if (t && !t.isPowerUp && (t.val === 2 || t.val === 4)) {
+        if (t && !t.isPowerUp && t !== triggeringTile && t.val <= 4) {
+          totalAbsorbed += t.val;
+          lowCount++;
           grid[r][c] = null;
-          cleared++;
           spawnMergeSparkles(r, c, '#14b8a6');
         }
       }
     }
-    score += cleared * 30;
-    spawnFloatingText(`🧹 CLEANED ${cleared} LOW TILES!`, pos.x, pos.y - 25, '#14b8a6');
+
+    // If few or no 2s and 4s were found, include 8s too so it always gives huge value
+    if (lowCount === 0) {
+      for (let r = 0; r < boardSize; r++) {
+        for (let c = 0; c < boardSize; c++) {
+          const t = grid[r][c];
+          if (t && !t.isPowerUp && t !== triggeringTile && t.val <= 8) {
+            totalAbsorbed += t.val;
+            lowCount++;
+            grid[r][c] = null;
+            spawnMergeSparkles(r, c, '#14b8a6');
+          }
+        }
+      }
+    }
+
+    // Determine synthesized value (powers of 2, minimum 16)
+    let synthVal = 16;
+    while (synthVal < totalAbsorbed) synthVal *= 2;
+    if (lowCount === 0) synthVal = 32;
+
+    if (triggeringTile && !triggeringTile.isPowerUp) {
+      triggeringTile.val = Math.max(triggeringTile.val * 2, synthVal);
+      triggeringTile.scale = 1.45;
+      if (triggeringTile.val > highestTile) highestTile = triggeringTile.val;
+    } else {
+      const synthTile = createTile(synthVal);
+      synthTile.scale = 1.45;
+      grid[atRow][atCol] = synthTile;
+      if (synthVal > highestTile) highestTile = synthVal;
+    }
+
+    score += synthVal * 2 + 100;
+    screenShakeAmount = 6;
+    spawnFloatingText(`⚗️ CONDENSED ${lowCount} LOW TILES INTO A ${synthVal}!`, pos.x, pos.y - 25, '#14b8a6');
   }
 
   else if (typeKey === 'BLACK_HOLE') {
-    // 2-tile radius vortex
+    // 2-tile radius gravitational vortex: compresses all absorbed mass into a giant Singularity tile!
     screenShakeAmount = 14;
     let totalAbsorbed = 0;
+    let absorbedCount = 0;
     for (let r = Math.max(0, atRow - 2); r <= Math.min(boardSize - 1, atRow + 2); r++) {
       for (let c = Math.max(0, atCol - 2); c <= Math.min(boardSize - 1, atCol + 2); c++) {
         if (grid[r][c] && grid[r][c] !== triggeringTile) {
-          totalAbsorbed += (grid[r][c].val || 10);
+          totalAbsorbed += (grid[r][c].val || 16);
+          absorbedCount++;
           grid[r][c] = null;
           spawnMergeSparkles(r, c, '#8b5cf6');
         }
       }
     }
+
+    // Convert absorbed mass into a high-tier Singularity tile (powers of 2, min 64)
+    let singularityVal = 64;
+    while (singularityVal < totalAbsorbed) singularityVal *= 2;
+
+    if (triggeringTile && !triggeringTile.isPowerUp) {
+      triggeringTile.val = Math.max(triggeringTile.val * 2, singularityVal);
+      triggeringTile.scale = 1.5;
+      if (triggeringTile.val > highestTile) highestTile = triggeringTile.val;
+    } else {
+      const singTile = createTile(singularityVal);
+      singTile.scale = 1.5;
+      grid[atRow][atCol] = singTile;
+      if (singularityVal > highestTile) highestTile = singularityVal;
+    }
+
     score += totalAbsorbed * 2 + 1000;
-    spawnFloatingText(`🌌 BLACK HOLE CONVERTED +${totalAbsorbed * 2}!`, pos.x, pos.y - 25, '#8b5cf6');
+    spawnFloatingText(`🌌 SINGULARITY FORGED: ${singularityVal} TILE (+${totalAbsorbed * 2})!`, pos.x, pos.y - 25, '#8b5cf6');
   }
 
   else if (typeKey === 'QUANTUM') {
@@ -1454,7 +1541,7 @@ function drawCellTile(t, x, y, size) {
 
   if (t.isPowerUp) {
     // Power-Up Tile Object
-    const pu = t.info || POWER_UP_TYPES.BOMB;
+    const pu = t.info || POWER_UP_TYPES.FUSION_PULSE;
     ctx.shadowColor = pu.glow;
     ctx.shadowBlur = 16;
 

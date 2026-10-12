@@ -717,9 +717,9 @@ export const TOOL_METADATA = {
       interpretResults: 'Scores above 2,500 demonstrate solid board control. Reaching 8,000+ requires smart power-up collection and chain setup. Scores exceeding 20,000+ represent mastery of large-scale board synthesis on advanced reactors.',
       tips: [
         'Keep your highest-value tiles clustered in one corner to maintain clean merge pathways.',
-        'Do not leave low-tier power-ups uncollected if board space is getting tight - slide into them to clear room.',
-        'Use Bombs and Board Cleaners when the board is over 75% full to avert game over.',
-        'Take advantage of Black Holes and Quantum Merges to leapfrog merge tiers instantly.',
+        'Do not leave low-tier power-ups uncollected if board space is getting tight - slide into them to clear room and boost values.',
+        'Trigger Fusion Pulses and Element Condensers to double clusters and fuse low tiles into high-tier elements.',
+        'Take advantage of Supercharge Beams and Quantum Merges to leapfrog merge tiers instantly across rows and columns.',
         'In Timed Mode, prioritize rapid merges over slow micro-optimization to maintain high combo multipliers.'
       ],
       relatedTools: ['stack-panic', 'reaction-time-test', 'sequence-memory-test']
