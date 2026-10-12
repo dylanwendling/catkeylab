@@ -39,10 +39,11 @@ function getYarnBoundaries() {
     if (rect.bottom > 0) {
       headerBottom = rect.bottom;
     }
-  } else {
+  }
+  if (!headerBottom) {
     headerBottom = 62;
   }
-  const minY = Math.max(10, headerBottom + 6);
+  const minY = Math.max(10, headerBottom + 8);
 
   // 2. Mobile Home Bar Boundary (Bottom)
   let bottomLimit = window.innerHeight;
@@ -58,13 +59,29 @@ function getYarnBoundaries() {
       }
     }
   }
-  const maxY = Math.max(minY + 20, bottomLimit - ballSize - 6);
+
+  // Hard safe fallback on mobile: ensure bottomLimit is at least 74px above viewport bottom
+  if (isMobile) {
+    bottomLimit = Math.min(bottomLimit, window.innerHeight - 74);
+  }
+
+  const maxY = Math.max(minY + 20, bottomLimit - ballSize - 8);
 
   // 3. Horizontal Viewport Boundaries (Left & Right)
   const minX = 10;
   const maxX = Math.max(minX + 20, window.innerWidth - ballSize - 10);
 
-  return { minX, maxX, minY, maxY, ballSize };
+  return { minX, maxX, minY, maxY, ballSize, isMobile };
+}
+
+export function clampYarnToBounds() {
+  if (!yarnEl) return;
+  const bounds = getYarnBoundaries();
+  if (posX < bounds.minX) posX = bounds.minX;
+  if (posX > bounds.maxX) posX = bounds.maxX;
+  if (posY < bounds.minY) posY = bounds.minY;
+  if (posY > bounds.maxY) posY = bounds.maxY;
+  updateYarnPosition();
 }
 
 export function initYarnBall() {
@@ -84,11 +101,17 @@ export function initYarnBall() {
   yarnEl = document.getElementById('yarn-ball');
   if (!yarnEl) return;
 
-  // Set initial position safely inside bounds, above the mobile home bar and food bowl
+  // Set initial position safely well above the mobile home bar and food bowl
   const bounds = getYarnBoundaries();
-  posX = Math.max(bounds.minX, bounds.maxX - (window.innerWidth <= 768 ? 16 : 50));
-  posY = Math.max(bounds.minY, bounds.maxY - (window.innerWidth <= 768 ? 16 : 30));
+  posX = Math.max(bounds.minX, bounds.maxX - (bounds.isMobile ? 16 : 40));
+  // Position clearly above the food bowl and home bar on mobile (110px above maxY)
+  posY = Math.max(bounds.minY + 20, bounds.maxY - (bounds.isMobile ? 110 : 50));
   updateYarnPosition();
+
+  // Re-verify position on next animation frame after layout reflow
+  requestAnimationFrame(() => {
+    clampYarnToBounds();
+  });
 
   // Mouse & Touch Drag Handlers
   yarnEl.addEventListener('mousedown', startDrag);
@@ -100,12 +123,7 @@ export function initYarnBall() {
   window.addEventListener('touchend', endDrag);
 
   window.addEventListener('resize', () => {
-    const bounds = getYarnBoundaries();
-    if (posX < bounds.minX) posX = bounds.minX;
-    if (posX > bounds.maxX) posX = bounds.maxX;
-    if (posY < bounds.minY) posY = bounds.minY;
-    if (posY > bounds.maxY) posY = bounds.maxY;
-    updateYarnPosition();
+    clampYarnToBounds();
   });
 
   // Physics animation loop

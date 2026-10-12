@@ -21,23 +21,23 @@ document.addEventListener('DOMContentLoaded', () => {
   initI18n();
   fetchGlobalLeaderboards();
 
-  // 2. Initialize Interactive Cat Mascot, Throwable Yarn Ball & Food Bowl 🥣🐟
-  initCatMascot();
-  initYarnBall();
-  initFoodBowl();
-
-  // 3. Initialize Sylva 3D Hero Background
-  initSylvaHero();
-
-  // 3. Setup Global Mouse Tracking Spotlight Aura & Card Parallax
-  initMouseSpotlight();
-
-  // 3. Render Global Layout Components
+  // 2. Render Global Layout Components (Header & Footer)
   const headerContainer = document.getElementById('app-header');
   const footerContainer = document.getElementById('app-footer');
 
   if (headerContainer) renderHeader(headerContainer);
   if (footerContainer) renderFooter(footerContainer);
+
+  // 3. Initialize Interactive Cat Mascot, Throwable Yarn Ball & Food Bowl 🥣🐟
+  initCatMascot();
+  initYarnBall();
+  initFoodBowl();
+
+  // 4. Initialize Sylva 3D Hero Background
+  initSylvaHero();
+
+  // 5. Setup Global Mouse Tracking Spotlight Aura & Card Parallax
+  initMouseSpotlight();
 
   // 4. Register Translation Updater Callback
   window.updatePageTranslations = () => {
