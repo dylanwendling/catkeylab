@@ -663,40 +663,5 @@ export const TOOL_METADATA = {
       { q: 'Can I play this on a mobile phone?', a: 'Yes! The game is explicitly designed to be mobile-first. Tap the input box and use your phone\'s native keyboard to type the words.' },
       { q: 'What do the passives do?', a: 'Passives are upgrades you get from shops and chests. They modify the game rules - giving you more time, bonus damage, healing, or special abilities like ignoring a mistake.' }
     ]
-  },
-  'cat-dash': {
-    titleKey: 'catDashTitle',
-    desc: 'Sprint through vibrant cartoon worlds, leap over boxes, slide under hazards, and unlock custom cat skins in this fast-paced endless runner.',
-    icon: '🐾',
-    category: 'games',
-    content: {
-      intro: 'Cat Dash is a colorful, fast-paced 2D side-scrolling endless runner where you take control of an adventurous feline. Dodge obstacles, collect shiny fish and gold coins, grab shield bubbles and catnip sprints, and survive as long as possible as the world speeds up!',
-      howTo: [
-        'Tap the screen or press Space / Up Arrow / W / [JUMP] to jump over obstacles and cardboard boxes.',
-        'Swipe down or press S / Down Arrow / [SLIDE] to crouch low and slide safely under overhead pipes and banners.',
-        'Collect silver fish (+25 pts) and shiny gold coins (+50 pts) to build your combo multiplier and buy wardrobe skins.',
-        'Snag blue milk bottles for a barrier shield that absorbs one crash.',
-        'Grab green catnip rushes for temporary invulnerability and automatic coin magnet pull!',
-        'Test your reflexes in the Daily Challenge: a shared deterministic track with a daily 650m goal and 150 coin reward.'
-      ],
-      whatItMeasures: 'Tests reflex reaction latency, predictive timing, obstacle anticipation, hand-eye coordination, and spatial rhythm as scrolling velocity ramps up.',
-      whyUseIt: 'Offers quick indie arcade thrills with instant restart, responsive mobile touch controls, zero lag, smooth 60fps canvas animation, and rewarding progression with 6 cat skins.',
-      interpretResults: 'Surviving 300 meters is a solid warmup. 600 meters demonstrates sharp reflexes. Surviving beyond 1,000 meters proves master-level reaction speed!',
-      tips: [
-        'Look ahead toward the right edge of the screen rather than staring at your cat to spot obstacle patterns early.',
-        'Time your slides carefully: your cat will remain crouched for a brief window before automatically standing back up.',
-        'Shield bubbles are precious lifelines: save them for higher speed biomes like City Rooftops and Moonlit Kingdom.',
-        'Complete the Daily Challenge each day for a reliable 150-coin bonus toward the rare Neon Cat skin.',
-        'On mobile devices, toggle on-screen virtual buttons in the pause menu if you prefer tactile buttons over swipe gestures.'
-      ],
-      relatedTools: ['cat-typing-dungeon', 'reaction-time-test', 'aim-trainer-test']
-    },
-    faqs: [
-      { q: 'How do mobile controls work in Cat Dash?', a: 'You can tap anywhere on the screen to jump and swipe down to slide. Alternatively, use the tactile on-screen [JUMP] and [SLIDE] action buttons at the bottom of the screen.' },
-      { q: 'What is the Daily Challenge in Cat Dash?', a: 'Every day at midnight UTC, a new obstacle seed is generated. All players run the exact same course layout. Reach the 650-meter target to earn a 150 gold coin bonus.' },
-      { q: 'Do cat skins affect hitboxes or speed?', a: 'No. All cat skins (Orange Tabby, Tuxedo Black, Silver Gray, Calico, Pure White, and Cyber Neon) share the identical collision hitbox, jump physics, and movement speeds.' },
-      { q: 'Is game progress saved automatically?', a: 'Yes! High scores, longest distance, collected fish, coins, unlocked skins, and audio preferences are persisted automatically in your browser LocalStorage.' },
-      { q: 'Can I play Cat Dash with sound muted?', a: 'Yes! Sound effects can be toggled on or off at any time from the pause menu or options. Cat Dash uses synthesized Web Audio without requiring audio to play.' }
-    ]
   }
 };

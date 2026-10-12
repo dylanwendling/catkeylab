@@ -173,13 +173,6 @@ TOOL_ROUTES = {
         'categoryName': 'Arcade Games',
         'displayName': 'Cat Typing Dungeon',
         'aliases': ['typing-dungeon', 'cat-typing-dungeon', 'cat-typing-dungeon-game']
-    },
-    'cat-dash': {
-        'path': '/games/cat-dash/',
-        'category': 'games',
-        'categoryName': 'Arcade Games',
-        'displayName': 'Cat Dash - Endless Runner',
-        'aliases': ['cat-dash', 'cat-dash-game', 'dash']
     }
 }
 
@@ -288,7 +281,6 @@ STATIC_HEADER_HTML = """
               <a href="/games/fruit-slicer/" class="dropdown-item"><span>🍉</span> <span>Fruit Slicer Arcade</span></a>
               <a href="/games/fish-maze/" class="dropdown-item"><span>🐟</span> <span>Nibbles Fish Maze</span></a>
               <a href="/games/card-memory/" class="dropdown-item"><span>🎴</span> <span>Card Memory Match</span></a>
-              <a href="/games/cat-dash/" class="dropdown-item"><span>🐾</span> <span>Cat Dash (Endless Runner)</span></a>
             </div>
           </div>
 
@@ -1014,13 +1006,9 @@ def generate_home_page(tool_metadata):
                   <td style="padding:1rem;">Navigate Nibbles through a procedural maze</td>
                   <td style="padding:1rem;"><a href="/games/fish-maze/" style="color:var(--accent-cyan); font-weight:600;">Fish Maze 🐟</a></td>
                 </tr>
-                <tr style="border-bottom:1px solid var(--border-color);">
+                <tr>
                   <td style="padding:1rem;">Match 3D cat cards in a visual recognition game</td>
                   <td style="padding:1rem;"><a href="/games/card-memory/" style="color:var(--accent-cyan); font-weight:600;">Card Memory Match 🎴</a></td>
-                </tr>
-                <tr>
-                  <td style="padding:1rem;">Sprint through cartoon biomes, leap hurdles & slide under hazards</td>
-                  <td style="padding:1rem;"><a href="/games/cat-dash/" style="color:var(--accent-cyan); font-weight:600;">Cat Dash 🐾</a></td>
                 </tr>
               </tbody>
             </table>
