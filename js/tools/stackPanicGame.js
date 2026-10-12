@@ -62,10 +62,69 @@ const BLOCK_PALETTES = [
 const SPECIAL_TYPES = {
   NORMAL: 'NORMAL',
   BONUS: 'BONUS',     // Golden Block: +50 Bonus Points
-  SLOWMO: 'SLOWMO',   // Frost Cyan: Slows horizontal speed for 3 blocks
+  SLOWMO: 'SLOWMO',   // Frost Cyan: Slows horizontal speed for 4 blocks
   SHIELD: 'SHIELD',   // Emerald Shield: Absorbs 1 near-miss/mistake
-  WIDE: 'WIDE'        // Neon Magenta: Expands block width +30px
+  WIDE: 'WIDE'        // Neon Magenta: Expands block width +32px
 };
+
+const POWERUP_INFO = {
+  [SPECIAL_TYPES.SHIELD]: {
+    name: 'SHIELD',
+    icon: '🛡️',
+    color: '#10b981',
+    glow: 'rgba(16, 185, 129, 0.75)',
+    desc: 'Absorbs 1 Mistake'
+  },
+  [SPECIAL_TYPES.SLOWMO]: {
+    name: 'SLOW-MO',
+    icon: '❄️',
+    color: '#06b6d4',
+    glow: 'rgba(6, 182, 212, 0.75)',
+    desc: 'Cools Speed 40%'
+  },
+  [SPECIAL_TYPES.BONUS]: {
+    name: 'BONUS +50',
+    icon: '🌟',
+    color: '#eab308',
+    glow: 'rgba(234, 179, 8, 0.75)',
+    desc: '50 Bonus Points'
+  },
+  [SPECIAL_TYPES.WIDE]: {
+    name: 'WIDE EXPAND',
+    icon: '💖',
+    color: '#ec4899',
+    glow: 'rgba(236, 72, 153, 0.75)',
+    desc: 'Expands Width +32px'
+  }
+};
+
+let scheduledPowerUps = [];
+
+function generateScheduledPowerUps(startFloor = 5) {
+  const sequence = [
+    SPECIAL_TYPES.SLOWMO,
+    SPECIAL_TYPES.SHIELD,
+    SPECIAL_TYPES.BONUS,
+    SPECIAL_TYPES.WIDE,
+    SPECIAL_TYPES.SHIELD,
+    SPECIAL_TYPES.BONUS,
+    SPECIAL_TYPES.SLOWMO,
+    SPECIAL_TYPES.WIDE
+  ];
+  
+  scheduledPowerUps = [];
+  let currentFloor = startFloor;
+  for (let i = 0; i < 40; i++) {
+    const type = sequence[i % sequence.length];
+    scheduledPowerUps.push({
+      floor: currentFloor,
+      type: type,
+      info: POWERUP_INFO[type],
+      collected: false
+    });
+    currentFloor += 5 + (i % 3); // Spaced 5 to 7 floors apart
+  }
+}
 
 // Controls debounce state
 let canDrop = true;
@@ -228,7 +287,13 @@ export function renderStackPanicGame(container) {
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; gap:1.25rem;">
+        <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+          <!-- Next Power-Up Indicator Badge -->
+          <div id="sp-hud-next-powerup" style="display:flex; align-items:center; gap:0.35rem; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); padding:0.25rem 0.65rem; border-radius:999px;">
+            <span id="sp-hud-next-icon" style="font-size:0.95rem;">❄️</span>
+            <span id="sp-hud-next-text" style="font-size:0.8rem; font-weight:800; color:var(--text-secondary);">in 4 fl.</span>
+          </div>
+
           <!-- Combo Badge Indicator -->
           <div id="sp-hud-combo-badge" style="display:none; align-items:center; gap:0.25rem; background:linear-gradient(135deg, rgba(234,179,8,0.2), rgba(249,115,22,0.2)); border:1px solid rgba(234,179,8,0.5); padding:0.25rem 0.65rem; border-radius:999px;">
             <span style="font-size:0.9rem;">⚡</span>
@@ -431,6 +496,9 @@ function startNewGame() {
   targetCameraY = 0;
   canDrop = true;
 
+  // Initialize Scheduled Visible Power-Ups Ahead
+  generateScheduledPowerUps(5);
+
   // Base Tower Foundation
   tower = [];
   const baseBlock = {
@@ -530,15 +598,9 @@ function spawnNextBlock() {
   const nextY = topBlock.y - BLOCK_HEIGHT;
   const level = tower.length;
 
-  // Determine Special Block Type
-  let blockType = SPECIAL_TYPES.NORMAL;
-  if (level >= 6 && Math.random() < 0.22) {
-    const r = Math.random();
-    if (r < 0.35) blockType = SPECIAL_TYPES.BONUS;
-    else if (r < 0.60) blockType = SPECIAL_TYPES.SLOWMO;
-    else if (r < 0.80 && !shieldActive) blockType = SPECIAL_TYPES.SHIELD;
-    else blockType = SPECIAL_TYPES.WIDE;
-  }
+  // Determine Special Block Type from Scheduled Power-Up Ahead
+  const upcomingPU = scheduledPowerUps.find(p => !p.collected && p.floor === level);
+  const blockType = upcomingPU ? upcomingPU.type : SPECIAL_TYPES.NORMAL;
 
   // Speed Scaling with level
   let speedMultiplier = 1 + Math.min(2.5, level * 0.038);
@@ -667,6 +729,13 @@ function handleMiss() {
 }
 
 function finalizePlacement(placedBlock) {
+  // Check if placement collected an upcoming power-up node
+  const collectedPU = scheduledPowerUps.find(p => !p.collected && p.floor === tower.length);
+  if (collectedPU) {
+    collectedPU.collected = true;
+    spawnPowerUpCollectionBlast(V_WIDTH / 2, placedBlock.y, collectedPU.info.color);
+  }
+
   // Apply Special Block Effects
   if (placedBlock.type === SPECIAL_TYPES.BONUS) {
     score += 50;
@@ -675,11 +744,11 @@ function finalizePlacement(placedBlock) {
   } else if (placedBlock.type === SPECIAL_TYPES.SLOWMO) {
     slowMoTurns = 4; // Active for next 4 blocks
     playArcadeSound('button');
-    spawnFloatingText('❄️ SLOW-MO!', placedBlock.x + placedBlock.w / 2, placedBlock.y - 28, '#22d3ee');
+    spawnFloatingText('❄️ SLOW-MO (4 TURNS)!', placedBlock.x + placedBlock.w / 2, placedBlock.y - 28, '#22d3ee');
   } else if (placedBlock.type === SPECIAL_TYPES.SHIELD) {
     shieldActive = true;
     playArcadeSound('shield_gain');
-    spawnFloatingText('🛡️ SHIELD GAINED!', placedBlock.x + placedBlock.w / 2, placedBlock.y - 28, '#34d399');
+    spawnFloatingText('🛡️ SHIELD EQUIPPED!', placedBlock.x + placedBlock.w / 2, placedBlock.y - 28, '#34d399');
   } else if (placedBlock.type === SPECIAL_TYPES.WIDE) {
     placedBlock.w = Math.min(BASE_BLOCK_WIDTH, placedBlock.w + 32);
     playArcadeSound('bonus');
@@ -773,6 +842,24 @@ function spawnShieldBurst(x, y) {
   }
 }
 
+function spawnPowerUpCollectionBlast(x, y, color) {
+  screenShakeAmount = 6;
+  for (let i = 0; i < 32; i++) {
+    const angle = (i / 32) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+    const speed = 100 + Math.random() * 160;
+    particles.push({
+      x: x,
+      y: y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 40,
+      radius: 3 + Math.random() * 3.5,
+      color: color,
+      alpha: 1,
+      decay: 1.6
+    });
+  }
+}
+
 function spawnFloatingText(text, x, y, color) {
   floatingTexts.push({
     text: text,
@@ -798,6 +885,9 @@ function initMenuIdleGame() {
   floatingTexts = [];
   cameraY = 0;
   targetCameraY = 0;
+
+  // Show a preview power-up in menu mode
+  generateScheduledPowerUps(3);
 
   const baseBlock = {
     x: (V_WIDTH - BASE_BLOCK_WIDTH) / 2,
@@ -966,6 +1056,9 @@ function render() {
     drawBlock(b, idx === tower.length - 1);
   });
 
+  // Render Upcoming Floating Power-Up Beacons in the Sky Ahead
+  renderUpcomingPowerUpsWorld();
+
   // Render Active Moving Block
   if (currentBlock) {
     drawBlock(currentBlock, true, true);
@@ -1012,6 +1105,9 @@ function render() {
   });
 
   ctx.restore(); // Restore Camera Transform
+
+  // Render Screen-Space Upcoming Power-Up Radar Pill
+  renderUpcomingPowerUpScreenRadar();
 
   ctx.restore(); // Restore Canvas DPR Transform
 }
@@ -1116,6 +1212,180 @@ function updateHUD() {
     } else {
       slowmoBadge.style.display = 'none';
     }
+  }
+
+  // Update Next Power-Up Indicator
+  const nextPU = scheduledPowerUps.find(p => !p.collected && p.floor >= tower.length);
+  const nextPowerupEl = document.getElementById('sp-hud-next-powerup');
+  const nextIconEl = document.getElementById('sp-hud-next-icon');
+  const nextTextEl = document.getElementById('sp-hud-next-text');
+  if (nextPowerupEl && nextIconEl && nextTextEl) {
+    if (nextPU) {
+      nextPowerupEl.style.display = 'flex';
+      nextIconEl.textContent = nextPU.info.icon;
+      const dist = Math.max(1, nextPU.floor - tower.length);
+      nextTextEl.textContent = `in ${dist} fl.`;
+      nextPowerupEl.style.borderColor = nextPU.info.color;
+    } else {
+      nextPowerupEl.style.display = 'none';
+    }
+  }
+}
+
+/* ==========================================================================
+   Upcoming Power-Up World & Radar Rendering
+   ========================================================================== */
+
+function renderUpcomingPowerUpsWorld() {
+  const baseBlockY = V_HEIGHT - BLOCK_HEIGHT * 2.5;
+  const nowMs = performance.now();
+
+  scheduledPowerUps.forEach(pu => {
+    if (pu.collected) return;
+    // Visible within 15 floors above the current tower
+    if (pu.floor < tower.length) return;
+    if (pu.floor > tower.length + 14) return;
+
+    const targetY = baseBlockY - pu.floor * BLOCK_HEIGHT;
+    const bobOffset = Math.sin(nowMs * 0.0035 + pu.floor) * 5;
+    const orbY = targetY + BLOCK_HEIGHT / 2 + bobOffset;
+    const orbX = V_WIDTH / 2;
+    const floorsAway = Math.max(1, pu.floor - tower.length);
+
+    ctx.save();
+
+    // 1. Holographic Floor Target Line & Floor Marker
+    ctx.save();
+    ctx.setLineDash([6, 6]);
+    ctx.strokeStyle = pu.info.glow;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(35, targetY + BLOCK_HEIGHT / 2);
+    ctx.lineTo(V_WIDTH - 35, targetY + BLOCK_HEIGHT / 2);
+    ctx.stroke();
+
+    // Floor Tag Pill on the Left
+    ctx.fillStyle = 'rgba(6, 9, 20, 0.88)';
+    ctx.fillRect(25, targetY + 6, 66, 20);
+    ctx.strokeStyle = pu.info.color;
+    ctx.lineWidth = 1;
+    ctx.strokeRect(25, targetY + 6, 66, 20);
+    ctx.fillStyle = pu.info.color;
+    ctx.font = '900 11px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(`FL ${pu.floor}`, 58, targetY + 16);
+    ctx.restore();
+
+    // 2. Energy Ray / Tether to Top Block if 1-3 Floors Away
+    if (floorsAway <= 3 && tower.length > 0) {
+      const topB = tower[tower.length - 1];
+      ctx.save();
+      ctx.strokeStyle = pu.info.color;
+      ctx.lineWidth = 1.8;
+      ctx.setLineDash([4, 4]);
+      ctx.shadowColor = pu.info.color;
+      ctx.shadowBlur = 10;
+      ctx.beginPath();
+      ctx.moveTo(topB.x + topB.w / 2, topB.y);
+      ctx.lineTo(orbX, orbY + 18);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 3. Glowing Pulsing Floating Power-Up Beacon
+    ctx.shadowColor = pu.info.glow;
+    ctx.shadowBlur = 22;
+
+    // Outer Aura
+    const pulseScale = 1 + Math.sin(nowMs * 0.006 + pu.floor) * 0.12;
+    const auraGrad = ctx.createRadialGradient(orbX, orbY, 4, orbX, orbY, 28 * pulseScale);
+    auraGrad.addColorStop(0, pu.info.color);
+    auraGrad.addColorStop(0.45, pu.info.glow);
+    auraGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    ctx.fillStyle = auraGrad;
+    ctx.beginPath();
+    ctx.arc(orbX, orbY, 28 * pulseScale, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Rotating Holographic Diamond
+    ctx.save();
+    ctx.translate(orbX, orbY);
+    ctx.rotate(nowMs * 0.0016 + pu.floor);
+    ctx.strokeStyle = pu.info.color;
+    ctx.lineWidth = 1.8;
+    const diamondR = 21 * pulseScale;
+    ctx.beginPath();
+    ctx.moveTo(0, -diamondR);
+    ctx.lineTo(diamondR, 0);
+    ctx.lineTo(0, diamondR);
+    ctx.lineTo(-diamondR, 0);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+
+    // Icon Emoji
+    ctx.font = '22px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(pu.info.icon, orbX, orbY);
+
+    // Label Pill Below Orb
+    ctx.save();
+    ctx.font = '900 12px Inter, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const labelText = `${pu.info.icon} ${pu.info.name} • ${floorsAway} FL AWAY`;
+    const textWidth = ctx.measureText(labelText).width;
+    
+    ctx.fillStyle = 'rgba(6, 9, 24, 0.92)';
+    ctx.fillRect(orbX - textWidth / 2 - 8, orbY + 24, textWidth + 16, 20);
+    ctx.strokeStyle = pu.info.color;
+    ctx.lineWidth = 1.2;
+    ctx.strokeRect(orbX - textWidth / 2 - 8, orbY + 24, textWidth + 16, 20);
+
+    ctx.fillStyle = pu.info.color;
+    ctx.shadowColor = pu.info.color;
+    ctx.shadowBlur = 8;
+    ctx.fillText(labelText, orbX, orbY + 34);
+    ctx.restore();
+
+    ctx.restore();
+  });
+}
+
+function renderUpcomingPowerUpScreenRadar() {
+  const nextPU = scheduledPowerUps.find(p => !p.collected && p.floor >= tower.length);
+  if (gameState === 'PLAYING' && nextPU) {
+    const floorsAway = Math.max(1, nextPU.floor - tower.length);
+    const pillY = 14;
+    const pillX = V_WIDTH / 2;
+
+    ctx.save();
+    ctx.font = '900 12px Inter, sans-serif';
+    const trackerText = `UPCOMING: ${nextPU.info.icon} ${nextPU.info.name} (in ${floorsAway} floor${floorsAway === 1 ? '' : 's'})`;
+    const tWidth = ctx.measureText(trackerText).width;
+
+    ctx.fillStyle = 'rgba(6, 9, 24, 0.9)';
+    ctx.shadowColor = nextPU.info.glow;
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(pillX - tWidth / 2 - 14, pillY, tWidth + 28, 26, 13);
+    } else {
+      ctx.rect(pillX - tWidth / 2 - 14, pillY, tWidth + 28, 26);
+    }
+    ctx.fill();
+
+    ctx.strokeStyle = nextPU.info.color;
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    ctx.fillStyle = nextPU.info.color;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(trackerText, pillX, pillY + 13);
+    ctx.restore();
   }
 }
 
