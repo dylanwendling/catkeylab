@@ -1541,14 +1541,11 @@ export function renderLastClickGame(container) {
           <h2 style="font-size:2rem; font-weight:900; margin-bottom:0.25rem; color:var(--text-primary);">GAME PAUSED</h2>
           <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.5rem;">Sector scan on hold. Take a breath.</p>
 
-          <div style="display:flex; flex-direction:column; gap:0.65rem; width:100%; max-width:280px;">
-            <button id="lc-btn-resume" class="btn btn-primary btn-lg" style="font-weight:800; padding:0.75rem;">
+          <div style="display:flex; flex-direction:column; gap:0.75rem; width:100%; max-width:280px;">
+            <button id="lc-btn-resume" class="btn btn-primary btn-lg" style="font-weight:800; padding:0.8rem;">
               ▶️ Resume (Esc)
             </button>
-            <button id="lc-btn-restart-pause" class="btn btn-secondary btn-lg" style="font-weight:700; padding:0.65rem;">
-              🔄 Restart Match
-            </button>
-            <button id="lc-btn-mainmenu-pause" class="btn btn-secondary" style="font-weight:600; padding:0.65rem;">
+            <button id="lc-btn-mainmenu-pause" class="btn btn-secondary btn-lg" style="font-weight:700; padding:0.75rem;">
               🏠 Main Menu
             </button>
           </div>
@@ -1961,9 +1958,6 @@ function bindUIEvents() {
   // Pause Modal Buttons
   const btnResume = document.getElementById('lc-btn-resume');
   if (btnResume) btnResume.addEventListener('click', resumeGame);
-
-  const btnRestartPause = document.getElementById('lc-btn-restart-pause');
-  if (btnRestartPause) btnRestartPause.addEventListener('click', () => startGameFromMenu(currentDiffId));
 
   const btnMainMenuPause = document.getElementById('lc-btn-mainmenu-pause');
   if (btnMainMenuPause) btnMainMenuPause.addEventListener('click', returnToMainMenu);
