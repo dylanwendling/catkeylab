@@ -86,7 +86,6 @@ let movesCount = 0;
 let secondsElapsed = 0;
 let comboStreak = 0;
 let maxComboStreak = 0;
-let cyberCredits = 0;
 let unlockedThemes = ['cyber'];
 
 // Active Targeting State
@@ -126,7 +125,6 @@ function getRandom() {
 function loadPersistence() {
   try {
     highScore = parseInt(localStorage.getItem('catkeylab_lastclick_highscore')) || 0;
-    cyberCredits = parseInt(localStorage.getItem('catkeylab_lastclick_credits')) || 0;
     const rawThemes = localStorage.getItem('catkeylab_lastclick_themes');
     if (rawThemes) unlockedThemes = JSON.parse(rawThemes);
     const savedTheme = localStorage.getItem('catkeylab_lastclick_active_theme');
@@ -140,7 +138,6 @@ function savePersistence() {
       highScore = score;
       localStorage.setItem('catkeylab_lastclick_highscore', highScore.toString());
     }
-    localStorage.setItem('catkeylab_lastclick_credits', cyberCredits.toString());
     localStorage.setItem('catkeylab_lastclick_themes', JSON.stringify(unlockedThemes));
     localStorage.setItem('catkeylab_lastclick_active_theme', currentThemeId);
   } catch (e) {}
@@ -1008,9 +1005,6 @@ function triggerGameOver(isWin, triggerR = 0, triggerC = 0) {
     const timeBonus = Math.max(0, 1000 - (secondsElapsed * 5));
     const finalScore = score + timeBonus + (remainingMines * 100);
     score = finalScore;
-
-    const earnedCredits = Math.max(10, Math.floor(finalScore / 50));
-    cyberCredits += earnedCredits;
     savePersistence();
 
     // Submit to leaderboard with 3 parameters: (testId, scoreVal, scoreDisplay)
@@ -1019,7 +1013,7 @@ function triggerGameOver(isWin, triggerR = 0, triggerC = 0) {
       rankInfo = submitScore('last-click', score, `${score.toLocaleString()} pts (${diffName})`);
     }
 
-    showVictoryModal(earnedCredits, rankInfo);
+    showVictoryModal(timeBonus, rankInfo);
   } else {
     gameState = 'LOST';
     playSfx('explosion');
@@ -1619,8 +1613,8 @@ export function renderLastClickGame(container) {
               </div>
 
               <div>
-                <strong style="color:var(--text-primary); font-size:0.95rem;">🔥 Streaks & Progression:</strong>
-                <div>Safe reveals chain into combo streaks for high scores. Completing boards rewards Cyber Credits to unlock board color themes!</div>
+                <strong style="color:var(--text-primary); font-size:0.95rem;">🔥 Streaks & Scoring:</strong>
+                <div>Safe reveals chain into combo streaks for higher score multipliers! Complete sectors quickly with strategic power-up usage to climb the global leaderboard.</div>
               </div>
             </div>
 
@@ -1666,7 +1660,7 @@ export function renderLastClickGame(container) {
           <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.65rem 1.25rem; margin-bottom:0.75rem; width:100%; max-width:280px;">
             <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Final Score</div>
             <div id="lc-vic-score" style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);">0</div>
-            <div id="lc-vic-credits" style="font-size:0.85rem; font-weight:700; color:#fde047; margin-top:0.2rem;">+0 Cyber Credits 🪙</div>
+            <div id="lc-vic-bonus" style="font-size:0.85rem; font-weight:700; color:var(--accent-amber); margin-top:0.2rem;">⚡ Time Bonus: +0 pts</div>
           </div>
 
           <!-- Leaderboard Anonymous Rank Badge -->
@@ -1940,12 +1934,12 @@ function spawnBanner(msg) {
   }, 4000);
 }
 
-function showVictoryModal(credits, rankInfo = null) {
+function showVictoryModal(timeBonus = 0, rankInfo = null) {
   const modal = document.getElementById('lc-modal-victory');
   const scoreEl = document.getElementById('lc-vic-score');
-  const credEl = document.getElementById('lc-vic-credits');
+  const bonusEl = document.getElementById('lc-vic-bonus');
   if (scoreEl) scoreEl.textContent = score.toLocaleString();
-  if (credEl) credEl.textContent = `+${credits} Cyber Credits 🪙`;
+  if (bonusEl) bonusEl.textContent = `⚡ Time Bonus: +${timeBonus.toLocaleString()} pts`;
 
   const rankCard = document.getElementById('lc-vic-rank-card');
   const rankText = document.getElementById('lc-vic-rank-text');
