@@ -263,59 +263,307 @@ export function renderStackPanicGame(container) {
   loadPersistedData();
 
   container.innerHTML = `
-    <div class="sp-wrapper" style="max-width:560px; margin:0 auto; user-select:none;">
+    <style>
+      .sp-wrapper {
+        max-width: 480px;
+        margin: 0 auto;
+        user-select: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Compact vertical footprint on mobile screens */
+      @media (max-width: 768px) {
+        .tool-page-main > div:first-child {
+          margin-bottom: 0.35rem !important;
+        }
+        .tool-page-main > div:first-child h1 {
+          font-size: 1.35rem !important;
+          margin-bottom: 0.15rem !important;
+        }
+        .tool-page-main > div:first-child p {
+          display: none !important; /* Conceal long intro paragraph during gameplay to save vertical height */
+        }
+        .container {
+          padding-top: 0.35rem !important;
+        }
+      }
+
+      /* Unified Clean HUD Card */
+      .sp-hud-card {
+        width: 100%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 0.45rem 0.75rem;
+        margin-bottom: 0.45rem;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        box-sizing: border-box;
+      }
+
+      .sp-hud-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+      }
+
+      /* Score & Best Stat Pills */
+      .sp-hud-scores {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .sp-stat-pill {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-md);
+        padding: 0.2rem 0.55rem;
+        min-width: 58px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .sp-stat-label {
+        font-size: 0.62rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+        line-height: 1;
+        margin-bottom: 0.1rem;
+      }
+
+      .sp-stat-val {
+        font-size: 1.25rem;
+        font-weight: 900;
+        line-height: 1.1;
+      }
+
+      .sp-stat-score {
+        color: var(--accent-cyan);
+      }
+
+      .sp-stat-best {
+        color: var(--accent-amber);
+      }
+
+      /* Right Action Controls */
+      .sp-hud-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .sp-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        cursor: pointer;
+        font-size: 1.05rem;
+        padding: 0;
+        transition: all var(--transition-fast);
+      }
+
+      .sp-icon-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: var(--accent-cyan);
+      }
+
+      /* Dynamic Status Ribbon (Sub Strip) */
+      .sp-hud-sub-strip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: var(--radius-sm);
+        padding: 0.2rem 0.55rem;
+        font-size: 0.75rem;
+        gap: 0.35rem;
+        min-height: 24px;
+        box-sizing: border-box;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .sp-hud-sub-strip::-webkit-scrollbar {
+        display: none;
+      }
+
+      .sp-badges-container {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .sp-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.15rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 800;
+        white-space: nowrap;
+        line-height: 1.2;
+      }
+
+      #sp-hud-next-powerup {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+      }
+
+      #sp-hud-combo-badge {
+        background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(249, 115, 22, 0.2));
+        border: 1px solid rgba(234, 179, 8, 0.5);
+        color: #fde047;
+      }
+
+      #sp-hud-target-badge {
+        background: rgba(34, 197, 94, 0.2);
+        border: 1px solid rgba(34, 197, 94, 0.5);
+        color: #4ade80;
+      }
+
+      #sp-hud-slowmo-badge {
+        background: rgba(6, 182, 212, 0.2);
+        border: 1px solid rgba(6, 182, 212, 0.5);
+        color: #22d3ee;
+      }
+
+      .sp-status-hint {
+        color: var(--text-muted);
+        font-size: 0.72rem;
+        white-space: nowrap;
+      }
+
+      /* Responsive Canvas Container - fits mobile vertical screen */
+      #sp-canvas-container {
+        position: relative;
+        width: min(100%, calc((100dvh - 170px) * (480 / 700)));
+        max-width: 440px;
+        aspect-ratio: 480 / 700;
+        max-height: calc(100dvh - 170px);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        border: 2px solid var(--border-color);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        background: #060913;
+        touch-action: none;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+
+      #sp-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .sp-controls-hint-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-top: 0.45rem;
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        padding: 0 0.5rem;
+        gap: 0.5rem;
+      }
+
+      @media (max-width: 480px) {
+        .sp-controls-hint-bar {
+          display: none; /* Hide bottom hint on mobile to maximize vertical canvas space */
+        }
+      }
+    </style>
+
+    <div class="sp-wrapper">
       
-      <!-- Top HUD Header -->
-      <div class="sp-hud-bar" style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:0.65rem 1rem; margin-bottom:0.75rem; box-shadow:0 4px 14px rgba(0,0,0,0.25);">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span style="font-size:1.6rem;">🥞</span>
-          <div>
-            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-weight:700;">Score</div>
-            <div id="sp-hud-score" style="font-size:1.5rem; font-weight:900; color:var(--accent-cyan); line-height:1;">0</div>
+      <!-- Unified Clean HUD Card -->
+      <div class="sp-hud-card">
+        
+        <!-- Top Row: Score & Best (Left) + Actions (Right) -->
+        <div class="sp-hud-top-row">
+          <div class="sp-hud-scores">
+            <div class="sp-stat-pill">
+              <span class="sp-stat-label">SCORE</span>
+              <span id="sp-hud-score" class="sp-stat-val sp-stat-score">0</span>
+            </div>
+            <div class="sp-stat-pill">
+              <span class="sp-stat-label">BEST</span>
+              <span id="sp-hud-best" class="sp-stat-val sp-stat-best">${highScore}</span>
+            </div>
+          </div>
+
+          <div class="sp-hud-actions">
+            <button id="sp-sound-toggle-btn" class="sp-icon-btn" title="Toggle Sound">
+              ${isSoundEnabled() ? '🔊' : '🔇'}
+            </button>
+            <button id="sp-pause-btn" class="sp-icon-btn" title="Pause Game (Esc)">
+              ⏸️
+            </button>
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
-          <!-- Next Power-Up Indicator Badge -->
-          <div id="sp-hud-next-powerup" style="display:flex; align-items:center; gap:0.35rem; background:rgba(255,255,255,0.05); border:1px solid var(--border-color); padding:0.25rem 0.65rem; border-radius:999px;">
-            <span id="sp-hud-next-icon" style="font-size:0.95rem;">❄️</span>
-            <span id="sp-hud-next-text" style="font-size:0.8rem; font-weight:800; color:var(--text-secondary);">in 4 fl.</span>
+        <!-- Dynamic Status Sub-Strip: Badges & Hint -->
+        <div class="sp-hud-sub-strip">
+          <div class="sp-badges-container">
+            <!-- Next Power-Up Indicator Badge -->
+            <div id="sp-hud-next-powerup" class="sp-badge">
+              <span id="sp-hud-next-icon">❄️</span>
+              <span id="sp-hud-next-text">in 4 fl.</span>
+            </div>
+
+            <!-- Target Lock Badge Indicator -->
+            <div id="sp-hud-target-badge" class="sp-badge" style="display:none;">
+              <span>🎯</span>
+              <span id="sp-hud-target-text">3x</span>
+            </div>
+
+            <!-- Combo Badge Indicator -->
+            <div id="sp-hud-combo-badge" class="sp-badge" style="display:none;">
+              <span>⚡</span>
+              <span id="sp-hud-combo-text">1x</span>
+            </div>
+
+            <!-- SlowMo Badge Indicator -->
+            <div id="sp-hud-slowmo-badge" class="sp-badge" style="display:none;">
+              <span>❄️</span>
+              <span id="sp-hud-slowmo-text">3</span>
+            </div>
           </div>
 
-          <!-- Combo Badge Indicator -->
-          <div id="sp-hud-combo-badge" style="display:none; align-items:center; gap:0.25rem; background:linear-gradient(135deg, rgba(234,179,8,0.2), rgba(249,115,22,0.2)); border:1px solid rgba(234,179,8,0.5); padding:0.25rem 0.65rem; border-radius:999px;">
-            <span style="font-size:0.9rem;">⚡</span>
-            <span id="sp-hud-combo-text" style="font-size:0.85rem; font-weight:900; color:#fde047;">1x</span>
-          </div>
-
-          <!-- Target Lock Badge Indicator -->
-          <div id="sp-hud-target-badge" style="display:none; align-items:center; gap:0.25rem; background:rgba(34,197,94,0.2); border:1px solid rgba(34,197,94,0.5); padding:0.25rem 0.65rem; border-radius:999px;">
-            <span style="font-size:0.9rem;">🎯</span>
-            <span id="sp-hud-target-text" style="font-size:0.85rem; font-weight:900; color:#4ade80;">3x</span>
-          </div>
-
-          <!-- SlowMo Badge Indicator -->
-          <div id="sp-hud-slowmo-badge" style="display:none; align-items:center; gap:0.25rem; background:rgba(6,182,212,0.2); border:1px solid rgba(6,182,212,0.5); padding:0.25rem 0.65rem; border-radius:999px;">
-            <span style="font-size:0.9rem;">❄️</span>
-            <span id="sp-hud-slowmo-text" style="font-size:0.85rem; font-weight:900; color:#22d3ee;">3</span>
+          <div class="sp-status-hint">
+            <span>🥞 Tap to drop</span>
           </div>
         </div>
 
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <!-- Sound Toggle Button -->
-          <button id="sp-sound-toggle-btn" class="btn btn-sm btn-secondary" style="padding:0.45rem 0.65rem; font-size:1.1rem; line-height:1;" title="Toggle Sound">
-            ${isSoundEnabled() ? '🔊' : '🔇'}
-          </button>
-          <!-- Pause / Resume Button -->
-          <button id="sp-pause-btn" class="btn btn-sm btn-secondary" style="padding:0.45rem 0.75rem; font-weight:700;" title="Pause Game (Esc)">
-            ⏸️
-          </button>
-        </div>
       </div>
 
       <!-- Main Game Canvas Container -->
-      <div id="sp-canvas-container" style="position:relative; width:100%; border-radius:var(--radius-xl); overflow:hidden; border:2px solid var(--border-color); box-shadow:0 14px 40px rgba(0,0,0,0.5); background:#060913; touch-action:manipulation;">
-        <canvas id="sp-canvas" style="display:block; width:100%; height:auto; cursor:pointer; -webkit-tap-highlight-color:transparent;"></canvas>
+      <div id="sp-canvas-container">
+        <canvas id="sp-canvas"></canvas>
 
         <!-- Menu / Game State Modals -->
         
@@ -416,7 +664,7 @@ export function renderStackPanicGame(container) {
       </div>
 
       <!-- Quick Controls Reference Bar -->
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted); padding:0 0.5rem; flex-wrap:wrap; gap:0.5rem;">
+      <div class="sp-controls-hint-bar">
         <div>⚡ <strong>Space / Click / Tap</strong> to drop block</div>
         <div>🎯 <strong>Target Lock</strong> auto-perfects next 3</div>
         <div>❄️ <strong>Slow-Mo</strong> cools speed</div>
@@ -1210,6 +1458,9 @@ function updateHUD() {
   const scoreEl = document.getElementById('sp-hud-score');
   if (scoreEl) scoreEl.textContent = score;
 
+  const bestEl = document.getElementById('sp-hud-best');
+  if (bestEl) bestEl.textContent = Math.max(score, highScore);
+
   const comboBadge = document.getElementById('sp-hud-combo-badge');
   const comboText = document.getElementById('sp-hud-combo-text');
   if (comboBadge && comboText) {
@@ -1466,6 +1717,9 @@ function bindControls() {
     };
 
     canvas.addEventListener('pointerdown', handlePointerAction);
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
   }
 
   // Keyboard Accessibility

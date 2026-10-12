@@ -459,52 +459,269 @@ export function renderMergeLabGame(container) {
   const initBoard = BOARD_CONFIGS[currentBoardId] || { size: 6, difficulty: 'Easy' };
 
   container.innerHTML = `
-    <div class="ml-wrapper" style="max-width:620px; margin:0 auto; user-select:none;">
+    <style>
+      .ml-wrapper {
+        max-width: 520px;
+        margin: 0 auto;
+        user-select: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Compact vertical footprint on mobile screens */
+      @media (max-width: 768px) {
+        .tool-page-main > div:first-child {
+          margin-bottom: 0.35rem !important;
+        }
+        .tool-page-main > div:first-child h1 {
+          font-size: 1.35rem !important;
+          margin-bottom: 0.15rem !important;
+        }
+        .tool-page-main > div:first-child p {
+          display: none !important; /* Conceal long intro paragraph during gameplay to save vertical height */
+        }
+        .container {
+          padding-top: 0.4rem !important;
+        }
+      }
+
+      /* Unified Clean HUD Card */
+      .ml-hud-card {
+        width: 100%;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        padding: 0.45rem 0.75rem;
+        margin-bottom: 0.45rem;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        box-sizing: border-box;
+      }
+
+      .ml-hud-top-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        gap: 0.5rem;
+      }
+
+      /* Score & Best Stat Pills */
+      .ml-hud-scores {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .ml-stat-pill {
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: var(--radius-md);
+        padding: 0.2rem 0.55rem;
+        min-width: 58px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .ml-stat-label {
+        font-size: 0.62rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--text-muted);
+        line-height: 1;
+        margin-bottom: 0.1rem;
+      }
+
+      .ml-stat-val {
+        font-size: 1.22rem;
+        font-weight: 900;
+        line-height: 1.1;
+      }
+
+      .ml-stat-score {
+        color: var(--accent-cyan);
+      }
+
+      .ml-stat-best {
+        color: var(--accent-amber);
+      }
+
+      /* Right Action Controls */
+      .ml-hud-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+      }
+
+      .ml-hud-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+      }
+
+      .ml-hud-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: var(--accent-cyan);
+      }
+
+      .ml-board-btn {
+        padding: 0.35rem 0.65rem;
+        font-size: 0.8rem;
+        font-weight: 800;
+        gap: 0.25rem;
+        white-space: nowrap;
+      }
+
+      .ml-icon-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1.05rem;
+        padding: 0;
+      }
+
+      /* Sub-Strip Ribbon */
+      .ml-hud-sub-strip {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: var(--radius-sm);
+        padding: 0.2rem 0.55rem;
+        font-size: 0.75rem;
+        gap: 0.3rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+      }
+
+      .ml-hud-sub-strip::-webkit-scrollbar {
+        display: none;
+      }
+
+      .ml-mode-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        font-weight: 800;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+      }
+      .ml-mode-btn:hover {
+        color: var(--accent-cyan);
+      }
+
+      .ml-sub-stat {
+        display: flex;
+        align-items: center;
+        gap: 0.2rem;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        font-size: 0.75rem;
+      }
+
+      @media (max-width: 440px) {
+        .ml-board-diff {
+          display: none;
+        }
+      }
+
+      /* Canvas Container: scales gracefully to fit vertical viewport on phones */
+      #ml-canvas-container {
+        position: relative;
+        width: 100%;
+        max-width: 520px;
+        aspect-ratio: 1 / 1;
+        max-height: calc(100dvh - 165px);
+        width: min(100%, calc(100dvh - 165px));
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        border: 2px solid var(--border-color);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        background: #060a17;
+        touch-action: none;
+        margin: 0 auto;
+        box-sizing: border-box;
+      }
+
+      #ml-canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: grab;
+        -webkit-tap-highlight-color: transparent;
+      }
+    </style>
+
+    <div class="ml-wrapper">
       
-      <!-- Top Lab Header & Mode Selector -->
-      <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:0.65rem 1rem; margin-bottom:0.75rem; box-shadow:0 4px 14px rgba(0,0,0,0.25);">
+      <!-- Unified Clean HUD Card -->
+      <div class="ml-hud-card">
         
-        <div style="display:flex; align-items:center; gap:0.6rem;">
-          <span style="font-size:1.8rem;">🧪</span>
-          <div>
-            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-weight:700;">Score</div>
-            <div id="ml-hud-score" style="font-size:1.6rem; font-weight:900; color:var(--accent-cyan); line-height:1;">0</div>
+        <!-- Top Row: Score & Best (Left) + Actions (Right) -->
+        <div class="ml-hud-top-row">
+          <div class="ml-hud-scores">
+            <div class="ml-stat-pill">
+              <span class="ml-stat-label">SCORE</span>
+              <span id="ml-hud-score" class="ml-stat-val ml-stat-score">0</span>
+            </div>
+            <div class="ml-stat-pill">
+              <span class="ml-stat-label">BEST</span>
+              <span id="ml-hud-best" class="ml-stat-val ml-stat-best">${prog.records[currentBoardId]?.highScore || 0}</span>
+            </div>
+          </div>
+
+          <div class="ml-hud-actions">
+            <button id="ml-board-select-btn" class="ml-hud-btn ml-board-btn" title="Select Board Difficulty">
+              <span>🎛️</span>
+              <span id="ml-hud-board-label">${initBoard.size}×${initBoard.size}</span><span id="ml-hud-board-diff" class="ml-board-diff"> (${initBoard.difficulty})</span>
+            </button>
+            <button id="ml-sound-btn" class="ml-hud-btn ml-icon-btn" title="Toggle Sound">
+              ${isSoundEnabled() ? '🔊' : '🔇'}
+            </button>
+            <button id="ml-pause-btn" class="ml-hud-btn ml-icon-btn" title="Pause Game (Esc)">
+              ⏸️
+            </button>
           </div>
         </div>
 
-        <!-- Mode & Board Picker Buttons -->
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <button id="ml-board-select-btn" class="btn btn-sm btn-secondary" style="font-weight:700; font-size:0.85rem; padding:0.4rem 0.75rem;" title="Select Board Difficulty">
-            🎛️ <span id="ml-hud-board-label">${initBoard.size}×${initBoard.size} (${initBoard.difficulty})</span>
-          </button>
-          <button id="ml-mode-toggle-btn" class="btn btn-sm btn-secondary" style="font-weight:700; font-size:0.85rem; padding:0.4rem 0.75rem;" title="Switch Game Mode">
+        <!-- Sub Strip: Mode + Highest Tile + Combo + Timer -->
+        <div class="ml-hud-sub-strip">
+          <button id="ml-mode-toggle-btn" class="ml-mode-btn" title="Switch Game Mode">
             🕹️ <span id="ml-hud-mode-label">CLASSIC</span>
           </button>
+          <div class="ml-sub-stat">
+            <span>🔬 Highest:</span> <strong id="ml-hud-highest" style="color:var(--accent-primary);">2</strong>
+          </div>
+          <div class="ml-sub-stat">
+            <span>⚡ Combo:</span> <strong id="ml-hud-combo" style="color:#fde047;">1x</strong>
+          </div>
+          <div id="ml-hud-timer-container" class="ml-sub-stat" style="display:none; color:var(--accent-rose);">
+            ⏱️ <strong id="ml-hud-timer">180s</strong>
+          </div>
         </div>
 
-        <!-- Controls (Sound & Pause) -->
-        <div style="display:flex; align-items:center; gap:0.4rem;">
-          <button id="ml-sound-btn" class="btn btn-sm btn-secondary" style="padding:0.45rem 0.65rem; font-size:1.1rem; line-height:1;" title="Toggle Sound">
-            ${isSoundEnabled() ? '🔊' : '🔇'}
-          </button>
-          <button id="ml-pause-btn" class="btn btn-sm btn-secondary" style="padding:0.45rem 0.75rem; font-weight:700;" title="Pause Game (Esc)">
-            ⏸️
-          </button>
-        </div>
-
-      </div>
-
-      <!-- Quick Metrics Ribbon -->
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem; background:rgba(0,0,0,0.25); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.4rem 0.85rem; margin-bottom:0.75rem; font-size:0.82rem;">
-        <div>🏆 Best: <strong id="ml-hud-best" style="color:var(--accent-amber);">${prog.records[currentBoardId]?.highScore || 0}</strong></div>
-        <div>🔬 Highest: <strong id="ml-hud-highest" style="color:var(--accent-primary);">2</strong></div>
-        <div>⚡ Combo: <strong id="ml-hud-combo" style="color:#fde047;">1x</strong></div>
-        <div id="ml-hud-timer-container" style="display:none; color:var(--accent-rose);">⏱️ <strong id="ml-hud-timer">180s</strong></div>
       </div>
 
       <!-- Main Canvas Container -->
-      <div id="ml-canvas-container" style="position:relative; width:100%; border-radius:var(--radius-xl); overflow:hidden; border:2px solid var(--border-color); box-shadow:0 14px 40px rgba(0,0,0,0.5); background:#060a17; touch-action:none;">
-        <canvas id="ml-canvas" style="display:block; width:100%; height:auto; cursor:grab; -webkit-tap-highlight-color:transparent;"></canvas>
+      <div id="ml-canvas-container">
+        <canvas id="ml-canvas"></canvas>
 
         <!-- 1. Main Menu Overlay -->
         <div id="ml-modal-menu" style="position:absolute; inset:0; background:rgba(6,10,23,0.88); backdrop-filter:blur(8px); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:1.5rem; text-align:center; z-index:10;">
@@ -1665,9 +1882,11 @@ function updateHUD() {
   if (comboEl) comboEl.textContent = `${Math.max(1, combo)}x`;
 
   const boardLabel = document.getElementById('ml-hud-board-label');
+  const boardDiff = document.getElementById('ml-hud-board-diff');
   if (boardLabel) {
     const cfg = BOARD_CONFIGS[currentBoardId] || { size: boardSize, difficulty: 'Easy' };
-    boardLabel.textContent = `${cfg.size}×${cfg.size} (${cfg.difficulty})`;
+    boardLabel.textContent = `${cfg.size}×${cfg.size}`;
+    if (boardDiff) boardDiff.textContent = ` (${cfg.difficulty})`;
   }
 
   const modeLabel = document.getElementById('ml-hud-mode-label');
@@ -1847,6 +2066,12 @@ function bindControls() {
         isTouching = true;
       }
     }, { passive: true });
+
+    canvas.addEventListener('touchmove', (e) => {
+      if (isTouching) {
+        e.preventDefault();
+      }
+    }, { passive: false });
 
     canvas.addEventListener('touchend', (e) => {
       if (!isTouching || e.changedTouches.length === 0) return;
