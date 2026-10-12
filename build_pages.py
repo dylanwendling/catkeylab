@@ -187,6 +187,13 @@ TOOL_ROUTES = {
         'categoryName': 'Arcade Games',
         'displayName': 'Merge Lab Puzzle',
         'aliases': ['merge-lab', 'merge-lab-game', 'mergelab', 'merge', '2048']
+    },
+    'last-click': {
+        'path': '/games/last-click/',
+        'category': 'games',
+        'categoryName': 'Arcade Games',
+        'displayName': 'Last Click Minesweeper',
+        'aliases': ['last-click', 'last-click-game', 'lastclick', 'minesweeper', 'power-minesweeper']
     }
 }
 
@@ -298,6 +305,7 @@ STATIC_HEADER_HTML = """
               <a href="/games/typing-dungeon/" class="dropdown-item"><span>🏰</span> <span>Cat Typing Dungeon</span></a>
               <a href="/games/stack-panic/" class="dropdown-item"><span>🥞</span> <span>Stack Panic Arcade</span></a>
               <a href="/games/merge-lab/" class="dropdown-item"><span>🧪</span> <span>Merge Lab Puzzle</span></a>
+              <a href="/games/last-click/" class="dropdown-item"><span>💣</span> <span>Last Click Minesweeper</span></a>
             </div>
           </div>
 

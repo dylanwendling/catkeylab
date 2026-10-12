@@ -730,5 +730,41 @@ export const TOOL_METADATA = {
       { q: 'How do I unlock harder boards?', a: 'Start on the 6x6 Easy board. Reaching a 256 tile or 1,500 points unlocks 5x5 Medium. Reaching a 512 tile or 4,000 points on 5x5 unlocks 4x4 Hard. Reaching a 1024 tile or 8,000 points on 4x4 unlocks the brutal 3x3 Impossible board!' },
       { q: 'Are my scores and unlocked boards saved?', a: 'Yes! All unlocked boards, personal high scores, and highest tiles achieved are saved locally in your browser and automatically submitted to the CatKeyLab anonymous global leaderboard.' }
     ]
+  },
+  'last-click': {
+    titleKey: 'lastClickTitle',
+    desc: 'Tactical power-up Minesweeper featuring board-based special tiles, interactive mine defusal, shield barriers, combo streaks, and daily seeded challenges.',
+    icon: '💣',
+    category: 'games',
+    content: {
+      intro: 'Step into Last Click: an arcade reimagining of classic Minesweeper for CatKeyLab. Uncover numbered tiles, interpret spatial logic, and collect board-based tactical power-ups. Disarm suspected mines with precision Defusers, scan dangerous quadrants with Scanners, survive accidental detonations with Shields, and clear safe pockets with Reveal Pulses.',
+      howTo: [
+        'Left Click or Tap hidden tiles to reveal them. Your very first click is 100% guaranteed safe with an opening cascade.',
+        'Numbers indicate exactly how many mines touch that specific tile (horizontally, vertically, and diagonally).',
+        'Right Click or toggle Flag Mode on mobile to mark suspected mine locations with red flags.',
+        'Discover and collect special tiles directly on the board: Scanners (3x3 radar), Defusers (safely neutralize mines), Shields (absorb detonations), Reveal Pulses (open safe zones), Double Points, and Chain Reactions.',
+        'Target power-ups by selecting them in your inventory, then clicking a target board tile.',
+        'Use Chording: Click an already-revealed numbered tile whose adjacent flag count matches its clue to instantly reveal all unflagged neighbors!',
+        'Clear all safe non-mine tiles to achieve victory, earn Cyber Credits, and claim your spot on the global leaderboard!'
+      ],
+      whatItMeasures: 'Last Click evaluates spatial deductive reasoning, probabilistic risk assessment, tactical resource allocation, and cognitive composure under uncertainty.',
+      whyUseIt: 'Unlike traditional Minesweeper where 50/50 guesses can abruptly end a long run, Last Click equips players with tactical power-ups and protective shields to overcome ambiguous boards through strategic resource management.',
+      interpretResults: 'Clearing Beginner in under 60s demonstrates swift spatial deduction. Intermediate victories reflect solid multi-step planning. Clearing Expert or Daily Seeded challenges with high combos marks true Grandmaster Minesweeper mastery.',
+      tips: [
+        'Look for the 1-1 and 1-2-1 edge patterns to identify guaranteed safe and mine tiles without guessing.',
+        'Save your Defusers for unavoidable 50/50 corner guesses to remove the mine and update surrounding numbers safely.',
+        'Use Scanners when entering dense minefields to pinpoint high-threat clusters before clicking.',
+        'Keep your Shield active as insurance against misclicks and rapid chording maneuvers.',
+        'Play the Daily Challenge mode every day to compete on a globally identical seeded board against players worldwide!'
+      ],
+      relatedTools: ['merge-lab', 'stack-panic', 'aim-trainer-test', 'reaction-time-test']
+    },
+    faqs: [
+      { q: 'How does the First-Click Protection work in Last Click?', a: 'Your first click on any board is guaranteed to be 100% safe. Mines are procedurally generated only after your first click, guaranteeing that your opening move opens an informative safe cascade.' },
+      { q: 'What happens when I use a Defuser on a mine?', a: 'Targeting a suspected mine with a Defuser neutralizes the mine, removes it from the underlying board data, marks the tile as safe, and automatically decrements all adjacent numbered clues by 1!' },
+      { q: 'How does the Shield protect me?', a: 'If you accidentally reveal an unflagged mine while carrying a Shield, the shield absorbs the explosion, neutralizes that mine, updates surrounding numbers, and keeps your run alive.' },
+      { q: 'What is the Daily Challenge mode?', a: 'The Daily Challenge generates a unique board layout based on the current UTC date. Every player across the globe receives the exact same board and power-up layout for fair daily competition.' },
+      { q: 'Can I play Last Click comfortably on mobile devices?', a: 'Yes! Last Click features a mobile-friendly 2-tier HUD, dedicated Flag Mode toggle button, touch-action panning, and responsive scaling that fits phone screens without vertical scrolling.' }
+    ]
   }
 };

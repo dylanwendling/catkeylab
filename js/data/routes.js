@@ -172,6 +172,13 @@ export const TOOL_ROUTES = {
     categoryName: 'Arcade Games',
     displayName: 'Merge Lab Puzzle',
     aliases: ['merge-lab', 'merge-lab-game', 'mergelab', 'merge', '2048']
+  },
+  'last-click': {
+    path: '/games/last-click/',
+    category: 'games',
+    categoryName: 'Arcade Games',
+    displayName: 'Last Click Minesweeper',
+    aliases: ['last-click', 'last-click-game', 'lastclick', 'minesweeper', 'power-minesweeper']
   }
 };
 

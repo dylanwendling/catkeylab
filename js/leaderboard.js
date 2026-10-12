@@ -31,7 +31,8 @@ const INITIAL_LEADERBOARDS = {
   'cat-mini-golf-game-18': [],
   'cat-typing-dungeon': [],
   'stack-panic': [],
-  'merge-lab': []
+  'merge-lab': [],
+  'last-click': []
 };
 
 // Get or Create Anonymous Identity
@@ -401,6 +402,13 @@ export function getPercentile(testId, score, rank = null) {
       if (score >= 6000) return "Top 15% (Reactor Specialist ⚡)";
       if (score >= 2000) return "Top 40% (Competent Synthesizer 🔬)";
       return "Top 60% (Junior Researcher)";
+
+    case 'last-click':
+      if (score >= 10000) return "Top 1% (Grandmaster Sapper 💣)";
+      if (score >= 5000) return "Top 5% (Bomb Squad Chief ✂️)";
+      if (score >= 2500) return "Top 15% (Tactical Defuser 🛡️)";
+      if (score >= 1000) return "Top 40% (Competent Sweeper 📡)";
+      return "Top 60% (Apprentice Sweeper)";
 
     default:
       return "Top 15%";

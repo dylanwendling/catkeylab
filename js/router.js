@@ -36,6 +36,7 @@ import { renderFruitSlicerGame, cleanupFruitSlicerGame } from './tools/fruitSlic
 import { renderCatTypingDungeon_MAIN as renderCatTypingDungeon, cleanupCatTypingDungeon } from './tools/catTypingDungeon.js?v=46';
 import { renderStackPanicGame, cleanupStackPanicGame } from './tools/stackPanicGame.js';
 import { renderMergeLabGame, cleanupMergeLabGame } from './tools/mergeLabGame.js';
+import { renderLastClickGame, cleanupLastClickGame } from './tools/lastClickGame.js';
 
 let currentCleanup = null;
 
@@ -120,6 +121,8 @@ TOOL_METADATA['stack-panic'].renderFn = renderStackPanicGame;
 TOOL_METADATA['stack-panic'].cleanupFn = cleanupStackPanicGame;
 TOOL_METADATA['merge-lab'].renderFn = renderMergeLabGame;
 TOOL_METADATA['merge-lab'].cleanupFn = cleanupMergeLabGame;
+TOOL_METADATA['last-click'].renderFn = renderLastClickGame;
+TOOL_METADATA['last-click'].cleanupFn = cleanupLastClickGame;
 ;
 
 export function handleRoute() {
