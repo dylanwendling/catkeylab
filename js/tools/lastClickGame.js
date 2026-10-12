@@ -353,22 +353,23 @@ function initNewGame(diffId = currentDiffId, keepMenu = false) {
 }
 
 function pauseGame() {
-  if (gameState !== 'PLAYING' && gameState !== 'TARGETING') return;
+  if (gameState !== 'PLAYING' && gameState !== 'IDLE' && gameState !== 'TARGETING') return;
+  playSfx('button');
   gameState = 'PAUSED';
   if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
   }
-  playSfx('button');
+  closeModals();
   const modal = document.getElementById('lc-modal-pause');
   if (modal) modal.style.display = 'flex';
 }
 
 function resumeGame() {
   if (gameState !== 'PAUSED') return;
+  playSfx('button');
   gameState = firstClickDone ? 'PLAYING' : 'IDLE';
   if (firstClickDone) startTimer();
-  playSfx('button');
   const modal = document.getElementById('lc-modal-pause');
   if (modal) modal.style.display = 'none';
 }
@@ -380,11 +381,13 @@ function openRulesModal() {
 }
 
 function closeRulesModal() {
+  playSfx('button');
   const modal = document.getElementById('lc-modal-rules');
   if (modal) modal.style.display = 'none';
 }
 
-function showMainMenu() {
+function returnToMainMenu() {
+  playSfx('button');
   gameState = 'MENU';
   if (timerInterval) {
     clearInterval(timerInterval);
@@ -394,6 +397,42 @@ function showMainMenu() {
   initNewGame(currentDiffId, true);
   const menuModal = document.getElementById('lc-modal-menu');
   if (menuModal) menuModal.style.display = 'flex';
+}
+
+function showMainMenu() {
+  returnToMainMenu();
+}
+
+function selectMenuDifficulty(id) {
+  if (!DIFFICULTIES[id]) return;
+  currentDiffId = id;
+  playSfx('button');
+  initNewGame(id, true);
+
+  document.querySelectorAll('.lc-menu-diff-btn').forEach(b => {
+    b.classList.remove('btn-primary');
+    b.classList.add('btn-secondary');
+  });
+  const activeBtn = document.getElementById(`lc-menu-diff-${id}`);
+  if (activeBtn) {
+    activeBtn.classList.remove('btn-secondary');
+    activeBtn.classList.add('btn-primary');
+  }
+  const dailyBtn = document.getElementById('lc-menu-diff-daily');
+  if (dailyBtn) {
+    if (id === 'daily') {
+      dailyBtn.classList.remove('btn-secondary');
+      dailyBtn.classList.add('btn-primary');
+    } else {
+      dailyBtn.classList.remove('btn-primary');
+      dailyBtn.classList.add('btn-secondary');
+    }
+  }
+  const badgeEl = document.getElementById('lc-menu-diff-badge');
+  if (badgeEl) badgeEl.textContent = DIFFICULTIES[id].badge;
+
+  const hudDiffBtn = document.getElementById('lc-diff-btn');
+  if (hudDiffBtn) hudDiffBtn.textContent = DIFFICULTIES[id].badge;
 }
 
 function startGameFromMenu(diffId = currentDiffId) {
@@ -1221,76 +1260,100 @@ export function renderLastClickGame(container) {
       #lc-board-container {
         position: relative;
         width: 100%;
-        max-width: 640px;
-        max-height: calc(100dvh - 170px);
-        background: #070b19;
+        max-width: 540px;
+        min-height: 490px;
+        background: radial-gradient(circle at 50% 20%, #0d152d 0%, #060a18 100%);
         border: 2px solid var(--border-color);
         border-radius: var(--radius-xl);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.85rem;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .lc-grid-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        max-height: 100%;
         overflow: auto;
-        padding: 0.6rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        touch-action: pan-x pan-y;
+        padding: 0.25rem;
         box-sizing: border-box;
         scrollbar-width: thin;
       }
 
       .lc-grid {
         display: grid;
-        gap: 3px;
-        margin: 0 auto;
+        gap: 4px;
+        margin: auto;
         width: fit-content;
+        user-select: none;
       }
 
-      /* Grid Tile Cell */
+      /* Grid Tile Cell with Rich 3D Arcade Cyber Aesthetics */
       .lc-cell {
-        width: 32px;
-        height: 32px;
-        background: #131c36;
-        border: 1px solid #1e293b;
-        border-radius: 4px;
+        background: linear-gradient(145deg, #182344, #0f1730);
+        border: 1px solid #23335e;
+        border-radius: 6px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 1rem;
         font-weight: 900;
         cursor: pointer;
-        transition: transform 0.05s, background-color 0.15s;
+        transition: transform 0.06s ease, background-color 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
         box-sizing: border-box;
         position: relative;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
       }
 
-      .lc-cell:hover:not(.revealed) {
-        background: #1d2b52;
+      .lc-cell:hover:not(.revealed):not(.flagged) {
+        background: linear-gradient(145deg, #223363, #152042);
         border-color: #38bdf8;
+        box-shadow: 0 0 12px rgba(56, 189, 248, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .lc-cell:active:not(.revealed) {
+        transform: translateY(1px);
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
       }
 
       .lc-cell.revealed {
-        background: #0b1124;
-        border-color: rgba(255, 255, 255, 0.04);
+        background: #090e1f;
+        border-color: rgba(255, 255, 255, 0.06);
+        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.65);
         cursor: default;
+        transform: none;
       }
 
       .lc-cell.flagged {
-        background: rgba(244, 63, 94, 0.18);
+        background: linear-gradient(145deg, rgba(244, 63, 94, 0.3), rgba(159, 18, 57, 0.2));
         border-color: #f43f5e;
+        box-shadow: 0 0 12px rgba(244, 63, 94, 0.35);
       }
 
       .lc-cell.mine-revealed {
-        background: rgba(239, 68, 68, 0.35);
+        background: linear-gradient(145deg, rgba(239, 68, 68, 0.5), rgba(185, 28, 28, 0.4));
         border-color: #ef4444;
+        box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
       }
 
       .lc-cell.scanned-mine {
         border-color: #f97316 !important;
-        box-shadow: 0 0 10px #f97316 !important;
+        box-shadow: 0 0 12px #f97316 !important;
         animation: lcRadarPulse 1s infinite alternate;
       }
 
       .lc-cell.defused-safe {
         background: rgba(16, 185, 129, 0.25) !important;
         border-color: #10b981 !important;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.35) !important;
       }
 
       @keyframes lcRadarPulse {
@@ -1317,8 +1380,8 @@ export function renderLastClickGame(container) {
       .lc-modal {
         position: absolute;
         inset: 0;
-        background: rgba(6, 10, 23, 0.88);
-        backdrop-filter: blur(8px);
+        background: rgba(6, 10, 23, 0.94);
+        backdrop-filter: blur(10px);
         display: none;
         flex-direction: column;
         justify-content: center;
@@ -1326,6 +1389,7 @@ export function renderLastClickGame(container) {
         padding: 1.25rem;
         text-align: center;
         z-index: 50;
+        box-sizing: border-box;
       }
     </style>
 
@@ -1359,10 +1423,10 @@ export function renderLastClickGame(container) {
             <button id="lc-diff-btn" class="lc-powerup-btn" style="font-size:0.75rem; padding:0.25rem 0.55rem;" title="Change Difficulty">
               ${DIFFICULTIES[currentDiffId].badge}
             </button>
-            <button id="lc-btn-rules" class="lc-btn-icon" title="Rules & How to Play (❓)" onclick="window.lcOpenRules()">
+            <button id="lc-btn-rules" class="lc-btn-icon" title="Rules & How to Play (❓)">
               ❓
             </button>
-            <button id="lc-btn-pause" class="lc-btn-icon" title="Pause Game (Esc / P)" onclick="window.lcPause()">
+            <button id="lc-btn-pause" class="lc-btn-icon" title="Pause Game (Esc)">
               ⏸️
             </button>
             <button id="lc-btn-sound" class="lc-btn-icon" title="Toggle Audio">
@@ -1411,73 +1475,80 @@ export function renderLastClickGame(container) {
 
       <!-- Main Game Board Container -->
       <div id="lc-board-container">
-        <div id="lc-grid" class="lc-grid"></div>
+        <div class="lc-grid-wrapper">
+          <div id="lc-grid" class="lc-grid"></div>
+        </div>
 
         <!-- 0. Main Menu Modal -->
-        <div id="lc-modal-menu" class="lc-modal" style="display:flex; overflow-y:auto;">
-          <div style="font-size:3.2rem; margin-bottom:0.25rem; filter:drop-shadow(0 0 16px rgba(6,182,212,0.5));">💣</div>
-          <h1 style="font-size:2.3rem; font-weight:900; letter-spacing:0.04em; margin-bottom:0.25rem; background:linear-gradient(135deg, #22d3ee, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
+        <div id="lc-modal-menu" class="lc-modal" style="display:flex;">
+          <div style="font-size:2.8rem; margin-bottom:0.15rem; filter:drop-shadow(0 0 16px rgba(6,182,212,0.4));">💣</div>
+          <h1 style="font-size:2.1rem; font-weight:900; letter-spacing:0.04em; margin-bottom:0.15rem; background:linear-gradient(135deg, #22d3ee, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">
             LAST CLICK
           </h1>
-          <p style="color:var(--text-secondary); font-size:0.95rem; margin-bottom:1.25rem; font-weight:500; max-width:340px; line-height:1.4;">
-            One wrong step detonates the sector. Deploy tactical power-ups, disarm hazards, and survive.
+          <p style="color:var(--text-secondary); font-size:0.85rem; max-width:320px; margin-bottom:0.75rem; line-height:1.35;">
+            Tactical grid puzzle with hidden power-ups & combo streaks.
           </p>
 
           <!-- Difficulty Selectors in Main Menu -->
-          <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); font-weight:800; margin-bottom:0.45rem;">
-            Select Grid Difficulty
-          </div>
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.45rem; width:100%; max-width:320px; margin-bottom:0.75rem;">
-            <button id="lc-menu-diff-easy" class="btn lc-menu-diff-btn ${currentDiffId === 'easy' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('easy')">
-              🟢 Easy (6×6)
-            </button>
-            <button id="lc-menu-diff-medium" class="btn lc-menu-diff-btn ${currentDiffId === 'medium' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('medium')">
-              🟡 Medium (8×8)
-            </button>
-            <button id="lc-menu-diff-hard" class="btn lc-menu-diff-btn ${currentDiffId === 'hard' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('hard')">
-              🔴 Hard (11×11)
-            </button>
-            <button id="lc-menu-diff-impossible" class="btn lc-menu-diff-btn ${currentDiffId === 'impossible' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.85rem; padding:0.5rem 0.25rem;" onclick="window.lcSelectMenuDiff('impossible')">
-              💀 Impossible (14×14)
+          <div style="width:100%; max-width:320px; margin-bottom:0.65rem;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
+              <span style="font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted); font-weight:800;">
+                Select Difficulty
+              </span>
+              <span id="lc-menu-diff-badge" style="font-size:0.72rem; color:var(--accent-cyan); font-weight:700;">
+                ${DIFFICULTIES[currentDiffId].badge}
+              </span>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.35rem; margin-bottom:0.35rem;">
+              <button id="lc-menu-diff-easy" class="btn lc-menu-diff-btn ${currentDiffId === 'easy' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.8rem; padding:0.4rem 0.2rem;">
+                🟢 Easy (6×6)
+              </button>
+              <button id="lc-menu-diff-medium" class="btn lc-menu-diff-btn ${currentDiffId === 'medium' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.8rem; padding:0.4rem 0.2rem;">
+                🟡 Medium (8×8)
+              </button>
+              <button id="lc-menu-diff-hard" class="btn lc-menu-diff-btn ${currentDiffId === 'hard' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.8rem; padding:0.4rem 0.2rem;">
+                🔴 Hard (11×11)
+              </button>
+              <button id="lc-menu-diff-impossible" class="btn lc-menu-diff-btn ${currentDiffId === 'impossible' ? 'btn-primary' : 'btn-secondary'}" style="font-weight:700; font-size:0.8rem; padding:0.4rem 0.2rem;">
+                💀 Impossible (14×14)
+              </button>
+            </div>
+            <button id="lc-menu-diff-daily" class="btn ${currentDiffId === 'daily' ? 'btn-primary' : 'btn-secondary'} btn-sm" style="width:100%; font-weight:700; padding:0.35rem;">
+              📅 Daily Seeded Challenge (9×9)
             </button>
           </div>
 
-          <button id="lc-menu-diff-daily" class="btn ${currentDiffId === 'daily' ? 'btn-primary' : 'btn-secondary'} btn-sm" style="margin-bottom:1.15rem; width:100%; max-width:320px; font-weight:700;" onclick="window.lcSelectMenuDiff('daily')">
-            📅 Daily Seeded Challenge (9×9)
-          </button>
-
-          <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:320px; margin-bottom:1.15rem;">
-            <button id="lc-btn-menu-play" class="btn btn-primary btn-lg" onclick="window.lcStartGame()" style="font-size:1.25rem; font-weight:900; padding:0.85rem; box-shadow:0 0 24px rgba(6,182,212,0.4);">
+          <!-- Play & Rules Buttons -->
+          <div style="display:flex; flex-direction:column; gap:0.45rem; width:100%; max-width:320px; margin-bottom:0.75rem;">
+            <button id="lc-btn-menu-play" class="btn btn-primary btn-lg" style="font-size:1.15rem; font-weight:900; padding:0.7rem; box-shadow:0 0 20px rgba(6,182,212,0.4);">
               ▶️ PLAY NOW
             </button>
-            <button class="btn btn-secondary" onclick="window.lcOpenRules()" style="font-weight:700; padding:0.65rem;">
-              📖 HOW TO PLAY & RULES
+            <button id="lc-btn-menu-rules" class="btn btn-secondary" style="font-weight:700; font-size:0.85rem; padding:0.45rem;">
+              📖 How to Play & Rules
             </button>
           </div>
 
-          <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:0.6rem 1.25rem; width:100%; max-width:320px;">
-            <div style="font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-weight:700;">Personal High Score</div>
-            <div id="lc-menu-highscore" style="font-size:1.6rem; font-weight:900; color:var(--accent-amber);">${highScore} pts</div>
+          <!-- High Score Pill -->
+          <div style="background:rgba(255,255,255,0.04); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.35rem 1rem; width:100%; max-width:320px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-muted); font-weight:700;">Personal Best</span>
+            <span id="lc-menu-highscore" style="font-size:1.1rem; font-weight:900; color:var(--accent-amber);">${highScore} pts</span>
           </div>
         </div>
 
-        <!-- 1. Pause Menu Modal -->
+        <!-- 1. Pause Menu Modal (Just like Stack Panic & Merge Lab) -->
         <div id="lc-modal-pause" class="lc-modal">
-          <div style="font-size:3rem; margin-bottom:0.25rem;">⏸️</div>
+          <div style="font-size:3rem; margin-bottom:0.35rem;">⏸️</div>
           <h2 style="font-size:2rem; font-weight:900; margin-bottom:0.25rem; color:var(--text-primary);">GAME PAUSED</h2>
-          <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1.5rem;">Sector exploration frozen.</p>
+          <p style="color:var(--text-muted); font-size:0.92rem; margin-bottom:1.5rem;">Sector scan on hold. Take a breath.</p>
 
-          <div style="display:flex; flex-direction:column; gap:0.75rem; width:100%; max-width:280px;">
-            <button class="btn btn-primary btn-lg" onclick="window.lcResume()" style="font-weight:800;">
-              ▶️ Resume (Esc / P)
+          <div style="display:flex; flex-direction:column; gap:0.65rem; width:100%; max-width:280px;">
+            <button id="lc-btn-resume" class="btn btn-primary btn-lg" style="font-weight:800; padding:0.75rem;">
+              ▶️ Resume (Esc)
             </button>
-            <button class="btn btn-secondary btn-lg" onclick="window.lcRestart()" style="font-weight:700;">
+            <button id="lc-btn-restart-pause" class="btn btn-secondary btn-lg" style="font-weight:700; padding:0.65rem;">
               🔄 Restart Match
             </button>
-            <button class="btn btn-secondary" onclick="window.lcOpenRules()" style="font-weight:600;">
-              📖 Rules & Power-Ups
-            </button>
-            <button class="btn btn-secondary" onclick="window.lcMainMenu()" style="font-weight:600;">
+            <button id="lc-btn-mainmenu-pause" class="btn btn-secondary" style="font-weight:600; padding:0.65rem;">
               🏠 Main Menu
             </button>
           </div>
@@ -1485,12 +1556,12 @@ export function renderLastClickGame(container) {
 
         <!-- 2. Rules & Tactical Guide Modal -->
         <div id="lc-modal-rules" class="lc-modal" style="overflow-y:auto; max-height:100%;">
-          <div style="max-width:540px; width:100%; text-align:left; background:rgba(11, 17, 36, 0.96); border:1px solid var(--border-color); border-radius:var(--radius-xl); padding:1.25rem; box-shadow:0 12px 40px rgba(0,0,0,0.7);">
+          <div style="max-width:540px; width:100%; text-align:left; background:rgba(11, 17, 36, 0.98); border:1px solid var(--border-color); border-radius:var(--radius-xl); padding:1.25rem; box-shadow:0 12px 40px rgba(0,0,0,0.7);">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:0.5rem;">
-              <h2 style="font-size:1.45rem; font-weight:900; margin:0; color:var(--accent-cyan); display:flex; align-items:center; gap:0.5rem;">
+              <h2 style="font-size:1.35rem; font-weight:900; margin:0; color:var(--accent-cyan); display:flex; align-items:center; gap:0.5rem;">
                 <span>📖</span> Last Click — Rules & Guide
               </h2>
-              <button class="btn btn-secondary btn-sm" onclick="window.lcCloseRules()">✖️ Close</button>
+              <button id="lc-btn-close-rules" class="btn btn-secondary btn-sm">✖️ Close</button>
             </div>
 
             <div style="font-size:0.88rem; line-height:1.55; color:var(--text-secondary); display:flex; flex-direction:column; gap:0.85rem; max-height:60dvh; overflow-y:auto; padding-right:0.35rem;">
@@ -1546,7 +1617,7 @@ export function renderLastClickGame(container) {
             </div>
 
             <div style="margin-top:1rem; text-align:center;">
-              <button class="btn btn-primary" onclick="window.lcCloseRules()" style="width:100%; font-weight:800; padding:0.65rem;">
+              <button id="lc-btn-confirm-rules" class="btn btn-primary" style="width:100%; font-weight:800; padding:0.65rem;">
                 👍 UNDERSTOOD — LET'S PLAY
               </button>
             </div>
@@ -1590,10 +1661,10 @@ export function renderLastClickGame(container) {
             <div id="lc-vic-credits" style="font-size:0.85rem; font-weight:700; color:#fde047; margin-top:0.2rem;">+0 Cyber Credits 🪙</div>
           </div>
           <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:260px;">
-            <button class="btn btn-primary btn-lg" onclick="window.lcRestart()" style="font-weight:900;">
+            <button id="lc-btn-vic-restart" class="btn btn-primary btn-lg" style="font-weight:900;">
               ▶️ PLAY AGAIN
             </button>
-            <button class="btn btn-secondary" onclick="window.lcMainMenu()" style="font-weight:700;">
+            <button id="lc-btn-vic-menu" class="btn btn-secondary" style="font-weight:700;">
               🏠 MAIN MENU
             </button>
           </div>
@@ -1611,10 +1682,10 @@ export function renderLastClickGame(container) {
             <div id="lc-def-score" style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan);">0</div>
           </div>
           <div style="display:flex; flex-direction:column; gap:0.6rem; width:100%; max-width:260px;">
-            <button class="btn btn-primary btn-lg" onclick="window.lcRestart()" style="font-weight:900;">
+            <button id="lc-btn-def-restart" class="btn btn-primary btn-lg" style="font-weight:900;">
               🔄 TRY AGAIN
             </button>
-            <button class="btn btn-secondary" onclick="window.lcMainMenu()" style="font-weight:700;">
+            <button id="lc-btn-def-menu" class="btn btn-secondary" style="font-weight:700;">
               🏠 MAIN MENU
             </button>
           </div>
@@ -1637,27 +1708,13 @@ export function renderLastClickGame(container) {
   window.lcCloseDiff = () => {
     document.getElementById('lc-modal-diff').style.display = 'none';
   };
-  window.lcSelectMenuDiff = (id) => {
-    currentDiffId = id;
-    initNewGame(id, true);
-    document.querySelectorAll('.lc-menu-diff-btn').forEach(b => {
-      b.classList.remove('btn-primary');
-      b.classList.add('btn-secondary');
-    });
-    const activeBtn = document.getElementById(`lc-menu-diff-${id}`);
-    if (activeBtn) {
-      activeBtn.classList.remove('btn-secondary');
-      activeBtn.classList.add('btn-primary');
-    }
-    const diffBtn = document.getElementById('lc-diff-btn');
-    if (diffBtn) diffBtn.textContent = DIFFICULTIES[id].badge;
-  };
+  window.lcSelectMenuDiff = (id) => selectMenuDifficulty(id);
   window.lcStartGame = () => startGameFromMenu(currentDiffId);
   window.lcPause = pauseGame;
   window.lcResume = resumeGame;
   window.lcOpenRules = openRulesModal;
   window.lcCloseRules = closeRulesModal;
-  window.lcMainMenu = showMainMenu;
+  window.lcMainMenu = returnToMainMenu;
 
   bindUIEvents();
   initNewGame(currentDiffId, true);
@@ -1667,8 +1724,36 @@ function renderBoardDOM() {
   const gridEl = document.getElementById('lc-grid');
   if (!gridEl) return;
 
-  const cellSize = cols <= 6 ? 44 : (cols <= 8 ? 36 : (cols <= 11 ? 28 : 24));
+  // Responsive arcade cell sizes:
+  // Easy (6x6): 50px, Medium (8x8): 40px, Daily (9x9): 36px, Hard (11x11): 30px, Impossible (14x14): 24px
+  let cellSize = 50;
+  let gap = 5;
+  let fontSize = '1.35rem';
+
+  if (cols <= 6) {
+    cellSize = 50;
+    gap = 5;
+    fontSize = '1.35rem';
+  } else if (cols <= 8) {
+    cellSize = 40;
+    gap = 4;
+    fontSize = '1.15rem';
+  } else if (cols <= 9) {
+    cellSize = 36;
+    gap = 3;
+    fontSize = '1.05rem';
+  } else if (cols <= 11) {
+    cellSize = 30;
+    gap = 3;
+    fontSize = '0.92rem';
+  } else {
+    cellSize = 24;
+    gap = 2;
+    fontSize = '0.78rem';
+  }
+
   gridEl.style.gridTemplateColumns = `repeat(${cols}, ${cellSize}px)`;
+  gridEl.style.gap = `${gap}px`;
   gridEl.innerHTML = '';
 
   for (let r = 0; r < rows; r++) {
@@ -1678,7 +1763,7 @@ function renderBoardDOM() {
       cellEl.className = 'lc-cell';
       cellEl.style.width = `${cellSize}px`;
       cellEl.style.height = `${cellSize}px`;
-      cellEl.style.fontSize = cellSize >= 36 ? '1.1rem' : (cellSize >= 28 ? '0.88rem' : '0.72rem');
+      cellEl.style.fontSize = fontSize;
       cellEl.dataset.r = r;
       cellEl.dataset.c = c;
 
@@ -1843,7 +1928,7 @@ function closeModals() {
 
 function bindUIEvents() {
   const btnRestart = document.getElementById('lc-btn-restart');
-  if (btnRestart) btnRestart.addEventListener('click', () => initNewGame(currentDiffId));
+  if (btnRestart) btnRestart.addEventListener('click', () => startGameFromMenu(currentDiffId));
 
   const btnSound = document.getElementById('lc-btn-sound');
   if (btnSound) {
@@ -1860,21 +1945,66 @@ function bindUIEvents() {
     });
   }
 
+  // Top HUD Pause Button
   const btnPause = document.getElementById('lc-btn-pause');
   if (btnPause) {
-    btnPause.addEventListener('click', () => {
-      if (gameState === 'PLAYING' || gameState === 'TARGETING') {
-        pauseGame();
-      } else if (gameState === 'PAUSED') {
+    btnPause.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (gameState === 'PAUSED') {
         resumeGame();
+      } else if (gameState === 'PLAYING' || gameState === 'IDLE' || gameState === 'TARGETING') {
+        pauseGame();
       }
     });
   }
 
+  // Pause Modal Buttons
+  const btnResume = document.getElementById('lc-btn-resume');
+  if (btnResume) btnResume.addEventListener('click', resumeGame);
+
+  const btnRestartPause = document.getElementById('lc-btn-restart-pause');
+  if (btnRestartPause) btnRestartPause.addEventListener('click', () => startGameFromMenu(currentDiffId));
+
+  const btnMainMenuPause = document.getElementById('lc-btn-mainmenu-pause');
+  if (btnMainMenuPause) btnMainMenuPause.addEventListener('click', returnToMainMenu);
+
+  // Top HUD Rules Button
   const btnRules = document.getElementById('lc-btn-rules');
   if (btnRules) {
     btnRules.addEventListener('click', openRulesModal);
   }
+
+  // Main Menu Modal Buttons
+  const btnMenuPlay = document.getElementById('lc-btn-menu-play');
+  if (btnMenuPlay) btnMenuPlay.addEventListener('click', () => startGameFromMenu(currentDiffId));
+
+  const btnMenuRules = document.getElementById('lc-btn-menu-rules');
+  if (btnMenuRules) btnMenuRules.addEventListener('click', openRulesModal);
+
+  ['easy', 'medium', 'hard', 'impossible', 'daily'].forEach(id => {
+    const b = document.getElementById(`lc-menu-diff-${id}`);
+    if (b) b.addEventListener('click', () => selectMenuDifficulty(id));
+  });
+
+  // Rules Modal Close Buttons
+  const btnCloseRules = document.getElementById('lc-btn-close-rules');
+  if (btnCloseRules) btnCloseRules.addEventListener('click', closeRulesModal);
+
+  const btnConfirmRules = document.getElementById('lc-btn-confirm-rules');
+  if (btnConfirmRules) btnConfirmRules.addEventListener('click', closeRulesModal);
+
+  // Victory / Defeat Modal Buttons
+  const btnVicRestart = document.getElementById('lc-btn-vic-restart');
+  if (btnVicRestart) btnVicRestart.addEventListener('click', () => startGameFromMenu(currentDiffId));
+
+  const btnVicMenu = document.getElementById('lc-btn-vic-menu');
+  if (btnVicMenu) btnVicMenu.addEventListener('click', returnToMainMenu);
+
+  const btnDefRestart = document.getElementById('lc-btn-def-restart');
+  if (btnDefRestart) btnDefRestart.addEventListener('click', () => startGameFromMenu(currentDiffId));
+
+  const btnDefMenu = document.getElementById('lc-btn-def-menu');
+  if (btnDefMenu) btnDefMenu.addEventListener('click', returnToMainMenu);
 
   // Mobile Flag Mode Toggle
   const btnFlagToggle = document.getElementById('lc-btn-flag-toggle');
@@ -1915,8 +2045,11 @@ function bindUIEvents() {
       selectTargetingPowerUp('pulse');
     } else if (e.code === 'KeyP') {
       e.preventDefault();
-      if (gameState === 'PLAYING' || gameState === 'TARGETING') pauseGame();
-      else if (gameState === 'PAUSED') resumeGame();
+      if (gameState === 'PAUSED') {
+        resumeGame();
+      } else if (gameState === 'PLAYING' || gameState === 'IDLE' || gameState === 'TARGETING') {
+        pauseGame();
+      }
     } else if (e.code === 'Escape') {
       e.preventDefault();
       const rulesModal = document.getElementById('lc-modal-rules');
@@ -1927,10 +2060,10 @@ function bindUIEvents() {
         diffModal.style.display = 'none';
       } else if (activeTargetingPowerUp) {
         cancelTargeting();
-      } else if (gameState === 'PLAYING' || gameState === 'TARGETING') {
-        pauseGame();
       } else if (gameState === 'PAUSED') {
         resumeGame();
+      } else if (gameState === 'PLAYING' || gameState === 'IDLE' || gameState === 'TARGETING') {
+        pauseGame();
       }
     } else if (e.code === 'Space') {
       if (gameState === 'WON' || gameState === 'LOST') {
