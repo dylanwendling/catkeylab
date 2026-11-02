@@ -29,7 +29,12 @@ const TEST_TABS = [
   { id: 'cat-typing-dungeon', label: '⚔️ Cat Typing Dungeon' },
   { id: 'stack-panic', label: '🥞 Stack Panic' },
   { id: 'merge-lab', label: '🧪 Merge Lab' },
-  { id: 'last-click', label: '💣 Last Click' }
+  { id: 'last-click', label: '💣 Last Click' },
+  { id: 'split-master-classic', label: '✂️ Split Master (Classic)' },
+  { id: 'split-master-endless', label: '✂️ Split Master (Endless)' },
+  { id: 'split-master-daily', label: '✂️ Split Master (Daily)' },
+  { id: 'stacksnatch-3x3', label: '🎲 StackSnatch (3×3)' },
+  { id: 'stacksnatch-4x4', label: '🎲 StackSnatch (4×4)' }
 ];
 
 export function renderLeaderboardView(container) {

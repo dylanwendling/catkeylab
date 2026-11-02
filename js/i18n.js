@@ -47,6 +47,8 @@ export const translations = {
     stackPanicTitle: 'Stack Panic Arcade',
     mergeLabTitle: 'Merge Lab Puzzle',
     lastClickTitle: 'Last Click',
+    splitMasterTitle: 'Split Master Puzzle',
+    stackSnatchTitle: 'StackSnatch Board Game',
     
     // Hero
     heroBadge: '⚡ 100% Free & In-Browser Tools',

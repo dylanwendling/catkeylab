@@ -85,6 +85,8 @@ export function renderHeader(container) {
               <a href="/games/stack-panic/" class="dropdown-item"><span>🥞</span> <span>Stack Panic Arcade</span></a>
               <a href="/games/merge-lab/" class="dropdown-item"><span>🧪</span> <span>Merge Lab Puzzle</span></a>
               <a href="/games/last-click/" class="dropdown-item"><span>💣</span> <span>Last Click</span></a>
+              <a href="/games/split-master/" class="dropdown-item"><span>✂️</span> <span>Split Master Puzzle</span></a>
+              <a href="/games/stacksnatch/" class="dropdown-item"><span>🎲</span> <span>StackSnatch Board Game</span></a>
               <div style="height:1px; background:var(--border-color); margin:0.35rem 0;"></div>
               <a href="/games/" class="dropdown-item"><span>🎮</span> <strong>All Games Directory</strong></a>
             </div>
@@ -182,6 +184,12 @@ export function renderHeader(container) {
         </a>
         <a href="/games/last-click/" class="mobile-nav-link" data-route="last-click">
           <span>💣 Last Click</span>
+        </a>
+        <a href="/games/split-master/" class="mobile-nav-link" data-route="split-master">
+          <span>✂️ Split Master Puzzle</span>
+        </a>
+        <a href="/games/stacksnatch/" class="mobile-nav-link" data-route="stacksnatch">
+          <span>🎲 StackSnatch Board Game</span>
         </a>
         <a href="/games/" class="mobile-nav-link" data-route="games">
           <strong>🎮 All Arcade Games Hub</strong>

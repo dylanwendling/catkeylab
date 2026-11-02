@@ -194,6 +194,20 @@ TOOL_ROUTES = {
         'categoryName': 'Arcade Games',
         'displayName': 'Last Click',
         'aliases': ['last-click', 'last-click-game', 'lastclick']
+    },
+    'split-master': {
+        'path': '/games/split-master/',
+        'category': 'games',
+        'categoryName': 'Arcade Games',
+        'displayName': 'Split Master Puzzle',
+        'aliases': ['split-master', 'split-master-game', 'splitmaster', 'precision-cut']
+    },
+    'stacksnatch': {
+        'path': '/games/stacksnatch/',
+        'category': 'games',
+        'categoryName': 'Arcade Games',
+        'displayName': 'StackSnatch Board Game',
+        'aliases': ['stacksnatch', 'stacksnatch-game', 'stack-snatch', 'stack-snatch-game']
     }
 }
 
@@ -306,6 +320,8 @@ STATIC_HEADER_HTML = """
               <a href="/games/stack-panic/" class="dropdown-item"><span>🥞</span> <span>Stack Panic Arcade</span></a>
               <a href="/games/merge-lab/" class="dropdown-item"><span>🧪</span> <span>Merge Lab Puzzle</span></a>
               <a href="/games/last-click/" class="dropdown-item"><span>💣</span> <span>Last Click</span></a>
+              <a href="/games/split-master/" class="dropdown-item"><span>✂️</span> <span>Split Master Puzzle</span></a>
+              <a href="/games/stacksnatch/" class="dropdown-item"><span>🎲</span> <span>StackSnatch Board Game</span></a>
             </div>
           </div>
 
@@ -1031,9 +1047,17 @@ def generate_home_page(tool_metadata):
                   <td style="padding:1rem;">Navigate Nibbles through a procedural maze</td>
                   <td style="padding:1rem;"><a href="/games/fish-maze/" style="color:var(--accent-cyan); font-weight:600;">Fish Maze 🐟</a></td>
                 </tr>
-                <tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
                   <td style="padding:1rem;">Match 3D cat cards in a visual recognition game</td>
                   <td style="padding:1rem;"><a href="/games/card-memory/" style="color:var(--accent-cyan); font-weight:600;">Card Memory Match 🎴</a></td>
+                </tr>
+                <tr style="border-bottom:1px solid var(--border-color);">
+                  <td style="padding:1rem;">Cut shapes into perfect 50/50 halves</td>
+                  <td style="padding:1rem;"><a href="/games/split-master/" style="color:var(--accent-cyan); font-weight:600;">Split Master Puzzle ✂️</a></td>
+                </tr>
+                <tr>
+                  <td style="padding:1rem;">Play strategic piece-stacking board game vs AI</td>
+                  <td style="padding:1rem;"><a href="/games/stacksnatch/" style="color:var(--accent-cyan); font-weight:600;">StackSnatch Board Game 🎲</a></td>
                 </tr>
               </tbody>
             </table>

@@ -66,6 +66,8 @@ export function renderFooter(container) {
               <a href="/games/fruit-slicer/" class="footer-link">🍉 Fruit Slicer</a>
               <a href="/games/fish-maze/" class="footer-link">🐟 Nibbles Fish Maze</a>
               <a href="/games/card-memory/" class="footer-link">🎴 Card Memory Match</a>
+              <a href="/games/split-master/" class="footer-link">✂️ Split Master</a>
+              <a href="/games/stacksnatch/" class="footer-link">🎲 StackSnatch</a>
               <a href="/leaderboards/" class="footer-link">🏆 Leaderboards</a>
             </div>
           </div>

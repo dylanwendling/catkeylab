@@ -179,6 +179,20 @@ export const TOOL_ROUTES = {
     categoryName: 'Arcade Games',
     displayName: 'Last Click',
     aliases: ['last-click', 'last-click-game', 'lastclick']
+  },
+  'split-master': {
+    path: '/games/split-master/',
+    category: 'games',
+    categoryName: 'Arcade Games',
+    displayName: 'Split Master Puzzle',
+    aliases: ['split-master', 'split-master-game', 'splitmaster', 'precision-cut']
+  },
+  'stacksnatch': {
+    path: '/games/stacksnatch/',
+    category: 'games',
+    categoryName: 'Arcade Games',
+    displayName: 'StackSnatch Board Game',
+    aliases: ['stacksnatch', 'stacksnatch-game', 'stack-snatch', 'stack-snatch-game']
   }
 };
 

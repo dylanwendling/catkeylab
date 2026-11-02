@@ -32,7 +32,12 @@ const INITIAL_LEADERBOARDS = {
   'cat-typing-dungeon': [],
   'stack-panic': [],
   'merge-lab': [],
-  'last-click': []
+  'last-click': [],
+  'split-master-classic': [],
+  'split-master-endless': [],
+  'split-master-daily': [],
+  'stacksnatch-3x3': [],
+  'stacksnatch-4x4': []
 };
 
 // Get or Create Anonymous Identity
@@ -426,6 +431,41 @@ export function getPercentile(testId, score, rank = null) {
       if (score >= 2500) return "Top 15% (Tactical Defuser 🛡️)";
       if (score >= 1000) return "Top 40% (Competent Sweeper 📡)";
       return "Top 60% (Apprentice Sweeper)";
+
+    case 'split-master-classic':
+      if (score >= 7000) return "Top 1% (Grand Surgeon ✂️)";
+      if (score >= 5500) return "Top 5% (Precision Cutter 🎯)";
+      if (score >= 4000) return "Top 15% (Sharp Eye 👁️)";
+      if (score >= 2500) return "Top 40% (Decent Slicer)";
+      return "Top 60% (Apprentice Cutter)";
+
+    case 'split-master-endless':
+      if (score >= 15000) return "Top 1% (Infinite Surgeon ✂️)";
+      if (score >= 10000) return "Top 5% (Endless Cutter 🔁)";
+      if (score >= 6000) return "Top 15% (Marathon Slicer 🎯)";
+      if (score >= 3000) return "Top 40% (Steady Cutter)";
+      return "Top 60% (Casual Slicer)";
+
+    case 'split-master-daily':
+      if (score >= 5500) return "Top 1% (Daily Champion ✂️)";
+      if (score >= 4500) return "Top 5% (Daily Elite 🎯)";
+      if (score >= 3500) return "Top 15% (Daily Expert)";
+      if (score >= 2000) return "Top 40% (Daily Participant)";
+      return "Top 60% (Daily Rookie)";
+
+    case 'stacksnatch-3x3':
+      if (score >= 20) return "Top 1% (Grand StackMaster 🏆)";
+      if (score >= 12) return "Top 5% (Snatch Grandmaster 🎲)";
+      if (score >= 7) return "Top 15% (Stack Strategist ♟️)";
+      if (score >= 3) return "Top 40% (Board Rookie)";
+      return "Top 60% (New Player)";
+
+    case 'stacksnatch-4x4':
+      if (score >= 15) return "Top 1% (4x4 Legend 🏅)";
+      if (score >= 9) return "Top 5% (Advanced Snatcher 🎲)";
+      if (score >= 5) return "Top 15% (Tactical Stacker ♟️)";
+      if (score >= 2) return "Top 40% (Advanced Rookie)";
+      return "Top 60% (4x4 Novice)";
 
     default:
       return "Top 15%";

@@ -37,6 +37,8 @@ import { renderCatTypingDungeon_MAIN as renderCatTypingDungeon, cleanupCatTyping
 import { renderStackPanicGame, cleanupStackPanicGame } from './tools/stackPanicGame.js';
 import { renderMergeLabGame, cleanupMergeLabGame } from './tools/mergeLabGame.js';
 import { renderLastClickGame, cleanupLastClickGame } from './tools/lastClickGame.js';
+import { renderSplitMasterGame, cleanupSplitMasterGame } from './tools/splitMasterGame.js';
+import { renderStackSnatchGame, cleanupStackSnatchGame } from './tools/stackSnatchGame.js';
 
 let currentCleanup = null;
 
@@ -123,6 +125,10 @@ TOOL_METADATA['merge-lab'].renderFn = renderMergeLabGame;
 TOOL_METADATA['merge-lab'].cleanupFn = cleanupMergeLabGame;
 TOOL_METADATA['last-click'].renderFn = renderLastClickGame;
 TOOL_METADATA['last-click'].cleanupFn = cleanupLastClickGame;
+TOOL_METADATA['split-master'].renderFn = renderSplitMasterGame;
+TOOL_METADATA['split-master'].cleanupFn = cleanupSplitMasterGame;
+TOOL_METADATA['stacksnatch'].renderFn = renderStackSnatchGame;
+TOOL_METADATA['stacksnatch'].cleanupFn = cleanupStackSnatchGame;
 ;
 
 export function handleRoute() {
