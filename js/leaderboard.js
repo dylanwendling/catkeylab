@@ -34,7 +34,7 @@ const INITIAL_LEADERBOARDS = {
   'merge-lab': [],
   'last-click': [],
   'split-master-classic': [],
-  'split-master-endless': [],
+  'split-master-streak': [],
   'split-master-daily': [],
   'stacksnatch-3x3': [],
   'stacksnatch-4x4': []
@@ -439,12 +439,13 @@ export function getPercentile(testId, score, rank = null) {
       if (score >= 2500) return "Top 40% (Decent Slicer)";
       return "Top 60% (Apprentice Cutter)";
 
-    case 'split-master-endless':
-      if (score >= 15000) return "Top 1% (Infinite Surgeon ✂️)";
-      if (score >= 10000) return "Top 5% (Endless Cutter 🔁)";
-      if (score >= 6000) return "Top 15% (Marathon Slicer 🎯)";
-      if (score >= 3000) return "Top 40% (Steady Cutter)";
-      return "Top 60% (Casual Slicer)";
+    case 'split-master-streak':
+      if (score >= 12) return "Top 1% (Zen Surgeon ✂️)";
+      if (score >= 8) return "Top 5% (Precision Master 🎯)";
+      if (score >= 5) return "Top 15% (50/50 Specialist 👁️)";
+      if (score >= 3) return "Top 40% (Steady Slicer)";
+      if (score >= 1) return "Top 60% (Streak Starter)";
+      return "Top 80% (Apprentice Slicer)";
 
     case 'split-master-daily':
       if (score >= 5500) return "Top 1% (Daily Champion ✂️)";

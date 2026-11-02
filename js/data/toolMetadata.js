@@ -769,39 +769,39 @@ export const TOOL_METADATA = {
   },
   'split-master': {
     titleKey: 'splitMasterTitle',
-    desc: 'Precision-cutting puzzle game where you must cut shapes as close to a perfect 50/50 split as possible. Draw your cut line and score points based on accuracy.',
+    desc: 'Precision cutting puzzle game where you cut shapes into equal 50/50 halves. Draw your cut line and score points based on your accuracy.',
     icon: '✂️',
     category: 'games',
     content: {
-      intro: 'Step into Split Master — the ultimate precision puzzle where your spatial sense is everything! A shape appears on screen, and your challenge is to draw a cutting line that divides it into two perfectly equal halves. The closer to 50/50, the higher your score. Available in Classic, Endless, and Daily Challenge modes.',
+      intro: 'Step into Split Master, the ultimate precision puzzle where your spatial sense is everything. A shape appears on screen, and your challenge is to draw a cutting line that divides it into two perfectly equal halves. The closer to 50/50, the higher your score. Available in Classic, 50/50 Streak, and Daily Challenge modes.',
       howTo: [
         'Click and drag (or touch and drag on mobile) across the shape to draw your cutting line.',
-        'Release to confirm your cut — the shape splits into two pieces instantly.',
+        'Release to confirm your cut so the shape splits into two pieces instantly.',
         'The game calculates the exact area of each half using precise polygon geometry.',
         'Your accuracy percentage shows how close to 50/50 you achieved.',
-        'Earn up to 1,000 points per round — perfect splits award maximum points.',
+        'Earn up to 1,000 points per round where perfect splits award maximum points.',
         'In Classic mode, complete 8 progressively harder rounds for a final score.',
-        'In Endless mode, keep cutting shapes for a high-score run.',
-        'The Daily Challenge uses a fixed daily seed — compare your score with the global leaderboard!'
+        'In 50/50 Streak mode, you get 3 tries per shape to land an exact 50/50 cut and advance as far as you can.',
+        'The Daily Challenge uses a fixed daily seed so you can compare your score with the global leaderboard.'
       ],
       whatItMeasures: 'Split Master tests your spatial reasoning, visual estimation of areas, geometric intuition, and the ability to mentally bisect irregular shapes under pressure.',
-      whyUseIt: 'It is a uniquely satisfying blend of artistic judgment and geometric precision. Each shape rewards players who can intuitively visualize where equal division lies — a skill that bridges art, math, and spatial thinking.',
-      interpretResults: 'A score of 90%+ accuracy per round is exceptional. Classic scores above 7,000 require consistent near-perfect cutting across all 8 rounds. Endless scores test stamina and whether precision holds as shapes become more complex.',
+      whyUseIt: 'It is a uniquely satisfying blend of artistic judgment and geometric precision. Each shape rewards players who can intuitively visualize where equal division lies, which is a skill that bridges art, math, and spatial thinking.',
+      interpretResults: 'A score of 90% or higher accuracy per round is exceptional. Classic scores above 7,000 require consistent near-perfect cutting across all 8 rounds. In 50/50 Streak mode, clearing 5 or more shapes in a row demonstrates true mastery.',
       tips: [
-        'Look for symmetry axes in the shape — cutting along a line of symmetry often produces a near-perfect result.',
-        'For irregular shapes, mentally estimate the "center of mass" and cut through it.',
-        'Take your time before releasing — the cut only activates on pointer release.',
+        'Look for symmetry axes in the shape, because cutting along a line of symmetry often produces a near-perfect result.',
+        'For irregular shapes, mentally estimate the center of mass and cut through it.',
+        'Take your time before releasing, since the cut only activates on pointer release.',
         'For circles and ellipses, any cut through the center is perfect. For rectangles, cut parallel to either side at the midpoint.',
-        'Stars and L-shapes are the hardest — focus on equalizing the "visual weight" on each side of the line.'
+        'Stars and L-shapes are the hardest, so focus on equalizing the visual weight on each side of the line.'
       ],
       relatedTools: ['stack-panic', 'aim-trainer-test', 'visual-memory-test']
     },
     faqs: [
       { q: 'How is the cut accuracy calculated?', a: 'After you draw the cut line, Split Master uses the Sutherland-Hodgman polygon clipping algorithm to compute the exact area of each resulting polygon half. The percentage difference from 50% determines your accuracy and score.' },
-      { q: 'Can I cut any shape perfectly?', a: 'Yes! Every shape in the game has at least one perfect cut. For symmetric shapes, symmetry axes always produce perfect 50/50 splits. For irregular shapes, the challenge is finding the right line.' },
-      { q: 'What is the Daily Challenge mode?', a: 'The Daily Challenge uses a deterministic daily seed to generate the same sequence of 6 shapes for all players worldwide. Your score is submitted to the global leaderboard — everyone gets exactly one fair attempt per day.' },
-      { q: 'Does Split Master work on touch screens?', a: 'Yes! The game uses the Pointer Events API for seamless mouse and touch input. Simply touch and drag your finger across the shape to draw your cut line on phones and tablets.' },
-      { q: 'How does the Endless mode high score work?', a: 'In Endless mode, shapes continue indefinitely with increasing complexity. Your total cumulative score after completing each round is submitted to the Endless leaderboard when you end the session.' }
+      { q: 'Can I cut any shape perfectly?', a: 'Yes. Every shape in the game has at least one perfect cut. For symmetric shapes, symmetry axes always produce perfect 50/50 splits. For irregular shapes, the challenge is finding the right line.' },
+      { q: 'What is the Daily Challenge mode?', a: 'The Daily Challenge uses a deterministic daily seed to generate the same sequence of 6 shapes for all players worldwide. Your score is submitted to the global leaderboard so everyone gets exactly one fair attempt per day.' },
+      { q: 'Does Split Master work on touch screens?', a: 'Yes. The game uses the Pointer Events API for seamless mouse and touch input. Simply touch and drag your finger across the shape to draw your cut line on phones and tablets.' },
+      { q: 'How does the 50/50 Streak mode work?', a: 'In 50/50 Streak mode, you have up to 3 attempts on each shape to make an exact 50/50 cut. If you succeed within your 3 tries, you clear the shape and move on to the next one with refreshed attempts. Your streak continues indefinitely until you fail to hit 50/50 on all 3 tries.' }
     ]
   },
   'stacksnatch': {
@@ -810,10 +810,10 @@ export const TOOL_METADATA = {
     icon: '🎲',
     category: 'games',
     content: {
-      intro: 'Welcome to StackSnatch — a deceptively deep strategy board game for CatKeyLab! Place pieces of varying sizes on the board. Larger pieces can cover smaller pieces, hiding them from view. The hidden pieces remain underneath, ready to be revealed. Form a line of your visible pieces to win — but watch out for your opponent\'s sneaky covering maneuvers!',
+      intro: 'Welcome to StackSnatch, a deceptively deep strategy board game for CatKeyLab. Place pieces of varying sizes on the board. Larger pieces can cover smaller pieces, hiding them from view. The hidden pieces remain underneath, ready to be revealed. Form a line of your visible pieces to win, but watch out for your opponent\'s sneaky covering maneuvers.',
       howTo: [
         'Choose a piece from your supply (shown beside the board) to place it on the board.',
-        'You can place your piece on any empty cell, OR onto a smaller piece of either color.',
+        'You can place your piece on any empty cell, or onto a smaller piece of either color.',
         'You can also move an exposed (visible) piece from the board to a new location.',
         'When a piece is moved away from a cell, the previously hidden piece underneath is revealed.',
         'Win by forming 3 in a row (Classic 3×3) or 4 in a row (Advanced 4×4).',
@@ -822,22 +822,22 @@ export const TOOL_METADATA = {
         'To move a board piece, click it to select, then click the destination cell.'
       ],
       whatItMeasures: 'StackSnatch measures strategic planning, deceptive thinking, positional awareness, and the ability to manage hidden information across multiple board states simultaneously.',
-      whyUseIt: 'The stacking mechanic adds a layer of deception and surprise that makes every game unpredictable. Pieces you thought were gone can be suddenly revealed, changing the entire game state — creating tense, dramatic moments unlike any other board game.',
-      interpretResults: 'Beating the Hard AI in the 4×4 Advanced board represents true strategic mastery. The 3×3 Classic is ideal for learning the mechanics. The 4×4 board introduces far more strategic depth — piece availability and size management become critical.',
+      whyUseIt: 'The stacking mechanic adds a layer of deception and surprise that makes every game unpredictable. Pieces you thought were gone can be suddenly revealed, changing the entire game state and creating tense, dramatic moments unlike any other board game.',
+      interpretResults: 'Beating the Hard AI in the 4×4 Advanced board represents true strategic mastery. The 3×3 Classic is ideal for learning the mechanics. The 4×4 board introduces far more strategic depth where piece availability and size management become critical.',
       tips: [
-        'Manage your large pieces carefully — they are your most powerful tools and can cover any opponent\'s piece.',
+        'Manage your large pieces carefully, because they are your most powerful tools and can cover any opponent piece.',
         'Covering your opponent\'s winning piece is more powerful than advancing your own position.',
-        'Remember what is hidden! Keep mental track of which cells have stacked pieces that could be revealed.',
-        'In the 4×4 board, focus on creating multiple simultaneous threats — force your opponent to block one while you win on another.',
-        'Against the Hard AI, avoid predictable line-building strategies. The AI reads 3 moves ahead and will always block obvious threats.'
+        'Remember what is hidden, and keep mental track of which cells have stacked pieces that could be revealed.',
+        'In the 4×4 board, focus on creating multiple simultaneous threats to force your opponent to block one while you win on another.',
+        'Against the Hard AI, avoid predictable line-building strategies. The AI reads several moves ahead and will always block obvious threats.'
       ],
       relatedTools: ['last-click', 'merge-lab', 'chimp-test']
     },
     faqs: [
-      { q: 'Can I cover my own pieces?', a: 'Yes! You can place or move a larger piece on top of your own smaller piece. This can be used to protect a critical position, relocate a piece, or set up a tactical retreat.' },
-      { q: 'What happens when I move a board piece?', a: 'When you move an exposed piece off a cell, any piece that was hidden beneath it becomes the new top piece and is now visible and active. This can dramatically change the board state!' },
+      { q: 'Can I cover my own pieces?', a: 'Yes. You can place or move a larger piece on top of your own smaller piece. This can be used to protect a critical position, relocate a piece, or set up a tactical retreat.' },
+      { q: 'What happens when I move a board piece?', a: 'When you move an exposed piece off a cell, any piece that was hidden beneath it becomes the new top piece and is now visible and active. This can dramatically change the board state.' },
       { q: 'Can I cover the same size piece?', a: 'No. You can only cover pieces that are strictly smaller than the piece you are placing. A size-3 piece cannot cover another size-3 piece.' },
-      { q: 'How difficult is the Hard AI?', a: 'The Hard AI uses a minimax search algorithm with alpha-beta pruning. It evaluates positions several moves ahead, considers hidden pieces, and tries to create multi-directional threats. It is a genuine challenge!' },
+      { q: 'How difficult is the Hard AI?', a: 'The Hard AI uses a minimax search algorithm with alpha-beta pruning. It evaluates positions several moves ahead, considers hidden pieces, and tries to create multi-directional threats. It is a genuine challenge.' },
       { q: 'How does the leaderboard work for StackSnatch?', a: 'StackSnatch tracks cumulative wins per board size (3×3 and 4×4 separately). Each win adds to your win count, which is submitted to the global leaderboard. Win counts are tracked locally in your browser.' }
     ]
   }

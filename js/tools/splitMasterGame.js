@@ -1,7 +1,7 @@
 /* ==========================================================================
    CatKeyLab - Split Master: Precision Cutting Puzzle Game
    A game where players must cut shapes as close to 50/50 as possible.
-   Features: Classic Mode, Endless Mode, Daily Challenge, Leaderboard Integration,
+   Features: Classic Mode, 50/50 Streak Mode, Daily Challenge, Leaderboard Integration,
    Polygon Clipping Area Calculation, Animated Cuts, Sound FX, Mobile Touch Support.
    ========================================================================== */
 
@@ -16,15 +16,16 @@ let canvas = null;
 let ctx = null;
 
 // ── Mode & Session ───────────────────────────────────────────────────────────
-let currentMode = 'classic'; // 'classic' | 'endless' | 'daily'
+let currentMode = 'classic'; // 'classic' | 'streak' | 'daily'
 let round = 0;
 let totalRounds = 8;
 let totalScore = 0;
 let roundScores = [];
 let accuracyList = [];
 let highScoreClassic = 0;
-let highScoreEndless = 0;
-let endlessLives = 3;
+let highScoreStreak = 0;
+let streak = 0;
+let triesLeft = 3;
 
 // ── Current Shape ────────────────────────────────────────────────────────────
 let currentShape = null;
@@ -117,7 +118,7 @@ export function renderSplitMasterGame(container) {
 
   try {
     highScoreClassic = parseInt(localStorage.getItem('sm_hs_classic')) || 0;
-    highScoreEndless = parseInt(localStorage.getItem('sm_hs_endless')) || 0;
+    highScoreStreak = parseInt(localStorage.getItem('sm_hs_streak')) || 0;
   } catch (e) {}
 
   renderMenuHTML();
@@ -143,16 +144,16 @@ function renderMenuHTML() {
   gameState = 'MENU';
 
   const lb_classic = getLeaderboard('split-master-classic');
-  const lb_endless = getLeaderboard('split-master-endless');
+  const lb_streak = getLeaderboard('split-master-streak');
   const lb_daily = getLeaderboard('split-master-daily');
 
   const topClassic = lb_classic[0];
-  const topEndless = lb_endless[0];
+  const topStreak = lb_streak[0];
   const topDaily = lb_daily[0];
 
   const profile = getAnonProfile();
   const myClassic = lb_classic.find(e => e.handle === profile.handle);
-  const myEndless = lb_endless.find(e => e.handle === profile.handle);
+  const myStreak = lb_streak.find(e => e.handle === profile.handle);
 
   containerRef.innerHTML = `
     <div class="container section" style="padding-top:1.5rem;">
@@ -172,11 +173,11 @@ function renderMenuHTML() {
             <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem;">8 Rounds • Increasing Difficulty</div>
             ${myClassic ? `<div style="margin-top:0.75rem; font-size:0.8rem; color:var(--accent-cyan); font-weight:700;">Your Best: ${myClassic.score.toLocaleString()} pts</div>` : `<div style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted);">No score yet</div>`}
           </div>
-          <div class="sm-mode-card" id="sm-btn-endless" style="cursor:pointer; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.5rem; text-align:center; transition:all 0.2s;">
-            <div style="font-size:2.5rem; margin-bottom:0.5rem;">♾️</div>
-            <div style="font-weight:800; font-size:1.1rem; color:var(--text-primary);">Endless</div>
-            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem;">Continuous • Score Attack</div>
-            ${myEndless ? `<div style="margin-top:0.75rem; font-size:0.8rem; color:var(--accent-cyan); font-weight:700;">Your Best: ${myEndless.score.toLocaleString()} pts</div>` : `<div style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted);">No score yet</div>`}
+          <div class="sm-mode-card" id="sm-btn-streak" style="cursor:pointer; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.5rem; text-align:center; transition:all 0.2s;">
+            <div style="font-size:2.5rem; margin-bottom:0.5rem;">✨</div>
+            <div style="font-weight:800; font-size:1.1rem; color:var(--text-primary);">50/50 Streak</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.3rem;">3 Tries per Shape • Exact 50/50 Advances</div>
+            ${myStreak ? `<div style="margin-top:0.75rem; font-size:0.8rem; color:var(--accent-cyan); font-weight:700;">Your Best: ${myStreak.score} ${myStreak.score === 1 ? 'shape' : 'shapes'}</div>` : `<div style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-muted);">No streak yet</div>`}
           </div>
           <div class="sm-mode-card" id="sm-btn-daily" style="cursor:pointer; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.5rem; text-align:center; transition:all 0.2s;">
             <div style="font-size:2.5rem; margin-bottom:0.5rem;">📅</div>
@@ -189,7 +190,7 @@ function renderMenuHTML() {
         <!-- Top Scores Row -->
         <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:1rem; margin-bottom:2rem;">
           ${topClassic ? `<div style="background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; text-align:center;"><div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">🏆 Classic Record</div><div style="font-size:1.2rem; font-weight:800; color:var(--accent-cyan); margin-top:0.25rem;">${topClassic.score.toLocaleString()} pts</div><div style="font-size:0.8rem; color:var(--text-secondary);">${topClassic.avatar} ${topClassic.handle}</div></div>` : ''}
-          ${topEndless ? `<div style="background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; text-align:center;"><div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">♾️ Endless Record</div><div style="font-size:1.2rem; font-weight:800; color:var(--accent-cyan); margin-top:0.25rem;">${topEndless.score.toLocaleString()} pts</div><div style="font-size:0.8rem; color:var(--text-secondary);">${topEndless.avatar} ${topEndless.handle}</div></div>` : ''}
+          ${topStreak ? `<div style="background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; text-align:center;"><div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">✨ 50/50 Streak Record</div><div style="font-size:1.2rem; font-weight:800; color:var(--accent-cyan); margin-top:0.25rem;">${topStreak.score} ${topStreak.score === 1 ? 'shape' : 'shapes'}</div><div style="font-size:0.8rem; color:var(--text-secondary);">${topStreak.avatar} ${topStreak.handle}</div></div>` : ''}
           ${topDaily ? `<div style="background:var(--bg-tertiary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:1rem; text-align:center;"><div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">📅 Daily Record</div><div style="font-size:1.2rem; font-weight:800; color:var(--accent-cyan); margin-top:0.25rem;">${topDaily.score.toLocaleString()} pts</div><div style="font-size:0.8rem; color:var(--text-secondary);">${topDaily.avatar} ${topDaily.handle}</div></div>` : ''}
         </div>
 
@@ -197,10 +198,10 @@ function renderMenuHTML() {
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem; margin-bottom:1.5rem;">
           <div style="font-weight:700; color:var(--text-primary); margin-bottom:0.75rem;">✂️ How to Play</div>
           <ul style="color:var(--text-secondary); font-size:0.92rem; line-height:2; list-style:disc; padding-left:1.25rem;">
-            <li>Click & drag to draw a cutting line across the shape</li>
-            <li>Release to confirm your cut — see how close to 50/50 you are!</li>
+            <li>Click and drag to draw a cutting line across the shape</li>
+            <li>Release to confirm your cut and see how close to 50/50 you are!</li>
             <li>Earn up to <strong style="color:var(--accent-cyan);">1,000 points</strong> per round based on accuracy</li>
-            <li>A perfect 50/50 split = maximum points</li>
+            <li>In 50/50 Streak mode, get an exact 50.0% split within 3 tries to advance</li>
           </ul>
         </div>
 
@@ -227,12 +228,12 @@ function renderMenuHTML() {
   });
 
   const btnClassic = document.getElementById('sm-btn-classic');
-  const btnEndless = document.getElementById('sm-btn-endless');
+  const btnStreak = document.getElementById('sm-btn-streak');
   const btnDaily = document.getElementById('sm-btn-daily');
   const btnSound = document.getElementById('sm-sound-toggle');
 
   if (btnClassic) btnClassic.addEventListener('click', () => startGame('classic'));
-  if (btnEndless) btnEndless.addEventListener('click', () => startGame('endless'));
+  if (btnStreak) btnStreak.addEventListener('click', () => startGame('streak'));
   if (btnDaily) btnDaily.addEventListener('click', () => startGame('daily'));
   if (btnSound) btnSound.addEventListener('click', () => {
     toggleSound();
@@ -257,9 +258,11 @@ function startGame(mode) {
     seededRng = null;
     totalRounds = 8;
   } else {
+    // 50/50 Streak Mode
     seededRng = null;
     totalRounds = Infinity;
-    endlessLives = 3;
+    streak = 0;
+    triesLeft = 3;
   }
 
   renderGameHTML();
@@ -272,19 +275,27 @@ function renderGameHTML() {
   if (!containerRef) return;
   gameState = 'PLAYING';
 
-  const modeLabel = currentMode === 'classic' ? '🎯 Classic' : currentMode === 'endless' ? '♾️ Endless' : '📅 Daily';
+  const modeLabel = currentMode === 'classic' ? '🎯 Classic' : currentMode === 'streak' ? '✨ 50/50 Streak' : '📅 Daily';
 
   containerRef.innerHTML = `
     <div class="container section" style="padding-top:1rem;">
       <div style="max-width:700px; margin:0 auto;">
         <!-- HUD -->
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
-          <div style="display:flex; align-items:center; gap:1rem;">
+          <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
             <div style="font-size:0.85rem; color:var(--text-muted); font-weight:700; text-transform:uppercase;">${modeLabel}</div>
-            <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:0.3rem 0.75rem; font-size:0.9rem; color:var(--text-secondary);">
-              Round <span id="sm-round-num">1</span>${currentMode !== 'endless' ? `/${totalRounds}` : ''}
-            </div>
-            ${currentMode === 'endless' ? `<div id="sm-lives-container" style="font-size:1rem; letter-spacing:2px;" title="Remaining Lives">${'❤️'.repeat(endlessLives)}</div>` : ''}
+            ${currentMode === 'streak' ? `
+              <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:0.3rem 0.75rem; font-size:0.9rem; color:var(--text-secondary);">
+                Shape <span id="sm-round-num">1</span> • Streak: <strong id="sm-streak-val" style="color:var(--accent-cyan); font-weight:800;">${streak}</strong>
+              </div>
+              <div id="sm-tries-container" style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:0.3rem 0.75rem; font-size:0.9rem; color:var(--text-secondary);" title="Tries remaining for this shape">
+                Tries: <strong id="sm-tries-val" style="color:#f59e0b; font-weight:800;">${triesLeft}/3</strong>
+              </div>
+            ` : `
+              <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:0.3rem 0.75rem; font-size:0.9rem; color:var(--text-secondary);">
+                Round <span id="sm-round-num">1</span>/${totalRounds}
+              </div>
+            `}
           </div>
           <div style="display:flex; align-items:center; gap:0.75rem;">
             <div style="font-weight:800; font-size:1.2rem; color:var(--accent-cyan);"><span id="sm-total-score">0</span> pts</div>
@@ -300,7 +311,7 @@ function renderGameHTML() {
 
         <!-- Instructions -->
         <div id="sm-instructions" style="text-align:center; margin-bottom:0.5rem; color:var(--text-muted); font-size:0.88rem;">
-          Click and drag across the shape to draw your cut line
+          ${currentMode === 'streak' ? 'Cut exactly 50/50 to keep your streak alive (3 tries for this shape)' : 'Click and drag across the shape to draw your cut line'}
         </div>
 
         <!-- Canvas -->
@@ -336,10 +347,13 @@ function initCanvas() {
   ctx.scale(scale, scale);
 }
 
-// ── Next Round ────────────────────────────────────────────────────────────────
+// ── Next Round & Retry ────────────────────────────────────────────────────────
 
 function nextRound() {
   round++;
+  if (currentMode === 'streak') {
+    triesLeft = 3;
+  }
   cutLine = null;
   cutConfirmed = false;
   halfA = null;
@@ -357,9 +371,13 @@ function nextRound() {
   const roundEl = document.getElementById('sm-round-num');
   const scoreEl = document.getElementById('sm-total-score');
   const labelEl = document.getElementById('sm-shape-label');
+  const streakEl = document.getElementById('sm-streak-val');
+  const triesEl = document.getElementById('sm-tries-val');
   if (roundEl) roundEl.textContent = round;
   if (scoreEl) scoreEl.textContent = totalScore.toLocaleString();
   if (labelEl) labelEl.textContent = SHAPE_NAMES[shapeType] || shapeType;
+  if (streakEl) streakEl.textContent = streak;
+  if (triesEl) triesEl.textContent = `${triesLeft}/3`;
 
   // Hide result panel
   const panel = document.getElementById('sm-result-panel');
@@ -367,7 +385,36 @@ function nextRound() {
 
   // Update instructions
   const instr = document.getElementById('sm-instructions');
-  if (instr) instr.style.display = '';
+  if (instr) {
+    instr.style.display = '';
+    instr.textContent = currentMode === 'streak'
+      ? 'Cut exactly 50/50 to keep your streak alive (3 tries for this shape)'
+      : 'Click and drag across the shape to draw your cut line';
+  }
+
+  startDrawLoop();
+}
+
+function retryShape() {
+  cutLine = null;
+  cutConfirmed = false;
+  halfA = null;
+  halfB = null;
+  separationAnim = 0;
+  resultShown = false;
+  inputLocked = false;
+
+  const triesEl = document.getElementById('sm-tries-val');
+  if (triesEl) triesEl.textContent = `${triesLeft}/3`;
+
+  const panel = document.getElementById('sm-result-panel');
+  if (panel) panel.style.display = 'none';
+
+  const instr = document.getElementById('sm-instructions');
+  if (instr) {
+    instr.style.display = '';
+    instr.textContent = `Attempt ${4 - triesLeft} of 3: Aim for an exact 50.0% / 50.0% split!`;
+  }
 
   startDrawLoop();
 }
@@ -866,12 +913,7 @@ function confirmCut() {
   if (total < 1) {
     // Cut missed the shape
     const errPct = 50;
-    if (currentMode === 'endless') {
-      endlessLives = Math.max(0, endlessLives - 1);
-      const livesEl = document.getElementById('sm-lives-container');
-      if (livesEl) livesEl.textContent = '❤️'.repeat(endlessLives) || '💀';
-    }
-    showResult(errPct, 0);
+    showResult(errPct, 0, 100, 0);
     return;
   }
 
@@ -882,12 +924,6 @@ function confirmCut() {
   // Score: perfect = 1000, 50% off = 0
   const accuracy = Math.max(0, 100 - errPct * 2);
   const roundScore = Math.round(accuracy * 10);
-
-  if (currentMode === 'endless' && errPct >= 20) {
-    endlessLives = Math.max(0, endlessLives - 1);
-    const livesEl = document.getElementById('sm-lives-container');
-    if (livesEl) livesEl.textContent = '❤️'.repeat(endlessLives) || '💀';
-  }
 
   totalScore += roundScore;
   roundScores.push(roundScore);
@@ -924,7 +960,9 @@ function showResult(errPct, roundScore, ratioA = 50, ratioB = 50) {
   }
 
   if (reactionEl) reactionEl.textContent = reactionMsg;
-  if (accuracyEl) accuracyEl.innerHTML = `<strong>${(100 - errPct * 2).toFixed(1)}%</strong> accuracy — ${errPct.toFixed(2)}% off perfect`;
+  if (accuracyEl) {
+    accuracyEl.innerHTML = `<strong>${(100 - errPct * 2).toFixed(1)}%</strong> accuracy, with ${errPct.toFixed(2)}% deviation from 50/50`;
+  }
   if (scoreEl) scoreEl.textContent = `+${roundScore.toLocaleString()} pts`;
 
   // Split bar visualization
@@ -950,32 +988,46 @@ function showResult(errPct, roundScore, ratioA = 50, ratioB = 50) {
   if (panel) panel.style.display = '';
 
   if (continueBtn) {
-    const isOutOfLives = currentMode === 'endless' && endlessLives <= 0;
-    const isLastRound = isOutOfLives || (currentMode !== 'endless' && round >= totalRounds);
-
-    if (isOutOfLives && reactionEl) {
-      reactionEl.textContent = '💔 Out of Lives! Game Over!';
-    }
-
-    continueBtn.textContent = isLastRound ? '🏁 See Final Score' : 'Next Shape →';
-    continueBtn.onclick = () => {
-      if (isLastRound) {
-        endGame();
+    if (currentMode === 'streak') {
+      const isExact = errPct <= 0.5;
+      if (isExact) {
+        streak++;
+        const streakEl = document.getElementById('sm-streak-val');
+        if (streakEl) streakEl.textContent = streak;
+        if (reactionEl) {
+          reactionEl.innerHTML = `🎯 <span style="color:#10b981;">EXACT 50/50!</span> Current Streak: <strong>${streak}</strong>`;
+        }
+        continueBtn.textContent = `Next Shape (Streak: ${streak}) →`;
+        continueBtn.onclick = () => nextRound();
       } else {
-        nextRound();
-      }
-    };
+        triesLeft = Math.max(0, triesLeft - 1);
+        const triesEl = document.getElementById('sm-tries-val');
+        if (triesEl) triesEl.textContent = `${triesLeft}/3`;
 
-    const oldBank = document.getElementById('sm-bank-btn');
-    if (oldBank) oldBank.remove();
-    if (currentMode === 'endless' && !isLastRound) {
-      const bankBtn = document.createElement('button');
-      bankBtn.id = 'sm-bank-btn';
-      bankBtn.className = 'btn btn-secondary';
-      bankBtn.style.cssText = 'min-width:140px; margin-left:0.5rem;';
-      bankBtn.textContent = '💰 Bank & End Run';
-      bankBtn.onclick = () => endGame();
-      continueBtn.parentNode.appendChild(bankBtn);
+        if (triesLeft > 0) {
+          if (reactionEl) {
+            reactionEl.innerHTML = `⚠️ <span style="color:#f59e0b;">Not quite 50/50!</span> ${triesLeft} ${triesLeft === 1 ? 'try' : 'tries'} remaining on this shape`;
+          }
+          continueBtn.textContent = `🔄 Try Again (${triesLeft} left)`;
+          continueBtn.onclick = () => retryShape();
+        } else {
+          if (reactionEl) {
+            reactionEl.innerHTML = `💔 <span style="color:#ef4444;">Streak Over!</span> All 3 tries used on this shape`;
+          }
+          continueBtn.textContent = '🏁 View Final Streak & Leaderboard';
+          continueBtn.onclick = () => endGame();
+        }
+      }
+    } else {
+      const isLastRound = round >= totalRounds;
+      continueBtn.textContent = isLastRound ? '🏁 See Final Score' : 'Next Shape →';
+      continueBtn.onclick = () => {
+        if (isLastRound) {
+          endGame();
+        } else {
+          nextRound();
+        }
+      };
     }
   }
 
@@ -992,59 +1044,68 @@ function endGame() {
     ? accuracyList.reduce((a, b) => a + b, 0) / accuracyList.length
     : 0;
 
-  const leaderboardId = currentMode === 'daily' ? 'split-master-daily'
-    : currentMode === 'endless' ? 'split-master-endless'
-    : 'split-master-classic';
+  let leaderboardId = 'split-master-classic';
+  let scoreVal = totalScore;
+  let scoreDisplay = `${totalScore.toLocaleString()} pts`;
 
-  const result = submitScore(leaderboardId, totalScore, `${totalScore.toLocaleString()} pts`);
+  if (currentMode === 'streak') {
+    leaderboardId = 'split-master-streak';
+    scoreVal = streak;
+    scoreDisplay = `${streak} ${streak === 1 ? 'shape' : 'shapes'} cleared`;
+  } else if (currentMode === 'daily') {
+    leaderboardId = 'split-master-daily';
+    scoreVal = totalScore;
+    scoreDisplay = `${totalScore.toLocaleString()} pts`;
+  }
 
-  // Save local high score
+  const result = submitScore(leaderboardId, scoreVal, scoreDisplay);
+
+  // Save local high scores
   if (currentMode === 'classic' && totalScore > highScoreClassic) {
     highScoreClassic = totalScore;
-    try { localStorage.setItem('sm_hs_classic', totalScore); } catch(e) {}
+    try { localStorage.setItem('sm_hs_classic', totalScore); } catch (e) {}
   }
-  if (currentMode === 'endless' && totalScore > highScoreEndless) {
-    highScoreEndless = totalScore;
-    try { localStorage.setItem('sm_hs_endless', totalScore); } catch(e) {}
+  if (currentMode === 'streak' && streak > highScoreStreak) {
+    highScoreStreak = streak;
+    try { localStorage.setItem('sm_hs_streak', streak); } catch (e) {}
   }
 
-  const profile = getAnonProfile();
   const rank = result ? result.rank : null;
 
   containerRef.innerHTML = `
     <div class="container section" style="padding-top:1.5rem;">
       <div style="max-width:620px; margin:0 auto; text-align:center;">
-        <div style="font-size:4rem; margin-bottom:0.75rem;">${avgAccuracy >= 80 ? '🏆' : avgAccuracy >= 60 ? '🎯' : avgAccuracy >= 40 ? '✂️' : '😅'}</div>
-        <h1 style="font-size:2rem; font-weight:900; letter-spacing:-0.03em; margin-bottom:0.25rem;">Game Over!</h1>
+        <div style="font-size:4rem; margin-bottom:0.75rem;">${currentMode === 'streak' ? (streak >= 5 ? '🏆' : streak >= 2 ? '✨' : '🎯') : (avgAccuracy >= 80 ? '🏆' : avgAccuracy >= 60 ? '🎯' : avgAccuracy >= 40 ? '✂️' : '😅')}</div>
+        <h1 style="font-size:2rem; font-weight:900; letter-spacing:-0.03em; margin-bottom:0.25rem;">${currentMode === 'streak' ? 'Streak Complete!' : 'Game Over!'}</h1>
         <p style="color:var(--text-secondary); margin-bottom:2rem;">
-          ${currentMode === 'daily' ? '📅 Daily Challenge Complete!' : currentMode === 'endless' ? `♾️ Endless Run — ${round} rounds` : `🎯 Classic — ${round} rounds`}
+          ${currentMode === 'daily' ? '📅 Daily Challenge Complete' : currentMode === 'streak' ? `✨ 50/50 Streak: ${streak} ${streak === 1 ? 'shape' : 'shapes'} cleared across ${round} attempts` : `🎯 Classic Mode: ${round} rounds completed`}
         </p>
 
         <!-- Stats -->
         <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:2rem;">
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem;">
-            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Final Score</div>
-            <div style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan); margin-top:0.25rem;">${totalScore.toLocaleString()}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">${currentMode === 'streak' ? 'Final Streak' : 'Final Score'}</div>
+            <div style="font-size:1.8rem; font-weight:900; color:var(--accent-cyan); margin-top:0.25rem;">${currentMode === 'streak' ? streak : totalScore.toLocaleString()}</div>
           </div>
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem;">
-            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">Avg Accuracy</div>
-            <div style="font-size:1.8rem; font-weight:900; color:var(--accent-emerald); margin-top:0.25rem;">${avgAccuracy.toFixed(1)}%</div>
+            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">${currentMode === 'streak' ? 'Total Points' : 'Avg Accuracy'}</div>
+            <div style="font-size:1.8rem; font-weight:900; color:var(--accent-emerald); margin-top:0.25rem;">${currentMode === 'streak' ? totalScore.toLocaleString() : avgAccuracy.toFixed(1) + '%'}</div>
           </div>
           <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem;">
-            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">${rank ? 'Rank' : 'Rounds'}</div>
+            <div style="font-size:0.75rem; color:var(--text-muted); text-transform:uppercase; font-weight:700;">${rank ? 'Rank' : (currentMode === 'streak' ? 'Attempts' : 'Rounds')}</div>
             <div style="font-size:1.8rem; font-weight:900; color:var(--accent-purple); margin-top:0.25rem;">${rank ? `#${rank}` : round}</div>
           </div>
         </div>
 
         ${rank && rank <= 3 ? `<div style="background:linear-gradient(135deg,rgba(234,179,8,0.15),rgba(234,179,8,0.05)); border:1px solid rgba(234,179,8,0.3); border-radius:var(--radius-lg); padding:1rem; margin-bottom:1.5rem; color:#fde047; font-weight:700;">🎉 You're on the leaderboard at #${rank}!</div>` : ''}
 
-        <!-- Round Breakdown -->
+        <!-- Round / Attempt Breakdown -->
         <div style="background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem; margin-bottom:1.5rem; text-align:left;">
-          <div style="font-weight:700; margin-bottom:0.75rem; color:var(--text-primary);">Round Breakdown</div>
+          <div style="font-weight:700; margin-bottom:0.75rem; color:var(--text-primary);">${currentMode === 'streak' ? 'Attempt History' : 'Round Breakdown'}</div>
           <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); gap:0.5rem;">
             ${roundScores.map((s, i) => `
               <div style="background:var(--bg-tertiary); border-radius:var(--radius-sm); padding:0.5rem; text-align:center;">
-                <div style="font-size:0.75rem; color:var(--text-muted);">Round ${i + 1}</div>
+                <div style="font-size:0.75rem; color:var(--text-muted);">${currentMode === 'streak' ? `Cut ${i + 1}` : `Round ${i + 1}`}</div>
                 <div style="font-weight:800; color:${s >= 800 ? 'var(--accent-cyan)' : s >= 500 ? 'var(--accent-emerald)' : 'var(--text-secondary)'};">${s}</div>
               </div>
             `).join('')}
@@ -1052,7 +1113,7 @@ function endGame() {
         </div>
 
         <div style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
-          <button id="sm-replay-btn" class="btn btn-primary">🔄 Play Again</button>
+          <button id="sm-replay-btn" class="btn btn-primary">${currentMode === 'streak' ? '🔄 Play Streak Again' : '🔄 Play Again'}</button>
           <button id="sm-menu-end-btn" class="btn btn-secondary">🏠 Main Menu</button>
         </div>
       </div>
@@ -1069,7 +1130,7 @@ function endGame() {
 // Uses Sutherland-Hodgman style half-plane clipping
 
 function clipPolygonByLine(verts, line) {
-  // Line: from (x1,y1) to (x2,y2) — use the line as a half-plane divider
+  // Line: from (x1,y1) to (x2,y2) as a half-plane divider
   // Points on the left of the directed line go into set A, right into set B
   const { x1, y1, x2, y2 } = line;
 

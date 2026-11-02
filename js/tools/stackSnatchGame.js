@@ -94,13 +94,13 @@ function renderMenuHTML() {
               <div style="font-size:2rem; margin-bottom:0.4rem;">3×3</div>
               <div style="font-weight:800; color:var(--text-primary);">Classic Board</div>
               <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem;">Quick games • 3 sizes • Match 3</div>
-              ${lb33[0] ? `<div style="margin-top:0.6rem; font-size:0.8rem; color:var(--accent-cyan);">Record: ${lb33[0].score} wins — ${lb33[0].avatar} ${lb33[0].handle}</div>` : ''}
+              ${lb33[0] ? `<div style="margin-top:0.6rem; font-size:0.8rem; color:var(--accent-cyan);">Record: ${lb33[0].score} wins by ${lb33[0].avatar} ${lb33[0].handle}</div>` : ''}
             </div>
             <div id="ss-choose-4x4" class="ss-variant-card" data-v="4x4" style="cursor:pointer; background:var(--bg-secondary); border:1px solid var(--border-color); border-radius:var(--radius-lg); padding:1.25rem; text-align:center; transition:all 0.2s;">
               <div style="font-size:2rem; margin-bottom:0.4rem;">4×4</div>
               <div style="font-weight:800; color:var(--text-primary);">Advanced Board</div>
               <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.25rem;">Strategic depth • 4 sizes • Match 4</div>
-              ${lb44[0] ? `<div style="margin-top:0.6rem; font-size:0.8rem; color:var(--accent-cyan);">Record: ${lb44[0].score} wins — ${lb44[0].avatar} ${lb44[0].handle}</div>` : ''}
+              ${lb44[0] ? `<div style="margin-top:0.6rem; font-size:0.8rem; color:var(--accent-cyan);">Record: ${lb44[0].score} wins by ${lb44[0].avatar} ${lb44[0].handle}</div>` : ''}
             </div>
           </div>
         </div>
